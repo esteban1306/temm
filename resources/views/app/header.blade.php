@@ -52,19 +52,19 @@
                                 <div class="flat-mega-menu">
                                     <ul class="mcollapse changer">
                                         @guest
-                                            <li><a href="app-registro-software-inmobiliario.htm" title="Registro gratis" class="cotice">Login Partners</a></li>
+                                            <li><a  style="cursor:pointer;" onclick="openModal()" title="Registro gratis" class="cotice">Login Partners</a></li>
                                         @else
 
                                             <li>     <a href="{{ route('logout') }}"
-                                                           onclick="event.preventDefault();
+                                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();" title="Registro gratis" class="cotice">
-                                                            Cerrar Sesión
-                                                        </a>
+                                                    Cerrar Sesión
+                                                </a>
 
-                                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                                            {{ csrf_field() }}
-                                                        </form>
-                                                    </li>
+                                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                                    {{ csrf_field() }}
+                                                </form>
+                                            </li>
                                         @endguest
                                     </ul>
                                 </div>

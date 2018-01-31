@@ -6,11 +6,11 @@
                 <div class="row">
                     <div class="col-lg-8 col-lg-8">
                         <div class="text-center">
-                            <figure><img src="images/wasi-partner.svg" class="img-fluid" alt=""></figure>
-                            <h2>GANA <strong>CON</strong> WASI</h2>
+                            <!--<figure><img src="images/wasi-partner.svg" class="img-fluid" alt=""></figure>-->
+                            <h2>GANA <strong>CON</strong> TEEM</h2>
                             <img src="images/box-shadow.png" width="220" alt="">
-                            <p>Integer fringilla enim eget accumsan tempus. Vivamus nec odio eget sapien convallis condimentum Etiam ac eros quis purus egestas ornare
-                                ut eu augue.</p>
+                            <!--<p>Integer fringilla enim eget accumsan tempus. Vivamus nec odio eget sapien convallis condimentum Etiam ac eros quis purus egestas ornare
+                                ut eu augue.</p>-->
                         </div>
                     </div>
                     <div class="col-lg-4 col-lg-4">
@@ -130,7 +130,7 @@
         </div>
     </div>
 
-    <section id="Parallax">
+ <!--   <section id="Parallax">
         <div class="parallax-container mask1">
             <div class="parallax"><img src="images/parallax-empleo.jpg"></div>
             <div class="contenidos mask2 auto_margin">
@@ -172,7 +172,7 @@
                 </div>
             </div>
         </section>
-    </div>
+    </div>-->
     @include('desktop.login.modal_login')
     <!---->
     <p class="height_20"></p>
@@ -185,8 +185,7 @@
             el: "#modal_login",
         });
 
-        function openModal(id){
-            app_e.openModal(id);
+        function openModal(){
             $('#modal_login').modal('show');
         }
     </script>
