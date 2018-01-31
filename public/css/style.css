@@ -3646,6 +3646,10 @@ input[type="button"].btn-block {
   opacity: 1;
 }
 
+.fade.in {
+  opacity: 1;
+}
+
 .collapse {
   display: none;
 }
@@ -5947,7 +5951,7 @@ button.close {
           transform: translate(0, -25%);
 }
 
-.modal.show .modal-dialog {
+.modal.in .modal-dialog {
   -webkit-transform: translate(0, 0);
           transform: translate(0, 0);
 }
@@ -5993,7 +5997,7 @@ button.close {
   opacity: 0;
 }
 
-.modal-backdrop.show {
+.modal-backdrop.in {
   opacity: 0.6;
 }
 
@@ -6095,6 +6099,10 @@ button.close {
 }
 
 .tooltip.show {
+  opacity: 0.9;
+}
+
+.tooltip.in {
   opacity: 0.9;
 }
 

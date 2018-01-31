@@ -173,11 +173,21 @@
             </div>
         </section>
     </div>
-
+    @include('desktop.login.modal_login')
     <!---->
     <p class="height_20"></p>
     <!---->
 @endsection
 @section('scripts')
     <script src="{{ asset('js/app.js') }}"></script>
+    <script>
+        var app_e = new Vue({
+            el: "#modal_login",
+        });
+
+        function openModal(id){
+            app_e.openModal(id);
+            $('#modal_login').modal('show');
+        }
+    </script>
 @endsection

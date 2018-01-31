@@ -31,7 +31,7 @@
     @include transition($modal-transition);
     transform: translate(0, -25%);
   }
-  &.show .modal-dialog { transform: translate(0, 0); }
+  &.in .modal-dialog { transform: translate(0, 0); }
 }
 .modal-open .modal {
   overflow-x: hidden;
@@ -71,7 +71,7 @@
 
   // Fade for backdrop
   &.fade { opacity: 0; }
-  &.show { opacity: $modal-backdrop-opacity; }
+  &.in { opacity: $modal-backdrop-opacity; }
 }
 
 // Modal header
@@ -113,7 +113,7 @@
   > :not(:last-child) { margin-right: .25rem; }
 }
 
-// Measure scrollbar width for padding body during modal show/hide
+// Measure scrollbar width for padding body during modal in/hide
 .modal-scrollbar-measure {
   position: absolute;
   top: -9999px;

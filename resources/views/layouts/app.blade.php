@@ -5,6 +5,6 @@
     @include('app.header')
     @yield('content')
     @include('app/footer')
-    </body>
     @yield('scripts')
+    </body>
 </html>
