@@ -21,14 +21,14 @@ class CreateUsersTable extends Migration
             $table->string('password', 60);
             $table->integer('status')->unsigned();
             $table->integer('country_id')->unsigned();
+            $table->integer('parking_id')->unsigned();
             $table->integer('type')->unsigned();
             $table->rememberToken();
             $table->timestamps();
             //$table->primary('partner_id');
-            $table->foreign('country_id')
-                ->references('id_pais')->on('paises')
+            $table->foreign('parking_id')
+                ->references('parking_id')->on('parkings')
                 ->onDelete('cascade');
-
         });
     }
 
@@ -39,6 +39,6 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('partners');
     }
 }

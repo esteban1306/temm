@@ -15,7 +15,7 @@ class Partner extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'last_name', 'country_id', 'status', 'type', 'email', 'password',
+        'name', 'last_name', 'country_id', 'status', 'type', 'email', 'password', 'parking_id',
     ];
 
     /**

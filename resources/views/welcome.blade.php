@@ -7,7 +7,7 @@
                     <div class="col-lg-8 col-lg-8">
                         <div class="text-center">
                             <!--<figure><img src="images/wasi-partner.svg" class="img-fluid" alt=""></figure>-->
-                            <h2>GANA <strong>CON</strong> TEEM</h2>
+                            <h2>SOFTWARE PARA GESTIÓN DE <strong>PARQUEADEROS</strong></h2>
                             <img src="images/box-shadow.png" width="220" alt="">
                             <!--<p>Integer fringilla enim eget accumsan tempus. Vivamus nec odio eget sapien convallis condimentum Etiam ac eros quis purus egestas ornare
                                 ut eu augue.</p>-->
