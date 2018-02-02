@@ -115,6 +115,7 @@
 @endsection
 @section('scripts')
     <script src="{{ asset('js/app.js') }}"></script>
+    <script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script>
         var app_e = new Vue({
             el: "#modal_ticket_in",
