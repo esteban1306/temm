@@ -6,7 +6,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body" style="min-height: 130px;" >
-                <form class="row" method="POST" action="{{ route('register') }}">
+                <form class="row" method="POST" action="{{ route('tickets.store') }}">
                     {{ csrf_field() }}
                     <div class="form-group col-md-12">
                         <label for="">Fecha y hora</label>

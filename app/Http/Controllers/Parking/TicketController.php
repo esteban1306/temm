@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Ticket;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use DateTime;
+
 
 class TicketController extends Controller
 {
@@ -23,7 +27,6 @@ class TicketController extends Controller
      */
     public function create()
     {
-        //
     }
 
     /**
@@ -34,7 +37,18 @@ class TicketController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $now = new DateTime();
+        $ticket= new Ticket();
+        $ticket->hour =$now;
+        $ticket->plate =$request->plate;
+        $ticket->status = 1;
+        $ticket->type =$request->type;
+        $ticket->schedule =$request->schedule;
+        $ticket->parking_id = Auth::user()->parking_id;
+        $ticket->partner_id = Auth::user()->partner_id;
+        $ticket->drawer =$request->drawer;
+        $ticket->save();
+        return ;
     }
 
     /**

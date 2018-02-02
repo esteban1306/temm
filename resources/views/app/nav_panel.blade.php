@@ -6,7 +6,7 @@
                     <h1>Partners</h1>
                 </div>
                 <div class="col-6 text-right">
-                    <span class="member">Hola, {{ Auth::user()->name }}</span>
+                    <span class="member">Hola, {{ Auth::user()->name }}{{ Auth::user()->partner_id }}{{ Auth::user()->parking_id }}</span>
                     <figure><img src="images/user-partner.png" class="img-fluid" alt=""></figure>
                 </div>
             </div>
