@@ -69,3 +69,4 @@
 </footer>
 <!-- Scripts -->
 <script src="{{ asset('js/app.js') }}"></script>
+<script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
