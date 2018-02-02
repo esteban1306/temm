@@ -37,6 +37,7 @@ class TicketController extends Controller
      */
     public function store(Request $request)
     {
+        dd($request);
         $now = new DateTime();
         $ticket= new Ticket();
         $ticket->hour =$now;
