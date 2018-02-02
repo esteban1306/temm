@@ -11,6 +11,20 @@ let mix = require('laravel-mix');
  |
  */
 
+const WebpackShellPlugin = require('webpack-shell-plugin');
+
 mix.js('resources/assets/js/app.js', 'public/js')
-   .sass('resources/assets/sass/style.scss', 'public/css')
-   .version();
+    .sass('resources/assets/sass/style.scss', 'public/css')
+    .webpackConfig({
+        plugins:
+            [
+                new WebpackShellPlugin({onBuildStart:['php artisan lang:js public/js/messages.js --quiet'], onBuildEnd:[]})
+            ]
+    })
+    .scripts([
+        'public/js/messages.js',
+        'public/js/app.js',
+        'public/js/main.js',
+        'public/js/laroute.js'
+    ], 'public/js/app.js')
+    .version();

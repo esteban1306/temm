@@ -22,7 +22,6 @@ if (! function_exists('tt')) {
         $parameters = [];
         $number = 0;
         $plurals = false;
-        $domain = 'messages';
         $id_empresa = null;
         if(gettype($param1)=='string') {
             $id = $param1;
@@ -71,8 +70,8 @@ if (! function_exists('tt')) {
             $id .= '.xx';
 
         if($plurals)
-            return trans_choice($id, $number, $parameters, $domain, $locale);
-        return explode('|',trans($id, $parameters, $domain, $locale))[0];
+            return trans_choice($id, $number, $parameters, $locale);
+        return explode('|',trans($id, $parameters, $locale))[0];
     }
 }
 
@@ -144,42 +143,5 @@ if (! function_exists('accents')) {
         $s = str_replace("\u00c3\u00bd", "&yacute;", $s);
         $s = str_replace("\u00c3\u00bf", "&yuml;", $s);
         return $s;
-    }
-}
-
-if (! function_exists('trans')) {
-    /**
-     * Translate the given message.
-     *
-     * @param  string  $id
-     * @param  array   $parameters
-     * @param  string  $domain
-     * @param  string  $locale
-     * @return string
-     */
-    function trans($id = null, $parameters = [], $domain = 'messages', $locale = null)
-    {
-        if (is_null($id)) {
-            return app('translator');
-        }
-
-        return app('translator')->trans($id, $parameters, $domain, $locale);
-    }
-}
-
-if (! function_exists('trans_choice')) {
-    /**
-     * Translates the given message based on a count.
-     *
-     * @param  string  $id
-     * @param  int|array|\Countable  $number
-     * @param  array   $parameters
-     * @param  string  $domain
-     * @param  string  $locale
-     * @return string
-     */
-    function trans_choice($id, $number, array $parameters = [], $domain = 'messages', $locale = null)
-    {
-        return app('translator')->transChoice($id, $number, $parameters, $domain, $locale);
     }
 }

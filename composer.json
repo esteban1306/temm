@@ -8,14 +8,18 @@
         "php": ">=7.0.0",
         "fideloper/proxy": "~3.3",
         "laravel/framework": "5.5.*",
-        "laravel/tinker": "~1.0"
+        "laravel/tinker": "~1.0",
+        "mariuzzo/laravel-js-localization": "^1.4",
+        "yajra/laravel-datatables-oracle": "~8.0"
     },
     "require-dev": {
+        "barryvdh/laravel-ide-helper": "^2.4",
         "filp/whoops": "~2.0",
         "fzaninotto/faker": "~1.4",
         "mockery/mockery": "~1.0",
         "phpunit/phpunit": "~6.0",
-        "symfony/thanks": "^1.0"
+        "symfony/thanks": "^1.0",
+        "lord/laroute" : "2.*"
     },
     "autoload": {
         "classmap": [
@@ -24,8 +28,7 @@
         ],
         "psr-4": {
             "App\\": "app/"
-        }
-    ,
+        },
         "files": [
             "extra/constants.php",
             "extra/helpers.php"
@@ -52,10 +55,6 @@
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover"
-        ],
-        "compile":[
-            "php artisan migrate --force",
-            "php artisan storage:link"
         ]
     },
     "config": {
