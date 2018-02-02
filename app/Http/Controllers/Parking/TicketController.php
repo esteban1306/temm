@@ -37,7 +37,6 @@ class TicketController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request);
         $now = new DateTime();
         $ticket= new Ticket();
         $ticket->hour =$now;
@@ -49,7 +48,7 @@ class TicketController extends Controller
         $ticket->partner_id = Auth::user()->partner_id;
         $ticket->drawer =$request->drawer;
         $ticket->save();
-        return redirect('/home');
+        return redirect('/');
     }
 
     /**
