@@ -22,9 +22,7 @@ mix.js('resources/assets/js/app.js', 'public/js')
             ]
     })
     .scripts([
-        'public/js/messages.js',
         'public/js/app.js',
-        'public/js/main.js',
-        'public/js/laroute.js'
+        'public/js/main.js'
     ], 'public/js/app.js')
     .version();
