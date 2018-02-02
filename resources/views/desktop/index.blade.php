@@ -3,55 +3,25 @@
     @include('app/nav_panel')
     <div class="container-fluid">
         <div class="panelPartner auto_margin">
+            <!---->
             <div class="row">
-                <div class="col-lg-8">
-                    <div class="widget_box">
-                        <h3>Enviar Invitaciones</h3>
-                        <!-- item-->
-                        <div class="row">
-                            <div class="col-md-5">
-                                <div class="form-group">
-                                    <input type="text" class="form-control" name="" placeholder="Nombre y apellidos">
-                                </div>
-                            </div>
-                            <div class="col-md-5">
-                                <div class="form-group">
-                                    <input type="text" class="form-control" name="" placeholder="Correo Electrónico">
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <bt class="btn btn-primary full-width waves-effect waves-light"><strong>Enviar</strong></bt>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <a href="">+ Agregar Referido</a>
-                            </div>
-                        </div>
-                        <!-- end item-->
-                    </div>
+                <div class="col-md-6" style="text-align: center;">
+                    <button type="button" onclick="openModalIn()" class="btn btn-primary col-md-10 btn-lg">Ingresar</button>
                 </div>
-                <div class="col-lg-4">
-                    <div class="widget_box">
-                        <h3>Tu URL de referido es:</h3>
-                        <p class="5"></p>
-                        <span class="code_id">http://www.wasi.co/refer?id5903984</span>
-                    </div>
+                <div class="col-md-6" style="text-align: center;">
+                    <button type="button" onclick="openModalOut()" class="btn btn-default col-md-10 btn-lg">Cobrar</button>
                 </div>
             </div>
-
-            <!---->
             <p class="height_10"></p>
-            <h2 class="title_a">Título opción</h2>
+            <h2 class="title_a">Estado actual</h2>
             <!---->
-
             <div class="row">
                 <div class="col-lg-3 col-md-6">
                     <div class="widget_box_b">
                         <div class="contt">
                             <div class="fl_layer">
                                 <figure><img src="images/icon-pat-01.svg" alt=""></figure>
-                                <h4 class="title">Referidos</h4>
+                                <h4 class="title">Total del dia</h4>
                                 <span class="line"></span>
                                 <span class="data">125</span>
                             </div>
@@ -63,7 +33,7 @@
                         <div class="contt">
                             <div class="fl_layer">
                                 <figure><img src="images/icon-pat-02.svg" alt=""></figure>
-                                <h4 class="title">Activados</h4>
+                                <h4 class="title">Actualmente</h4>
                                 <span class="line"></span>
                                 <span class="data">18</span>
                             </div>
@@ -75,7 +45,7 @@
                         <div class="contt">
                             <div class="fl_layer">
                                 <figure><img src="images/icon-pat-03.svg" alt=""></figure>
-                                <h4 class="title">Retirados</h4>
+                                <h4 class="title">motos</h4>
                                 <span class="line"></span>
                                 <span class="data red">6</span>
                             </div>
@@ -87,9 +57,9 @@
                         <div class="contt">
                             <div class="fl_layer">
                                 <figure><img src="images/icon-pat-04.svg" alt=""></figure>
-                                <h4 class="title">Total Ganado</h4>
+                                <h4 class="title">Carros</h4>
                                 <span class="line"></span>
-                                <span class="data total">$1.250.000</span>
+                                <span class="data total">12</span>
                             </div>
                         </div>
                     </div>
@@ -140,7 +110,28 @@
 
         </div>
     </div>
+    @include('ticket.modal_ticket_in')
+    @include('ticket.modal_ticket_out')
 @endsection
 @section('scripts')
     <script src="{{ asset('js/app.js') }}"></script>
+    <script>
+        var app_e = new Vue({
+            el: "#modal_ticket_in",
+        });
+        function openModalIn(){
+            $('#modal_ticket_in').modal('show');
+            getFecha();
+        }
+        function openModalOut(){
+            $('#modal_ticket_out').modal('show');
+            getFecha();
+        }
+        var getFecha = function(){
+            var fecha = new Date();
+            var fechaActual=fecha.getDate()+"/"+(fecha.getMonth()+1)+"/"+fecha.getFullYear()
+                +"  "+fecha.getHours()+":"+fecha.getMinutes();
+            $('#fecha').val(fechaActual);
+        };
+    </script>
 @endsection

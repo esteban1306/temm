@@ -47,7 +47,7 @@
                         <div class="col-lg-3 col-md-1">
                             <div class="logo"><a href=""><img src="images/logo.png" data-2x="images/logo@2x.png" class="img-retina" alt=""></a></div>
                         </div>
-                        <div class="col-lg-9 col-md-11 hidden-sm-down">
+                        <div class="col-lg-9 col-md-11">
                             <div class="topMenu">
                                 <div class="flat-mega-menu">
                                     <ul class="mcollapse changer">
