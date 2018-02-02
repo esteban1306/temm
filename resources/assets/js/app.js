@@ -12,7 +12,7 @@ require('./libs/bootstrap-select');
 require('./libs/dense-retina');
 require('./libs/html5');
 require('./libs/parallax');
-//require('./libs/slidebars');
+require('./libs/slidebars');
 require('./libs/slicknav');
 require('./libs/waves');
 
