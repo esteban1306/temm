@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Ticket;
+use App\Parking;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use DateTime;
@@ -62,6 +63,16 @@ class TicketController extends Controller
         //
     }
 
+    public function precio($tiempo, $tipo)
+    {
+        $horas = $tiempo->format("%H");
+        $minutos = $tiempo->format("%I");
+        $parking = Parking::find(Auth::user()->parking_id);
+        $minutos = ($minutos*1) - ($parking->free_time);
+        $horas = (24*$tiempo->format("%d"))+$horas*1 + (($minutos>=0? 1: 0)*1);
+        return ($tipo==1? $parking->hour_cars_price * $horas: $parking->hour_motorcycles_price * $horas );
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -80,9 +91,15 @@ class TicketController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $now = new DateTime();
+        $ticket = Ticket::find($request->ticket_id);
+        $interval = date_diff(new DateTime("".$ticket->hour),$now);
+        $ticket->status = 2;
+        $ticket->price =$this->precio($interval,$ticket->type);
+        $ticket->save();
+        return [$ticket->price,$interval->format("%H:%I")];
     }
 
     /**

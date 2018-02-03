@@ -6,45 +6,16 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body" style="min-height: 130px;" >
-                <form class="form-horizontal" method="POST" action="{{ route('login') }}">
+                <form class="form-horizontal" method="POST">
                     {{ csrf_field() }}
 
-                    <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                        <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" placeholder="Email" required autofocus>
-
-                        @if ($errors->has('email'))
-                            <span class="help-block">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                        @endif
+                    <div class="form-group{{ $errors->has('plate') ? ' has-error' : '' }}">
+                        <input id="ticket_id" type="ticket_id" class="form-control" name="ticket_id" value="{{ old('ticket_id') }}" placeholder="ticket" required autofocus>
                     </div>
-
-                    <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-
-                        <input id="password" type="password" class="form-control" name="password" placeholder="Contraseña" required>
-
-                        @if ($errors->has('password'))
-                            <span class="help-block">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                        @endif
-                    </div>
-                    <div class="form-group">
-                        <input type="checkbox" value="1" id="checkbox10" {{ old('remember') ? 'checked' : '' }}>
-                        <label for="checkbox10">
-                            Recuerdame
-                        </label>
-                    </div>
-
                     <div class="form-group ">
-                        <button type="submit" class="btn btn-primary full-width">
-                            Login
+                        <button type="button" onclick="pagar()" class="btn btn-primary full-width">
+                            cobrar
                         </button>
-                    </div>
-                    <div class="form-group">
-                        <a href="{{ route('password.request') }}">
-                            ¿Olvidaste tu contraseña?
-                        </a>
                     </div>
                 </form>
             </div>

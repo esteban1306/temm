@@ -12,6 +12,16 @@
                     <button type="button" onclick="openModalOut()" class="btn btn-default col-md-10 btn-lg">Cobrar</button>
                 </div>
             </div>
+            <div class="alert alert-success" role="alert">
+                <h4 class="alert-heading">Es hora de cobrar</h4>
+                <p>ha tenido una duracion de :</p>
+                <p id="tiempo"></p>
+                <hr>
+                <p id="pagar"></p>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
             <p class="height_10"></p>
             <h2 class="title_a">Estado actual</h2>
             <!---->
@@ -110,6 +120,7 @@
 
         </div>
     </div>
+
     @include('ticket.modal_ticket_in')
     @include('ticket.modal_ticket_out')
 @endsection
@@ -134,5 +145,27 @@
                 +"  "+fecha.getHours()+":"+fecha.getMinutes();
             $('#fecha').val(fechaActual);
         };
+        function pagar() {
+            var ticket_id= $('#ticket_id').val();
+
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: "POST",
+                url: "cobrar",
+                data: {
+                    ticket_id:ticket_id
+                },
+                success: function (datos) {
+                    $('.alert').alert();
+                    $('#pagar').html(datos[0]);
+                    $('#tiempo').html(datos[1]);
+                },
+                error:function () {
+                    alert("Error !");
+                }
+            });
+        }
     </script>
 @endsection
