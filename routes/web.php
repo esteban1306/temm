@@ -19,4 +19,5 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::post('/cobrar', 'TicketController@update')->name('cobrar');
+Route::get('/get_tickets', 'TicketController@getTickets')->name('get_tickets');
 Route::resource('tickets', 'TicketController');

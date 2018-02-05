@@ -7,6 +7,11 @@ use App\Ticket;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Yajra\DataTables\DataTables;
+use Illuminate\Html\HtmlServiceProvider;
+
+
+use PDF; // at the top of the file
 
 
 class TicketController extends Controller
@@ -49,13 +54,37 @@ class TicketController extends Controller
         $ticket->partner_id = Auth::user()->partner_id;
         $ticket->drawer =$request->drawer;
         $ticket->save();
-        // Load autoloader (using Composer)
-        require __DIR__ . '/vendor/autoload.php';
-        $pdf = new TCPDF();                 // create TCPDF object with default constructor args
-        $pdf->AddPage();                    // pretty self-explanatory
-        $pdf->Write(1, 'Hello world');      // 1 is line height
-
-        $pdf->Output('hello_world.pdf');    // send the file inline to the browser (default).
+        $style = array(
+            'position' => '',
+            'align' => 'C',
+            'stretch' => false,
+            'fitwidth' => true,
+            'cellfitalign' => '',
+            'border' => true,
+            'hpadding' => 'auto',
+            'vpadding' => 'auto',
+            'fgcolor' => array(0,0,0),
+            'bgcolor' => false, //array(255,255,255),
+            'text' => true,
+            'font' => 'helvetica',
+            'fontsize' => 8,
+            'stretchtext' => 4
+        );
+        PDF::SetTitle('Hello World');
+        PDF::AddPage();
+        $parking = Parking::find(Auth::user()->parking_id);
+        PDF::Cell(0, 0, $parking->name, 0, 1);
+        PDF::Cell(0, 0, $parking->address, 0, 1);
+        setlocale(LC_ALL, 'es_ES');
+        $fecha = strftime("%b %d, %H:%M");
+        PDF::Cell(0, 0, $fecha, 0, 1);
+        PDF::Write(2, "Placa: ".$request->plate);
+        // CODE 128 AUTO
+        PDF::Ln();
+        PDF::Cell(0, 0, 'CODE 128 AUTO', 0, 1);
+        PDF::write1DBarcode($ticket->ticket_id, 'C128', '', '', '', 18, 0.4, $style, 'N');
+        PDF::Ln();
+        PDF::Output('hello_world.pdf');
 
         return redirect('/');
     }
@@ -119,5 +148,24 @@ class TicketController extends Controller
     public function destroy($id)
     {
         //
+    }
+    public function getTickets()
+    {
+        //return Datatables::of(Roles::query())->make(true);
+
+        $tickets= Ticket::select(['ticket_id as id', 'plate', 'type', 'schedule', 'partner_id', 'status', 'drawer'])->where('parking_id',Auth::user()->parking_id)->orderBy('ticket_id');
+
+        return Datatables::of($tickets)
+            ->addColumn('action', function ($tickets) {
+                return \Form::button('Pagar', [
+                        'class'   => 'btn btn-info',
+                        'onclick' => "$('#modal_ticket_out').modal('show');$('#ticket_id').val(".$tickets->id.")",
+                        'data-toggle' => "tooltip",
+                        'data-placement' => "bottom",
+                        'title' => "Pagar !",
+
+                    ]) ;
+            })
+            ->make(true);
     }
 }

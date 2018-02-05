@@ -12,16 +12,6 @@
                     <button type="button" onclick="openModalOut()" class="btn btn-default col-md-10 btn-lg">Cobrar</button>
                 </div>
             </div>
-            <div class="alert alert-success" role="alert">
-                <h4 class="alert-heading">Es hora de cobrar</h4>
-                <p>ha tenido una duracion de :</p>
-                <p id="tiempo"></p>
-                <hr>
-                <p id="pagar"></p>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
             <p class="height_10"></p>
             <h2 class="title_a">Estado actual</h2>
             <!---->
@@ -83,38 +73,18 @@
 
             <div class="row">
                 <div class="col-12">
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead class="thead-inverse">
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">First</th>
-                                <th scope="col">Last</th>
-                                <th scope="col">Handle</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>@mdo</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">3</th>
-                                <td>Larry</td>
-                                <td>the Bird</td>
-                                <td>@twitter</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                    <table class="table table-bordered" id="tickets-table">
+                        <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Placa</th>
+                            <th>Tipo</th>
+                            <th>estado</th>
+                            <th>Atendió</th>
+                            <th>acciones</th>
+                        </tr>
+                        </thead>
+                    </table>
                 </div>
             </div>
 
@@ -123,6 +93,7 @@
 
     @include('ticket.modal_ticket_in')
     @include('ticket.modal_ticket_out')
+    @include('ticket.modal_ticket_pay')
 @endsection
 @section('scripts')
     <script src="{{ asset('js/app.js') }}"></script>
@@ -161,11 +132,36 @@
                     $('.alert').alert();
                     $('#pagar').html(datos[0]);
                     $('#tiempo').html(datos[1]);
+                    $('#modal_ticket_out').modal('hide');
+                    $('#modal_ticket_pay').modal('show');
+
                 },
                 error:function () {
                     alert("Error !");
                 }
             });
         }
+        $(function() {
+            $.extend(true, $.fn.dataTable.defaults, {
+                "stateSave": true,
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json"
+                }
+            });
+            $('#tickets-table').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: '{!! route('get_tickets') !!}',
+                columns: [
+                    { data: 'id', name: 'Id', search: false },
+                    { data: 'plate', name: 'Placa', search: false },
+                    { data: 'type', name: 'Tipo', search: false },
+                    { data: 'status', name: 'estado', search: false },
+                    { data: 'partner_id', name: 'Atendió', search: false },
+                    { data: 'action', name: 'acciones', search: false },
+                ],
+                lengthMenu: [[ 5, 10, 25, 50, -1], [ 5, 10, 25, 50, "All"]]
+            });
+        });
     </script>
 @endsection
