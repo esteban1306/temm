@@ -15,12 +15,6 @@ const WebpackShellPlugin = require('webpack-shell-plugin');
 
 mix.js('resources/assets/js/app.js', 'public/js')
     .sass('resources/assets/sass/style.scss', 'public/css')
-    .webpackConfig({
-        plugins:
-            [
-                new WebpackShellPlugin({onBuildStart:['php artisan lang:js public/js/messages.js --quiet'], onBuildEnd:[]})
-            ]
-    })
     .scripts([
         'public/js/app.js',
         'public/js/main.js'
