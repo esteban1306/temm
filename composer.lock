@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "353895279b417359053dc0de8da09385",
+    "content-hash": "ae8c0d08d3a9a60b8a5123b6f851ce35",
     "packages": [
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -216,6 +216,58 @@
                 "validator"
             ],
             "time": "2017-11-15T23:40:40+00:00"
+        },
+        {
+            "name": "elibyy/tcpdf-laravel",
+            "version": "5.5.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/elibyy/tcpdf-laravel.git",
+                "reference": "f32b2e52a29ef279a5f1c0e6b12297f510225ed9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/elibyy/tcpdf-laravel/zipball/f32b2e52a29ef279a5f1c0e6b12297f510225ed9",
+                "reference": "f32b2e52a29ef279a5f1c0e6b12297f510225ed9",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "5.5.*",
+                "tecnickcom/tcpdf": "6.2.*"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Elibyy\\TCPDF\\ServiceProvider"
+                    ],
+                    "aliases": {
+                        "PDF": "Elibyy\\TCPDF\\Facades\\TCPDF"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Elibyy\\TCPDF\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "eli y",
+                    "email": "elibyy@gmail.com"
+                }
+            ],
+            "description": "tcpdf support for laravel 5",
+            "keywords": [
+                "TCPDF",
+                "laravel",
+                "pdf"
+            ],
+            "time": "2017-12-28T09:49:42+00:00"
         },
         {
             "name": "erusev/parsedown",

@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Ticket;
 use App\Parking;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
+use App\Ticket;
 use DateTime;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 
 class TicketController extends Controller
@@ -49,6 +49,14 @@ class TicketController extends Controller
         $ticket->partner_id = Auth::user()->partner_id;
         $ticket->drawer =$request->drawer;
         $ticket->save();
+        // Load autoloader (using Composer)
+        require __DIR__ . '/vendor/autoload.php';
+        $pdf = new TCPDF();                 // create TCPDF object with default constructor args
+        $pdf->AddPage();                    // pretty self-explanatory
+        $pdf->Write(1, 'Hello world');      // 1 is line height
+
+        $pdf->Output('hello_world.pdf');    // send the file inline to the browser (default).
+
         return redirect('/');
     }
 
