@@ -73,17 +73,17 @@
 
             <div class="row">
                 <div class="col-12">
-                    <table class="table table-bordered" id="tickets-table">
+                    <table class="table responsive" id="tickets-table">
                         <thead>
                         <tr>
-                            <th>Id</th>
-                            <th>Placa</th>
-                            <th>Tipo</th>
-                            <th>Estado</th>
-                            <th>Precio</th>
-                            <th>Locker</th>
-                            <th>Atendió</th>
-                            <th>acciones</th>
+                            <th class="all">Id</th>
+                            <th class="all">Placa</th>
+                            <th class="min-tablet">Tipo</th>
+                            <th class="min-tablet">Estado</th>
+                            <th class="min-tablet">Precio</th>
+                            <th class="min-tablet">Locker</th>
+                            <th class="min-tablet">Atendió</th>
+                            <th class="all">acciones</th>
                         </tr>
                         </thead>
                     </table>
