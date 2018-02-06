@@ -10,10 +10,11 @@
                     {{ csrf_field() }}
 
                     <div class="form-group{{ $errors->has('plate') ? ' has-error' : '' }}">
-                        <input id="ticket_id" type="ticket_id" class="form-control" name="ticket_id" value="{{ old('ticket_id') }}" placeholder="ticket" required autofocus>
+                        <textarea id="ticket_id" rows="2" cols="18" autofocus>
+                        </textarea>
                     </div>
                     <div class="form-group ">
-                        <button type="button" onclick="pagar()" class="btn btn-primary full-width">
+                        <button id="b_pagar" type="button" onclick="pagar()" class="btn btn-primary full-width">
                             cobrar
                         </button>
                     </div>

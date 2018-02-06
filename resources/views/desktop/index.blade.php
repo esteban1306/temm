@@ -109,6 +109,7 @@
         function openModalOut(){
             $('#modal_ticket_out').modal('show');
             getFecha();
+            $('#ticket_id').html('');
         }
         var getFecha = function(){
             var fecha = new Date();
@@ -117,7 +118,8 @@
             $('#fecha').val(fechaActual);
         };
         function pagar() {
-            var ticket_id= $('#ticket_id').val();
+            var ticket_id= $('#ticket_id').html();
+            ticket_id = ticket_id.replace(/[^0-9]/g,'');
 
             $.ajax({
                 headers: {
@@ -141,6 +143,14 @@
                 }
             });
         }
+        function teclas(event) {
+            tecla=(document.all) ? event.keyCode : event.which;
+            if (tecla==13 || event.altKey) {
+                alert('holaaa');
+            }
+
+            return false;
+        }
         $(function() {
             $.extend(true, $.fn.dataTable.defaults, {
                 "stateSave": true,
@@ -153,7 +163,7 @@
                 serverSide: true,
                 ajax: '{!! route('get_tickets') !!}',
                 columns: [
-                    { data: 'id', name: 'Id', search: false },
+                    { data: 'id', name: 'Id', search: false, ordeable: false },
                     { data: 'plate', name: 'Placa', search: false },
                     { data: 'type', name: 'Tipo', search: false },
                     { data: 'status', name: 'estado', search: false },

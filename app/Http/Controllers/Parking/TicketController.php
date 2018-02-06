@@ -60,7 +60,7 @@ class TicketController extends Controller
             'stretch' => false,
             'fitwidth' => true,
             'cellfitalign' => '',
-            'border' => true,
+            'border' => false,
             'hpadding' => 'auto',
             'vpadding' => 'auto',
             'fgcolor' => array(0,0,0),
@@ -70,21 +70,25 @@ class TicketController extends Controller
             'fontsize' => 8,
             'stretchtext' => 4
         );
-        PDF::SetTitle('Hello World');
+        PDF::SetTitle('Ticket');
         PDF::AddPage();
         $parking = Parking::find(Auth::user()->parking_id);
+        PDF::Cell(0, 0, "Parqueadero", 0, 1);
         PDF::Cell(0, 0, $parking->name, 0, 1);
         PDF::Cell(0, 0, $parking->address, 0, 1);
         setlocale(LC_ALL, 'es_ES');
         $fecha = strftime("%b %d, %H:%M");
         PDF::Cell(0, 0, $fecha, 0, 1);
         PDF::Write(2, "Placa: ".$request->plate);
-        // CODE 128 AUTO
+        if(isset($ticket->drawer)){
+            PDF::Ln();
+            PDF::Write(2, "Locker: ".$ticket->drawer);
+        }
+        // CODE 128 C
         PDF::Ln();
-        PDF::Cell(0, 0, 'CODE 128 AUTO', 0, 1);
-        PDF::write1DBarcode($ticket->ticket_id, 'C128', '', '', '', 18, 0.4, $style, 'N');
-        PDF::Ln();
-        PDF::Output('hello_world.pdf');
+        $id_bar = substr('0000000000'.$ticket->ticket_id,-10);
+        PDF::write1DBarcode($id_bar, 'C128C', '', '', '', 18, 0.4, $style, 'N');
+        PDF::Output('ticket.pdf');
 
         return redirect('/');
     }
@@ -159,7 +163,7 @@ class TicketController extends Controller
             ->addColumn('action', function ($tickets) {
                 return \Form::button('Pagar', [
                         'class'   => 'btn btn-info',
-                        'onclick' => "$('#modal_ticket_out').modal('show');$('#ticket_id').val(".$tickets->id.")",
+                        'onclick' => "$('#modal_ticket_out').modal('show');$('#ticket_id').html('".$tickets->id."')",
                         'data-toggle' => "tooltip",
                         'data-placement' => "bottom",
                         'title' => "Pagar !",
