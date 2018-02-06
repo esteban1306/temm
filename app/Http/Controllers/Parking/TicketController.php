@@ -44,7 +44,7 @@ class TicketController extends Controller
      */
     public function store(Request $request)
     {
-        $now = new DateTime();
+        $now = new DateTime(new Datetime('now',new DateTimeZone('America/New_York')));
         $ticket= new Ticket();
         $ticket->hour =$now;
         $ticket->plate =$request->plate;
@@ -135,7 +135,7 @@ class TicketController extends Controller
      */
     public function update(Request $request)
     {
-        $now = new DateTime();
+        $now = new DateTime(new Datetime('now',new DateTimeZone('America/New_York')));
         $ticket = Ticket::find($request->ticket_id);
         $interval = date_diff(new DateTime("".$ticket->hour),$now);
         $ticket->status = 2;
@@ -160,7 +160,7 @@ class TicketController extends Controller
 
         $tickets= Ticket::select(['ticket_id as Id', 'plate', 'type', 'schedule', 'partner_id', 'status', 'drawer', 'price'])->where('parking_id',Auth::user()->parking_id)->orderBy('ticket_id');
         if ($search) {
-                $tickets = $tickets->where('plate', $search);
+                $tickets = $tickets->where('plate', 'LIKE', "%$search%");
         }
         return Datatables::of($tickets)
             ->addColumn('action', function ($tickets) {
