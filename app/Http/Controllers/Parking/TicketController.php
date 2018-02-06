@@ -163,7 +163,7 @@ class TicketController extends Controller
             ->addColumn('action', function ($tickets) {
                 return \Form::button('Pagar', [
                         'class'   => 'btn btn-info',
-                        'onclick' => "$('#modal_ticket_out').modal('show');$('#ticket_id').html('$tickets->id')",
+                        'onclick' => "$('#modal_ticket_out').modal('show');$('#ticket_id').html('$tickets->Id')",
                         'data-toggle' => "tooltip",
                         'data-placement' => "bottom",
                         'title' => "Pagar !",
