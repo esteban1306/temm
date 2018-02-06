@@ -157,7 +157,7 @@ class TicketController extends Controller
     {
         //return Datatables::of(Roles::query())->make(true);
 
-        $tickets= Ticket::select(['ticket_id as id', 'plate', 'type', 'schedule', 'partner_id', 'status', 'drawer'])->where('parking_id',Auth::user()->parking_id)->orderBy('ticket_id');
+        $tickets= Ticket::select(['ticket_id as Id', 'plate', 'type', 'schedule', 'partner_id', 'status', 'drawer'])->where('parking_id',Auth::user()->parking_id)->orderBy('ticket_id');
 
         return Datatables::of($tickets)
             ->addColumn('action', function ($tickets) {

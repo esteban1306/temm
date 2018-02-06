@@ -163,7 +163,7 @@
                 serverSide: true,
                 ajax: '{!! route('get_tickets') !!}',
                 columns: [
-                    { data: 'id', name: 'Id', search: false, ordeable: false },
+                    { data: 'Id', name: 'Id', search: false, ordeable: false },
                     { data: 'plate', name: 'Placa', search: false },
                     { data: 'type', name: 'Tipo', search: false },
                     { data: 'status', name: 'estado', search: false },
