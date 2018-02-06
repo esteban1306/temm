@@ -122,7 +122,7 @@
         function pagar() {
             var ticket_id= $('#ticket_id').val();
             ticket_id = ticket_id.replace(/[^0-9]/g,'');
-
+            $('#ticket_id').val(ticket_id*1);
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -157,14 +157,14 @@
                 serverSide: true,
                 ajax: '{!! route('get_tickets') !!}',
                 columns: [
-                    { data: 'Id', name: 'Id', search: false, ordeable: false },
-                    { data: 'plate', name: 'Placa', search: false, ordeable: false },
-                    { data: 'Tipo', name: 'Tipo', search: false, ordeable: false },
-                    { data: 'Estado', name: 'Estado', search: false, ordeable: false },
-                    { data: 'price', name: 'Precio', search: false, ordeable: false },
-                    { data: 'drawer', name: 'Locker', search: false, ordeable: false },
-                    { data: 'Atendio', name: 'Atendió', search: false, ordeable: false },
-                    { data: 'action', name: 'acciones', search: false, ordeable: false },
+                    { data: 'Id', name: 'Id', orderable  : false, searchable : false },
+                    { data: 'plate', name: 'Placa', orderable  : false, searchable : false },
+                    { data: 'Tipo', name: 'Tipo', orderable  : false, searchable : false },
+                    { data: 'Estado', name: 'Estado', orderable  : false, searchable : false },
+                    { data: 'price', name: 'Precio', orderable  : false, searchable : false },
+                    { data: 'drawer', name: 'Locker', orderable  : false, searchable : false },
+                    { data: 'Atendio', name: 'Atendió', orderable  : false, searchable : false },
+                    { data: 'action', name: 'acciones', orderable  : false, searchable : false },
                 ],
                 lengthMenu: [[ 10, 25, 50, -1], [ 10, 25, 50, "Todos"]]
             });
