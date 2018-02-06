@@ -78,7 +78,8 @@ class TicketController extends Controller
         PDF::Cell(0, 0, $parking->name, 0, 1);
         PDF::Cell(0, 0, $parking->address, 0, 1);
         setlocale(LC_ALL, 'es_ES');
-        $fecha = strftime("%b %d, %H:%M");
+        $fecha = $now->format('M j, G:i');
+        //$fecha = strftime("%b %d, %H:%M");
         PDF::Cell(0, 0, $fecha, 0, 1);
         PDF::Write(2, "Placa: ".$request->plate);
         if(isset($ticket->drawer)){
