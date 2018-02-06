@@ -110,7 +110,7 @@
         function openModalOut(){
             $('#modal_ticket_out').modal('show');
             getFecha();
-            $('#ticket_id').html('');
+            $('#ticket_id').val('');
         }
         var getFecha = function(){
             var fecha = new Date();

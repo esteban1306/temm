@@ -162,6 +162,7 @@ class TicketController extends Controller
 
         return Datatables::of($tickets)
             ->addColumn('action', function ($tickets) {
+                if ($tickets->status == 1)
                 return \Form::button('Pagar', [
                         'class'   => 'btn btn-info',
                         'onclick' => "$('#modal_ticket_out').modal('show');$('#ticket_id').val('$tickets->Id')",
@@ -170,6 +171,8 @@ class TicketController extends Controller
                         'title' => "Pagar !",
 
                     ]) ;
+                else
+                    return '';
             })
             ->addColumn('Tipo', function ($tickets) {
                 return  $tickets->type == 1? 'Carro': 'Moto';
