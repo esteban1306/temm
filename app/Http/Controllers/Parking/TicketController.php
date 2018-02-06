@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Partner;
 use App\Parking;
 use App\Ticket;
 use DateTime;
@@ -157,7 +158,7 @@ class TicketController extends Controller
     {
         //return Datatables::of(Roles::query())->make(true);
 
-        $tickets= Ticket::select(['ticket_id as Id', 'plate', 'type', 'schedule', 'partner_id', 'status', 'drawer'])->where('parking_id',Auth::user()->parking_id)->orderBy('ticket_id');
+        $tickets= Ticket::select(['ticket_id as Id', 'plate', 'type', 'schedule', 'partner_id', 'status', 'drawer', 'price'])->where('parking_id',Auth::user()->parking_id)->orderBy('ticket_id');
 
         return Datatables::of($tickets)
             ->addColumn('action', function ($tickets) {
@@ -169,6 +170,16 @@ class TicketController extends Controller
                         'title' => "Pagar !",
 
                     ]) ;
+            })
+            ->addColumn('Tipo', function ($tickets) {
+                return  $tickets->type == 1? 'Carro': 'Moto';
+            })
+            ->addColumn('Estado', function ($tickets) {
+                return  $tickets->status == 1? 'Pendiente Pago': 'Pagó';
+            })
+            ->addColumn('Atendio', function ($tickets) {
+                $partner = Partner::find($tickets->partner_id);
+                return  $partner->name;
             })
             ->make(true);
     }

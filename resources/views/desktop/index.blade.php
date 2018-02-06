@@ -79,7 +79,8 @@
                             <th>Id</th>
                             <th>Placa</th>
                             <th>Tipo</th>
-                            <th>estado</th>
+                            <th>Estado</th>
+                            <th>Precio</th>
                             <th>Atendió</th>
                             <th>acciones</th>
                         </tr>
@@ -156,13 +157,14 @@
                 ajax: '{!! route('get_tickets') !!}',
                 columns: [
                     { data: 'Id', name: 'Id', search: false, ordeable: false },
-                    { data: 'plate', name: 'Placa', search: false },
-                    { data: 'type', name: 'Tipo', search: false },
-                    { data: 'status', name: 'estado', search: false },
-                    { data: 'partner_id', name: 'Atendió', search: false },
-                    { data: 'action', name: 'acciones', search: false },
+                    { data: 'plate', name: 'Placa', search: false, ordeable: false },
+                    { data: 'Tipo', name: 'Tipo', search: false, ordeable: false },
+                    { data: 'Estado', name: 'Estado', search: false, ordeable: false },
+                    { data: 'price', name: 'Precio', search: false, ordeable: false },
+                    { data: 'Atendio', name: 'Atendió', search: false, ordeable: false },
+                    { data: 'action', name: 'acciones', search: false, ordeable: false },
                 ],
-                lengthMenu: [[ 5, 10, 25, 50, -1], [ 5, 10, 25, 50, "All"]]
+                lengthMenu: [[ 10, 25, 50, -1], [ 10, 25, 50, "Todos"]]
             });
         });
     </script>
