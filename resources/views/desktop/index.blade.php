@@ -81,6 +81,7 @@
                             <th>Tipo</th>
                             <th>Estado</th>
                             <th>Precio</th>
+                            <th>Locker</th>
                             <th>Atendió</th>
                             <th>acciones</th>
                         </tr>
@@ -161,6 +162,7 @@
                     { data: 'Tipo', name: 'Tipo', search: false, ordeable: false },
                     { data: 'Estado', name: 'Estado', search: false, ordeable: false },
                     { data: 'price', name: 'Precio', search: false, ordeable: false },
+                    { data: 'drawer', name: 'Locker', search: false, ordeable: false },
                     { data: 'Atendio', name: 'Atendió', search: false, ordeable: false },
                     { data: 'action', name: 'acciones', search: false, ordeable: false },
                 ],

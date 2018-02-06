@@ -154,12 +154,14 @@ class TicketController extends Controller
     {
         //
     }
-    public function getTickets()
+    public function getTickets(Request $request)
     {
-        //return Datatables::of(Roles::query())->make(true);
+        $search = $request->get('search')['value'];
 
         $tickets= Ticket::select(['ticket_id as Id', 'plate', 'type', 'schedule', 'partner_id', 'status', 'drawer', 'price'])->where('parking_id',Auth::user()->parking_id)->orderBy('ticket_id');
-
+        if ($search) {
+                $tickets = $tickets->where('plate', $search);
+        }
         return Datatables::of($tickets)
             ->addColumn('action', function ($tickets) {
                 if ($tickets->status == 1)
