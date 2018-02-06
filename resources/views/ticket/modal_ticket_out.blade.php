@@ -8,14 +8,8 @@
             <div class="modal-body" style="min-height: 130px;" >
                 <div class="form-horizontal">
                     {{ csrf_field() }}
-
-                    <div class="form-group{{ $errors->has('plate') ? ' has-error' : '' }}">
-                        <textarea id="ticket_id_2" rows="2" cols="18" autofocus>
-                        </textarea>
-                    </div>
                     <div class="form-group{{ $errors->has('plate') ? ' has-error' : '' }}">
                         <input id="ticket_id" name="ticket_id" type="text" placeholder="ticket">
-                        <input id="ticket_id_2" type="number" placeholder="ticket" autofocus>
                     </div>
                     <div class="form-group ">
                         <button id="b_pagar" type="button" onclick="pagar()" class="btn btn-primary full-width">
