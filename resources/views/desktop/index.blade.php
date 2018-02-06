@@ -12,9 +12,8 @@
                     <button type="button" onclick="openModalOut()" class="btn btn-default col-md-10 btn-lg">Cobrar</button>
                 </div>
             </div>
-            <p class="height_10"></p>
+            <!--<p class="height_10"></p>
             <h2 class="title_a">Estado actual</h2>
-            <!---->
             <div class="row">
                 <div class="col-lg-3 col-md-6">
                     <div class="widget_box_b">
@@ -64,7 +63,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>-->
 
             <!---->
             <p class="height_10"></p>
@@ -76,7 +75,6 @@
                     <table class="table responsive" id="tickets-table">
                         <thead>
                         <tr>
-                            <th class="all">Id</th>
                             <th class="all">Placa</th>
                             <th class="min-tablet">Tipo</th>
                             <th class="min-tablet">Estado</th>
@@ -157,7 +155,6 @@
                 serverSide: true,
                 ajax: '{!! route('get_tickets') !!}',
                 columns: [
-                    { data: 'Id', name: 'Id', orderable  : false, searchable : false },
                     { data: 'plate', name: 'Placa', orderable  : false, searchable : false },
                     { data: 'Tipo', name: 'Tipo', orderable  : false, searchable : false },
                     { data: 'Estado', name: 'Estado', orderable  : false, searchable : false },
