@@ -118,7 +118,7 @@
             $('#fecha').val(fechaActual);
         };
         function pagar() {
-            var ticket_id= $('#ticket_id').html();
+            var ticket_id= $('#ticket_id').val();
             ticket_id = ticket_id.replace(/[^0-9]/g,'');
 
             $.ajax({
@@ -142,14 +142,6 @@
                     alert("Error !");
                 }
             });
-        }
-        function teclas(event) {
-            tecla=(document.all) ? event.keyCode : event.which;
-            if (tecla==13 || event.altKey) {
-                alert('holaaa');
-            }
-
-            return false;
         }
         $(function() {
             $.extend(true, $.fn.dataTable.defaults, {

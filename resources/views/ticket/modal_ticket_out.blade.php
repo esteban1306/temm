@@ -14,7 +14,7 @@
                         </textarea>
                     </div>
                     <div class="form-group{{ $errors->has('plate') ? ' has-error' : '' }}">
-                        <input id="ticket_id" type="text" placeholder="ticket">
+                        <input id="ticket_id" name="ticket_id" type="text" placeholder="ticket">
                         <input id="ticket_id_2" type="number" placeholder="ticket" autofocus>
                     </div>
                     <div class="form-group ">
