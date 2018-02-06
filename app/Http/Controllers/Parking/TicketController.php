@@ -44,7 +44,7 @@ class TicketController extends Controller
      */
     public function store(Request $request)
     {
-        $now = new DateTime(new Datetime('now',new DateTimeZone('America/New_York')));
+        $now = new Datetime('now',new DateTimeZone('America/New_York'));
         $ticket= new Ticket();
         $ticket->hour =$now;
         $ticket->plate =$request->plate;
@@ -135,7 +135,7 @@ class TicketController extends Controller
      */
     public function update(Request $request)
     {
-        $now = new DateTime(new Datetime('now',new DateTimeZone('America/New_York')));
+        $now = new Datetime('now',new DateTimeZone('America/New_York'));
         $ticket = Ticket::find($request->ticket_id);
         $interval = date_diff(new DateTime("".$ticket->hour),$now);
         $ticket->status = 2;
