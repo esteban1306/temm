@@ -69,7 +69,9 @@
             <p class="height_10"></p>
             <h2 class="title_a">Título opción</h2>
             <!---->
-
+            <div class="col-md-4">
+                <input id="Tiempo" type="text" name="daterange" value="01/02/2018 1:30 PM - 01/02/2018 2:00 PM" />
+            </div>
             <div class="row">
                 <div class="col-12">
                     <table class="table responsive" id="tickets-table">
@@ -98,6 +100,9 @@
 @section('scripts')
     <script src="{{ asset('js/app.js') }}"></script>
     <script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+
     <script>
         var app_e = new Vue({
             el: "#modal_ticket_in",
@@ -144,7 +149,17 @@
             });
         }
         $(function() {
-            $.extend(true, $.fn.dataTable.defaults, {
+            $('input[name="daterange"]').daterangepicker({
+                timePicker: true,
+                timePickerIncrement: 30,
+                locale: {
+                    format: 'YYYY/MM/DD h:mm A'
+                }
+            });
+            var fecha = new Date();
+            var hoy=fecha.getFullYear()+"/"+(fecha.getMonth()+1)+"/"+fecha.getDate();
+            $('#Tiempo').val(hoy+' 12:00 AM - '+hoy+' 11:59 pm');
+            $.extend(true, $.fn .dataTable.defaults, {
                 "stateSave": true,
                 "language": {
                     "url": "//cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json"
