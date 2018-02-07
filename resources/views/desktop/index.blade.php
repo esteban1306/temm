@@ -67,12 +67,55 @@
 
             <!---->
             <p class="height_10"></p>
-            <h2 class="title_a">Título opción</h2>
+
             <!---->
-            <div class="col-md-4">
-                <input id="Tiempo" type="text" name="daterange" value="01/02/2018 1:30 PM - 01/02/2018 2:00 PM" />
+            <div class="box">
+                <div class="box-title">
+                    <h3>
+                        <i class="fa fa-search"></i>
+                        <h2 class="title_a">Opciones de Busqueda</h2>
+                    </h3>
+                </div>
+                <div class="box-content">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                {!! Form::label('fecha', 'Fechas', ['class' => 'control-label']) !!}
+                                <input class="form-control" id="Tiempo" type="text" name="daterange" value="01/02/2018 1:30 PM - 01/02/2018 2:00 PM" />
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                {!! Form::label('tipo', 'Tipo Vehiculo', ['class' => 'control-label']) !!}
+                                <select id="type" name="type" class="form-control">
+                                    <option value="">Todos</option>
+                                    <option value="1">Carro</option>
+                                    <option value="2">Moto</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                {!! Form::label('tipoT', 'Tipo Tiempo', ['class' => 'control-label']) !!}
+                                <select id="type" name="type" class="form-control">
+                                    <option value="">Todos</option>
+                                    <option value="1">Horas</option>
+                                    <option value="2">Dias</option>
+                                    <option value="3">Mensualidad</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-sm-2">
+                            <div class="form-group">
+                                <label class="control-label">&nbsp;</label>
+                                <button class="btn btn-success form-control" id="advanced_search"><i class="fa fa-search"></i> Buscar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="row">
+
+                <div class="row">
                 <div class="col-12">
                     <table class="table responsive" id="tickets-table">
                         <thead>
