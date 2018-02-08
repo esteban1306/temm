@@ -87,7 +87,7 @@
                         <div class="col-md-2">
                             <div class="form-group">
                                 {!! Form::label('tipo', 'Tipo Vehiculo', ['class' => 'control-label']) !!}
-                                <select id="type" name="type" class="form-control">
+                                <select id="type-car" name="type" class="form-control">
                                     <option value="">Todos</option>
                                     <option value="1">Carro</option>
                                     <option value="2">Moto</option>
@@ -222,6 +222,19 @@
                     { data: 'action', name: 'acciones', orderable  : false, searchable : false },
                 ],
                 lengthMenu: [[ 10, 25, 50, -1], [ 10, 25, 50, "Todos"]]
+            });
+            $('#advanced_search').click(function() {
+                var options_datatable       = getOpt();
+                options_datatable.deferRender = true;
+                options_datatable.ajax = {
+                    url  : '{!! route('get_tickets') !!}',
+                    type : 'POST',
+                    data : {
+                        type_car        : $("#type-car").val(),
+                        type            : $("#type").val(),
+                    }
+                };
+                createDataTableStandar('#tickets-table', options_datatable);
             });
         });
     </script>
