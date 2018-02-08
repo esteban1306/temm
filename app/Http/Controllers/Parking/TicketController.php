@@ -169,7 +169,6 @@ class TicketController extends Controller
             $tickets = $tickets->where('schedule', $schedule);
         if (!empty($type))
             $tickets = $tickets->where('type', $type);
-
         return Datatables::of($tickets)
             ->addColumn('action', function ($tickets) {
                 if ($tickets->status == 1)
