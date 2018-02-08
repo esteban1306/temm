@@ -237,5 +237,43 @@
                 createDataTableStandar('#tickets-table', options_datatable);
             });
         });
+        function getOpt() {
+            var opt = {
+                processing     : true,
+                serverSide     : true,
+                destroy        : true,
+                ajax           : '',
+                columns        : [],
+                sDom           : 'r<Hlf><"datatable-scroll"t><Fip>',
+                pagingType     : "simple_numbers",
+                iDisplayLength : 5,
+                aLengthMenu    : [[5, 10, 50, -1], [5, 10, 50, tt('pagination.datatables.all', lang_locale)]],
+                oLanguage      : {
+                    sSearch         : "<span>" + tt('search.label', lang_locale) + ":</span> ",
+                    sProcessing     : "<div class='text-center'>" + tt('search.processing', lang_locale) + "</div>",
+                    sZeroRecords    : tt('search.zero_records', lang_locale),
+                    sEmptyTable     : tt('search.empty_table', lang_locale),
+                    sLoadingRecords : tt('actions.loading.label', lang_locale),
+                    sInfo           : tt('pagination.datatables.info', lang_locale),
+                    sInfoEmpty      : tt('pagination.datatables.info_empty', lang_locale),
+                    sInfoFiltered   : tt('pagination.datatables.info_filtered', lang_locale),
+                    sLengthMenu     : tt('pagination.datatables.length_menu', lang_locale),
+                    oPaginate       : {
+                        sFirst    : tt('pagination.first', lang_locale),
+                        sLast     : tt('pagination.last', lang_locale),
+                        sNext     : tt('pagination.next.label', lang_locale),
+                        sPrevious : tt('pagination.previous.label', lang_locale)
+                    },
+                    select          : {
+                        rows : {
+                            _ : Lang.choice('pagination.datatables.select.rows', 2, { num : '%d' }),
+                            1 : Lang.choice('pagination.datatables.select.rows', 1, { num : '%d' }),
+                            0 : ''
+                        }
+                    }
+                }
+            };
+            return opt;
+        }
     </script>
 @endsection
