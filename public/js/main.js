@@ -93,26 +93,4 @@ function tt(param1, param2) {
 
     return translation;
 }
-function createDataTableStandar(selector, opt) {
-    if (typeof opt.scroll === 'undefined')
-        opt.scroll = true;
-    var myTable = $(selector).DataTable(opt);
-    $(".dataTables_filter input[aria-controls='" + selector.substring(1) + "']").unbind().bind("keyup", function(e) {
-        //if(this.value.length >= 3 || e.keyCode == 13) {
-        if (e.keyCode == 13) {
-            myTable.search(this.value).draw();
-            return;
-        }
-        if (this.value == "")
-            myTable.search("").draw();
-        return;
-    });
-    if (opt.scroll) {
-        myTable.on('page.dt', function() {
-            $('html, body').animate({
-                scrollTop: $(".dataTables_wrapper").offset().top
-            }, 'fast');
-        });
-    }
-    return myTable;
-}
+
