@@ -211,7 +211,13 @@
             $('#tickets-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{!! route('get_tickets') !!}',
+                ajax: {
+                    url  : '{!! route('get_tickets') !!}',
+                    data : {
+                        type_car        : $("#type-car").val(),
+                        type            : $("#type").val(),
+                    }
+                },
                 columns: [
                     { data: 'plate', name: 'Placa', orderable  : false, searchable : false },
                     { data: 'Tipo', name: 'Tipo', orderable  : false, searchable : false },
