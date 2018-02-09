@@ -81,7 +81,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 {!! Form::label('fecha', 'Fechas', ['class' => 'control-label']) !!}
-                                <input class="form-control" id="Tiempo" type="text" name="daterange" value="<?  use DateTime;$now = new Datetime(); echo $now->format('Y/m/d')?> 12:00 AM - <? echo $now->format('Y/m/d')?> 11:30 PM" />
+                                <input class="form-control" id="Tiempo" type="text" name="daterange" value="" />
                             </div>
                         </div>
                         <div class="col-md-2">
@@ -224,7 +224,6 @@
                 lengthMenu: [[ 10, 25, 50, -1], [ 10, 25, 50, "Todos"]]
             });
             $('#advanced_search').click(function() {
-                $("#tickets-table").dataTable().fnDestroy();
                 $('#tickets-table').DataTable({
                     processing: true,
                     serverSide: true,
@@ -245,7 +244,7 @@
                         { data: 'action', name: 'acciones', orderable  : false, searchable : false },
                     ],
                     lengthMenu: [[ 10, 25, 50, -1], [ 10, 25, 50, "Todos"]]
-                });
+                })._fnAjaxUpdate();
             });
         });
         function getOpt() {
