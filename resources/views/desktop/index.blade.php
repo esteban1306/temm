@@ -81,7 +81,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 {!! Form::label('fecha', 'Fechas', ['class' => 'control-label']) !!}
-                                <input class="form-control" id="Tiempo" type="text" name="daterange" value="" />
+                                <input class="form-control" id="Tiempo" type="text" name="daterange" value="<?  use DateTime;$now = new Datetime(); echo $now->format('Y/m/d')?> 12:00 AM - <? echo $now->format('Y/m/d')?> 11:30 PM" />
                             </div>
                         </div>
                         <div class="col-md-2">
@@ -184,6 +184,7 @@
                     $('#tiempo').html(datos[1]);
                     $('#modal_ticket_out').modal('hide');
                     $('#modal_ticket_pay').modal('show');
+                    $('#tickets-table').dataTable()._fnAjaxUpdate();
 
                 },
                 error:function () {
@@ -211,13 +212,7 @@
             $('#tickets-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: {
-                    url  : '{!! route('get_tickets') !!}',
-                    data : {
-                        type_car        : $("#type-car").val(),
-                        type            : $("#type").val(),
-                    }
-                },
+                ajax: '{!! route('get_tickets') !!}',
                 columns: [
                     { data: 'plate', name: 'Placa', orderable  : false, searchable : false },
                     { data: 'Tipo', name: 'Tipo', orderable  : false, searchable : false },
@@ -230,6 +225,7 @@
                 lengthMenu: [[ 10, 25, 50, -1], [ 10, 25, 50, "Todos"]]
             });
             $('#advanced_search').click(function() {
+                $("#tickets-table").dataTable().fnDestroy();
                 $('#tickets-table').DataTable({
                     processing: true,
                     serverSide: true,
@@ -250,7 +246,7 @@
                         { data: 'action', name: 'acciones', orderable  : false, searchable : false },
                     ],
                     lengthMenu: [[ 10, 25, 50, -1], [ 10, 25, 50, "Todos"]]
-                })._fnAjaxUpdate();
+                });
             });
         });
         function getOpt() {
