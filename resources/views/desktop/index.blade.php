@@ -81,7 +81,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 {!! Form::label('fecha', 'Fechas', ['class' => 'control-label']) !!}
-                                <input class="form-control" id="Tiempo" type="text" name="daterange" value="01/02/2018 1:30 PM - 01/02/2018 2:00 PM" />
+                                <input class="form-control" id="Tiempo" type="text" name="daterange" value="<?  use DateTime;$now = new Datetime(); echo $now->format('Y/m/d')?> 12:00 AM - <? echo $now->format('Y/m/d')?> 11:30 PM" />
                             </div>
                         </div>
                         <div class="col-md-2">
@@ -161,7 +161,7 @@
         }
         var getFecha = function(){
             var fecha = new Date();
-            var fechaActual=fecha.getDate()+"/"+(fecha.getMonth()+1)+"/"+fecha.getFullYear()
+            var fechaActual=fecha.getDate()+"/0"+(fecha.getMonth()+1)+"/"+fecha.getFullYear()
                 +"  "+fecha.getHours()+":"+fecha.getMinutes();
             $('#fecha').val(fechaActual);
         };
@@ -224,17 +224,28 @@
                 lengthMenu: [[ 10, 25, 50, -1], [ 10, 25, 50, "Todos"]]
             });
             $('#advanced_search').click(function() {
-                var options_datatable       = getOpt();
-                options_datatable.deferRender = true;
-                options_datatable.ajax = {
-                    url  : '{!! route('get_tickets') !!}',
-                    type : 'POST',
-                    data : {
-                        type_car        : $("#type-car").val(),
-                        type            : $("#type").val(),
-                    }
-                };
-                createDataTableStandar('#tickets-table', options_datatable);
+                $("#tickets-table").dataTable().fnDestroy();
+                $('#tickets-table').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: {
+                        url  : '{!! route('get_tickets') !!}',
+                        data : {
+                            type_car        : $("#type-car").val(),
+                            type            : $("#type").val(),
+                        }
+                    },
+                    columns: [
+                        { data: 'plate', name: 'Placa', orderable  : false, searchable : false },
+                        { data: 'Tipo', name: 'Tipo', orderable  : false, searchable : false },
+                        { data: 'Estado', name: 'Estado', orderable  : false, searchable : false },
+                        { data: 'price', name: 'Precio', orderable  : false, searchable : false },
+                        { data: 'drawer', name: 'Locker', orderable  : false, searchable : false },
+                        { data: 'Atendio', name: 'Atendió', orderable  : false, searchable : false },
+                        { data: 'action', name: 'acciones', orderable  : false, searchable : false },
+                    ],
+                    lengthMenu: [[ 10, 25, 50, -1], [ 10, 25, 50, "Todos"]]
+                });
             });
         });
         function getOpt() {

@@ -158,8 +158,8 @@ class TicketController extends Controller
     public function getTickets(Request $request)
     {
         $search = $request->get('search')['value'];
-        $schedule = $request->get('type_car');
-        $type = $request->get('type');
+        $schedule = $request->get('type');
+        $type = $request->get('type_car');
 
         $tickets= Ticket::select(['ticket_id as Id', 'plate', 'type', 'schedule', 'partner_id', 'status', 'drawer', 'price'])->where('parking_id',Auth::user()->parking_id)->orderBy('ticket_id');
         if ($search) {
