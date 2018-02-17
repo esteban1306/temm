@@ -10,7 +10,8 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
-    <link href="//cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
-    @yield('styles')
+    <link href="{{ asset('css/dataTables.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/daterangepicker.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/pnotify.custom.min.css') }}" rel="stylesheet">
+   @yield('styles')
 </head>

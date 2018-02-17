@@ -78,12 +78,12 @@
                 </div>
                 <div class="box-content">
                     <div class="row">
-                        <div class="col-md-3">
+                        <!--<div class="col-md-3">
                             <div class="form-group">
                                 {!! Form::label('fecha', 'Fechas', ['class' => 'control-label']) !!}
                                 <input class="form-control" id="Tiempo" type="text" name="daterange" value="<?  use DateTime;$now = new Datetime(); echo $now->format('Y/m/d')?> 12:00 AM - <? echo $now->format('Y/m/d')?> 11:30 PM" />
                             </div>
-                        </div>
+                        </div>-->
                         <div class="col-md-2">
                             <div class="form-group">
                                 {!! Form::label('tipo', 'Tipo Vehiculo', ['class' => 'control-label']) !!}
@@ -142,9 +142,10 @@
 @endsection
 @section('scripts')
     <script src="{{ asset('js/app.js') }}"></script>
-    <script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-    <script src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-    <script src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+    <script src="{{ asset('js/datatable.min.js') }}"></script>
+    <script src="{{ asset('js/moment.min.js') }}"></script>
+    <script src="{{ asset('js/daterangepicker.js') }}"></script>
+    <script src="{{ asset('js/pnotify.custom.min.js') }}"></script>
 
     <script>
         var app_e = new Vue({
