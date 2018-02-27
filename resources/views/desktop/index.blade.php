@@ -226,6 +226,7 @@
             });
             $('#advanced_search').click(function() {
                 $("#tickets-table").dataTable().fnDestroy();
+                $('#tickets-table').DataTable().page(0).draw('page');
                 $('#tickets-table').DataTable({
                     processing: true,
                     serverSide: true,
