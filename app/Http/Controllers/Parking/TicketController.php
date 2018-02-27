@@ -72,22 +72,32 @@ class TicketController extends Controller
             'stretchtext' => 4
         );
         PDF::SetTitle('Ticket');
-        PDF::AddPage();
+        PDF::AddPage('P', 'A6');
+        PDF::SetMargins(4, 2, 49);
         $parking = Parking::find(Auth::user()->parking_id);
-        PDF::Cell(0, 0, "Parqueadero", 0, 1);
-        PDF::Cell(0, 0, $parking->name, 0, 1);
-        PDF::Cell(0, 0, $parking->address, 0, 1);
-        setlocale(LC_ALL, 'es_ES');
-        $fecha = $now->format('M j, G:i');
-        //$fecha = strftime("%b %d, %H:%M");
-        PDF::Cell(0, 0, $fecha, 0, 1);
-        PDF::Write(2, "Placa: ".$request->plate);
-        if(isset($ticket->drawer)){
-            PDF::Ln();
-            PDF::Write(2, "Locker: ".$ticket->drawer);
-        }
-        // CODE 128 C
-        PDF::Ln();
+        $html = '<div style="text-align:center"><big style="margin-bottom: 1px"><b>Parqueadero CC <br>del cafe</b></big><br>
+                <em style="font-size: x-small;margin-top: 2px;margin-bottom: 1px">"Todo lo puedo en Cristo que<br> me fortalece": Fil 4:13 <br></em>
+                <small style="font-size: x-small;margin-top: 2px;margin-bottom: 1px"><b>'.$parking->address.'</b></small>';
+        $html .='<small style="text-align:left;font-size: small"><br>
+                 Fecha: '.$now->format('d/m/Y').'<br>
+                 Hora: '.$now->format('h:ia').'<br>
+                 Tipo: '.($ticket->type==1?'Carro':'Moto').'<br>
+                 Placa: '.$request->plate.'<br>
+                 '.(isset($ticket->drawer)?"Locker: ".$ticket->drawer."<br>":'').'
+                 </small>
+                 <small style="text-align:left;font-size: 8px"><br>
+                 Horario: Lun-Sab 7:30am - 7:30 pm,<br>     Dom 7:30 am - 3 pm<br>
+                 </small>
+                 <small style="text-align:left;font-size: 6px"><br>
+                 1.El vehiculo se entregara al portador de este recibo<br>
+                 2.No aceptamos ordenes escritas o por telefono<br>
+                 3.Despues de retirado el vehiculo no respondemos por daños, faltas o averias. Revise el vehiculo a la salida.<br>
+                 4.No respondemos por objetos dejados en el carro mientras sus puertas esten aseguradas<br>
+                 5.No somos responsables por daños o perdidas causadas en el parqueadero mientras el vehiculo no sea entregado personalmente<br>
+                 6.No respondemos por la perdida, deterioro o daños ocurridos por causa de incendio, terremoto o causas similares, motin,conmosion civil, revolucion <br>y otros eventos que impliquen fuerza mayor.
+                 </small>
+</div>';
+        PDF::writeHTML($html, true, false, true, false, '');
         $id_bar = substr('0000000000'.$ticket->ticket_id,-10);
         PDF::write1DBarcode($id_bar, 'C128C', '', '', '', 18, 0.4, $style, 'N');
         PDF::Output('ticket.pdf');
@@ -113,6 +123,7 @@ class TicketController extends Controller
         $parking = Parking::find(Auth::user()->parking_id);
         $minutos = ($minutos*1) - ($parking->free_time);
         $horas = (24*$tiempo->format("%d"))+$horas*1 + (($minutos>=0? 1: 0)*1);
+        $horas = $horas==0? 1: $horas;
         return ($tipo==1? $parking->hour_cars_price * $horas: $parking->hour_motorcycles_price * $horas );
     }
 
@@ -161,7 +172,7 @@ class TicketController extends Controller
         $schedule = $request->get('type');
         $type = $request->get('type_car');
 
-        $tickets= Ticket::select(['ticket_id as Id', 'plate', 'type', 'schedule', 'partner_id', 'status', 'drawer', 'price'])->where('parking_id',Auth::user()->parking_id)->orderBy('ticket_id');
+        $tickets= Ticket::select(['ticket_id as Id', 'plate', 'type', 'schedule', 'partner_id', 'status', 'drawer', 'price'])->where('parking_id',Auth::user()->parking_id)->orderBy('ticket_id','desc');
         if ($search) {
                 $tickets = $tickets->where('plate', 'LIKE', "%$search%");
         }
