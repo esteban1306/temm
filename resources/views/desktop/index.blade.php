@@ -268,8 +268,11 @@
                 console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')');
             });
             $('#Tiempo').daterangepicker({
-                "startDate": "<?php $now = Carbon::now(); echo $now->format('m/d/Y')?>",
-                "endDate": "<?php   echo $now->addDay()->format('m/d/Y')?>",
+                "locale": {
+                    "format": "YYYY-MM-DD"
+                },
+                "startDate": "<?php $now = Carbon::now(); echo $now->format('Y-m-d')?>",
+                "endDate": "<?php   echo $now->addDay()->format('Y-m-d')?>",
                 "opens": "center",
                 "drops": "up"
             }, function(start, end, label) {
@@ -308,6 +311,7 @@
                         data : {
                             type_car        : $("#type-car").val(),
                             type            : $("#type").val(),
+                            range           : $("#Tiempo").val()
                         }
                     },
                     columns: [

@@ -171,6 +171,7 @@ class TicketController extends Controller
         $search = $request->get('search')['value'];
         $schedule = $request->get('type');
         $type = $request->get('type_car');
+        $range = $request->get('range');
 
         $tickets= Ticket::select(['ticket_id as Id', 'plate', 'type', 'schedule', 'partner_id', 'status', 'drawer', 'price'])->where('parking_id',Auth::user()->parking_id)->orderBy('ticket_id','desc');
         if ($search) {
@@ -180,6 +181,10 @@ class TicketController extends Controller
             $tickets = $tickets->where('schedule', $schedule);
         if (!empty($type))
             $tickets = $tickets->where('type', $type);
+        if (!empty($range)){
+            $dateRange = explode(" - ", $range);
+            $tickets = $tickets->whereBetween('created_at', [$dateRange[0], $dateRange[1]]);
+        }
         return Datatables::of($tickets)
             ->addColumn('action', function ($tickets) {
                 if ($tickets->status == 1)
