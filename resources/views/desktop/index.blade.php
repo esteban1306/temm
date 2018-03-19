@@ -78,12 +78,12 @@
                 </div>
                 <div class="box-content">
                     <div class="row">
-                        <!--<div class="col-md-3">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 {!! Form::label('fecha', 'Fechas', ['class' => 'control-label']) !!}
-                                <input class="form-control" id="Tiempo" type="text" name="daterange" value="<?  use DateTime;$now = new Datetime(); echo $now->format('Y/m/d')?> 12:00 AM - <? echo $now->format('Y/m/d')?> 11:30 PM" />
+                                <input class="form-control" id="Tiempo" />
                             </div>
-                        </div>-->
+                        </div>
                         <div class="col-md-2">
                             <div class="form-group">
                                 {!! Form::label('tipo', 'Tipo Vehiculo', ['class' => 'control-label']) !!}
@@ -146,6 +146,8 @@
     <script src="{{ asset('js/moment.min.js') }}"></script>
     <script src="{{ asset('js/daterangepicker.js') }}"></script>
     <script src="{{ asset('js/pnotify.custom.min.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-Validation-Engine/2.6.4/jquery.validationEngine.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-Validation-Engine/2.6.4/languages/jquery.validationEngine-es.js" type="text/javascript" charset="utf-8"></script>
 
     <script>
         var app_e = new Vue({
@@ -154,6 +156,20 @@
         function openModalIn(){
             $('#modal_ticket_in').modal('show');
             getFecha();
+            $("#nameIn").css("display","none");
+            $("#rangeIn").css("display","none");
+            $("#schedule").val(1);
+            $("#typeIn").val(1);
+        }
+        function mensualidad(){
+            var schedule = $("#schedule").val();
+            if(schedule == 3){
+                $("#nameIn").css("display","block");
+                $("#rangeIn").css("display","block");
+            }else{
+                $("#nameIn").css("display","none");
+                $("#rangeIn").css("display","none");
+            }
         }
         function openModalOut(){
             $('#modal_ticket_out').modal('show');
@@ -193,7 +209,49 @@
                 }
             });
         }
+
+        function crearTicket() {
+            var plate = $("#plate").val();
+            var type = $("#typeIn").val();
+            var schedule = $("#schedule").val();
+            var drawer = $("#drawer").val();
+            var nameIn = $("#nameIn").val();
+            var date = $("#date-range").val();
+
+            if(schedule == 3 && !($("#nameIn").validationEngine('validate')  && $("#date-range").validationEngine('validate') )){
+                return;
+            }
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: "POST",
+                url: "tickets",
+                data: {
+                    plate:plate,
+                    type:type,
+                    schedule:schedule,
+                    drawer:drawer,
+                    name:name,
+                    date:date,
+                },
+                success: function (datos) {
+                    $('#modal_ticket_in').modal('hide');
+                    new PNotify({
+                        title: 'Exito',
+                        text: 'Se agregó el ticket con exito'
+                    });
+                },
+                error:function () {
+                    alert("Error !");
+                }
+            });
+        }
+
         $(function() {
+            $("#plate").blur(function(){
+                type();
+            });
             $('input[name="daterange"]').daterangepicker({
                 timePicker: true,
                 timePickerIncrement: 30,
@@ -201,9 +259,24 @@
                     format: 'YYYY/MM/DD h:mm A'
                 }
             });
+            $('#date-range').daterangepicker({
+                "startDate": "<?php  use Carbon\Carbon;$now = Carbon::now(); echo $now->format('m/d/Y')?>",
+                "endDate": "<?php   echo $now->addMonth()->format('m/d/Y')?>",
+                "opens": "center",
+                "drops": "up"
+            }, function(start, end, label) {
+                console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')');
+            });
+            $('#Tiempo').daterangepicker({
+                "startDate": "<?php $now = Carbon::now(); echo $now->format('m/d/Y')?>",
+                "endDate": "<?php   echo $now->addDay()->format('m/d/Y')?>",
+                "opens": "center",
+                "drops": "up"
+            }, function(start, end, label) {
+                console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')');
+            });
             var fecha = new Date();
             var hoy=fecha.getFullYear()+"/"+(fecha.getMonth()+1)+"/"+fecha.getDate();
-            $('#Tiempo').val(hoy+' 12:00 AM - '+hoy+' 11:59 pm');
             $.extend(true, $.fn .dataTable.defaults, {
                 "stateSave": true,
                 "language": {
@@ -227,7 +300,6 @@
             });
             $('#advanced_search').click(function() {
                 $("#tickets-table").dataTable().fnDestroy();
-                $('#tickets-table').DataTable().page(0).draw('page');
                 $('#tickets-table').DataTable({
                     processing: true,
                     serverSide: true,
@@ -264,6 +336,24 @@
 
             };
             return opt;
+        }
+        function validar(e) {
+            tecla = (document.all) ? e.keyCode : e.which;
+            if (tecla==13){
+                type();
+            }
+        }
+        function type() {
+            var plate = $("#plate").val();
+            if(plate ==""){
+                return true;
+            }
+            if(plate.length == 6 && !isNaN(plate.charAt(plate.length-1))){
+                $("#typeIn").val(1);
+            }
+            else{
+                $("#typeIn").val(2);
+            }
         }
         function createDataTableStandar(selector, opt) {
             if (typeof opt.scroll === 'undefined')
