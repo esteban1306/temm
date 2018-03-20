@@ -12,7 +12,7 @@
                     <button type="button" onclick="openModalOut()" class="btn btn-default col-md-10 btn-lg">Cobrar</button>
                 </div>
             </div>
-            <!--<p class="height_10"></p>
+            <p class="height_10"></p>
             <h2 class="title_a">Estado actual</h2>
             <div class="row">
                 <div class="col-lg-3 col-md-6">
@@ -63,7 +63,7 @@
                         </div>
                     </div>
                 </div>
-            </div>-->
+            </div>
 
             <!---->
             <p class="height_10"></p>
@@ -382,5 +382,141 @@
             }
             return myTable;
         }
+        var desktop_index_vm = new Vue({
+            el         : '#main',
+            data       : {
+                ajax        : true,
+                all         : true,
+                nav         : 'all',
+                total       : 0,
+                retired     : 0,
+                assets      : 0,
+                value       : 0,
+            },
+            computed   : {
+
+            },
+            mounted    : function() {
+                //this.load();
+                //this.loadTable();
+            },
+            methods    : {
+                load : function() {
+                    var self = this;
+                    axios.get(laroute.route('referred.get_status'))
+                        .then(function (response) {
+                            self.total = response.data.total;
+                            self.retired = response.data.retired;
+                            self.assets = response.data.pro;
+                            self.value = response.data.value;
+                        });
+                },
+                loadTable : function(status,idTransaction) {
+                    $.extend(true, $.fn .dataTable.defaults, {
+                        "stateSave": true,
+                        "language": {
+                            "url": "//cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json"
+                        }
+                    });
+                    if(status == 'history'){
+                        $('#table-transaction').DataTable({
+                            sDom           : 'r<Hlf><"datatable-scroll"t><Fip>',
+                            order          : [],
+                            processing     : true,
+                            serverSide     : true,
+                            deferRender    : true,
+                            destroy        : true,
+                            ajax: {
+                                url  : laroute.route('transaction.get_list')
+                            },
+                            columns: [
+                                { data: 'rank', orderable  : false, searchable : false },
+                                { data: 'income', orderable  : false, searchable : false },
+                                { data: 'value', orderable  : false, searchable : false },
+                                { data: 'accion', orderable  : false, searchable : false },
+                            ],
+                            lengthMenu: [[ 10, 25, 50], [ 10, 25, 50]]
+                        });
+                    }else if(status == 'details'){
+                        $('#table-details').DataTable({
+                            sDom           : 'r<Hlf><"datatable-scroll"t><Fip>',
+                            order          : [],
+                            processing     : true,
+                            serverSide     : true,
+                            deferRender    : true,
+                            destroy        : true,
+                            ajax: {
+                                url  : laroute.route('transaction.get_list_details'),
+                                data : {
+                                    id_transaction  : idTransaction,
+                                }
+                            },
+                            columns: [
+                                { data: 'rank', orderable  : false, searchable : false },
+                                { data: 'id_factura', orderable  : false, searchable : false },
+                                { data: 'id_empresa', orderable  : false, searchable : false },
+                                { data: 'descripcion', orderable  : false, searchable : false },
+                                { data: 'value', orderable  : false, searchable : false },
+                                { data: 'action', orderable  : false, searchable : false },
+                                { data: 'commissionable', orderable  : false, searchable : false },
+                            ],
+                            lengthMenu: [[ 10, 25, 50], [ 10, 25, 50]]
+                        });
+                    }else
+                        $('#table-referrals').DataTable({
+                            sDom           : 'r<Hlf><"datatable-scroll"t><Fip>',
+                            order          : [],
+                            processing     : true,
+                            serverSide     : true,
+                            deferRender    : true,
+                            destroy        : true,
+                            ajax: {
+                                url  : laroute.route('referred.get_list'),
+                                data : {
+                                    status        : status,
+                                }
+                            },
+                            columns: [
+                                { data: 'id', orderable  : false, searchable : false },
+                                { data: 'name', orderable  : false, searchable : false },
+                                { data: 'email', orderable  : false, searchable : false },
+                                { data: 'date', orderable  : false, searchable : false },
+                                { data: 'status', orderable  : false, searchable : false },
+                            ],
+                            lengthMenu: [[ 10, 25, 50], [ 10, 25, 50]]
+                        });
+                },
+                changeAccount : function() {
+                    var nombre=$('input[name=new_name]').val();
+                    var apellido=$('input[name=new_last_name]').val();
+                    var email=$('input[name=new_email]').val();
+                    var password = $('#password').val();
+                    var currentPassword = $('#currentPassword').val();
+                    axios.post(laroute.route('partner.update',{'name' : nombre, 'last_name' : apellido, 'email' : email, 'password': password, 'currentPassword': currentPassword}))
+                        .then(function (response) {
+                            if (response.data == 1){
+                                new PNotify({
+                                    title: 'Listo!',
+                                    text: 'Se han modificado los datos correctamente.',
+                                    type: 'success',
+                                    buttons: {
+                                        sticker: false
+                                    }
+                                });
+                            }else{
+                                new PNotify({
+                                    title: 'Contraseña',
+                                    text: 'No coincide la contraseña actual.',
+                                    type: 'info',
+                                    buttons: {
+                                        sticker: false
+                                    }
+                                });
+                            }
+                        });
+                }
+            }
+
+        });
     </script>
 @endsection

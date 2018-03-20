@@ -7,9 +7,19 @@
                 </div>
                 <div class="col-3 text-right">
                     <span class="member">Hola, {{ Auth::user()->name }}</span>
-                    <figure><img src="images/user-partner.png" class="img-fluid" alt=""></figure>
                 </div>
             </div>
         </section>
     </div>
 </div>
+<nav class="nav_patner_panel">
+    <div class="container-fluid">
+        <ul class="auto_margin">
+            <li v-bind:class="{ active : nav == 'all' }"><a href="#!" v-on:click="all = true; nav = 'all'; loadTable()">{{ tt('pages/navigation.start') }}</a></li>
+            <li v-bind:class="{ active : nav == 'referrals' }"><a href="#!" v-on:click="all = false; nav = 'referrals'; loadTable()">{{ tt('pages/navigation.referrals') }}</a></li>
+            <li v-bind:class="{ active : nav == 'history' }"><a href="#!" v-on:click="all = false; nav = 'history'; loadTable('history')">{{ tt('pages/navigation.record') }}</a></li>
+            <li v-bind:class="{ active : nav == 'retired' }"><a href="#!" v-on:click="all = false; nav = 'retired'; loadTable('retired')">{{ tt('pages/navigation.retired') }} </a><span class="badge badge-danger" v-cloak>@{{ retired }}</span></li>
+            <li v-bind:class="{ active : nav == 'account' }"><a href="#!" v-on:click="all = false; nav = 'account'">{{ tt('pages/navigation.account') }}</a></li>
+        </ul>
+    </div>
+</nav>
