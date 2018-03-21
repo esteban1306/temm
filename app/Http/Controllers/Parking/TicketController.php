@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Partner;
 use App\Parking;
 use App\Ticket;
+use Carbon\Carbon;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -44,16 +45,22 @@ class TicketController extends Controller
      */
     public function store(Request $request)
     {
-        $now = new Datetime('now',new \DateTimeZone('America/New_York'));
+        $now = new Datetime('now');
         $ticket= new Ticket();
         $ticket->hour =$now;
         $ticket->plate =$request->plate;
         $ticket->status = 1;
         $ticket->type =$request->type;
         $ticket->schedule =$request->schedule;
+        if($request->schedule==3){
+            $dateRange = explode(" - ", $request->range);
+            $ticket->date_end = new \Carbon\Carbon($dateRange[1]);
+            $ticket->name = $request->name;
+            $ticket->hour = new \Carbon\Carbon($dateRange[0]);
+        }
         $ticket->parking_id = Auth::user()->parking_id;
         $ticket->partner_id = Auth::user()->partner_id;
-        $ticket->drawer =$request->drawer;
+        $ticket->drawer = $request->drawer;
         $ticket->save();
         $style = array(
             'position' => '',
@@ -147,7 +154,7 @@ class TicketController extends Controller
      */
     public function update(Request $request)
     {
-        $now = new Datetime('now',new \DateTimeZone('America/New_York'));
+        $now = new Datetime('now');
         $ticket = Ticket::find($request->ticket_id);
         $interval = date_diff(new DateTime("".$ticket->hour),$now);
         $ticket->status = 2;
@@ -210,5 +217,74 @@ class TicketController extends Controller
                 return  $partner->name;
             })
             ->make(true);
+    }
+
+    public function getMonths(Request $request)
+    {
+        $search = $request->get('search')['value'];
+        $schedule = 3;
+
+        $tickets= Ticket::select(['ticket_id as Id', 'plate', 'type', 'name', 'date_end', 'partner_id', 'status', 'price'])->where('parking_id',Auth::user()->parking_id)->orderBy('ticket_id','desc');
+        if ($search) {
+            $tickets = $tickets->where('plate', 'LIKE', "%$search%");
+        }
+        if (!empty($schedule))
+            $tickets = $tickets->where('schedule', $schedule);
+
+        return Datatables::of($tickets)
+            ->addColumn('action', function ($tickets) {
+                if (Auth::user()->type == 1)
+                    return \Form::button('Editar', [
+                        'class'   => 'btn btn-primary',
+                        'onclick' => "$('#modal_ticket_out').modal('show');$('#ticket_id').val('$tickets->Id')",
+                        'data-toggle' => "tooltip",
+                        'data-placement' => "bottom",
+                        'title' => "Editar !",
+
+                    ]).
+                        \Form::button('Eliminar', [
+                            'class'   => 'btn btn-warning',
+                            'onclick' => "$('#modal_ticket_out').modal('show');$('#ticket_id').val('$tickets->Id')",
+                            'data-toggle' => "tooltip",
+                            'data-placement' => "bottom",
+                            'title' => "Eliminar !",
+
+                        ]);
+                else
+                    return '';
+            })
+            ->addColumn('Tipo', function ($tickets) {
+                return  $tickets->type == 1? 'Carro': 'Moto';
+            })
+            ->addColumn('Estado', function ($tickets) {
+                $now = date("Y-m-d H:i:s");
+                return  $tickets->date_end >= $now? 'Activo': 'Vencido';
+            })
+            ->addColumn('Atendio', function ($tickets) {
+                $partner = Partner::find($tickets->partner_id);
+                return  $partner->name;
+            })
+            ->make(true);
+    }
+    public function getStatus(Request $request)
+    {
+        $schedule = $request->get('type');
+        $type = $request->get('type_car');
+        $range = $request->get('range');
+
+        $tickets= Ticket::selectRaw('sum(price) as total, sum(IF(type=1, 1, 0)) as carros,sum(IF(type=2, 1, 0)) as motos')
+        ->where('parking_id',Auth::user()->parking_id)->orderBy('ticket_id','desc');
+        if (!empty($schedule))
+            $tickets = $tickets->where('schedule', $schedule);
+        if (!empty($type))
+            $tickets = $tickets->where('type', $type);
+        if (!empty($range)){
+            $dateRange = explode(" - ", $range);
+            $tickets = $tickets->whereBetween('created_at', [$dateRange[0], $dateRange[1]]);
+        }
+        $tickets=$tickets->get();
+        foreach ($tickets as $ticket){
+            return [$ticket->total,$ticket->carros,$ticket->motos];
+        }
     }
 }

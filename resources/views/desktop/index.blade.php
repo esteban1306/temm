@@ -13,8 +13,8 @@
                 </div>
             </div>
             <p class="height_10"></p>
-            <h2 class="title_a">Estado actual</h2>
-            <div class="row">
+            <h2 class="title_a"  v-show="all" >Estado actual</h2>
+            <div class="row" v-show="all">
                 <div class="col-lg-3 col-md-6">
                     <div class="widget_box_b">
                         <div class="contt">
@@ -66,10 +66,10 @@
             </div>
 
             <!---->
-            <p class="height_10"></p>
+            <p class="height_10" v-show="all"></p>
 
             <!---->
-            <div class="box">
+            <div class="box"  v-show="all">
                 <div class="box-title">
                     <h3>
                         <i class="fa fa-search"></i>
@@ -115,7 +115,7 @@
                 </div>
             </div>
 
-                <div class="row">
+                <div class="row" v-show="all">
                 <div class="col-12">
                     <table class="table responsive" id="tickets-table">
                         <thead>
@@ -132,7 +132,24 @@
                     </table>
                 </div>
             </div>
-
+            <div class="row" v-show="month">
+                <div class="col-12">
+                    <table class="table responsive" id="month-table">
+                        <thead>
+                        <tr>
+                            <th class="all">Placa</th>
+                            <th class="min-tablet">Tipo</th>
+                            <th class="min-tablet">Estado</th>
+                            <th class="min-tablet">Precio</th>
+                            <th class="min-tablet">Fecha vencimiento</th>
+                            <th class="min-tablet">Nombre</th>
+                            <th class="min-tablet">Atendió</th>
+                            <th class="all">acciones</th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -150,9 +167,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-Validation-Engine/2.6.4/languages/jquery.validationEngine-es.js" type="text/javascript" charset="utf-8"></script>
 
     <script>
-        var app_e = new Vue({
-            el: "#modal_ticket_in",
-        });
         function openModalIn(){
             $('#modal_ticket_in').modal('show');
             getFecha();
@@ -215,12 +229,9 @@
             var type = $("#typeIn").val();
             var schedule = $("#schedule").val();
             var drawer = $("#drawer").val();
-            var nameIn = $("#nameIn").val();
+            var nameIn = $("#nombreIn").val();
             var date = $("#date-range").val();
 
-            if(schedule == 3 && !($("#nameIn").validationEngine('validate')  && $("#date-range").validationEngine('validate') )){
-                return;
-            }
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -232,8 +243,8 @@
                     type:type,
                     schedule:schedule,
                     drawer:drawer,
-                    name:name,
-                    date:date,
+                    name:nameIn,
+                    range:date,
                 },
                 success: function (datos) {
                     $('#modal_ticket_in').modal('hide');
@@ -286,45 +297,8 @@
                     "url": "//cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json"
                 }
             });
-            $('#tickets-table').DataTable({
-                processing: true,
-                serverSide: true,
-                ajax: '{!! route('get_tickets') !!}',
-                columns: [
-                    { data: 'plate', name: 'Placa', orderable  : false, searchable : false },
-                    { data: 'Tipo', name: 'Tipo', orderable  : false, searchable : false },
-                    { data: 'Estado', name: 'Estado', orderable  : false, searchable : false },
-                    { data: 'price', name: 'Precio', orderable  : false, searchable : false },
-                    { data: 'drawer', name: 'Locker', orderable  : false, searchable : false },
-                    { data: 'Atendio', name: 'Atendió', orderable  : false, searchable : false },
-                    { data: 'action', name: 'acciones', orderable  : false, searchable : false },
-                ],
-                lengthMenu: [[ 10, 25, 50, -1], [ 10, 25, 50, "Todos"]]
-            });
             $('#advanced_search').click(function() {
-                $("#tickets-table").dataTable().fnDestroy();
-                $('#tickets-table').DataTable({
-                    processing: true,
-                    serverSide: true,
-                    ajax: {
-                        url  : '{!! route('get_tickets') !!}',
-                        data : {
-                            type_car        : $("#type-car").val(),
-                            type            : $("#type").val(),
-                            range           : $("#Tiempo").val()
-                        }
-                    },
-                    columns: [
-                        { data: 'plate', name: 'Placa', orderable  : false, searchable : false },
-                        { data: 'Tipo', name: 'Tipo', orderable  : false, searchable : false },
-                        { data: 'Estado', name: 'Estado', orderable  : false, searchable : false },
-                        { data: 'price', name: 'Precio', orderable  : false, searchable : false },
-                        { data: 'drawer', name: 'Locker', orderable  : false, searchable : false },
-                        { data: 'Atendio', name: 'Atendió', orderable  : false, searchable : false },
-                        { data: 'action', name: 'acciones', orderable  : false, searchable : false },
-                    ],
-                    lengthMenu: [[ 10, 25, 50, -1], [ 10, 25, 50, "Todos"]]
-                });
+                desktop_index_vm.loadTable();
             });
         });
         function getOpt() {
@@ -387,6 +361,8 @@
             data       : {
                 ajax        : true,
                 all         : true,
+                account     : false,
+                month       : false,
                 nav         : 'all',
                 total       : 0,
                 retired     : 0,
@@ -397,19 +373,31 @@
 
             },
             mounted    : function() {
-                //this.load();
-                //this.loadTable();
+                this.load();
+                this.loadTable();
             },
             methods    : {
                 load : function() {
-                    var self = this;
-                    axios.get(laroute.route('referred.get_status'))
-                        .then(function (response) {
-                            self.total = response.data.total;
-                            self.retired = response.data.retired;
-                            self.assets = response.data.pro;
-                            self.value = response.data.value;
-                        });
+                    $.ajax({
+                        type: "POST",
+                        url: "{!! route('get_status') !!}",
+                        data : {
+                            type_car        : $("#type-car").val(),
+                            type            : $("#type").val(),
+                            range           : $("#Tiempo").val()
+                        },
+                        success: function (datos) {
+                            $('.alert').alert();
+                            $('#pagar').html(datos[0]);
+                            $('#tiempo').html(datos[1]);
+                            $('#modal_ticket_pay').modal('show');
+                            $('#tickets-table').dataTable()._fnAjaxUpdate();
+
+                        },
+                        error:function () {
+                            alert("Error !");
+                        }
+                    });
                 },
                 loadTable : function(status,idTransaction) {
                     $.extend(true, $.fn .dataTable.defaults, {
@@ -437,54 +425,56 @@
                             ],
                             lengthMenu: [[ 10, 25, 50], [ 10, 25, 50]]
                         });
-                    }else if(status == 'details'){
-                        $('#table-details').DataTable({
+                    }else if(status == 'month'){
+                        $('#month-table').DataTable({
                             sDom           : 'r<Hlf><"datatable-scroll"t><Fip>',
                             order          : [],
                             processing     : true,
                             serverSide     : true,
                             deferRender    : true,
                             destroy        : true,
-                            ajax: {
-                                url  : laroute.route('transaction.get_list_details'),
-                                data : {
-                                    id_transaction  : idTransaction,
-                                }
-                            },
+                                ajax: '{!! route('get_months') !!}',
                             columns: [
-                                { data: 'rank', orderable  : false, searchable : false },
-                                { data: 'id_factura', orderable  : false, searchable : false },
-                                { data: 'id_empresa', orderable  : false, searchable : false },
-                                { data: 'descripcion', orderable  : false, searchable : false },
-                                { data: 'value', orderable  : false, searchable : false },
-                                { data: 'action', orderable  : false, searchable : false },
-                                { data: 'commissionable', orderable  : false, searchable : false },
+                                { data: 'plate', name: 'Placa', orderable  : false, searchable : false },
+                                { data: 'Tipo', name: 'Tipo', orderable  : false, searchable : false },
+                                { data: 'Estado', name: 'Estado', orderable  : false, searchable : false },
+                                { data: 'price', name: 'Precio', orderable  : false, searchable : false },
+                                { data: 'date_end', name: 'Fecha Vencimiento', orderable  : false, searchable : false },
+                                { data: 'name', name: 'Nombre', orderable  : false, searchable : false },
+                                { data: 'Atendio', name: 'Atendió', orderable  : false, searchable : false },
+                                { data: 'action', name: 'acciones', orderable  : false, searchable : false },
                             ],
-                            lengthMenu: [[ 10, 25, 50], [ 10, 25, 50]]
+                            lengthMenu: [[ 10, 25, 50, -1], [ 10, 25, 50, "Todos"]]
                         });
-                    }else
-                        $('#table-referrals').DataTable({
-                            sDom           : 'r<Hlf><"datatable-scroll"t><Fip>',
-                            order          : [],
-                            processing     : true,
-                            serverSide     : true,
-                            deferRender    : true,
-                            destroy        : true,
-                            ajax: {
-                                url  : laroute.route('referred.get_list'),
-                                data : {
-                                    status        : status,
-                                }
-                            },
-                            columns: [
-                                { data: 'id', orderable  : false, searchable : false },
-                                { data: 'name', orderable  : false, searchable : false },
-                                { data: 'email', orderable  : false, searchable : false },
-                                { data: 'date', orderable  : false, searchable : false },
-                                { data: 'status', orderable  : false, searchable : false },
-                            ],
-                            lengthMenu: [[ 10, 25, 50], [ 10, 25, 50]]
-                        });
+                    }else{
+                        $("#tickets-table").dataTable().fnDestroy();
+                    $('#tickets-table').DataTable({
+                        sDom           : 'r<Hlf><"datatable-scroll"t><Fip>',
+                        order          : [],
+                        processing     : true,
+                        serverSide     : true,
+                        deferRender    : true,
+                        destroy        : true,
+                        ajax: {
+                            url  : '{!! route('get_tickets') !!}',
+                            data : {
+                                type_car        : $("#type-car").val(),
+                                type            : $("#type").val(),
+                                range           : $("#Tiempo").val()
+                            }
+                        },
+                        columns: [
+                            { data: 'plate', name: 'Placa', orderable  : false, searchable : false },
+                            { data: 'Tipo', name: 'Tipo', orderable  : false, searchable : false },
+                            { data: 'Estado', name: 'Estado', orderable  : false, searchable : false },
+                            { data: 'price', name: 'Precio', orderable  : false, searchable : false },
+                            { data: 'drawer', name: 'Locker', orderable  : false, searchable : false },
+                            { data: 'Atendio', name: 'Atendió', orderable  : false, searchable : false },
+                            { data: 'action', name: 'acciones', orderable  : false, searchable : false },
+                        ],
+                        lengthMenu: [[ 10, 25, 50, -1], [ 10, 25, 50, "Todos"]]
+                    });
+                    }
                 },
                 changeAccount : function() {
                     var nombre=$('input[name=new_name]').val();

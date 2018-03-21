@@ -24,6 +24,8 @@ class CreateTicketsTable extends Migration
             $table->integer('parking_id')->unsigned();
             $table->integer('partner_id')->unsigned();
             $table->string('drawer', 10)->nullable();
+            $table->string('name', 70)->nullable();
+            $table->dateTime('date_end')->nullable();
             $table->rememberToken();
             $table->timestamps();
             //$table->primary('partner_id');

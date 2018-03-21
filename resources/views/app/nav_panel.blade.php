@@ -15,11 +15,9 @@
 <nav class="nav_patner_panel">
     <div class="container-fluid">
         <ul class="auto_margin">
-            <li v-bind:class="{ active : nav == 'all' }"><a href="#!" v-on:click="all = true; nav = 'all'; loadTable()">{{ tt('pages/navigation.start') }}</a></li>
-            <li v-bind:class="{ active : nav == 'referrals' }"><a href="#!" v-on:click="all = false; nav = 'referrals'; loadTable()">{{ tt('pages/navigation.referrals') }}</a></li>
-            <li v-bind:class="{ active : nav == 'history' }"><a href="#!" v-on:click="all = false; nav = 'history'; loadTable('history')">{{ tt('pages/navigation.record') }}</a></li>
-            <li v-bind:class="{ active : nav == 'retired' }"><a href="#!" v-on:click="all = false; nav = 'retired'; loadTable('retired')">{{ tt('pages/navigation.retired') }} </a><span class="badge badge-danger" v-cloak>@{{ retired }}</span></li>
-            <li v-bind:class="{ active : nav == 'account' }"><a href="#!" v-on:click="all = false; nav = 'account'">{{ tt('pages/navigation.account') }}</a></li>
+            <li v-bind:class="{ active : nav == 'all' }"><a href="#!" v-on:click="all = true; nav = 'all'; month= false; loadTable()">Inicio</a></li>
+            <li v-bind:class="{ active : nav == 'month' }"><a href="#!" v-on:click="all = false; month= true; nav = 'month'; loadTable('month')">Mensualidades</a></li>
+            <li v-bind:class="{ active : nav == 'account' }"><a href="#!" v-on:click="all = false; month= false; nav = 'account'">Mi cuenta</a></li>
         </ul>
     </div>
 </nav>
