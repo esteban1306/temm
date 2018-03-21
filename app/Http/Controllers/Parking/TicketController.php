@@ -305,7 +305,7 @@ class TicketController extends Controller
                 }
             }
         }
-        $status['total'] = ;
+        $status['total'] = format_money($status['total']);
         return $status;
     }
 }
