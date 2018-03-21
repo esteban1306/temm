@@ -380,7 +380,7 @@
             methods    : {
                 load : function() {
                     $.ajax({
-                        type: "POST",
+                        type: "GET",
                         url: "{!! route('get_status') !!}",
                         data : {
                             type_car        : $("#type-car").val(),
