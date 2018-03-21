@@ -5,7 +5,10 @@
  * Date: 1/02/18
  * Time: 11:34 AM
  */
-
+use Illuminate\Support\Facades\Auth;
+use App\Currency;
+use App\CurrenciesConversion;
+use App\CurrenciesConversionLog;
 if (! function_exists('tt')) {
     /**
      *
@@ -143,5 +146,118 @@ if (! function_exists('accents')) {
         $s = str_replace("\u00c3\u00bd", "&yacute;", $s);
         $s = str_replace("\u00c3\u00bf", "&yuml;", $s);
         return $s;
+    }
+}
+if(!function_exists('script')){
+    function script($file, $attributes = []) {
+        return Html::script(last_version($file), $attributes, true);
+    }
+}
+
+if(!function_exists('style')){
+    function style($file, $attributes = []) {
+        return Html::style(last_version($file), $attributes, true);
+    }
+}
+if(!function_exists('last_version')){
+    function last_version($file) {
+        if (file_exists($file)) {
+            return "$file?".filectime($file);
+        }
+        return $file;
+    }
+}
+if (! function_exists('get_separators')) {
+    function get_separators()
+    {
+        if(!empty(session('id_pais'))) {
+            switch (session('id_pais')) {
+                case COUNTRY_COLOMBIA:
+                case COUNTRY_ARGENTINA:
+                case COUNTRY_BRAZIL:
+                case COUNTRY_COSTA_RICA:
+                case COUNTRY_CHILE:
+                case COUNTRY_VENEZUELA:
+                case COUNTRY_URUGUAY:
+                    $dec_point = ',';
+                    $thousands_sep = '.';
+                    break;
+                default:
+                    $dec_point = '.';
+                    $thousands_sep = ',';
+                    break;
+            }
+        } else {
+            $dec_point = ',';
+            $thousands_sep = '.';
+        }
+        return [$dec_point, $thousands_sep];
+    }
+}
+if (! function_exists('format_number')) {
+    function format_number($number, $decimals = 0, $dec_point = null, $thousands_sep = null) {
+        list($dec_point, $thousands_sep) = get_separators();
+        return number_format($number, $decimals, $dec_point, $thousands_sep);
+    }
+}
+if (! function_exists('format_money')) {
+    function format_money($number, $symbol = '$') {
+        $decimals = count(explode('.', $number)) > 1 ? 2 : 0;
+        return $symbol . format_number($number, $decimals);
+    }
+}
+if (! function_exists('usd_to_local')) {
+    function usd_to_local($params = array()) {
+        $mode       = isset($params['mode']) ? $params['mode'] : 'value';
+        $usd        = isset($params['usd']) ? $params['usd'] : 1;
+        $country_id = isset($params['country_id']) ? $params['country_id'] : Auth::user()->id_pais;
+        $currencies = config('payment.country');
+
+        if (array_key_exists($country_id, $currencies)) {
+            $currency = Currency::find($currencies[$country_id]['currency']);
+            if (isset($params['id_currencies_log']))
+                $unit = ($conversion = CurrenciesConversionLog::find($params['id_currencies_log'])) ? $conversion->value : config('payment.country.'.$country_id.'.usd_local');
+            else
+                $unit = ($conversion = CurrenciesConversion::where('currencies', 'usd_'.strtolower($currency->abreviacion))->first()) ? $conversion->value : config('payment.country.'.$country_id.'.usd_local');
+            $total    = $unit * $usd;
+            $pricing  = trans('payment.'.$country_id, [
+                'abbr'  => $currency->abreviacion,
+                'value' => format_money($total, $currency->simbolo)
+            ]);
+        } else {
+            $currency = Currency::find(CURRENCY_USD);
+            $unit     = config('payment.country.default.usd_local');
+            $total    = $unit * $usd;
+            $pricing  = trans('payment.', [
+                'abbr'  => $currency->abreviacion,
+                'value' => format_money($total, $currency->simbolo)
+            ]);
+        }
+
+        switch ($mode) {
+            case 'pricing':
+                return $pricing;
+            case 'short_label':
+                return format_money($total, $currency->simbolo)." ".$currency->abreviacion;
+            case 'label':
+                return format_money($total, $currency->simbolo)." ".$currency->nombre_moneda;
+            case 'currency':
+                return $currency;
+        }
+        return $total;
+    }
+}
+if (! function_exists('format_date')) {
+    function format_date($date, $with_hour = false, $format = 'd/m/Y') {
+        if ($date instanceof \Carbon\Carbon) {
+            if ($with_hour)
+                return $date->format($format.' h:i:s');
+            return $date->format($format);
+        }
+        $array = explode(' ', $date);
+        $date  = $array[0];
+        $hour  = count($array) > 1 ? $array[1] : '';
+        $date  = \Carbon\Carbon::parse($date)->format($format);
+        return $with_hour && !empty($hour) ? $date . ' ' . $hour : $date;
     }
 }

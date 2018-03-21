@@ -150,6 +150,7 @@
                     </table>
                 </div>
             </div>
+            @include('desktop.account')
         </div>
     </div>
 
@@ -388,7 +389,7 @@
                         },
                         success: function (datos) {
                             $('.alert').alert();
-                            $('#pagar').html(datos[0]);
+                            $('#pagar').html(datos['total']);
                             $('#tiempo').html(datos[1]);
                             $('#modal_ticket_pay').modal('show');
                             $('#tickets-table').dataTable()._fnAjaxUpdate();

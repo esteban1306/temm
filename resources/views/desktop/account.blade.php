@@ -8,7 +8,7 @@
             <div class="body">
                 <hr>
                 <p>
-                    {{ $user->first_name.' '.$user->last_name }} <br>
+                    {{ $user->name.' '.$user->last_name }} <br>
                     <strong>{{ tt('pages/account.email') }}:</strong> {{ $user->email }}
                 </p>
             </div>
@@ -44,7 +44,7 @@
                 </div>
                 <div class="form-group col-sm-6">
                     <label for="">{{ tt('pages/account.form.name') }}</label>
-                    <input type="text" class="form-control validate[required]" name="new_name" value="{{ $user->first_name }}">
+                    <input type="text" class="form-control validate[required]" name="new_name" value="{{ $user->name }}">
                 </div>
                 <div class="form-group col-sm-6">
                     <label for="">{{ tt('pages/account.form.last_name') }}</label>

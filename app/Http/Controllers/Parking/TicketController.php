@@ -272,7 +272,7 @@ class TicketController extends Controller
         $type = $request->get('type_car');
         $range = $request->get('range');
 
-        $tickets= Ticket::selectRaw('sum(price) as total, sum(IF(type=1, 1, 0)) as carros,sum(IF(type=2, 1, 0)) as motos')
+        $tickets= Ticket::select(['plate', 'type', 'schedule', 'price', 'name', 'date_end'])
         ->where('parking_id',Auth::user()->parking_id)->orderBy('ticket_id','desc');
         if (!empty($schedule))
             $tickets = $tickets->where('schedule', $schedule);
@@ -282,9 +282,30 @@ class TicketController extends Controller
             $dateRange = explode(" - ", $range);
             $tickets = $tickets->whereBetween('created_at', [$dateRange[0], $dateRange[1]]);
         }
+        $status = [];
+        $status['total'] = ZERO;
+        $status['carros'] = ZERO;
+        $status['motos'] = ZERO;
+        $status['month_expire'] = 'Mensualidades por vencer:';
+        $status['month_expire_num'] = ZERO;
         $tickets=$tickets->get();
+        $now = new Datetime('now');
         foreach ($tickets as $ticket){
-            return [$ticket->total,$ticket->carros,$ticket->motos];
+            $status['total'] += $ticket->price;
+            if($ticket->type == 1)
+                $status['carros'] ++;
+            if($ticket->type == 2)
+                $status['motos'] ++;
+            if($ticket->schedule == 3){
+                $diff=date_diff($tickets->date_end, $now);
+                $diff=$diff->format("%a");
+                if($diff<=2){
+                    $status['month_expire'] .= $ticket->name.' ('.$ticket->plate.') Vence '.$ticket->date_end;
+                    $status['month_expire_num'] ++;
+                }
+            }
         }
+        $status['total'] = ;
+        return $status;
     }
 }
