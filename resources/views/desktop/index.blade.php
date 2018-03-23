@@ -19,10 +19,9 @@
                     <div class="widget_box_b">
                         <div class="contt">
                             <div class="fl_layer">
-                                <figure><img src="images/icon-pat-01.svg" alt=""></figure>
-                                <h4 class="title">Total del dia</h4>
+                                <h4 class="title">Recaudadó</h4>
                                 <span class="line"></span>
-                                <span class="data">125</span>
+                                <span class="data" id="total">125</span>
                             </div>
                         </div>
                     </div>
@@ -31,10 +30,20 @@
                     <div class="widget_box_b">
                         <div class="contt">
                             <div class="fl_layer">
-                                <figure><img src="images/icon-pat-02.svg" alt=""></figure>
-                                <h4 class="title">Actualmente</h4>
+                                <h4 class="title">motos</h4>
                                 <span class="line"></span>
-                                <span class="data">18</span>
+                                <span class="data" id="motos">6</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="widget_box_b">
+                        <div class="contt">
+                            <div class="fl_layer">
+                                <h4 class="title">Carros</h4>
+                                <span class="line"></span>
+                                <span class="data total" id="carros">12</span>
                             </div>
                         </div>
                     </div>
@@ -43,22 +52,9 @@
                     <div class="widget_box_b bdred">
                         <div class="contt">
                             <div class="fl_layer">
-                                <figure><img src="images/icon-pat-03.svg" alt=""></figure>
-                                <h4 class="title">motos</h4>
+                                <h4 class="title">Mensualidades por vencer</h4>
                                 <span class="line"></span>
-                                <span class="data red">6</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="widget_box_b">
-                        <div class="contt">
-                            <div class="fl_layer">
-                                <figure><img src="images/icon-pat-04.svg" alt=""></figure>
-                                <h4 class="title">Carros</h4>
-                                <span class="line"></span>
-                                <span class="data total">12</span>
+                                <span class="data red" id="month_expired"></span>
                             </div>
                         </div>
                     </div>
@@ -156,6 +152,7 @@
 
     @include('ticket.modal_ticket_in')
     @include('ticket.modal_ticket_out')
+    @include('ticket.modal_ticket_mod')
     @include('ticket.modal_ticket_pay')
 @endsection
 @section('scripts')
@@ -186,10 +183,25 @@
                 $("#rangeIn").css("display","none");
             }
         }
+        function mensualidad2(){
+            var schedule = $("#schedule_mod").val();
+            if(schedule == 3){
+                $("#nameIn_mod").css("display","block");
+                $("#rangeIn_mod").css("display","block");
+            }else{
+                $("#nameIn_mod").css("display","none");
+                $("#rangeIn_mod").css("display","none");
+            }
+        }
         function openModalOut(){
             $('#modal_ticket_out').modal('show');
             getFecha();
             $('#ticket_id').val('');
+        }
+        function openModalMod(ticket_id){
+            $('#modal_ticket_mod').modal('show');
+            loadTicket(ticket_id);
+            $('#ticket_id_mod').val(ticket_id);
         }
         var getFecha = function(){
             var fecha = new Date();
@@ -259,6 +271,38 @@
                 }
             });
         }
+        function loadTicket(id) {
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: "POST",
+                url: "get_ticket",
+                data: {
+                    ticket_id:id
+                },
+                success: function (datos) {
+                    $('#plate_mod').val(datos['plate']);
+                    $('#fecha_mod').val(datos['hour']);
+                    $('#typeIn_mod').val(datos['type']);
+                    $('#schedule_mod').val(datos['schedule']);
+                    $('#drawer_mod').val(datos['drawer']);
+                    $('#nombreIn_mod').val(datos['name']);
+                    $('#date_range_mod').val(datos['hour']+' - '+datos['date_end']);
+                    mensualidad2();
+                    $('#date_range_mod').daterangepicker({
+                        "locale": {
+                            "format": "YYYY-MM-DD"
+                        },
+                        "opens": "center",
+                        "drops": "up"
+                    });
+                },
+                error:function () {
+                    alert("Error !");
+                }
+            });
+        }
 
         $(function() {
             $("#plate").blur(function(){
@@ -285,6 +329,15 @@
                 },
                 "startDate": "<?php $now = Carbon::now(); echo $now->format('Y-m-d')?>",
                 "endDate": "<?php   echo $now->addDay()->format('Y-m-d')?>",
+                "opens": "center",
+                "drops": "up"
+            }, function(start, end, label) {
+                console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')');
+            });
+            $('#date_range_mod').daterangepicker({
+                "locale": {
+                    "format": "YYYY-MM-DD"
+                },
                 "opens": "center",
                 "drops": "up"
             }, function(start, end, label) {
@@ -379,21 +432,28 @@
             },
             methods    : {
                 load : function() {
+                    $("#Tiempo").val();
                     $.ajax({
-                        type: "GET",
-                        url: "{!! route('get_status') !!}",
-                        data : {
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        type: "POST",
+                        url: "get_status",
+                        data: {
                             type_car        : $("#type-car").val(),
                             type            : $("#type").val(),
                             range           : $("#Tiempo").val()
                         },
                         success: function (datos) {
-                            $('.alert').alert();
-                            $('#pagar').html(datos['total']);
-                            $('#tiempo').html(datos[1]);
-                            $('#modal_ticket_pay').modal('show');
-                            $('#tickets-table').dataTable()._fnAjaxUpdate();
-
+                            var month= datos['month_expire_num'];
+                            $("#total").html(datos['total']);
+                            $("#motos").html(datos['motos']);
+                            $("#carros").html(datos['carros']);
+                            $("#month_expired").html(datos['month_expire_num']);
+                            if(this.retired == 0 && datos['month_expire_num']>0){
+                                alert(datos['month_expire']);
+                            }
+                            this.retired = 1;
                         },
                         error:function () {
                             alert("Error !");

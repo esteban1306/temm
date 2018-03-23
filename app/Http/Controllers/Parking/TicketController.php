@@ -236,7 +236,7 @@ class TicketController extends Controller
                 if (Auth::user()->type == 1)
                     return \Form::button('Editar', [
                         'class'   => 'btn btn-primary',
-                        'onclick' => "$('#modal_ticket_out').modal('show');$('#ticket_id').val('$tickets->Id')",
+                        'onclick' => "openModalMod('$tickets->Id')",
                         'data-toggle' => "tooltip",
                         'data-placement' => "bottom",
                         'title' => "Editar !",
@@ -281,6 +281,8 @@ class TicketController extends Controller
         if (!empty($range)){
             $dateRange = explode(" - ", $range);
             $tickets = $tickets->whereBetween('created_at', [$dateRange[0], $dateRange[1]]);
+        }else{
+            $tickets = $tickets->whereBetween('created_at', [ new Datetime('today'), new Datetime('tomorrow')]);
         }
         $status = [];
         $status['total'] = ZERO;
@@ -296,7 +298,7 @@ class TicketController extends Controller
                 $status['carros'] ++;
             if($ticket->type == 2)
                 $status['motos'] ++;
-            if($ticket->schedule == 3){
+            if($ticket->schedule == 3 and !empty($tickets->date_end)){
                 $diff=date_diff($tickets->date_end, $now);
                 $diff=$diff->format("%a");
                 if($diff<=2){
@@ -307,5 +309,10 @@ class TicketController extends Controller
         }
         $status['total'] = format_money($status['total']);
         return $status;
+    }
+    public function getTicket(Request $request)
+    {
+        $ticket = Ticket::find($request->ticket_id);
+        return $ticket;
     }
 }
