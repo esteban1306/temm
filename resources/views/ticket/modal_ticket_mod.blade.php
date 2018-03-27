@@ -38,6 +38,10 @@
                         <label for="drawer" class="control-label">Casilla</label>
                         <input id="drawer_mod" type="text" class="form-control">
                     </div>
+                    <div class="form-group col-md-12{{ $errors->has('name') ? ' has-error' : '' }}">
+                        <label for="extra" class="control-label">Extra</label>
+                        <input id="extra" type="number" class="form-control">
+                    </div>
                     <div class="form-group col-md-12" id="nameIn_mod">
                         <label for="nombre" class="control-label">Nombre</label>
                         <input id="nombreIn_mod" type="text" class="form-control validate[required]">

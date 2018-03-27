@@ -19,6 +19,8 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::post('/cobrar', 'TicketController@update')->name('cobrar');
+Route::post('/actualizar', 'TicketController@updateTicket')->name('actualizar');
+Route::post('/eliminar', 'TicketController@deleteTicket')->name('eliminar');
 Route::post('/get_ticket', 'TicketController@getTicket')->name('get_ticket');
 Route::post('/get_status', 'TicketController@getStatus')->name('get_status');
 Route::get('/get_tickets', 'TicketController@getTickets')->name('get_tickets');

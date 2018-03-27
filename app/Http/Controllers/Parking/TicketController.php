@@ -159,6 +159,7 @@ class TicketController extends Controller
         $interval = date_diff(new DateTime("".$ticket->hour),$now);
         $ticket->status = 2;
         $ticket->price =$this->precio($interval,$ticket->type);
+        $ticket->pay_day =$now;
         $ticket->save();
         return [$ticket->price,$interval->format("%H:%I")];
     }
@@ -191,9 +192,27 @@ class TicketController extends Controller
         if (!empty($range)){
             $dateRange = explode(" - ", $range);
             $tickets = $tickets->whereBetween('created_at', [$dateRange[0], $dateRange[1]]);
+        }else{
+            $tickets = $tickets->whereBetween('created_at', [ new Datetime('today'), new Datetime('tomorrow')]);
         }
         return Datatables::of($tickets)
             ->addColumn('action', function ($tickets) {
+                $htmlAdmin= \Form::button('Editar', [
+                        'class'   => 'btn btn-primary',
+                        'onclick' => "openModalMod('$tickets->Id')",
+                        'data-toggle' => "tooltip",
+                        'data-placement' => "bottom",
+                        'title' => "Editar !",
+
+                    ]).
+                    \Form::button('Eliminar', [
+                        'class'   => 'btn btn-warning',
+                        'onclick' => "eliminarTicket('$tickets->Id')",
+                        'data-toggle' => "tooltip",
+                        'data-placement' => "bottom",
+                        'title' => "Eliminar !",
+
+                    ]);
                 if ($tickets->status == 1)
                 return \Form::button('Pagar', [
                         'class'   => 'btn btn-info',
@@ -202,9 +221,9 @@ class TicketController extends Controller
                         'data-placement' => "bottom",
                         'title' => "Pagar !",
 
-                    ]) ;
+                    ]).(Auth::user()->type == 1?$htmlAdmin:'') ;
                 else
-                    return '';
+                    return (Auth::user()->type == 1?$htmlAdmin:'');
             })
             ->addColumn('Tipo', function ($tickets) {
                 return  $tickets->type == 1? 'Carro': 'Moto';
@@ -244,7 +263,7 @@ class TicketController extends Controller
                     ]).
                         \Form::button('Eliminar', [
                             'class'   => 'btn btn-warning',
-                            'onclick' => "$('#modal_ticket_out').modal('show');$('#ticket_id').val('$tickets->Id')",
+                            'onclick' => "eliminarTicket('$tickets->Id')",
                             'data-toggle' => "tooltip",
                             'data-placement' => "bottom",
                             'title' => "Eliminar !",
@@ -272,18 +291,17 @@ class TicketController extends Controller
         $type = $request->get('type_car');
         $range = $request->get('range');
 
-        $tickets= Ticket::select(['plate', 'type', 'schedule', 'price', 'name', 'date_end'])
-        ->where('parking_id',Auth::user()->parking_id)->orderBy('ticket_id','desc');
+        $tickets= Ticket::select(['plate', 'type', 'schedule', 'price', 'name', 'date_end'])->where('parking_id',Auth::user()->parking_id)->orderBy('ticket_id','desc');
         if (!empty($schedule))
-            $tickets = $tickets->where('schedule', $schedule);
+        $tickets = $tickets->where('schedule', $schedule);
         if (!empty($type))
             $tickets = $tickets->where('type', $type);
-        if (!empty($range)){
+        /*if (!empty($range)){
             $dateRange = explode(" - ", $range);
-            $tickets = $tickets->whereBetween('created_at', [$dateRange[0], $dateRange[1]]);
+            $tickets = $tickets->whereBetween('pay_day', [$dateRange[0], $dateRange[1]]);
         }else{
-            $tickets = $tickets->whereBetween('created_at', [ new Datetime('today'), new Datetime('tomorrow')]);
-        }
+            $tickets = $tickets->whereBetween('pay_day', [ new Datetime('today'), new Datetime('tomorrow')]);
+        }*/
         $status = [];
         $status['total'] = ZERO;
         $status['carros'] = ZERO;
@@ -298,8 +316,8 @@ class TicketController extends Controller
                 $status['carros'] ++;
             if($ticket->type == 2)
                 $status['motos'] ++;
-            if($ticket->schedule == 3 and !empty($tickets->date_end)){
-                $diff=date_diff($tickets->date_end, $now);
+            if($ticket->schedule == 3 and !empty($ticket->date_end)){
+                $diff=date_diff(new DateTime("".$ticket->date_end), $now);
                 $diff=$diff->format("%a");
                 if($diff<=2){
                     $status['month_expire'] .= $ticket->name.' ('.$ticket->plate.') Vence '.$ticket->date_end;
@@ -314,5 +332,30 @@ class TicketController extends Controller
     {
         $ticket = Ticket::find($request->ticket_id);
         return $ticket;
+    }
+    public function updateTicket(Request $request)
+    {
+        $ticket = Ticket::find($request->ticket_id);
+        $now = new Datetime('now');
+        $ticket->plate =$request->plate;
+        $ticket->type =$request->type;
+        $ticket->schedule =$request->schedule;
+        if($request->schedule==3){
+            $dateRange = explode(" - ", $request->range);
+            $ticket->date_end = new \Carbon\Carbon($dateRange[1]);
+            $ticket->name = $request->name;
+            $ticket->hour = new \Carbon\Carbon($dateRange[0]);
+        }
+        $ticket->partner_id = Auth::user()->partner_id;
+        $ticket->extra = $request->extra;
+        $ticket->drawer = $request->drawer;
+        $ticket->save();
+        return ;
+    }
+    public function deleteTicket(Request $request)
+    {
+        $ticket = Ticket::find($request->ticket_id);
+        $ticket->delete();
+        return ;
     }
 }

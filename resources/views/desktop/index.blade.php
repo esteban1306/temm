@@ -236,10 +236,79 @@
                 }
             });
         }
+        function modificarTicket() {
+            var ticket_id= $('#ticket_id_mod').val();
+            var plate= $('#plate_mod').val();
+            var type= $('#typeIn_mod').val();
+            var schedule= $('#schedule_mod').val();
+            var drawer= $('#drawer_mod').val();
+            var extra= $('#extra').val();
+            var name= $('#nombreIn_mod').val();
+            var range= $('#date_range_mod').val();
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: "POST",
+                url: "actualizar",
+                data: {
+                    ticket_id:ticket_id,
+                    plate:plate,
+                    type:type,
+                    schedule:schedule,
+                    drawer:drawer,
+                    name:name,
+                    extra:extra,
+                    range:range
+                },
+                success: function (datos) {
+                    new PNotify({
+                        title: 'Exito',
+                        type: 'success',
+                        text: 'Se modificó el ticket con exito'
+                    });
+                    $('#modal_ticket_mod').modal('hide');
+                    $('#tickets-table').dataTable()._fnAjaxUpdate();
 
+                },
+                error:function () {
+                    alert("Error !");
+                }
+            });
+        }
+
+        function eliminarTicket(id) {
+            (new PNotify({
+                title: 'Necesita confirmación',
+                text: 'Esta seguro de querer eliminar el registro?',
+                icon: 'glyphicon glyphicon-question-sign',
+                hide: false,
+                confirm: {
+                    confirm: true
+                },
+                buttons: {
+                    closer: false,
+                    sticker: false
+                },
+                history: {
+                    history: false
+                },
+                addclass: 'stack-modal',
+                stack: {
+                    'dir1': 'down',
+                    'dir2': 'right',
+                    'modal': true
+                }
+            })).get().on('pnotify.confirm', function() {
+                desktop_index_vm.delete(id);
+            }).on('pnotify.cancel', function() {
+               ;
+            });
+        }
         function crearTicket() {
+            type();
             var plate = $("#plate").val();
-            var type = $("#typeIn").val();
+            var typeIn = $("#typeIn").val();
             var schedule = $("#schedule").val();
             var drawer = $("#drawer").val();
             var nameIn = $("#nombreIn").val();
@@ -253,7 +322,7 @@
                 url: "tickets",
                 data: {
                     plate:plate,
-                    type:type,
+                    type:typeIn,
                     schedule:schedule,
                     drawer:drawer,
                     name:nameIn,
@@ -263,8 +332,10 @@
                     $('#modal_ticket_in').modal('hide');
                     new PNotify({
                         title: 'Exito',
+                        type: 'success',
                         text: 'Se agregó el ticket con exito'
                     });
+                    desktop_index_vm.loadTable();
                 },
                 error:function () {
                     alert("Error !");
@@ -288,6 +359,7 @@
                     $('#schedule_mod').val(datos['schedule']);
                     $('#drawer_mod').val(datos['drawer']);
                     $('#nombreIn_mod').val(datos['name']);
+                    $('#extra').val(datos['extra']);
                     $('#date_range_mod').val(datos['hour']+' - '+datos['date_end']);
                     mensualidad2();
                     $('#date_range_mod').daterangepicker({
@@ -427,7 +499,6 @@
 
             },
             mounted    : function() {
-                this.load();
                 this.loadTable();
             },
             methods    : {
@@ -450,8 +521,12 @@
                             $("#motos").html(datos['motos']);
                             $("#carros").html(datos['carros']);
                             $("#month_expired").html(datos['month_expire_num']);
-                            if(this.retired == 0 && datos['month_expire_num']>0){
-                                alert(datos['month_expire']);
+                            if( datos['month_expire_num']>0){
+                                new PNotify({
+                                    title: 'Mensualidades pendientes',
+                                    text: datos['month_expire'],
+                                    type: 'info'
+                                });
                             }
                             this.retired = 1;
                         },
@@ -508,7 +583,7 @@
                             lengthMenu: [[ 10, 25, 50, -1], [ 10, 25, 50, "Todos"]]
                         });
                     }else{
-                        $("#tickets-table").dataTable().fnDestroy();
+                        this.load();
                     $('#tickets-table').DataTable({
                         sDom           : 'r<Hlf><"datatable-scroll"t><Fip>',
                         order          : [],
@@ -563,6 +638,30 @@
                                         sticker: false
                                     }
                                 });
+                            }
+                        });
+                },
+                delete : function(ticket_id) {
+                        $.ajax({
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            type: "POST",
+                            url: "eliminar",
+                            data: {
+                                ticket_id:ticket_id
+                            },
+                            success: function (datos) {
+                                new PNotify({
+                                    title: 'Exito',
+                                    type: 'success',
+                                    text: 'Se Eliminó el ticket con exito'
+                                });
+                                $('#tickets-table').dataTable()._fnAjaxUpdate();
+
+                            },
+                            error:function () {
+                                alert("Error !");
                             }
                         });
                 }
