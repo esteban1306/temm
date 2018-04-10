@@ -138,7 +138,7 @@ class TicketController extends Controller
 </div>';
         }
         PDF::writeHTML($html, true, false, true, false, '');
-        if($ticket->price != null){
+        if(!isset($ticket->price)){
         $id_bar = substr('0000000000'.$ticket->ticket_id,-10);
         PDF::write1DBarcode($id_bar, 'C128C', '', '', '', 18, 0.4, $style, 'N');
         }
