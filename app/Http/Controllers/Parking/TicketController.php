@@ -94,7 +94,7 @@ class TicketController extends Controller
         $parking = Parking::find(Auth::user()->parking_id);
         $html = '<div style="text-align:center"><big style="margin-bottom: 1px"><b>'.$parking->name.'</b></big><br>
                 <em style="font-size: x-small;margin-top: 2px;margin-bottom: 1px">"Todo lo puedo en Cristo que<br> me fortalece": Fil 4:13 <br></em>
-                <small style="font-size: x-small;margin-top: 2px;margin-bottom: 1px"><b>'.$parking->address.'<br>'.($parking->parking_id==3?'OLIVEROS HERNANDEZ VALENTINA <br> NIT: 1094965452':'').'</b></small>';
+                <small style="font-size: x-small;margin-top: 2px;margin-bottom: 1px"><b>'.$parking->address.'<br></b>'.($parking->parking_id==3?'OLIVEROS HERNANDEZ VALENTINA <br> NIT: 1094965452':'').'</small>';
         if(!isset($ticket->price)) {
             $html .= '<small style="text-align:left;font-size: small"><br>
                  Fecha: ' . $hour->format('d/m/Y') . '<br>
