@@ -71,6 +71,7 @@ class TicketController extends Controller
         $id = $request->id_pdf;
         $ticket= Ticket::find($id);
         $hour =new DateTime("".$ticket->hour);
+        $hour2 =new DateTime("".$ticket->date_end);
         $style = array(
             'position' => '',
             'align' => 'C',
@@ -91,18 +92,40 @@ class TicketController extends Controller
         PDF::AddPage('P', 'A6');
         PDF::SetMargins(4, 2, 49);
         $parking = Parking::find(Auth::user()->parking_id);
-        $html = '<div style="text-align:center"><big style="margin-bottom: 1px"><b>Parqueadero CC <br>del cafe</b></big><br>
+        $html = '<div style="text-align:center"><big style="margin-bottom: 1px"><b>'.$parking->name.'</b></big><br>
                 <em style="font-size: x-small;margin-top: 2px;margin-bottom: 1px">"Todo lo puedo en Cristo que<br> me fortalece": Fil 4:13 <br></em>
                 <small style="font-size: x-small;margin-top: 2px;margin-bottom: 1px"><b>'.$parking->address.'</b></small>';
-        $html .='<small style="text-align:left;font-size: small"><br>
-                 Fecha: '.$hour->format('d/m/Y').'<br>
-                 Hora: '.$hour->format('h:ia').'<br>
-                 Tipo: '.($ticket->type==1?'Carro':'Moto').'<br>
-                 Placa: '.$ticket->plate.'<br>
-                 '.(isset($ticket->drawer)?"Locker: ".$ticket->drawer."<br>":'').'
+        if($ticket->price != null) {
+            $html .= '<small style="text-align:left;font-size: small"><br>
+                 Fecha: ' . $hour->format('d/m/Y') . '<br>
+                 Hora: ' . $hour->format('h:ia') . '<br>
+                 Tipo: ' . ($ticket->type == 1 ? 'Carro' : 'Moto') . '<br>
+                 Placa: ' . $ticket->plate . '<br>
+                 ' . (isset($ticket->drawer) ? "Locker: " . $ticket->drawer . "<br>" : '') . '
                  </small>
                  <small style="text-align:left;font-size: 8px"><br>
-                 Horario: Lun-Sab 7:30am - 7:30 pm,<br>     Dom 7:30 am - 3 pm<br>
+                 Horario: Lun-Sab 7am - 9pm<br>
+                 </small>
+                 <small style="text-align:left;font-size: 6px"><br>
+                 1.El vehiculo se entregara al portador de este recibo<br>
+                 2.No aceptamos ordenes escritas o por telefono<br>
+                 3.Despues de retirado el vehiculo no respondemos por daños, faltas o averias. Revise el vehiculo a la salida.<br>
+                 4.No respondemos por objetos dejados en el carro mientras sus puertas esten aseguradas<br>
+                 5.No somos responsables por daños o perdidas causadas en el parqueadero mientras el vehiculo no sea entregado personalmente<br>
+                 6.No respondemos por la perdida, deterioro o daños ocurridos por causa de incendio, terremoto o causas similares, motin,conmosion civil, revolucion <br>y otros eventos que impliquen fuerza mayor.
+                 </small></div>';
+        }else{
+            $html .= '<small style="text-align:left;font-size: small"><br>
+                 Fecha: ' . $hour->format('d/m/Y') . '<br>
+                 Hora: ' . $hour->format('h:ia') . '<br>
+                 Tipo: ' . ($ticket->type == 1 ? 'Carro' : 'Moto') . '<br>
+                 Placa: ' . $ticket->plate . '<br>
+                 ' . (isset($ticket->price) ? "Precio: " . $ticket->price . "<br>" : '') .
+                (isset($ticket->extra) ? "Extra: " . $ticket->extra . "<br>Total: " . ($ticket->price+$ticket->extra) . "<br>" : '').
+                (isset($ticket->date_end) ? "Fecha fin: " . $hour2->format('d/m/Y') . "<br>" : '').
+                '</small>
+                 <small style="text-align:left;font-size: 8px"><br>
+                 Horario: Lun-Sab 7am - 9pm<br>
                  </small>
                  <small style="text-align:left;font-size: 6px"><br>
                  1.El vehiculo se entregara al portador de este recibo<br>
@@ -113,9 +136,12 @@ class TicketController extends Controller
                  6.No respondemos por la perdida, deterioro o daños ocurridos por causa de incendio, terremoto o causas similares, motin,conmosion civil, revolucion <br>y otros eventos que impliquen fuerza mayor.
                  </small>
 </div>';
+        }
         PDF::writeHTML($html, true, false, true, false, '');
+        if($ticket->price != null){
         $id_bar = substr('0000000000'.$ticket->ticket_id,-10);
         PDF::write1DBarcode($id_bar, 'C128C', '', '', '', 18, 0.4, $style, 'N');
+        }
         $js = 'print(true);';
         PDF::IncludeJS($js);
         PDF::Output('ticket.pdf');
