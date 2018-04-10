@@ -120,9 +120,9 @@ class TicketController extends Controller
                  Hora: ' . $hour->format('h:ia') . '<br>
                  Tipo: ' . ($ticket->type == 1 ? 'Carro' : 'Moto') . '<br>
                  Placa: ' . $ticket->plate . '<br>
-                 ' . (isset($ticket->price) ? "Precio: " . $ticket->price . "<br>" : '') .
-                (isset($ticket->extra) ? "Extra: " . $ticket->extra . "<br>Total: " . ($ticket->price+$ticket->extra) . "<br>" : '').
-                (isset($ticket->date_end) ? "Fecha fin: " . $hour2->format('d/m/Y') . "<br>" : '').
+                 ' . (isset($ticket->price) ? "   Precio: " . $ticket->price . "<br>" : '') .
+                (isset($ticket->extra) ? "   Extra: " . $ticket->extra . "<br>Total: " . ($ticket->price+$ticket->extra) . "<br>" : '').
+                (isset($ticket->date_end) ? "   Fecha fin: " . $hour2->format('d/m/Y') . "<br>" : '').
                 '</small>
                  <small style="text-align:left;font-size: 8px"><br>
                  Horario: Lun-Sab 7am - 9pm<br>
