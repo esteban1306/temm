@@ -146,6 +146,11 @@
                     </table>
                 </div>
             </div>
+            <form id="form_pdf" class="row" method="POST" action="{{ route('pdf') }}" TARGET="_blank" hidden>
+            {{ csrf_field() }}
+                <input id="id_pdf" type="text" class="form-control" name="id_pdf">
+                <button id="pdfsubmit" type="submit" form="form_pdf">Submit</button>
+            </form>
             @include('desktop.account')
         </div>
     </div>
@@ -236,6 +241,10 @@
                 }
             });
         }
+        function form_pdf(id) {
+            $('#id_pdf').val(id);
+            $('#pdfsubmit').click();
+        }
         function modificarTicket() {
             var ticket_id= $('#ticket_id_mod').val();
             var plate= $('#plate_mod').val();
@@ -269,7 +278,7 @@
                     });
                     $('#modal_ticket_mod').modal('hide');
                     $('#tickets-table').dataTable()._fnAjaxUpdate();
-
+                    desktop_index_vm.load();
                 },
                 error:function () {
                     alert("Error !");
@@ -336,6 +345,7 @@
                         text: 'Se agregó el ticket con exito'
                     });
                     desktop_index_vm.loadTable();
+                    form_pdf(datos);
                 },
                 error:function () {
                     alert("Error !");

@@ -62,6 +62,15 @@ class TicketController extends Controller
         $ticket->partner_id = Auth::user()->partner_id;
         $ticket->drawer = $request->drawer;
         $ticket->save();
+
+
+        return $ticket->ticket_id;
+    }
+    public function pdf(Request $request)
+    {
+        $id = $request->id_pdf;
+        $ticket= Ticket::find($id);
+        $hour =new DateTime("".$ticket->hour);
         $style = array(
             'position' => '',
             'align' => 'C',
@@ -86,10 +95,10 @@ class TicketController extends Controller
                 <em style="font-size: x-small;margin-top: 2px;margin-bottom: 1px">"Todo lo puedo en Cristo que<br> me fortalece": Fil 4:13 <br></em>
                 <small style="font-size: x-small;margin-top: 2px;margin-bottom: 1px"><b>'.$parking->address.'</b></small>';
         $html .='<small style="text-align:left;font-size: small"><br>
-                 Fecha: '.$now->format('d/m/Y').'<br>
-                 Hora: '.$now->format('h:ia').'<br>
+                 Fecha: '.$hour->format('d/m/Y').'<br>
+                 Hora: '.$hour->format('h:ia').'<br>
                  Tipo: '.($ticket->type==1?'Carro':'Moto').'<br>
-                 Placa: '.$request->plate.'<br>
+                 Placa: '.$ticket->plate.'<br>
                  '.(isset($ticket->drawer)?"Locker: ".$ticket->drawer."<br>":'').'
                  </small>
                  <small style="text-align:left;font-size: 8px"><br>
@@ -107,11 +116,12 @@ class TicketController extends Controller
         PDF::writeHTML($html, true, false, true, false, '');
         $id_bar = substr('0000000000'.$ticket->ticket_id,-10);
         PDF::write1DBarcode($id_bar, 'C128C', '', '', '', 18, 0.4, $style, 'N');
-        PDF::Output('ticket.pdf','D');
+        $js = 'print(true);';
+        PDF::IncludeJS($js);
+        PDF::Output('ticket.pdf');
 
-        return redirect('/');
+// set javascript
     }
-
     /**
      * Display the specified resource.
      *
@@ -123,7 +133,7 @@ class TicketController extends Controller
         //
     }
 
-    public function precio($tiempo, $tipo)
+    public function precio($tiempo, $tipo, $schedule)
     {
         $horas = $tiempo->format("%H");
         $minutos = $tiempo->format("%I");
@@ -131,7 +141,12 @@ class TicketController extends Controller
         $minutos = ($minutos*1) - ($parking->free_time);
         $horas = (24*$tiempo->format("%d"))+$horas*1 + (($minutos>=0? 1: 0)*1);
         $horas = $horas==0? 1: $horas;
-        return ($tipo==1? $parking->hour_cars_price * $horas: $parking->hour_motorcycles_price * $horas );
+        if($schedule==1)
+            return ($tipo==1? $parking->hour_cars_price * $horas: $parking->hour_motorcycles_price * $horas );
+        if($schedule==2)
+            return ($tipo==1? $parking->day_cars_price: $parking->day_motorcycles_price);
+        if($schedule==3)
+            return ($tipo==1? $parking->monthly_cars_price: $parking->monthly_motorcycles_price);
     }
 
     /**
@@ -158,7 +173,7 @@ class TicketController extends Controller
         $ticket = Ticket::find($request->ticket_id);
         $interval = date_diff(new DateTime("".$ticket->hour),$now);
         $ticket->status = 2;
-        $ticket->price =$this->precio($interval,$ticket->type);
+        $ticket->price =$this->precio($interval,$ticket->type, $ticket->schedule);
         $ticket->pay_day =$now;
         $ticket->save();
         return [$ticket->price,$interval->format("%H:%I")];
@@ -221,9 +236,25 @@ class TicketController extends Controller
                         'data-placement' => "bottom",
                         'title' => "Pagar !",
 
-                    ]).(Auth::user()->type == 1?$htmlAdmin:'') ;
+                    ]).(Auth::user()->type == 1?$htmlAdmin:'').
+                    \Form::button('Imprimir', [
+                        'class'   => 'btn btn-info',
+                        'onclick' => "form_pdf('$tickets->Id')",
+                        'data-toggle' => "tooltip",
+                        'data-placement' => "bottom",
+                        'title' => "Imprimir !",
+
+                    ]) ;
                 else
-                    return (Auth::user()->type == 1?$htmlAdmin:'');
+                    return (Auth::user()->type == 1?$htmlAdmin:'').
+                        \Form::button('Imprimir', [
+                            'class'   => 'btn btn-info',
+                            'onclick' => "form_pdf('$tickets->Id')",
+                            'data-toggle' => "tooltip",
+                            'data-placement' => "bottom",
+                            'title' => "Imprimir !",
+
+                        ]);
             })
             ->addColumn('Tipo', function ($tickets) {
                 return  $tickets->type == 1? 'Carro': 'Moto';
@@ -268,6 +299,14 @@ class TicketController extends Controller
                             'data-placement' => "bottom",
                             'title' => "Eliminar !",
 
+                        ]).
+                        \Form::button('Imprimir', [
+                            'class'   => 'btn btn-info',
+                            'onclick' => "form_pdf('$tickets->Id')",
+                            'data-toggle' => "tooltip",
+                            'data-placement' => "bottom",
+                            'title' => "Imprimir !",
+
                         ]);
                 else
                     return '';
@@ -296,12 +335,12 @@ class TicketController extends Controller
         $tickets = $tickets->where('schedule', $schedule);
         if (!empty($type))
             $tickets = $tickets->where('type', $type);
-        /*if (!empty($range)){
+        if (!empty($range)){
             $dateRange = explode(" - ", $range);
             $tickets = $tickets->whereBetween('pay_day', [$dateRange[0], $dateRange[1]]);
         }else{
             $tickets = $tickets->whereBetween('pay_day', [ new Datetime('today'), new Datetime('tomorrow')]);
-        }*/
+        }
         $status = [];
         $status['total'] = ZERO;
         $status['carros'] = ZERO;

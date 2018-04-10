@@ -19,6 +19,7 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::post('/cobrar', 'TicketController@update')->name('cobrar');
+Route::post('/pdf', 'TicketController@pdf')->name('pdf');
 Route::post('/actualizar', 'TicketController@updateTicket')->name('actualizar');
 Route::post('/eliminar', 'TicketController@deleteTicket')->name('eliminar');
 Route::post('/get_ticket', 'TicketController@getTicket')->name('get_ticket');
