@@ -92,19 +92,17 @@ class TicketController extends Controller
         PDF::AddPage('P', 'A6');
         PDF::SetMargins(4, 2, 49);
         $parking = Parking::find(Auth::user()->parking_id);
-        $html = '<div style="text-align:center"><big style="margin-bottom: 1px"><b>'.$parking->name.'</b></big><br>
+        $html = '<div style="text-align:center"><big style="margin-bottom: 1px"><b>PARQUEADERO '.$parking->name.'</b></big><br>
                 <em style="font-size: x-small;margin-top: 2px;margin-bottom: 1px">"Todo lo puedo en Cristo que<br> me fortalece": Fil 4:13 <br></em>
-                <small style="font-size: x-small;margin-top: 2px;margin-bottom: 1px"><b>'.$parking->address.'<br></b>'.($parking->parking_id==3?'OLIVEROS HERNANDEZ VALENTINA <br> NIT: 1094965452':'').'</small>';
+                <small style="font-size: x-small;margin-top: 2px;margin-bottom: 1px"><b>'.$parking->address.'</b></small>'.($parking->parking_id!=3?'<small style="text-align:center;font-size: 7px"><br>
+    SERVICIO: Lun-Sab 7am - 9pm<br>OLIVEROS HERNANDEZ VALENTINA <br> NIT: 1094965452 <br> TEL: 3104276986</small>':'');
         if(!isset($ticket->price)) {
             $html .= '<small style="text-align:left;font-size: small"><br>
-                 Fecha: ' . $hour->format('d/m/Y') . '<br>
-                 Hora: ' . $hour->format('h:ia') . '<br>
+                 Fecha ingreso: ' . $hour->format('d/m/Y') . '<br>
+                 Hora ingreso: ' . $hour->format('h:ia') . '<br>
                  Tipo: ' . ($ticket->type == 1 ? 'Carro' : 'Moto') . '<br>
                  Placa: ' . $ticket->plate . '<br>
                  ' . (isset($ticket->drawer) ? "Locker: " . $ticket->drawer . "<br>" : '') . '
-                 </small>
-                 <small style="text-align:left;font-size: 8px"><br>
-                 Horario: Lun-Sab 7am - 9pm<br>
                  </small>
                  <small style="text-align:left;font-size: 6px"><br>
                  1.El vehiculo se entregara al portador de este recibo<br>
@@ -115,26 +113,31 @@ class TicketController extends Controller
                  6.No respondemos por la perdida, deterioro o daños ocurridos por causa de incendio, terremoto o causas similares, motin,conmosion civil, revolucion <br>y otros eventos que impliquen fuerza mayor.
                  </small></div>';
         }else{
+            $pay_day = new DateTime("".$ticket->pay_day);
+            $interval = date_diff($hour,$pay_day);
+            $horas = $interval->format("%H");
+            $minutos = $interval->format("%I");
+            if($minutos<=5 && $ticket->schedule==1){
+                $horas= 0;
+            }else{
+                $parking = Parking::find(Auth::user()->parking_id);
+                $minutos = ($minutos*1) - ($parking->free_time);
+                $horas = (24*$interval->format("%d"))+$horas*1 + (($minutos>=0? 1: 0)*1);
+                $horas = $horas==0? 1: $horas;
+            }
             $html .= '<small style="text-align:left;font-size: small"><br>
-                 Fecha: ' . $hour->format('d/m/Y') . '<br>
-                 Hora: ' . $hour->format('h:ia') . '<br>
+                    FACTURA DE VENTA N° ' . $ticket->ticket_id . '<br>
+                 ' . ($ticket->schedule==1? "   Fracciones: " . $horas . "<br>" : '') .'
+                   Fecha ingreso: ' . $hour->format('d/m/Y') . '<br>
+                 Hora ingreso: ' . $hour->format('h:ia') . '<br>
+                 ' . ($ticket->schedule==1? "   Fecha salida: " . $pay_day->format('d/m/Y') . "<br>" : '') .'
+                 ' . ($ticket->schedule==1? "   Hora salida: " . $pay_day->format('h:ia') . "<br>" : '') .'
                  Tipo: ' . ($ticket->type == 1 ? 'Carro' : 'Moto') . '<br>
                  Placa: ' . $ticket->plate . '<br>
                  ' . (isset($ticket->price) ? "   Precio: " . $ticket->price . "<br>" : '') .
                 (isset($ticket->extra) ? "   Extra: " . $ticket->extra . "<br>Total: " . ($ticket->price+$ticket->extra) . "<br>" : '').
-                (isset($ticket->date_end) ? "   Fecha fin: " . $hour2->format('d/m/Y') . "<br>" : '').
+                (isset($ticket->date_end) ? "   Fecha fin: " . $hour2->format('d/m/Y') : '').
                 '</small>
-                 <small style="text-align:left;font-size: 8px"><br>
-                 Horario: Lun-Sab 7am - 9pm<br>
-                 </small>
-                 <small style="text-align:left;font-size: 6px"><br>
-                 1.El vehiculo se entregara al portador de este recibo<br>
-                 2.No aceptamos ordenes escritas o por telefono<br>
-                 3.Despues de retirado el vehiculo no respondemos por daños, faltas o averias. Revise el vehiculo a la salida.<br>
-                 4.No respondemos por objetos dejados en el carro mientras sus puertas esten aseguradas<br>
-                 5.No somos responsables por daños o perdidas causadas en el parqueadero mientras el vehiculo no sea entregado personalmente<br>
-                 6.No respondemos por la perdida, deterioro o daños ocurridos por causa de incendio, terremoto o causas similares, motin,conmosion civil, revolucion <br>y otros eventos que impliquen fuerza mayor.
-                 </small>
 </div>';
         }
         $html .= '<small style="text-align:left;font-size: 5px"><br>
@@ -166,6 +169,8 @@ class TicketController extends Controller
     {
         $horas = $tiempo->format("%H");
         $minutos = $tiempo->format("%I");
+        if($minutos<=5 && $schedule==1)
+            return 0;
         $parking = Parking::find(Auth::user()->parking_id);
         $minutos = ($minutos*1) - ($parking->free_time);
         $horas = (24*$tiempo->format("%d"))+$horas*1 + (($minutos>=0? 1: 0)*1);
@@ -359,19 +364,20 @@ class TicketController extends Controller
         $type = $request->get('type_car');
         $range = $request->get('range');
 
-        $tickets= Ticket::select(['plate', 'type', 'schedule', 'price', 'name', 'date_end'])->where('parking_id',Auth::user()->parking_id)->orderBy('ticket_id','desc');
+        $tickets= Ticket::select(['plate', 'type', 'extra', 'schedule', 'price', 'name', 'date_end'])->where('parking_id',Auth::user()->parking_id)->orderBy('ticket_id','desc');
         if (!empty($schedule))
         $tickets = $tickets->where('schedule', $schedule);
         if (!empty($type))
             $tickets = $tickets->where('type', $type);
         if (!empty($range)){
             $dateRange = explode(" - ", $range);
-            $tickets = $tickets->whereBetween('pay_day', [$dateRange[0], $dateRange[1]]);
+            $tickets = $tickets->whereBetween('created_at', [$dateRange[0], $dateRange[1]]);
         }else{
-            $tickets = $tickets->whereBetween('pay_day', [ new Datetime('today'), new Datetime('tomorrow')]);
+            $tickets = $tickets->whereBetween('created_at', [ new Datetime('today'), new Datetime('tomorrow')]);
         }
         $status = [];
         $status['total'] = ZERO;
+        $status['extra'] = ZERO;
         $status['carros'] = ZERO;
         $status['motos'] = ZERO;
         $status['month_expire'] = 'Mensualidades por vencer:';
@@ -380,15 +386,22 @@ class TicketController extends Controller
         $now = new Datetime('now');
         foreach ($tickets as $ticket){
             $status['total'] += $ticket->price;
+            $status['extra'] += $ticket->extra;
             if($ticket->type == 1)
                 $status['carros'] ++;
             if($ticket->type == 2)
                 $status['motos'] ++;
+        }
+        $ticketss= Ticket::select(['plate', 'type', 'extra', 'schedule', 'price', 'name', 'date_end'])->where('parking_id',Auth::user()->parking_id)->orderBy('ticket_id','desc');
+        $ticketss = $ticketss->where('schedule', 3);
+        $ticketss=$ticketss->get();
+        foreach ($ticketss as $ticket){
             if($ticket->schedule == 3 and !empty($ticket->date_end)){
+                $hour2 =new DateTime("".$ticket->date_end);
                 $diff=date_diff(new DateTime("".$ticket->date_end), $now);
                 $diff=$diff->format("%a");
                 if($diff<=2){
-                    $status['month_expire'] .= $ticket->name.' ('.$ticket->plate.') Vence '.$ticket->date_end;
+                    $status['month_expire'] .= $ticket->name.' ('.$ticket->plate.') Vence '.$hour2->format('d/m/Y');
                     $status['month_expire_num'] ++;
                 }
             }
