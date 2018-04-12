@@ -48,7 +48,7 @@ class TicketController extends Controller
         $now = new Datetime('now');
         $ticket= new Ticket();
         $ticket->hour =$now;
-        $ticket->plate =$request->plate;
+        $ticket->plate =strtoupper($request->plate);
         $ticket->status = 1;
         $ticket->type =$request->type;
         $ticket->schedule =$request->schedule;
@@ -92,7 +92,7 @@ class TicketController extends Controller
         PDF::AddPage('P', 'A6');
         PDF::SetMargins(4, 2, 49);
         $parking = Parking::find(Auth::user()->parking_id);
-        $html = '<div style="text-align:center"><big style="margin-bottom: 1px"><b>PARQUEADERO '.$parking->name.'</b></big><br>
+        $html = '<div style="text-align:center"><big style="margin-bottom: 1px"><b>&nbsp; PARQUEADERO '.$parking->name.'</b></big><br>
                 <em style="font-size: x-small;margin-top: 2px;margin-bottom: 1px">"Todo lo puedo en Cristo que<br> me fortalece": Fil 4:13 <br></em>
                 <small style="font-size: x-small;margin-top: 2px;margin-bottom: 1px"><b>'.$parking->address.'</b></small>'.($parking->parking_id==3?'<small style="text-align:center;font-size: 7px"><br>
     SERVICIO: Lun-Sab 7am - 9pm<br>OLIVEROS HERNANDEZ VALENTINA <br> NIT: 1094965452_1 <br> TEL: 3104276986</small>':'');
@@ -117,7 +117,7 @@ class TicketController extends Controller
             $interval = date_diff($hour,$pay_day);
             $horas = $interval->format("%H");
             $minutos = $interval->format("%I");
-            if($minutos<=5 && $ticket->schedule==1){
+            if($minutos<=5 && $horas==0 && $ticket->schedule==1){
                 $horas= 0;
             }else{
                 $parking = Parking::find(Auth::user()->parking_id);
@@ -127,16 +127,17 @@ class TicketController extends Controller
             }
             $html .= '<small style="text-align:left;font-size: small"><br>
                     FACTURA DE VENTA N° ' . $ticket->ticket_id . '<br>
+                 ' . ($ticket->schedule==3? strtoupper($ticket->name) . "<br>" : '') .'
                  ' . ($ticket->schedule==1? "   Fracciones: " . $horas . "<br>" : '') .'
                    Fecha ingreso: ' . $hour->format('d/m/Y') . '<br>
                  Hora ingreso: ' . $hour->format('h:ia') . '<br>
-                 ' . ($ticket->schedule==1? "   Fecha salida: " . $pay_day->format('d/m/Y') . "<br>" : '') .'
-                 ' . ($ticket->schedule==1? "   Hora salida: " . $pay_day->format('h:ia') . "<br>" : '') .'
+                 ' . ($ticket->schedule!=3? "   Fecha salida: " . $pay_day->format('d/m/Y') . "<br>" : '') .'
+                 ' . ($ticket->schedule!=3? "   Hora salida: " . $pay_day->format('h:ia') . "<br>" : '') .'
+                 ' . ($ticket->schedule==3? "   Fecha vencimiento: " . $hour2->format('d/m/Y') . "<br>" : '') .'
                  Tipo: ' . ($ticket->type == 1 ? 'Carro' : 'Moto') . '<br>
                  Placa: ' . $ticket->plate . '<br>
                  ' . (isset($ticket->price) ? "   Precio: " . $ticket->price . "<br>" : '') .
-                (isset($ticket->extra) ? "   Extra: " . $ticket->extra . "<br>Total: " . ($ticket->price+$ticket->extra) . "<br>" : '').
-                (isset($ticket->date_end) ? "   Fecha fin: " . $hour2->format('d/m/Y') : '').
+                (isset($ticket->extra) ? ($ticket->extra>0?"Incremento: ":"Descuento:" ). abs($ticket->extra) . "<br>Total: " . ($ticket->price+$ticket->extra) . "<br>" : '').
                 '</small>
 </div>';
         }
@@ -169,11 +170,11 @@ class TicketController extends Controller
     {
         $horas = $tiempo->format("%H");
         $minutos = $tiempo->format("%I");
-        if($minutos<=5 && $schedule==1)
-            return 0;
         $parking = Parking::find(Auth::user()->parking_id);
         $minutos = ($minutos*1) - ($parking->free_time);
         $horas = (24*$tiempo->format("%d"))+$horas*1 + (($minutos>=0? 1: 0)*1);
+        if($minutos<=5 && $horas==0 && $schedule==1)
+            return 0;
         $horas = $horas==0? 1: $horas;
         if($schedule==1)
             return ($tipo==1? $parking->hour_cars_price * $horas: $parking->hour_motorcycles_price * $horas );
@@ -229,11 +230,14 @@ class TicketController extends Controller
         $schedule = $request->get('type');
         $type = $request->get('type_car');
         $range = $request->get('range');
+        $status = $request->get('status');
 
-        $tickets= Ticket::select(['ticket_id as Id', 'plate', 'type', 'schedule', 'partner_id', 'status', 'drawer', 'price'])->where('parking_id',Auth::user()->parking_id)->orderBy('ticket_id','desc');
+        $tickets= Ticket::select(['ticket_id as Id', 'plate', 'type', 'schedule', 'partner_id', 'status', 'drawer', 'price','hour'])->where('parking_id',Auth::user()->parking_id)->orderBy('ticket_id','desc');
         if ($search) {
                 $tickets = $tickets->where('plate', 'LIKE', "%$search%");
         }
+        if (!empty($status))
+            $tickets = $tickets->where('status', $status);
         if (!empty($schedule))
             $tickets = $tickets->where('schedule', $schedule);
         if (!empty($type))
@@ -292,6 +296,10 @@ class TicketController extends Controller
             })
             ->addColumn('Tipo', function ($tickets) {
                 return  $tickets->type == 1? 'Carro': 'Moto';
+            })
+            ->addColumn('entrada', function ($tickets) {
+                $hour =new DateTime("".$tickets->hour);
+                return  $hour->format('h:ia');
             })
             ->addColumn('Estado', function ($tickets) {
                 return  $tickets->status == 1? 'Pendiente Pago': 'Pagó';
@@ -363,10 +371,13 @@ class TicketController extends Controller
         $schedule = $request->get('type');
         $type = $request->get('type_car');
         $range = $request->get('range');
+        $status = $request->get('status');
 
-        $tickets= Ticket::select(['plate', 'type', 'extra', 'schedule', 'price', 'name', 'date_end'])->where('parking_id',Auth::user()->parking_id)->orderBy('ticket_id','desc');
+        $tickets= Ticket::select(['plate', 'type', 'extra', 'schedule', 'price', 'name', 'status', 'date_end'])->where('parking_id',Auth::user()->parking_id)->orderBy('ticket_id','desc');
         if (!empty($schedule))
         $tickets = $tickets->where('schedule', $schedule);
+        if (!empty($status))
+        $tickets = $tickets->where('status', $status);
         if (!empty($type))
             $tickets = $tickets->where('type', $type);
         if (!empty($range)){

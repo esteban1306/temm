@@ -13,54 +13,6 @@
                 </div>
             </div>
             <p class="height_10"></p>
-            <h2 class="title_a"  v-show="all" >Estado actual</h2>
-            <div class="row" v-show="all">
-                <div class="col-lg-3 col-md-6">
-                    <div class="widget_box_b">
-                        <div class="contt">
-                            <div class="fl_layer">
-                                <h4 class="title">Recaudadó</h4>
-                                <span class="line"></span>
-                                <span class="data" id="total">125</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="widget_box_b">
-                        <div class="contt">
-                            <div class="fl_layer">
-                                <h4 class="title">motos</h4>
-                                <span class="line"></span>
-                                <span class="data" id="motos">6</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="widget_box_b">
-                        <div class="contt">
-                            <div class="fl_layer">
-                                <h4 class="title">Carros</h4>
-                                <span class="line"></span>
-                                <span class="data total" id="carros">12</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="widget_box_b bdred">
-                        <div class="contt">
-                            <div class="fl_layer">
-                                <h4 class="title">Mensualidades por vencer</h4>
-                                <span class="line"></span>
-                                <span class="data red" id="month_expired"></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <!---->
             <p class="height_10" v-show="all"></p>
 
@@ -78,6 +30,16 @@
                             <div class="form-group">
                                 {!! Form::label('fecha', 'Fechas', ['class' => 'control-label']) !!}
                                 <input class="form-control" id="Tiempo" />
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                {!! Form::label('Estado', 'Estado', ['class' => 'control-label']) !!}
+                                <select id="status" name="status" class="form-control">
+                                    <option value="">Todos</option>
+                                    <option value="1" selected="selected">Pendiente</option>
+                                    <option value="2">Pagó</option>
+                                </select>
                             </div>
                         </div>
                         <div class="col-md-2">
@@ -120,12 +82,59 @@
                             <th class="min-tablet">Tipo</th>
                             <th class="min-tablet">Estado</th>
                             <th class="min-tablet">Precio</th>
-                            <th class="min-tablet">Locker</th>
+                            <th class="min-tablet">Hora Entrada</th>
                             <th class="min-tablet">Atendió</th>
                             <th class="all">acciones</th>
                         </tr>
                         </thead>
                     </table>
+                </div>
+            </div>
+            <h2 class="title_a"  v-show="all" >Estado actual</h2>
+            <div class="row" v-show="all">
+                <div class="col-lg-3 col-md-6">
+                    <div class="widget_box_b">
+                        <div class="contt">
+                            <div class="fl_layer">
+                                <h4 class="title">Recaudadó</h4>
+                                <span class="line"></span>
+                                <span class="data" id="total"> - </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="widget_box_b">
+                        <div class="contt">
+                            <div class="fl_layer">
+                                <h4 class="title">motos</h4>
+                                <span class="line"></span>
+                                <span class="data" id="motos"> - </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="widget_box_b">
+                        <div class="contt">
+                            <div class="fl_layer">
+                                <h4 class="title">Carros</h4>
+                                <span class="line"></span>
+                                <span class="data total" id="carros"> - </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="widget_box_b bdred">
+                        <div class="contt">
+                            <div class="fl_layer">
+                                <h4 class="title">Mensualidades por vencer</h4>
+                                <span class="line"></span>
+                                <span class="data red" id="month_expired"> - </span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="row" v-show="month">
@@ -523,6 +532,7 @@
                         data: {
                             type_car        : $("#type-car").val(),
                             type            : $("#type").val(),
+                            status          : $("#status").val(),
                             range           : $("#Tiempo").val()
                         },
                         success: function (datos) {
@@ -606,6 +616,7 @@
                             data : {
                                 type_car        : $("#type-car").val(),
                                 type            : $("#type").val(),
+                                status          : $("#status").val(),
                                 range           : $("#Tiempo").val()
                             }
                         },
@@ -614,7 +625,7 @@
                             { data: 'Tipo', name: 'Tipo', orderable  : false, searchable : false },
                             { data: 'Estado', name: 'Estado', orderable  : false, searchable : false },
                             { data: 'price', name: 'Precio', orderable  : false, searchable : false },
-                            { data: 'drawer', name: 'Locker', orderable  : false, searchable : false },
+                            { data: 'entrada', name: 'Locker', orderable  : false, searchable : false },
                             { data: 'Atendio', name: 'Atendió', orderable  : false, searchable : false },
                             { data: 'action', name: 'acciones', orderable  : false, searchable : false },
                         ],

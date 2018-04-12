@@ -7,10 +7,29 @@
             </div>
             <div class="modal-body" style="min-height: 130px;" >
                 <div class="" role="alert">
-                    <p>ha tenido una duracion de :</p>
-                    <p id="tiempo"></p>
+                    <div class="col-lg-12 col-md-12">
+                        <div class="widget_box_b">
+                            <div class="contt">
+                                <div class="fl_layer">
+                                    <h4 class="title">ha tenido una duracion de :</h4>
+                                    <span class="line"></span>
+                                    <span class="data total" id="tiempo"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <hr>
-                    <p id="pagar"></p>
+                    <div class="col-lg-12 col-md-12">
+                        <div class="widget_box_b">
+                            <div class="contt">
+                                <div class="fl_layer">
+                                    <h4 class="title">Valor a pagar :</h4>
+                                    <span class="line"></span>
+                                    <span class="data total" id="pagar"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div><!-- /.modal-content -->
