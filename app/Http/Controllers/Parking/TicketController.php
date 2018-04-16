@@ -339,7 +339,14 @@ class TicketController extends Controller
         return Datatables::of($tickets)
             ->addColumn('action', function ($tickets) {
                 if (Auth::user()->type == 1)
-                    return \Form::button('Editar', [
+                    return ($tickets->status == 1? \Form::button('Pagar', [
+                            'class'   => 'btn btn-info',
+                            'onclick' => "$('#modal_ticket_out').modal('show');$('#ticket_id').val('$tickets->Id')",
+                            'data-toggle' => "tooltip",
+                            'data-placement' => "bottom",
+                            'title' => "Pagar !",
+
+                        ]) : "").\Form::button('Editar', [
                         'class'   => 'btn btn-primary',
                         'onclick' => "openModalMod('$tickets->Id')",
                         'data-toggle' => "tooltip",
@@ -490,7 +497,7 @@ class TicketController extends Controller
         $ticket= new Ticket();
         $ticket->hour =$now;
         $ticket->plate =strtoupper($tickets->plate);
-        $ticket->status = 2;
+        $ticket->status = 1;
         $ticket->type =$tickets->type;
         $ticket->schedule =$tickets->schedule;
         if($tickets->schedule==3){
@@ -501,9 +508,6 @@ class TicketController extends Controller
         $ticket->parking_id = Auth::user()->parking_id;
         $ticket->partner_id = Auth::user()->partner_id;
         $ticket->drawer = $tickets->drawer;
-        $now = new Datetime('now');
-        $interval = date_diff(new DateTime("".$tickets->hour),$now);
-        $ticket->price =$this->precio($interval,$ticket->type, $ticket->schedule);
         $ticket->save();
 
         return ;
