@@ -282,7 +282,7 @@ class TicketController extends Controller
                         'data-placement' => "bottom",
                         'title' => "Imprimir !",
 
-                    ]) ;
+                    ]);
                 else
                     return (Auth::user()->type == 1?$htmlAdmin:'').
                         \Form::button('Imprimir', [
@@ -291,6 +291,14 @@ class TicketController extends Controller
                             'data-toggle' => "tooltip",
                             'data-placement' => "bottom",
                             'title' => "Imprimir !",
+
+                        ]).
+                        \Form::button('Recuperar', [
+                            'class'   => 'btn btn-info',
+                            'onclick' => "recuperarTicket('$tickets->Id')",
+                            'data-toggle' => "tooltip",
+                            'data-placement' => "bottom",
+                            'title' => "Recuperar !",
 
                         ]);
             })
@@ -308,6 +316,11 @@ class TicketController extends Controller
                 $partner = Partner::find($tickets->partner_id);
                 return  $partner->name;
             })
+            ->editColumn('price', function ($tickets) {
+                $now = new Datetime('now');
+                $interval = date_diff(new DateTime("".$tickets->hour),$now);
+                return !empty( $tickets->price)?  $tickets->price: "*".$this->precio($interval,$tickets->type, $tickets->schedule);
+            })
             ->make(true);
     }
 
@@ -316,7 +329,7 @@ class TicketController extends Controller
         $search = $request->get('search')['value'];
         $schedule = 3;
 
-        $tickets= Ticket::select(['ticket_id as Id', 'plate', 'type', 'name', 'date_end', 'partner_id', 'status', 'price'])->where('parking_id',Auth::user()->parking_id)->orderBy('ticket_id','desc');
+        $tickets= Ticket::select(['ticket_id as Id', 'plate', 'type', 'name', 'date_end', 'partner_id', 'status', 'price'])->where('parking_id',Auth::user()->parking_id)->where('status','<>',"3")->orderBy('ticket_id','desc');
         if ($search) {
             $tickets = $tickets->where('plate', 'LIKE', "%$search%");
         }
@@ -349,6 +362,14 @@ class TicketController extends Controller
                             'data-placement' => "bottom",
                             'title' => "Imprimir !",
 
+                        ]).
+                        \Form::button('Renovar', [
+                            'class'   => 'btn btn-info',
+                            'onclick' => "renovarTicket('$tickets->Id')",
+                            'data-toggle' => "tooltip",
+                            'data-placement' => "bottom",
+                            'title' => "Renovar !",
+
                         ]);
                 else
                     return '';
@@ -373,7 +394,7 @@ class TicketController extends Controller
         $range = $request->get('range');
         $status = $request->get('status');
 
-        $tickets= Ticket::select(['plate', 'type', 'extra', 'schedule', 'price', 'name', 'status', 'date_end'])->where('parking_id',Auth::user()->parking_id)->orderBy('ticket_id','desc');
+        $tickets= Ticket::select(['plate', 'type', 'extra', 'schedule', 'price', 'name', 'status', 'date_end'])->where('parking_id',Auth::user()->parking_id)->where('status','<>',"3")->orderBy('ticket_id','desc');
         if (!empty($schedule))
         $tickets = $tickets->where('schedule', $schedule);
         if (!empty($status))
@@ -403,7 +424,7 @@ class TicketController extends Controller
             if($ticket->type == 2)
                 $status['motos'] ++;
         }
-        $ticketss= Ticket::select(['plate', 'type', 'extra', 'schedule', 'price', 'name', 'date_end'])->where('parking_id',Auth::user()->parking_id)->orderBy('ticket_id','desc');
+        $ticketss= Ticket::select(['plate', 'type', 'extra', 'schedule', 'price', 'name', 'date_end'])->where('parking_id',Auth::user()->parking_id)->where('status','<>',"3")->orderBy('ticket_id','desc');
         $ticketss = $ticketss->where('schedule', 3);
         $ticketss=$ticketss->get();
         foreach ($ticketss as $ticket){
@@ -448,6 +469,43 @@ class TicketController extends Controller
     {
         $ticket = Ticket::find($request->ticket_id);
         $ticket->delete();
+        return ;
+    }
+    public function recoveryTicket(Request $request)
+    {
+        $ticket = Ticket::find($request->ticket_id);
+        $ticket->status = 1;
+        $ticket->price =null;
+        $ticket->pay_day =null;
+        $ticket->save();
+        return ;
+    }
+    public function renovarTicket(Request $request)
+    {
+        $tickets = Ticket::find($request->ticket_id);
+        $tickets->status = 3;
+        $tickets->save();
+
+        $now = new Datetime('now');
+        $ticket= new Ticket();
+        $ticket->hour =$now;
+        $ticket->plate =strtoupper($tickets->plate);
+        $ticket->status = 2;
+        $ticket->type =$tickets->type;
+        $ticket->schedule =$tickets->schedule;
+        if($tickets->schedule==3){
+            $date_end = new \Carbon\Carbon($tickets->date_end);
+            $ticket->date_end = $date_end->addMonth();
+            $ticket->name = strtoupper($tickets->name);
+        }
+        $ticket->parking_id = Auth::user()->parking_id;
+        $ticket->partner_id = Auth::user()->partner_id;
+        $ticket->drawer = $tickets->drawer;
+        $now = new Datetime('now');
+        $interval = date_diff(new DateTime("".$tickets->hour),$now);
+        $ticket->price =$this->precio($interval,$ticket->type, $ticket->schedule);
+        $ticket->save();
+
         return ;
     }
 }

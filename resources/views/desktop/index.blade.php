@@ -323,6 +323,62 @@
                ;
             });
         }
+        function recuperarTicket(id) {
+            (new PNotify({
+                title: 'Necesita confirmación',
+                text: 'Esta seguro de querer recuperar el registro?',
+                icon: 'glyphicon glyphicon-question-sign',
+                hide: false,
+                confirm: {
+                    confirm: true
+                },
+                buttons: {
+                    closer: false,
+                    sticker: false
+                },
+                history: {
+                    history: false
+                },
+                addclass: 'stack-modal',
+                stack: {
+                    'dir1': 'down',
+                    'dir2': 'right',
+                    'modal': true
+                }
+            })).get().on('pnotify.confirm', function() {
+                desktop_index_vm.recovery(id);
+            }).on('pnotify.cancel', function() {
+               ;
+            });
+        }
+        function renovarTicket(id) {
+            (new PNotify({
+                title: 'Necesita confirmación',
+                text: 'Esta seguro de querer renovar mensualidad?',
+                icon: 'glyphicon glyphicon-question-sign',
+                hide: false,
+                confirm: {
+                    confirm: true
+                },
+                buttons: {
+                    closer: false,
+                    sticker: false
+                },
+                history: {
+                    history: false
+                },
+                addclass: 'stack-modal',
+                stack: {
+                    'dir1': 'down',
+                    'dir2': 'right',
+                    'modal': true
+                }
+            })).get().on('pnotify.confirm', function() {
+                desktop_index_vm.renovar(id);
+            }).on('pnotify.cancel', function() {
+               ;
+            });
+        }
         function crearTicket() {
             type();
             var plate = $("#plate").val();
@@ -679,6 +735,54 @@
                                     text: 'Se Eliminó el ticket con exito'
                                 });
                                 $('#tickets-table').dataTable()._fnAjaxUpdate();
+
+                            },
+                            error:function () {
+                                alert("Error !");
+                            }
+                        });
+                },
+                recovery : function(ticket_id) {
+                        $.ajax({
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            type: "POST",
+                            url: "recuperar",
+                            data: {
+                                ticket_id:ticket_id
+                            },
+                            success: function (datos) {
+                                new PNotify({
+                                    title: 'Exito',
+                                    type: 'success',
+                                    text: 'Se recuperó el ticket con exito'
+                                });
+                                $('#tickets-table').dataTable()._fnAjaxUpdate();
+
+                            },
+                            error:function () {
+                                alert("Error !");
+                            }
+                        });
+                },
+                renovar : function(ticket_id) {
+                        $.ajax({
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            type: "POST",
+                            url: "renovar",
+                            data: {
+                                ticket_id:ticket_id
+                            },
+                            success: function (datos) {
+                                new PNotify({
+                                    title: 'Exito',
+                                    type: 'success',
+                                    text: 'Se recuperó el ticket con exito'
+                                });
+                                $('#month-table').dataTable()._fnAjaxUpdate();
 
                             },
                             error:function () {
