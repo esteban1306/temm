@@ -243,7 +243,7 @@
                     $('#modal_ticket_out').modal('hide');
                     $('#modal_ticket_pay').modal('show');
                     $('#tickets-table').dataTable()._fnAjaxUpdate();
-
+                    $('#cobrar_id').attr("onclick","form_pdf('"+ticket_id+"'); $('#modal_ticket_pay').modal('hide')");
                 },
                 error:function () {
                     alert("Error !");
@@ -450,8 +450,16 @@
                 }
             });
         }
-
+        function mayus(e) {
+            e.value = e.value.toUpperCase();
+        }
         $(function() {
+            $("#plate").keypress(function(e) {
+                if(e.which == 13) {
+                    // Acciones a realizar, por ej: enviar formulario.
+                    $('#new_ticket').click();
+                }
+            });
             $("#plate").blur(function(){
                 type();
             });

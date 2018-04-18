@@ -15,7 +15,7 @@
                         <label for="plate" class="control-label">PLACA</label>
 
                         <div>
-                            <input id="plate" type="plate" class="form-control validate[required]" name="plate" value="{{ old('plate') }}" onkeypress="validar(event)" required autofocus>
+                            <input onkeyup="mayus(this);" id="plate" type="plate" class="form-control validate[required]" name="plate" value="{{ old('plate') }}" onkeypress="validar(event)" required autofocus>
 
                             @if ($errors->has('email'))
                                 <span class="help-block">
@@ -45,14 +45,14 @@
                     </div>
                     <div class="form-group col-md-12" id="nameIn">
                         <label for="nombre" class="control-label">Nombre</label>
-                        <input id="nombreIn" type="text" class="form-control validate[required]" name="nombre">
+                        <input onkeyup="mayus(this);" id="nombreIn" type="text" class="form-control validate[required]" name="nombre">
                     </div>
                     <div class="form-group col-md-12" id="rangeIn">
                         <label for="fechas" class="control-label">Rango fechas</label>
                         <input id="date-range" type="text" class="form-control validate[required]" name="date-range">
                     </div>
                     <div class="form-group col-md-12 pt-3">
-                        <button class="btn btn-primary full-width waves-effect waves-light" onclick="crearTicket()"><strong>REGISTRAR</strong></button>
+                        <button id="new_ticket" class="btn btn-primary full-width waves-effect waves-light" onclick="crearTicket()"><strong>REGISTRAR</strong></button>
                     </div>
                 </div>
             </div>
