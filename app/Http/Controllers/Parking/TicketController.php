@@ -95,15 +95,15 @@ class TicketController extends Controller
         $html = '<div style="text-align:center"><big style="margin-bottom: 1px"><b>&nbsp; PARQUEADERO '.$parking->name.'</b></big><br>
                 <em style="font-size: x-small;margin-top: 2px;margin-bottom: 1px">"Todo lo puedo en Cristo que<br> me fortalece": Fil 4:13 <br></em>
                 <small style="font-size: x-small;margin-top: 2px;margin-bottom: 1px"><b>'.$parking->address.'</b></small>'.($parking->parking_id==3?'<small style="text-align:center;font-size: 7px"><br>
-    SERVICIO: Lun-Sab 7am - 9pm<br>OLIVEROS HERNANDEZ VALENTINA <br> NIT: 1094965452_1 <br> TEL: 3104276986</small>':'');
+    <b>SERVICIO: Lun-Sab 7am - 9pm</b><br>OLIVEROS HERNANDEZ VALENTINA <br> NIT: 1094965452-1 <br> TEL: 3104276986</small>':'');
         if(!isset($ticket->price)) {
-            $html .= '<small style="text-align:left;font-size: small"><br>
+            $html .= '<small style="text-align:left;font-size: small"><b><br>
                  Fecha ingreso: ' . $hour->format('d/m/Y') . '<br>
                  Hora ingreso: ' . $hour->format('h:ia') . '<br>
                  Tipo: ' . ($ticket->type == 1 ? 'Carro' : 'Moto') . '<br>
                  Placa: ' . $ticket->plate . '<br>
                  ' . (isset($ticket->drawer) ? "Locker: " . $ticket->drawer . "<br>" : '') . '
-                 </small>
+                 </b></small>
                  <small style="text-align:left;font-size: 6px"><br>
                  1.El vehiculo se entregara al portador de este recibo<br>
                  2.No aceptamos ordenes escritas o por telefono<br>

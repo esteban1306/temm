@@ -735,6 +735,7 @@
                                     text: 'Se Eliminó el ticket con exito'
                                 });
                                 $('#tickets-table').dataTable()._fnAjaxUpdate();
+                                $('#month-table').dataTable()._fnAjaxUpdate();
 
                             },
                             error:function () {
