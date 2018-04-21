@@ -1,5 +1,6 @@
 <div class="row" v-show="nav == 'account'">
     @php($user = Auth::user())
+    @php($parking = App\Parking::find($user->parking_id))
     <div class="col-sm-4 padding_20">
         <div class="Mods">
             <div class="head">
@@ -73,15 +74,15 @@
                 </div>
                 <div class="form-group col-sm-6">
                     <label for="">Hora</label>
-                    <input type="number" class="form-control validate[required,minSize[6]]" name="currentPassword" id="currentPassword" value="">
+                    <input type="number" class="form-control validate[required,minSize[6]]" name="currentPassword" id="hour_cars_price" min="0" value="{{ $parking->hour_cars_price }}">
                 </div>
                 <div class="form-group col-sm-6">
                     <label for="">Dia</label>
-                    <input type="number" class="form-control validate[required,minSize[6]]" name="password" id="password" value="">
+                    <input type="number" class="form-control validate[required,minSize[6]]" name="password" id="day_cars_price" min="0" value="{{ $parking->day_cars_price }}">
                 </div>
                 <div class="form-group col-sm-6">
                     <label for="">Mensualidad</label>
-                    <input type="number" class="form-control validate[required,equals[password]]" name="confirm_password" value="">
+                    <input type="number" class="form-control validate[required,equals[password]]" id="monthly_cars_price" min="0" value="{{ $parking->monthly_cars_price }}">
                 </div>
 
                 <div class="form-group col-sm-12">
@@ -91,15 +92,15 @@
                 </div>
                 <div class="form-group col-sm-6">
                     <label for="">Hora</label>
-                    <input type="number" class="form-control validate[required,minSize[6]]" name="currentPassword" id="currentPassword" value="">
+                    <input type="number" class="form-control validate[required,minSize[6]]" name="currentPassword" id="hour_motorcycles_price" min="0" value="{{ $parking->hour_motorcycles_price }}">
                 </div>
                 <div class="form-group col-sm-6">
                     <label for="">Dia</label>
-                    <input type="number" class="form-control validate[required,minSize[6]]" name="password" id="password" value="">
+                    <input type="number" class="form-control validate[required,minSize[6]]" name="password" id="day_motorcycles_price" min="0" value="{{ $parking->day_motorcycles_price }}">
                 </div>
                 <div class="form-group col-sm-6">
                     <label for="">Mensualidad</label>
-                    <input type="number" class="form-control validate[required,equals[password]]" name="confirm_password" value="">
+                    <input type="number" class="form-control validate[required,equals[password]]" id="monthly_motorcycles_price"  min="0" value="{{ $parking->monthly_motorcycles_price }}">
                 </div>
                 <div class="form-group col-sm-12">
                     <div class="head">
@@ -108,15 +109,15 @@
                 </div>
                 <div class="form-group col-sm-6">
                     <label for="">Tiempo muerto</label>
-                    <input type="number" class="form-control validate[required]" name="new_name" value="{{ $user->name }}">
+                    <input type="number" class="form-control validate[required]" id="free_time" min="0" max="20" value="{{ $parking->free_time }}">
                 </div>
                 <div class="form-group col-sm-6">
                     <label for="">Numero de carros</label>
-                    <input type="number" class="form-control validate[required]" name="new_name" value="{{ $user->name }}">
+                    <input type="number" class="form-control validate[required]" min="0" id="cars_num" value="{{ $parking->cars_num }}">
                 </div>
                 <div class="form-group col-sm-6">
                     <label for="">Numero de motos</label>
-                    <input type="number" class="form-control validate[required]" name="new_name" value="{{ $user->name }}">
+                    <input type="number" class="form-control validate[required]" min="0" id="motorcycles_num" value="{{ $parking->motorcycles_num }}">
                 </div>
 
                 <div class="col-sm-12">
