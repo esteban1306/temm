@@ -98,8 +98,11 @@ class TicketController extends Controller
     <b>SERVICIO: Lun-Sab 7am - 9pm</b><br>OLIVEROS HERNANDEZ VALENTINA <br> NIT: 1094965452-1 <br> TEL: 3104276986</small>':'');
         if(!isset($ticket->price)) {
             $html .= '<small style="text-align:left;font-size: small"><b><br>
+                 ' . ($ticket->schedule==3? strtoupper($ticket->name) . "<br>" : '') .'
                  Fecha ingreso: ' . $hour->format('d/m/Y') . '<br>
                  Hora ingreso: ' . $hour->format('h:ia') . '<br>
+                 ' . ($ticket->schedule==3? "   Fecha vencimiento: " . $hour2->format('d/m/Y') . "<br>" : '') .'
+                 ' . ($ticket->schedule==3? strtoupper($ticket->name) . "<br>" : '') .'
                  Tipo: ' . ($ticket->type == 1 ? 'Carro' : 'Moto') . '<br>
                  Placa: ' . $ticket->plate . '<br>
                  ' . (isset($ticket->drawer) ? "Locker: " . $ticket->drawer . "<br>" : '') . '
@@ -142,7 +145,7 @@ class TicketController extends Controller
 </div>';
         }
         $html .= '<small style="text-align:left;font-size: 5px"><br>
-                 IMPRESO POR TEMM SOFT
+                 IMPRESO POR TEMM SOFT 3207329971
                  </small>';
         PDF::writeHTML($html, true, false, true, false, '');
         if(!isset($ticket->price)){
