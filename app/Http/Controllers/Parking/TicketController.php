@@ -98,7 +98,7 @@ class TicketController extends Controller
     <b>SERVICIO: Lun-Sab 7am - 9pm</b><br>OLIVEROS HERNANDEZ VALENTINA <br> NIT: 1094965452-1 <br> TEL: 3104276986</small>':'');
         if(!isset($ticket->price)) {
             $html .= '<small style="text-align:left;font-size: small"><b><br>
-                 ' . ($ticket->schedule==3? strtoupper($ticket->name) . "<br>" : '') .'
+                 ' . ($ticket->schedule==3? "FACTURA DE VENTA N° " . $ticket->ticket_id . "<br>" : '') .'
                  Fecha ingreso: ' . $hour->format('d/m/Y') . '<br>
                  Hora ingreso: ' . $hour->format('h:ia') . '<br>
                  ' . ($ticket->schedule==3? "   Fecha vencimiento: " . $hour2->format('d/m/Y') . "<br>" : '') .'
