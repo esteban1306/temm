@@ -6,12 +6,13 @@
     "type": "project",
     "require": {
         "php": ">=7.0.0",
+        "elibyy/tcpdf-laravel": "5.5.*",
         "fideloper/proxy": "~3.3",
         "laravel/framework": "5.5.*",
         "laravel/tinker": "~1.0",
-        "yajra/laravel-datatables-oracle": "~8.0",
-        "elibyy/tcpdf-laravel": "5.5.*",
-        "laravelcollective/html": "~5.0"
+        "laravelcollective/html": "~5.0",
+        "nexmo/laravel": "^1.1",
+        "yajra/laravel-datatables-oracle": "~8.0"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.4",
