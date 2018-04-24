@@ -37,6 +37,6 @@ return [
     'nexmo' => [
         'key' => env('NEXMO_KEY'),
         'secret' => env('NEXMO_SECRET'),
-        'sms_from' => '15556666666',
+        'sms_from' => '3207329971',
     ],
 ];
