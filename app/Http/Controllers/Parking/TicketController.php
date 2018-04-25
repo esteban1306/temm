@@ -64,11 +64,11 @@ class TicketController extends Controller
         $ticket->drawer = $request->drawer;
         $ticket->save();
 
-        Nexmo::message()->send([
+        /*Nexmo::message()->send([
             'to'   => '573207329971',
             'from' => '573207329971',
             'text' => 'te amo care nalga camila.'
-        ]);
+        ]);*/
         return $ticket->ticket_id;
     }
     public function pdf(Request $request)
