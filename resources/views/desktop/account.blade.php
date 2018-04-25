@@ -74,11 +74,11 @@
                 </div>
                 <div class="form-group col-sm-6">
                     <label for="">Hora</label>
-                    <input type="number" class="form-control validate[required,minSize[6]]" name="currentPassword" id="hour_cars_price" min="0" value="{{ $parking->hour_cars_price }}">
+                    <input type="number" class="form-control validate[required,minSize[6]]"  id="hour_cars_price" min="0" value="{{ $parking->hour_cars_price }}">
                 </div>
                 <div class="form-group col-sm-6">
                     <label for="">Dia</label>
-                    <input type="number" class="form-control validate[required,minSize[6]]" name="password" id="day_cars_price" min="0" value="{{ $parking->day_cars_price }}">
+                    <input type="number" class="form-control validate[required,minSize[6]]"  id="day_cars_price" min="0" value="{{ $parking->day_cars_price }}">
                 </div>
                 <div class="form-group col-sm-6">
                     <label for="">Mensualidad</label>
@@ -92,11 +92,11 @@
                 </div>
                 <div class="form-group col-sm-6">
                     <label for="">Hora</label>
-                    <input type="number" class="form-control validate[required,minSize[6]]" name="currentPassword" id="hour_motorcycles_price" min="0" value="{{ $parking->hour_motorcycles_price }}">
+                    <input type="number" class="form-control validate[required,minSize[6]]" id="hour_motorcycles_price" min="0" value="{{ $parking->hour_motorcycles_price }}">
                 </div>
                 <div class="form-group col-sm-6">
                     <label for="">Dia</label>
-                    <input type="number" class="form-control validate[required,minSize[6]]" name="password" id="day_motorcycles_price" min="0" value="{{ $parking->day_motorcycles_price }}">
+                    <input type="number" class="form-control validate[required,minSize[6]]" id="day_motorcycles_price" min="0" value="{{ $parking->day_motorcycles_price }}">
                 </div>
                 <div class="form-group col-sm-6">
                     <label for="">Mensualidad</label>

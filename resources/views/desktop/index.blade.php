@@ -294,6 +294,19 @@
                 }
             });
         }
+        function actualizarCuenta() {
+            var vNombre=$('input[name=new_name]').validationEngine('validate');
+            var vApellido=$('input[name=new_last_name]').validationEngine('validate');
+            var vEmail=$('input[name=new_email]').validationEngine('validate');
+            if ($('#password').val().length>0){
+                var currentPassword = $('input[name=currentPassword]').validationEngine('validate');
+                var password = $('input[name=password]').validationEngine('validate');
+                var confirmPassword = $('input[name=confirm_password]').validationEngine('validate');
+            }
+            if (vNombre || vApellido || vEmail || ( $('#password').val().length>0 && (currentPassword || password || confirmPassword) ))
+                return;
+            desktop_index_vm.changeAccount();
+        }
 
         function eliminarTicket(id) {
             (new PNotify({
@@ -703,8 +716,20 @@
                     var email=$('input[name=new_email]').val();
                     var password = $('#password').val();
                     var currentPassword = $('#currentPassword').val();
-                    axios.post(laroute.route('partner.update',{'name' : nombre, 'last_name' : apellido, 'email' : email, 'password': password, 'currentPassword': currentPassword}))
-                        .then(function (response) {
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        type: "POST",
+                        url: "update_cuenta",
+                        data: {
+                            name : nombre,
+                            last_name : apellido,
+                            email : email,
+                            password: password,
+                            currentPassword: currentPassword
+                        },
+                        success: function (response) {
                             if (response.data == 1){
                                 new PNotify({
                                     title: 'Listo!',
@@ -724,7 +749,11 @@
                                     }
                                 });
                             }
-                        });
+                        },
+                        error:function () {
+                            alert("Error !");
+                        }
+                    });
                 },
                 delete : function(ticket_id) {
                         $.ajax({
