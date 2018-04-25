@@ -21,7 +21,7 @@ class PartnerController extends Controller
     public function update(Request $request)
     {
         $user = Auth::user();
-        $partner = Partner::find($user->id);
+        $partner = Partner::find($user->partner_id);
         $partner->first_name = $request->name;
         $partner->last_name = $request->last_name;
         $partner->email = $request->email;
