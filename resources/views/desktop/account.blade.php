@@ -57,7 +57,7 @@
                 </div>
                 <div class="col-sm-12">
                     <span class="height_10"></span>
-                    <button type="button" onclick="alert('aun no esta disponible esta opción')" class="btn btn-success waves-effect waves-light"><i class="mdi mdi-content-save-all"></i> Actualizar</button>
+                    <button type="button" onclick="actualizarCuenta()" class="btn btn-success waves-effect waves-light"><i class="mdi mdi-content-save-all"></i> Actualizar</button>
                 </div>
                 <span class="height_30"></span>
             </form>
@@ -122,7 +122,7 @@
 
                 <div class="col-sm-12">
                     <span class="height_10"></span>
-                    <button type="button" onclick="alert('aun no esta disponible esta opción')" class="btn btn-success waves-effect waves-light"><i class="mdi mdi-content-save-all"></i>Actualizar</button>
+                    <button type="button" onclick="actualizarCuenta()" class="btn btn-success waves-effect waves-light"><i class="mdi mdi-content-save-all"></i>Actualizar</button>
                 </div>
                 <span class="height_30"></span>
             </form>

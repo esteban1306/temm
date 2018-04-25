@@ -596,6 +596,7 @@
             },
             mounted    : function() {
                 this.loadTable();
+                setInterval(function(){$('#tickets-table').dataTable()._fnAjaxUpdate();}, 60000);
             },
             methods    : {
                 load : function() {
