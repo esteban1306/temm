@@ -9,7 +9,7 @@
                 <div class="form-horizontal">
                     {{ csrf_field() }}
                     <div class="form-group{{ $errors->has('plate') ? ' has-error' : '' }}">
-                        <input id="ticket_id" name="ticket_id" type="text" placeholder="ticket">
+                        <input id="ticket_id" name="ticket_id" type="text" placeholder="ticket" onkeypress="validar2(event)">
                     </div>
                     <div class="form-group ">
                         <button id="b_pagar" type="button" onclick="pagar()" class="btn btn-primary full-width">

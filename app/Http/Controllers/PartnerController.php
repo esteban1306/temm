@@ -22,7 +22,7 @@ class PartnerController extends Controller
     {
         $user = Auth::user();
         $partner = Partner::find($user->partner_id);
-        $partner->first_name = $request->name;
+        $partner->name = $request->name;
         $partner->last_name = $request->last_name;
         $partner->email = $request->email;
         if(!empty($request->password)){

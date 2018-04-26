@@ -181,7 +181,7 @@ class TicketController extends Controller
         $parking = Parking::find(Auth::user()->parking_id);
         $minutos = ($minutos*1) - ($parking->free_time);
         $horas = (24*$tiempo->format("%d"))+$horas*1 + (($minutos>=0? 1: 0)*1);
-        if($minutos<=5 && $horas==0 && $schedule==1)
+        if($tiempo->format("%I")<=5 && $horas==0 && ($schedule==1 || $schedule==2))
             return 0;
         $horas = $horas==0? 1: $horas;
         if($schedule==1)

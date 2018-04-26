@@ -467,6 +467,12 @@
             e.value = e.value.toUpperCase();
         }
         $(function() {
+            $("#ticket_id").keypress(function(e) {
+                if(e.which == 13) {
+                    // Acciones a realizar, por ej: enviar formulario.
+                    $('#b_pagar').click();
+                }
+            });
             $("#plate").keypress(function(e) {
                 if(e.which == 13) {
                     // Acciones a realizar, por ej: enviar formulario.
@@ -731,7 +737,7 @@
                             currentPassword: currentPassword
                         },
                         success: function (response) {
-                            if (response.data == 1){
+                            if (response == 1){
                                 new PNotify({
                                     title: 'Listo!',
                                     text: 'Se han modificado los datos correctamente.',
