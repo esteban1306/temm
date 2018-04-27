@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
 use Illuminate\Html\HtmlServiceProvider;
 use Nexmo\Laravel\Facade\Nexmo;
-
+use App\Notifications\Message;
 
 use PDF; // at the top of the file
 
@@ -57,6 +57,9 @@ class TicketController extends Controller
             $dateRange = explode(" - ", $request->range);
             $ticket->date_end = new \Carbon\Carbon($dateRange[1]);
             $ticket->name = $request->name;
+            $ticket->email = $request->email;
+            $ticket->movil = $request->movil;
+            $ticket->price = $request->price;
             $ticket->hour = new \Carbon\Carbon($dateRange[0]);
         }
         $ticket->parking_id = Auth::user()->parking_id;
@@ -216,7 +219,8 @@ class TicketController extends Controller
         $ticket = Ticket::find($request->ticket_id);
         $interval = date_diff(new DateTime("".$ticket->hour),$now);
         $ticket->status = 2;
-        $ticket->price =$this->precio($interval,$ticket->type, $ticket->schedule);
+        if($ticket->schedule != 3 || empty($ticket->price))
+            $ticket->price = $this->precio($interval,$ticket->type, $ticket->schedule);
         $ticket->pay_day =$now;
         $ticket->save();
         return [$ticket->price,$interval->format("%H:%I")];
@@ -300,7 +304,7 @@ class TicketController extends Controller
                             'data-placement' => "bottom",
                             'title' => "Imprimir !",
 
-                        ]).
+                        ]).($tickets->schedule != 3?
                         \Form::button('Recuperar', [
                             'class'   => 'btn btn-info',
                             'onclick' => "recuperarTicket('$tickets->Id')",
@@ -308,7 +312,7 @@ class TicketController extends Controller
                             'data-placement' => "bottom",
                             'title' => "Recuperar !",
 
-                        ]);
+                        ]):'');
             })
             ->addColumn('Tipo', function ($tickets) {
                 return  $tickets->type == 1? 'Carro': 'Moto';
@@ -334,10 +338,11 @@ class TicketController extends Controller
 
     public function getMonths(Request $request)
     {
+        $parking = Parking::find(Auth::user()->parking_id);
         $search = $request->get('search')['value'];
         $schedule = 3;
 
-        $tickets= Ticket::select(['ticket_id as Id', 'plate', 'type', 'name', 'date_end', 'partner_id', 'status', 'price'])->where('parking_id',Auth::user()->parking_id)->where('status','<>',"3")->orderBy('ticket_id','desc');
+        $tickets= Ticket::select(['ticket_id as Id', 'plate', 'type', 'name', 'date_end', 'partner_id', 'status', 'price','email','movil'])->where('parking_id',Auth::user()->parking_id)->where('status','<>',"3")->orderBy('ticket_id','desc');
         if ($search) {
             $tickets = $tickets->where('plate', 'LIKE', "%$search%");
         }
@@ -345,7 +350,7 @@ class TicketController extends Controller
             $tickets = $tickets->where('schedule', $schedule);
 
         return Datatables::of($tickets)
-            ->addColumn('action', function ($tickets) {
+            ->addColumn('action', function ($tickets) use($parking){
                 if (Auth::user()->type == 1)
                     return ($tickets->status == 1? \Form::button('Pagar', [
                             'class'   => 'btn btn-info',
@@ -385,7 +390,7 @@ class TicketController extends Controller
                             'data-placement' => "bottom",
                             'title' => "Renovar !",
 
-                        ]);
+                        ]).(!empty($tickets->movil)?'<a href="https://api.whatsapp.com/send?phone=57'.$tickets->movil.'&text=Hola%20'.$tickets->name.',parqueadero%20'.$parking->name.'%20le%20saluda%20coordialmente%20y%20le%20informa%20que%20el%20vehiculo%20con%20placa%20'.$tickets->plate.'%20tiene%20pago%20el%20parqueo%20con%20nosotros%20hasta%20la%20fecha:%20'.$tickets->date_end.'" target="_blank">Whatsapp</a>':'');
                 else
                     return '';
             })
@@ -473,6 +478,9 @@ class TicketController extends Controller
             $ticket->date_end = new \Carbon\Carbon($dateRange[1]);
             $ticket->name = $request->name;
             $ticket->hour = new \Carbon\Carbon($dateRange[0]);
+            $ticket->email = $request->email;
+            $ticket->movil = $request->movil;
+            $ticket->price = $request->price;
         }
         $ticket->partner_id = Auth::user()->partner_id;
         $ticket->extra = $request->extra;

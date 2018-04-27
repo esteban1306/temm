@@ -47,6 +47,18 @@
                         <label for="nombre" class="control-label">Nombre</label>
                         <input onkeyup="mayus(this);" id="nombreIn" type="text" class="form-control validate[required]" name="nombre">
                     </div>
+                    <div class="form-group col-md-12" id="priceIn">
+                        <label for="nombre" class="control-label">Precio</label>
+                        <input id="precioIn" type="number" class="form-control validate[required]" name="price">
+                    </div>
+                    <div class="form-group col-md-12" id="mailIn">
+                        <label for="nombre" class="control-label">Email</label>
+                        <input id="emailIn" type="text" class="form-control validate[required]" name="email">
+                    </div>
+                    <div class="form-group col-md-12" id="movilIn">
+                        <label for="nombre" class="control-label">Celular</label>
+                        <input id="celularIn" type="number" class="form-control validate[required]" name="nombre">
+                    </div>
                     <div class="form-group col-md-12" id="rangeIn">
                         <label for="fechas" class="control-label">Rango fechas</label>
                         <input id="date-range" type="text" class="form-control validate[required]" name="date-range">

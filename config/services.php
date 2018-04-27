@@ -39,4 +39,8 @@ return [
         'secret' => env('NEXMO_SECRET'),
         'sms_from' => '3207329971',
     ],
+    'sendinblue' => [
+        'url' => 'https://api.sendinblue.com/v2.0',
+        'key' => env('SENDINBLUE_KEY'),
+    ],
 ];

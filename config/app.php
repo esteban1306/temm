@@ -180,6 +180,7 @@ return [
         Elibyy\TCPDF\ServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
         Nexmo\Laravel\NexmoServiceProvider::class,
+        Webup\LaravelSendinBlue\SendinBlueServiceProvider::class,
     ],
 
     /*

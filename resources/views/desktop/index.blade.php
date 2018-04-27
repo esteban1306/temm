@@ -183,6 +183,9 @@
             $('#modal_ticket_in').modal('show');
             getFecha();
             $("#nameIn").css("display","none");
+            $("#priceIn").css("display","none");
+            $("#mailIn").css("display","none");
+            $("#movilIn").css("display","none");
             $("#rangeIn").css("display","none");
             $("#schedule").val(1);
             $("#typeIn").val(1);
@@ -192,8 +195,14 @@
             if(schedule == 3){
                 $("#nameIn").css("display","block");
                 $("#rangeIn").css("display","block");
+                $("#priceIn").css("display","block");
+                $("#mailIn").css("display","block");
+                $("#movilIn").css("display","block");
             }else{
                 $("#nameIn").css("display","none");
+                $("#priceIn").css("display","none");
+                $("#mailIn").css("display","none");
+                $("#movilIn").css("display","none");
                 $("#rangeIn").css("display","none");
             }
         }
@@ -202,8 +211,14 @@
             if(schedule == 3){
                 $("#nameIn_mod").css("display","block");
                 $("#rangeIn_mod").css("display","block");
+                $("#priceIn_mod").css("display","block");
+                $("#mailIn_mod").css("display","block");
+                $("#movilIn_mod").css("display","block");
             }else{
                 $("#nameIn_mod").css("display","none");
+                $("#priceIn_mod").css("display","none");
+                $("#mailIn_mod").css("display","none");
+                $("#movilIn_mod").css("display","none");
                 $("#rangeIn_mod").css("display","none");
             }
         }
@@ -262,6 +277,9 @@
             var drawer= $('#drawer_mod').val();
             var extra= $('#extra').val();
             var name= $('#nombreIn_mod').val();
+            var precioIn = $("#precioIn_mod").val();
+            var emailIn = $("#emailIn_mod").val();
+            var celularIn = $("#celularIn_mod").val();
             var range= $('#date_range_mod').val();
             $.ajax({
                 headers: {
@@ -276,6 +294,9 @@
                     schedule:schedule,
                     drawer:drawer,
                     name:name,
+                    price:precioIn,
+                    email:emailIn,
+                    movil:celularIn,
                     extra:extra,
                     range:range
                 },
@@ -399,6 +420,9 @@
             var schedule = $("#schedule").val();
             var drawer = $("#drawer").val();
             var nameIn = $("#nombreIn").val();
+            var precioIn = $("#precioIn").val();
+            var emailIn = $("#emailIn").val();
+            var celularIn = $("#celularIn").val();
             var date = $("#date-range").val();
 
             $.ajax({
@@ -413,6 +437,9 @@
                     schedule:schedule,
                     drawer:drawer,
                     name:nameIn,
+                    price:precioIn,
+                    email:emailIn,
+                    movil:celularIn,
                     range:date,
                 },
                 success: function (datos) {

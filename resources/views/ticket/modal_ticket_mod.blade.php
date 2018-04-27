@@ -46,6 +46,18 @@
                         <label for="nombre" class="control-label">Nombre</label>
                         <input id="nombreIn_mod" type="text" class="form-control validate[required]">
                     </div>
+                    <div class="form-group col-md-12" id="priceIn_mod">
+                        <label for="nombre" class="control-label">Precio</label>
+                        <input id="precioIn_mod" type="number" class="form-control validate[required]" name="price">
+                    </div>
+                    <div class="form-group col-md-12" id="mailIn_mod">
+                        <label for="nombre" class="control-label">Email</label>
+                        <input id="emailIn_mod" type="text" class="form-control validate[required]" name="email">
+                    </div>
+                    <div class="form-group col-md-12" id="movilIn_mod">
+                        <label for="nombre" class="control-label">Celular</label>
+                        <input id="celularIn_mod" type="number" class="form-control validate[required]" name="nombre">
+                    </div>
                     <div class="form-group col-md-12" id="rangeIn_mod">
                         <label for="fechas" class="control-label">Rango fechas</label>
                         <input id="date_range_mod" type="text" class="form-control validate[required]">
