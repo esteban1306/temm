@@ -520,6 +520,9 @@ class TicketController extends Controller
             $date_end = new \Carbon\Carbon($tickets->date_end);
             $ticket->date_end = $date_end->addMonth();
             $ticket->name = strtoupper($tickets->name);
+            $ticket->email = $tickets->email;
+            $ticket->movil = $tickets->movil;
+            $ticket->price = $tickets->price;
         }
         $ticket->parking_id = Auth::user()->parking_id;
         $ticket->partner_id = Auth::user()->partner_id;
