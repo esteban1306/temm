@@ -58,7 +58,7 @@ class TicketController extends Controller
             $ticket->date_end = new \Carbon\Carbon($dateRange[1]);
             $ticket->name = $request->name;
             $ticket->email = $request->email;
-            $ticket->movil = $request->movil;
+            $ticket->phone = $request->movil;
             $ticket->price = $request->price;
             $ticket->hour = new \Carbon\Carbon($dateRange[0]);
         }
@@ -342,7 +342,7 @@ class TicketController extends Controller
         $search = $request->get('search')['value'];
         $schedule = 3;
 
-        $tickets= Ticket::select(['ticket_id as Id', 'plate', 'type', 'name', 'date_end', 'partner_id', 'status', 'price','email','movil'])->where('parking_id',Auth::user()->parking_id)->where('status','<>',"3")->orderBy('ticket_id','desc');
+        $tickets= Ticket::select(['ticket_id as Id', 'plate', 'type', 'name', 'date_end', 'partner_id', 'status', 'price','email','phone'])->where('parking_id',Auth::user()->parking_id)->where('status','<>',"3")->orderBy('ticket_id','desc');
         if ($search) {
             $tickets = $tickets->where('plate', 'LIKE', "%$search%");
         }
@@ -390,7 +390,7 @@ class TicketController extends Controller
                             'data-placement' => "bottom",
                             'title' => "Renovar !",
 
-                        ]).(!empty($tickets->movil)?'<a href="https://api.whatsapp.com/send?phone=57'.$tickets->movil.'&text=Hola%20'.$tickets->name.',parqueadero%20'.$parking->name.'%20le%20saluda%20coordialmente%20y%20le%20informa%20que%20el%20vehiculo%20con%20placa%20'.$tickets->plate.'%20tiene%20pago%20el%20parqueo%20con%20nosotros%20hasta%20la%20fecha:%20'.$tickets->date_end.'" target="_blank">Whatsapp</a>':'');
+                        ]).(!empty($tickets->phone)?'<a href="https://api.whatsapp.com/send?phone=57'.$tickets->phone.'&text=Hola%20'.$tickets->name.',parqueadero%20'.$parking->name.'%20le%20saluda%20coordialmente%20y%20le%20informa%20que%20el%20vehiculo%20con%20placa%20'.$tickets->plate.'%20tiene%20pago%20el%20parqueo%20con%20nosotros%20hasta%20la%20fecha:%20'.$tickets->date_end.'" target="_blank">Whatsapp</a>':'');
                 else
                     return '';
             })
@@ -479,7 +479,7 @@ class TicketController extends Controller
             $ticket->name = $request->name;
             $ticket->hour = new \Carbon\Carbon($dateRange[0]);
             $ticket->email = $request->email;
-            $ticket->movil = $request->movil;
+            $ticket->phone = $request->movil;
             $ticket->price = $request->price;
         }
         $ticket->partner_id = Auth::user()->partner_id;
@@ -521,7 +521,7 @@ class TicketController extends Controller
             $ticket->date_end = $date_end->addMonth();
             $ticket->name = strtoupper($tickets->name);
             $ticket->email = $tickets->email;
-            $ticket->movil = $tickets->movil;
+            $ticket->phone = $tickets->movil;
             $ticket->price = $tickets->price;
         }
         $ticket->parking_id = Auth::user()->parking_id;
