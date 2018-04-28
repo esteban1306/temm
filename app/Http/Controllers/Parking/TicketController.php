@@ -110,7 +110,7 @@ class TicketController extends Controller
                  Fecha ingreso: ' . $hour->format('d/m/Y') . '<br>
                  Hora ingreso: ' . $hour->format('h:ia') . '<br>
                  ' . ($ticket->schedule==3? "   Fecha vencimiento: " . $hour2->format('d/m/Y') . "<br>" : '') .'
-                 ' . ($ticket->schedule==3? strtoupper($ticket->name) . "<br>" : '') .'
+                 ' . ($ticket->schedule==3? "<b>".strtoupper($ticket->name) . "</b><br>" : '') .'
                  Tipo: ' . ($ticket->type == 1 ? 'Carro' : 'Moto') . '<br>
                  Placa: ' . $ticket->plate . '<br>
                  ' . (isset($ticket->drawer) ? "Locker: " . $ticket->drawer . "<br>" : '') . '
@@ -138,7 +138,7 @@ class TicketController extends Controller
             }
             $html .= '<small style="text-align:left;font-size: small"><br>
                     FACTURA DE VENTA N° ' . $ticket->ticket_id . '<br>
-                 ' . ($ticket->schedule==3? strtoupper($ticket->name) . "<br>" : '') .'
+                 ' . ($ticket->schedule==3?"<b>".strtoupper($ticket->name) . "</b><br>" : '') .'
                  ' . ($ticket->schedule==1? "   Fracciones: " . $horas . "<br>" : '') .'
                    Fecha ingreso: ' . $hour->format('d/m/Y') . '<br>
                  Hora ingreso: ' . $hour->format('h:ia') . '<br>
@@ -152,8 +152,8 @@ class TicketController extends Controller
                 '</small>
 </div>';
         }
-        $html .= '<small style="text-align:left;font-size: 5px"><br>
-                 IMPRESO POR TEMM SOFT 3207329971
+        $html .= '<small style="text-align:left;font-size: 7px"><br>
+                 <b>IMPRESO POR TEMM SOFT 3207329971</b>
                  </small>';
         PDF::writeHTML($html, true, false, true, false, '');
         if(!isset($ticket->price)){
@@ -390,7 +390,7 @@ class TicketController extends Controller
                             'data-placement' => "bottom",
                             'title' => "Renovar !",
 
-                        ]).(!empty($tickets->phone)?'<a href="https://api.whatsapp.com/send?phone=57'.$tickets->phone.'&text=Hola%20'.$tickets->name.',parqueadero%20'.$parking->name.'%20le%20saluda%20coordialmente%20y%20le%20informa%20que%20el%20vehiculo%20con%20placa%20'.$tickets->plate.'%20tiene%20pago%20el%20parqueo%20con%20nosotros%20hasta%20la%20fecha:%20'.$tickets->date_end.'" target="_blank">Whatsapp</a>':'');
+                        ]).(!empty($tickets->phone)?'<a class="btn" href="https://api.whatsapp.com/send?phone=57'.$tickets->phone.'&text=Hola%20'.$tickets->name.',parqueadero%20'.$parking->name.'%20le%20saluda%20coordialmente%20y%20le%20informa%20que%20el%20vehiculo%20con%20placa%20'.$tickets->plate.'%20tiene%20pago%20el%20parqueo%20con%20nosotros%20hasta%20la%20fecha:%20'.$tickets->date_end.'" target="_blank">Whatsapp</a>':'');
                 else
                     return '';
             })

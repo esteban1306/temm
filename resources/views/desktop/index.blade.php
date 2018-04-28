@@ -474,6 +474,9 @@
                     $('#schedule_mod').val(datos['schedule']);
                     $('#drawer_mod').val(datos['drawer']);
                     $('#nombreIn_mod').val(datos['name']);
+                    $('#precioIn_mod').val(datos['price']);
+                    $('#emailIn_mod').val(datos['email']);
+                    $('#celularIn_mod').val(datos['phone']);
                     $('#extra').val(datos['extra']);
                     $('#date_range_mod').val(datos['hour']+' - '+datos['date_end']);
                     mensualidad2();
