@@ -258,6 +258,8 @@
                     $('#modal_ticket_out').modal('hide');
                     $('#modal_ticket_pay').modal('show');
                     $('#tickets-table').dataTable()._fnAjaxUpdate();
+                    if(!$('#nav_inicio').hasClass('active'))
+                        $('#month-table').dataTable()._fnAjaxUpdate();
                     $('#cobrar_id').attr("onclick","form_pdf('"+ticket_id+"'); $('#modal_ticket_pay').modal('hide')");
                 },
                 error:function () {
@@ -308,6 +310,8 @@
                     });
                     $('#modal_ticket_mod').modal('hide');
                     $('#tickets-table').dataTable()._fnAjaxUpdate();
+                    if(!$('#nav_inicio').hasClass('active'))
+                        $('#month-table').dataTable()._fnAjaxUpdate();
                     desktop_index_vm.load();
                 },
                 error:function () {
@@ -809,7 +813,10 @@
                                     text: 'Se Eliminó el ticket con exito'
                                 });
                                 $('#tickets-table').dataTable()._fnAjaxUpdate();
-                                $('#month-table').dataTable()._fnAjaxUpdate();
+                                if($('#nav_inicio').hasClass('active'))
+                                    $('#tickets-table').dataTable()._fnAjaxUpdate();
+                                else
+                                    $('#month-table').dataTable()._fnAjaxUpdate();
 
                             },
                             error:function () {
@@ -833,7 +840,10 @@
                                     type: 'success',
                                     text: 'Se recuperó el ticket con exito'
                                 });
-                                $('#tickets-table').dataTable()._fnAjaxUpdate();
+                                if($('#nav_inicio').hasClass('active'))
+                                    $('#tickets-table').dataTable()._fnAjaxUpdate();
+                                else
+                                    $('#month-table').dataTable()._fnAjaxUpdate();
 
                             },
                             error:function () {
@@ -857,7 +867,10 @@
                                     type: 'success',
                                     text: 'Se recuperó el ticket con exito'
                                 });
-                                $('#month-table').dataTable()._fnAjaxUpdate();
+                                if($('#nav_inicio').hasClass('active'))
+                                    $('#tickets-table').dataTable()._fnAjaxUpdate();
+                                else
+                                    $('#month-table').dataTable()._fnAjaxUpdate();
 
                             },
                             error:function () {
