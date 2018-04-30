@@ -26,6 +26,7 @@ Route::post('/recuperar', 'TicketController@recoveryTicket')->name('recuperar');
 Route::post('/renovar', 'TicketController@renovarTicket')->name('renovar');
 Route::post('/get_ticket', 'TicketController@getTicket')->name('get_ticket');
 Route::post('/update_cuenta', 'PartnerController@update')->name('update_cuenta');
+Route::post('/update_parking', 'ParkingController@update')->name('update_parking');
 Route::post('/get_status', 'TicketController@getStatus')->name('get_status');
 Route::get('/get_tickets', 'TicketController@getTickets')->name('get_tickets');
 Route::get('/get_months', 'TicketController@getMonths')->name('get_months');
