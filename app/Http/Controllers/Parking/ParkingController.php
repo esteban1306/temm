@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Parking;
 use Illuminate\Http\Request;
 use DateTime;
 
@@ -67,11 +68,23 @@ class ParkingController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        //
-    }
 
+    public function update(Request $request)
+    {
+        $user = Auth::user();
+        $parking = Parking::find($user->parking_id);
+        $parking->hour_cars_price= $request->hour_cars_price;
+        $parking->day_cars_price = $request->day_cars_price  ;
+        $parking->monthly_cars_price = $request->monthly_cars_price  ;
+        $parking->hour_motorcycles_price = $request->hour_motorcycles_price  ;
+        $parking->day_motorcycles_price  = $request->day_motorcycles_price   ;
+        $parking->monthly_motorcycles_price  = $request->monthly_motorcycles_price   ;
+        $parking->free_time= $request->free_time;
+        $parking->cars_num= $request->cars_num;
+        $parking->motorcycles_num = $request->motorcycles_num;
+        $parking->save();
+        return ONE;
+    }
     /**
      * Remove the specified resource from storage.
      *

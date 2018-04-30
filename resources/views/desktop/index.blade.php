@@ -333,6 +333,22 @@
             desktop_index_vm.changeAccount();
         }
 
+        function actualizarCuentaParking() {
+            var hour_cars_price=$('#hour_cars_price').validationEngine('validate');
+            var day_cars_price=$('#day_cars_price').validationEngine('validate');
+            var monthly_cars_price=$('#monthly_cars_price').validationEngine('validate');
+            var hour_motorcycles_price=$('#hour_motorcycles_price').validationEngine('validate');
+            var day_motorcycles_price=$('#day_motorcycles_price').validationEngine('validate');
+            var monthly_motorcycles_price=$('#monthly_motorcycles_price').validationEngine('validate');
+            var free_time=$('#free_time').validationEngine('validate');
+            var cars_num=$('#cars_num').validationEngine('validate');
+            var motorcycles_num=$('#motorcycles_num').validationEngine('validate');
+
+            if (hour_cars_price || day_cars_price || monthly_cars_price || hour_motorcycles_price || day_motorcycles_price || monthly_motorcycles_price || free_time || cars_num || motorcycles_num )
+                return;
+            desktop_index_vm.changePrice();
+        }
+
         function eliminarTicket(id) {
             (new PNotify({
                 title: 'Necesita confirmación',
@@ -790,6 +806,48 @@
                                     }
                                 });
                             }
+                        },
+                        error:function () {
+                            alert("Error !");
+                        }
+                    });
+                },
+                changePrice : function() {
+                    var hour_cars_price=$('#hour_cars_price').val();
+                    var day_cars_price=$('#day_cars_price').val();
+                    var monthly_cars_price=$('#monthly_cars_price').val();
+                    var hour_motorcycles_price=$('#hour_motorcycles_price').val();
+                    var day_motorcycles_price=$('#day_motorcycles_price').val();
+                    var monthly_motorcycles_price=$('#monthly_motorcycles_price').val();
+                    var free_time=$('#free_time').val();
+                    var cars_num=$('#cars_num').val();
+                    var motorcycles_num=$('#motorcycles_num').val();
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        type: "POST",
+                        url: "update_parking",
+                        data: {
+                            hour_cars_price: hour_cars_price,
+                            day_cars_price : day_cars_price  ,
+                            monthly_cars_price : monthly_cars_price  ,
+                            hour_motorcycles_price : hour_motorcycles_price  ,
+                            day_motorcycles_price  : day_motorcycles_price   ,
+                            monthly_motorcycles_price  : monthly_motorcycles_price   ,
+                            free_time: free_time,
+                            cars_num: cars_num,
+                            motorcycles_num: motorcycles_num
+                        },
+                        success: function (response) {
+                            new PNotify({
+                                title: 'Listo!',
+                                text: 'Se han modificado los datos correctamente.',
+                                type: 'success',
+                                buttons: {
+                                    sticker: false
+                                }
+                            });
                         },
                         error:function () {
                             alert("Error !");
