@@ -74,7 +74,7 @@
             </div>
 
                 <div class="row" v-show="all">
-                <div class="col-12">
+                <div class="col-12" style="overflow:  scroll;">
                     <table class="table responsive" id="tickets-table">
                         <thead>
                         <tr>
