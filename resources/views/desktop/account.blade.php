@@ -62,6 +62,7 @@
                 <span class="height_30"></span>
             </form>
         </div>
+        @if($user->type==1)
         <div class="mi-cuenta">
             <span class="height_30"></span><br>
             <h2>Actualizar cuenta empresa</h2>
@@ -127,5 +128,6 @@
                 <span class="height_30"></span>
             </form>
         </div>
+            @endif
     </div>
 </div>

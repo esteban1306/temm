@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Parking;
 use Illuminate\Http\Request;
 use DateTime;
+use Illuminate\Support\Facades\Auth;
 
 class ParkingController extends Controller
 {
