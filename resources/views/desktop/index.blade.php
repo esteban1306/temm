@@ -138,7 +138,7 @@
                 </div>
             </div>
             <div class="row" v-show="month">
-                <div class="col-12">
+                <div class="col-12"  style="overflow:  auto;">
                     <table class="table responsive" id="month-table">
                         <thead>
                         <tr>
