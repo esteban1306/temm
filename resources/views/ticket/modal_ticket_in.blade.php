@@ -15,13 +15,7 @@
                         <label for="plate" class="control-label">PLACA</label>
 
                         <div>
-                            <input onkeyup="mayus(this);" id="plate" type="plate" class="form-control validate[required]" name="plate" value="{{ old('plate') }}" onkeypress="validar(event)" required autofocus>
-
-                            @if ($errors->has('email'))
-                                <span class="help-block">
-                                    <strong>{{ $errors->first('email') }}</strong>
-                                </span>
-                            @endif
+                            <input onkeyup="mayus(this);" id="plate" type="plate" class="form-control validate[required]" name="plate" value="{{ old('plate') }}" onkeypress="validar(event)" required autofocus autocomplete="off">
                         </div>
                     </div>
                     <div class="form-group col-md-6">
