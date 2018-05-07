@@ -513,7 +513,8 @@
             });
         }
         function mayus(e) {
-            e.value = e.value.toUpperCase();
+            if (screen.width>=500 )
+                e.value = e.value.toUpperCase();
         }
         $(function() {
             $("#ticket_id").keypress(function(e) {
