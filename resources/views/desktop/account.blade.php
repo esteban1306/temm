@@ -53,7 +53,7 @@
                 </div>
                 <div class="form-group col-sm-6">
                     <label for="">Email</label>
-                    <input type="text" class="form-control validate[required,custom[email]]" name="new_email" value="{{ $user->email }}">
+                    <input type="text" class="form-control validate[required]" name="new_email" value="{{ $user->email }}">
                 </div>
                 <div class="col-sm-12">
                     <span class="height_10"></span>
@@ -62,6 +62,7 @@
                 <span class="height_30"></span>
             </form>
         </div>
+        @if($user->type==1)
         <div class="mi-cuenta">
             <span class="height_30"></span><br>
             <h2>Actualizar cuenta empresa</h2>
@@ -74,15 +75,15 @@
                 </div>
                 <div class="form-group col-sm-6">
                     <label for="">Hora</label>
-                    <input type="number" class="form-control validate[required]"  id="hour_cars_price" min="0" value="{{ $parking->hour_cars_price }}">
+                    <input type="number" class="form-control validate[required, onlyNumber]"  id="hour_cars_price" min="0" value="{{ $parking->hour_cars_price }}">
                 </div>
                 <div class="form-group col-sm-6">
                     <label for="">Dia</label>
-                    <input type="number" class="form-control validate[required]"  id="day_cars_price" min="0" value="{{ $parking->day_cars_price }}">
+                    <input type="number" class="form-control validate[required, onlyNumber]"  id="day_cars_price" min="0" value="{{ $parking->day_cars_price }}">
                 </div>
                 <div class="form-group col-sm-6">
                     <label for="">Mensualidad</label>
-                    <input type="number" class="form-control validate[required]" id="monthly_cars_price" min="0" value="{{ $parking->monthly_cars_price }}">
+                    <input type="number" class="form-control validate[required, onlyNumber]" id="monthly_cars_price" min="0" value="{{ $parking->monthly_cars_price }}">
                 </div>
 
                 <div class="form-group col-sm-12">
@@ -92,15 +93,15 @@
                 </div>
                 <div class="form-group col-sm-6">
                     <label for="">Hora</label>
-                    <input type="number" class="form-control validate[required]" id="hour_motorcycles_price" min="0" value="{{ $parking->hour_motorcycles_price }}">
+                    <input type="number" class="form-control validate[required, onlyNumber]" id="hour_motorcycles_price" min="0" value="{{ $parking->hour_motorcycles_price }}">
                 </div>
                 <div class="form-group col-sm-6">
                     <label for="">Dia</label>
-                    <input type="number" class="form-control validate[required]" id="day_motorcycles_price" min="0" value="{{ $parking->day_motorcycles_price }}">
+                    <input type="number" class="form-control validate[required, onlyNumber]" id="day_motorcycles_price" min="0" value="{{ $parking->day_motorcycles_price }}">
                 </div>
                 <div class="form-group col-sm-6">
                     <label for="">Mensualidad</label>
-                    <input type="number" class="form-control validate[required]" id="monthly_motorcycles_price"  min="0" value="{{ $parking->monthly_motorcycles_price }}">
+                    <input type="number" class="form-control validate[required, onlyNumber]" id="monthly_motorcycles_price"  min="0" value="{{ $parking->monthly_motorcycles_price }}">
                 </div>
                 <div class="form-group col-sm-12">
                     <div class="head">
@@ -109,15 +110,15 @@
                 </div>
                 <div class="form-group col-sm-6">
                     <label for="">Tiempo muerto</label>
-                    <input type="number" class="form-control validate[required]" id="free_time" min="0" max="20" value="{{ $parking->free_time }}">
+                    <input type="number" class="form-control validate[required, onlyNumber]" id="free_time" min="0" max="20" value="{{ $parking->free_time }}">
                 </div>
                 <div class="form-group col-sm-6">
                     <label for="">Numero de carros</label>
-                    <input type="number" class="form-control validate[required]" min="0" id="cars_num" value="{{ $parking->cars_num }}">
+                    <input type="number" class="form-control validate[required, onlyNumber]" min="0" id="cars_num" value="{{ $parking->cars_num }}">
                 </div>
                 <div class="form-group col-sm-6">
                     <label for="">Numero de motos</label>
-                    <input type="number" class="form-control validate[required]" min="0" id="motorcycles_num" value="{{ $parking->motorcycles_num }}">
+                    <input type="number" class="form-control validate[required, onlyNumber]" min="0" id="motorcycles_num" value="{{ $parking->motorcycles_num }}">
                 </div>
 
                 <div class="col-sm-12">
@@ -127,5 +128,6 @@
                 <span class="height_30"></span>
             </form>
         </div>
+            @endif
     </div>
 </div>

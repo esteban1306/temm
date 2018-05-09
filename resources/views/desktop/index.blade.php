@@ -74,7 +74,7 @@
             </div>
 
                 <div class="row" v-show="all">
-                <div class="col-12">
+                <div class="col-12" style="overflow:  auto;">
                     <table class="table responsive" id="tickets-table">
                         <thead>
                         <tr>
@@ -138,7 +138,7 @@
                 </div>
             </div>
             <div class="row" v-show="month">
-                <div class="col-12">
+                <div class="col-12"  style="overflow:  auto;">
                     <table class="table responsive" id="month-table">
                         <thead>
                         <tr>
@@ -175,9 +175,8 @@
     <script src="{{ asset('js/moment.min.js') }}"></script>
     <script src="{{ asset('js/daterangepicker.js') }}"></script>
     <script src="{{ asset('js/pnotify.custom.min.js') }}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-Validation-Engine/2.6.4/jquery.validationEngine.min.js" type="text/javascript" charset="utf-8"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-Validation-Engine/2.6.4/languages/jquery.validationEngine-es.js" type="text/javascript" charset="utf-8"></script>
-
+    <script src="{{ asset('js/validationEngine.min.js') }}"></script>
+    <script src="{{ asset('js/validationEngine-es.min.js') }}"></script>
     <script>
         function openModalIn(){
             $('#modal_ticket_in').modal('show');
@@ -514,7 +513,8 @@
             });
         }
         function mayus(e) {
-            e.value = e.value.toUpperCase();
+            if (screen.width>=500 )
+                e.value = e.value.toUpperCase();
         }
         $(function() {
             $("#ticket_id").keypress(function(e) {
