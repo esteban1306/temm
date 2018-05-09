@@ -219,8 +219,13 @@ class TicketController extends Controller
         $ticket = Ticket::find($request->ticket_id);
         $interval = date_diff(new DateTime("".$ticket->hour),$now);
         $ticket->status = 2;
+        $now2 = date("Y-m-d H:i:s");
+        $ticketss= Ticket::select(['plate'])->where('parking_id',Auth::user()->parking_id)->where('status','<>',"3")->where('plate',$ticket->plate)->where('date_end','>=',$now2)->orderBy('ticket_id','desc')->get();
+
         if($ticket->schedule != 3 || empty($ticket->price))
             $ticket->price = $this->precio($interval,$ticket->type, $ticket->schedule);
+        if($ticketss->count() > 0)
+            $ticket->price =0;
         $ticket->pay_day =$now;
         $ticket->save();
         return [$ticket->price,$interval->format("%H:%I")];
@@ -331,7 +336,7 @@ class TicketController extends Controller
             ->editColumn('price', function ($tickets) {
                 $now = new Datetime('now');
                 $interval = date_diff(new DateTime("".$tickets->hour),$now);
-                return !empty( $tickets->price)?  $tickets->price: "*".$this->precio($interval,$tickets->type, $tickets->schedule);
+                return isset( $tickets->price)?  $tickets->price:( "*".$this->precio($interval,$tickets->type, $tickets->schedule));
             })
             ->make(true);
     }
