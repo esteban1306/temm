@@ -551,7 +551,7 @@
                 "locale": {
                     "format": "YYYY-MM-DD"
                 },
-                "startDate": "<?php $now = Carbon::now(); echo $now->format('Y-m-d')?>",
+                "startDate": "<?php $now = Carbon::now(); echo Carbon::yesterday()->format('Y-m-d')?>",
                 "endDate": "<?php   echo $now->addDay()->format('Y-m-d')?>",
                 "opens": "center",
                 "drops": "up"
