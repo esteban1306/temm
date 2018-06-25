@@ -261,8 +261,8 @@
                         $('#month-table').dataTable()._fnAjaxUpdate();
                     $('#cobrar_id').attr("onclick","form_pdf('"+ticket_id+"'); $('#modal_ticket_pay').modal('hide')");
                 },
-                error:function () {
-                    alert("Error !");
+                error : function () {
+                    location = '/login';
                 }
             });
         }
@@ -313,8 +313,8 @@
                         $('#month-table').dataTable()._fnAjaxUpdate();
                     desktop_index_vm.load();
                 },
-                error:function () {
-                    alert("Error !");
+                error : function () {
+                    location = '/login';
                 }
             });
         }
@@ -471,8 +471,8 @@
                     desktop_index_vm.loadTable();
                     form_pdf(datos);
                 },
-                error:function () {
-                    alert("Error !");
+                error : function () {
+                    location = '/login';
                 }
             });
         }
@@ -507,8 +507,8 @@
                         "drops": "up"
                     });
                 },
-                error:function () {
-                    alert("Error !");
+                error : function () {
+                    location = '/login';
                 }
             });
         }
@@ -684,8 +684,8 @@
                             }
                             this.retired = 1;
                         },
-                        error:function () {
-                            alert("Error !");
+                        error : function () {
+                            location = '/login';
                         }
                     });
                 },
@@ -705,7 +705,10 @@
                             deferRender    : true,
                             destroy        : true,
                             ajax: {
-                                url  : laroute.route('transaction.get_list')
+                                url  : laroute.route('transaction.get_list'),
+                                error : function () {
+                                    location = '/login';
+                                }
                             },
                             columns: [
                                 { data: 'rank', orderable  : false, searchable : false },
@@ -752,6 +755,9 @@
                                 type            : $("#type").val(),
                                 status          : $("#status").val(),
                                 range           : $("#Tiempo").val()
+                            },
+                            error : function () {
+                                location = '/login';
                             }
                         },
                         columns: [
@@ -807,8 +813,8 @@
                                 });
                             }
                         },
-                        error:function () {
-                            alert("Error !");
+                        error : function () {
+                            location = '/login';
                         }
                     });
                 },
@@ -849,8 +855,8 @@
                                 }
                             });
                         },
-                        error:function () {
-                            alert("Error !");
+                        error : function () {
+                            location = '/login';
                         }
                     });
                 },
@@ -877,8 +883,8 @@
                                     $('#month-table').dataTable()._fnAjaxUpdate();
 
                             },
-                            error:function () {
-                                alert("Error !");
+                            error : function () {
+                                location = '/login';
                             }
                         });
                 },
@@ -904,8 +910,8 @@
                                     $('#month-table').dataTable()._fnAjaxUpdate();
 
                             },
-                            error:function () {
-                                alert("Error !");
+                            error : function () {
+                                location = '/login';
                             }
                         });
                 },
@@ -931,8 +937,8 @@
                                     $('#month-table').dataTable()._fnAjaxUpdate();
 
                             },
-                            error:function () {
-                                alert("Error !");
+                            error : function () {
+                                location = '/login';
                             }
                         });
                 }
