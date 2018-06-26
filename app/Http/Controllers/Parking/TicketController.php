@@ -217,6 +217,10 @@ class TicketController extends Controller
     {
         $now = new Datetime('now');
         $ticket = Ticket::find($request->ticket_id);
+        if($ticket->status == 2 && !empty($ticket->pay_day)){
+            $interval = date_diff(new DateTime("".$ticket->hour),new DateTime("".$ticket->pay_day));
+            return [$ticket->price,$interval->format("%H:%I")];
+        }
         $interval = date_diff(new DateTime("".$ticket->hour),$now);
         $ticket->status = 2;
         $now2 = date("Y-m-d H:i:s");
