@@ -1,4 +1,4 @@
-<section id="Header">
+<section id="Header" style="background-color: darkblue">
     <div class="bg-fixed">
         <div id="topBar">
             <div class="area-bar auto_margin">
