@@ -19,7 +19,11 @@
                                 <h4>Registro</h4>
                             </div>
                             <div class="body-form">
-                                <form class="row" method="POST" action="{{ route('register') }}">
+                                @guest
+                                    <form class="row" method="POST" action="{{ route('register') }}">
+                                @else
+                                    <form class="row" method="POST" action="#">
+                                @endguest
                                     {{ csrf_field() }}
                                     <div class="form-group col-md-12{{ $errors->has('email') ? ' has-error' : '' }}">
                                         <label for="email" class="control-label">Correo Electrónico</label>
@@ -81,10 +85,14 @@
                                             <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
                                         </div>
                                     </div>
-
-                                    <div class="form-group col-md-12 pt-3">
-                                        <button class="btn btn-primary full-width waves-effect waves-light"><strong>REGISTRARSE</strong></button>
-                                    </div>
+                                        @guest
+                                            <div class="form-group col-md-12 pt-3">
+                                                <button class="btn btn-primary full-width waves-effect waves-light"><strong>REGISTRARSE</strong></button>
+                                            </div>
+                                        @else
+                                            <div class="form-group col-md-12 pt-3">
+                                            </div>
+                                        @endguest
                                 </form>
                             </div>
                         </div>
@@ -130,49 +138,6 @@
         </div>
     </div>
 
- <!--   <section id="Parallax">
-        <div class="parallax-container mask1">
-            <div class="parallax"><img src="images/parallax-empleo.jpg"></div>
-            <div class="contenidos mask2 auto_margin">
-                <div class="text">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum eget efficitur velit, ac egestas velit.
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <div class="areaPartner">
-        <section class="content-bottom auto_margin">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-lg-4 hidden-md-down">
-                        <img src="images/partner-people.png" class="img-fluid" alt="">
-                    </div>
-                    <div class="col-lg-8 text-center">
-                        <article>
-                            <h3>It has survived not only five centuries, but also the leap into electronic typesetting</h3>
-                            <p class="height_30"></p>
-                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since
-                                the
-                                1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries,
-                                but
-                                also the leap into electronic typesetting, remaining essentially unchanged.</p>
-
-                            <p> It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop
-                                publishing
-                                software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-
-                            <p class="height_30"></p>
-                            <p>
-                                <a href="#registro" class="btn btn-primary btn-lg waves-effect waves-light"><strong>REGISTRARSE</strong></a>
-                            </p>
-                            <p class="height_30 hidden-lg-up"></p>
-                        </article>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </div>-->
     @include('desktop.login.modal_login')
     <!---->
     <p class="height_20"></p>
