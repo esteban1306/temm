@@ -671,7 +671,10 @@
                         },
                         success: function (datos) {
                             var month= datos['month_expire_num'];
-                            $("#total").html(datos['total']);
+                            if(datos['extra']=='$0')
+                                $("#total").html(datos['total']);
+                            else
+                                $("#total").html(datos['total']+'</br>('+datos['extra']+')');
                             $("#motos").html(datos['motos']);
                             $("#carros").html(datos['carros']);
                             $("#month_expired").html(datos['month_expire_num']);

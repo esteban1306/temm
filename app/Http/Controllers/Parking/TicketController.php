@@ -468,6 +468,7 @@ class TicketController extends Controller
             }
         }
         $status['total'] = format_money($status['total']);
+        $status['extra'] = format_money($status['extra']);
         return $status;
     }
     public function getTicket(Request $request)
