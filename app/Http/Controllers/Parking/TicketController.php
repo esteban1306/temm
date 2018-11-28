@@ -183,13 +183,14 @@ class TicketController extends Controller
     public function precio($tiempo, $tipo, $schedule)
     {
         $horas = $tiempo->format("%H");
+        $horas2 = $tiempo->format("%H");
         $minutos = $tiempo->format("%I");
         $minutos2 = $minutos;
         $parking = Parking::find(Auth::user()->parking_id);
         $minutos = ($minutos*1) - ($parking->free_time);
         $horas = (24*$tiempo->format("%d"))+$horas*1 + (($minutos>=0? 1: 0)*1);
         if($parking->parking_id==4){
-            $minutos2 = ($horas*60)+($minutos2*1)-60;
+            $minutos2 = (((24*$tiempo->format("%d"))+$horas2*1)*60)+($minutos2*1)-60;
             $priceMin = $minutos2 > 0?($tipo==1? $parking->min_cars_price*$minutos2: $parking->min_motorcycles_price*$minutos2):0;
             if($schedule==1)
                 return ($tipo==1? $parking->hour_cars_price: $parking->hour_motorcycles_price )+$priceMin;
