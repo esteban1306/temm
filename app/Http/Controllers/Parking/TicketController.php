@@ -102,8 +102,11 @@ class TicketController extends Controller
         $parking = Parking::find(Auth::user()->parking_id);
         $html = '<div style="text-align:center"><big style="margin-bottom: 1px"><b>&nbsp; PARQUEADERO '.$parking->name.'</b></big><br>
                 <em style="font-size: x-small;margin-top: 2px;margin-bottom: 1px">"Todo lo puedo en Cristo que<br> me fortalece": Fil 4:13 <br></em>
-                <small style="font-size: x-small;margin-top: 2px;margin-bottom: 1px"><b>'.$parking->address.'</b></small>'.($parking->parking_id==3?'<small style="text-align:center;font-size: 7px"><br>
-    <b>SERVICIO: Lun-Sab 7am - 9pm</b><br>OLIVEROS HERNANDEZ VALENTINA <br> NIT: 1094965452-1 <br> TEL: 3104276986</small>':'');
+                <small style="font-size: x-small;margin-top: 2px;margin-bottom: 1px"><b>'.$parking->address.'</b></small>'
+            .($parking->parking_id==3?'<small style="text-align:center;font-size: 7px"><br>
+    <b>SERVICIO: Lun-Sab 7am - 9pm</b><br>OLIVEROS HERNANDEZ VALENTINA <br> NIT: 1094965452-1 <br> TEL: 3104276986</small>':'')
+            .($parking->parking_id==4?'<small style="text-align:center;font-size: 7px"><br>
+    <b>SERVICIO: Lun-Sab 7am - 9pm</b><br>CARLOS E. MIDEROS <br> NIT: 80449231-4 <br> TEL: 9207119</small>':'');
         if(!isset($ticket->price)) {
             $html .= '<small style="text-align:left;font-size: small"><b><br>
                  ' . ($ticket->schedule==3? "FACTURA DE VENTA N° " . $ticket->ticket_id . "<br>" : '') .'
@@ -181,9 +184,16 @@ class TicketController extends Controller
     {
         $horas = $tiempo->format("%H");
         $minutos = $tiempo->format("%I");
+        $minutos2 = $minutos;
         $parking = Parking::find(Auth::user()->parking_id);
         $minutos = ($minutos*1) - ($parking->free_time);
         $horas = (24*$tiempo->format("%d"))+$horas*1 + (($minutos>=0? 1: 0)*1);
+        if($parking->parking_id==4){
+            $minutos2 = ($horas*60)+($minutos2*1)-60;
+            $priceMin = $minutos2 > 0?($tipo==1? $parking->min_cars_price*$minutos2: $parking->min_motorcycles_price*$minutos2):0;
+            if($schedule==1)
+                return ($tipo==1? $parking->hour_cars_price: $parking->hour_motorcycles_price )+$priceMin;
+        }
         if($tiempo->format("%I")<=5 && $horas==0 && ($schedule==1 || $schedule==2))
             return 0;
         $horas = $horas==0? 1: $horas;
