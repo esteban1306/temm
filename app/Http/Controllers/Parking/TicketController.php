@@ -106,7 +106,7 @@ class TicketController extends Controller
             .($parking->parking_id==3?'<small style="text-align:center;font-size: 7px"><br>
     <b>SERVICIO: Lun-Sab 7am - 9pm</b><br>OLIVEROS HERNANDEZ VALENTINA <br> NIT: 1094965452-1 <br> TEL: 3104276986</small>':'')
             .($parking->parking_id==4?'<small style="text-align:center;font-size: 7px"><br>
-    <b>SERVICIO: Lun-Sab 7am - 9pm</b><br>CARLOS E. MIDEROS <br> NIT: 80449231-4 <br> TEL: 9207119</small>':'');
+    <b>SERVICIO: Lun-Sab 7am - 9pm</b><br>CARLOS E. MIDEROS <br> NIT: 80449231-4 <br> TEL: 9207119<br> CEL: 3013830790</small>':'');
         if(!isset($ticket->price)) {
             $html .= '<small style="text-align:left;font-size: small"><b><br>
                  ' . ($ticket->schedule==3? "FACTURA DE VENTA N° " . $ticket->ticket_id . "<br>" : '') .'
