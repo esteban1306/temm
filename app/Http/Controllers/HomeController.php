@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -23,6 +24,10 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('desktop/index');
+        $user = Auth::user();
+        if($user->type != 3)
+            return view('desktop/index');
+        else
+            return view('desktop/index2');
     }
 }

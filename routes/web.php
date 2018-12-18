@@ -19,6 +19,7 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::post('/cobrar', 'TicketController@update')->name('cobrar')->middleware('auth');
+Route::post('/customers', 'CustomerController@store')->name('customers')->middleware('auth');
 Route::post('/pdf', 'TicketController@pdf')->name('pdf')->middleware('auth');
 Route::post('/actualizar', 'TicketController@updateTicket')->name('actualizar')->middleware('auth');
 Route::post('/eliminar', 'TicketController@deleteTicket')->name('eliminar')->middleware('auth');
