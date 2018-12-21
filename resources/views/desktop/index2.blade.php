@@ -5,14 +5,11 @@
         <div class="panelPartner auto_margin">
             <!---->
             <div class="row">
-                <div class="col-md-4" style="text-align: center;">
+                <div class="col-md-6" style="text-align: center;">
                     <button type="button" onclick="openModalCliente()" class="btn btn-primary col-md-10 btn-lg">Nuevo Cliente</button>
                 </div>
-                <div class="col-md-4" style="text-align: center;">
-                    <button type="button" onclick="openModalOut()" class="btn btn-default col-md-10 btn-lg">Nuevo Prestamo</button>
-                </div>
-                <div class="col-md-4" style="text-align: center;">
-                    <button type="button" onclick="openModalOut()" class="btn btn-info col-md-10 btn-lg">Nuevo Abono</button>
+                <div class="col-md-6" style="text-align: center;">
+                    <button type="button" onclick="openModalPrestamo()" class="btn btn-default col-md-10 btn-lg">Nuevo Prestamo</button>
                 </div>
             </div>
             <p class="height_10"></p>
@@ -47,22 +44,11 @@
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
-                                {!! Form::label('tipo', 'Tipo Vehiculo', ['class' => 'control-label']) !!}
-                                <select id="type-car" name="type" class="form-control">
-                                    <option value="">Todos</option>
-                                    <option value="1">Carro</option>
-                                    <option value="2">Moto</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group">
                                 {!! Form::label('tipoT', 'Tipo Tiempo', ['class' => 'control-label']) !!}
                                 <select id="type" name="type" class="form-control">
                                     <option value="">Todos</option>
-                                    <option value="1">Horas</option>
-                                    <option value="2">Dias</option>
-                                    <option value="3">Mensualidad</option>
+                                    <option value="1">Mensual</option>
+                                    <option value="2">Quincenal</option>
                                 </select>
                             </div>
                         </div>
@@ -81,12 +67,12 @@
                     <table class="table responsive" id="tickets-table">
                         <thead>
                         <tr>
-                            <th class="all">Placa</th>
+                            <th class="all">Cliente</th>
+                            <th class="min-tablet">Monto</th>
+                            <th class="min-tablet">Interes</th>
+                            <th class="min-tablet">Tiempo</th>
                             <th class="min-tablet">Tipo</th>
-                            <th class="min-tablet">Estado</th>
-                            <th class="min-tablet">Precio</th>
-                            <th class="min-tablet">Hora Entrada</th>
-                            <th class="min-tablet">Atendió</th>
+                            <th class="min-tablet">Cuota</th>
                             <th class="all">acciones</th>
                         </tr>
                         </thead>
@@ -168,7 +154,7 @@
     </div>
 
     @include('customer.modal_add')
-    @include('ticket.modal_ticket_out')
+    @include('customer.modal_prestamo')
     @include('ticket.modal_ticket_mod')
     @include('ticket.modal_ticket_pay')
 @endsection
@@ -187,6 +173,10 @@
             $("#celularCustomer").val("");
             $("#observacionCustomer").val("");
             $("#cedulaCustomer").val("");
+        }
+
+        function openModalPrestamo(){
+            $('#modal_prestamo').modal('show');
         }
         function mensualidad(){
             var schedule = $("#schedule").val();
@@ -219,11 +209,6 @@
                 $("#movilIn_mod").css("display","none");
                 $("#rangeIn_mod").css("display","none");
             }
-        }
-        function openModalOut(){
-            $('#modal_ticket_out').modal('show');
-            getFecha();
-            $('#ticket_id').val('');
         }
         function openModalMod(ticket_id){
             $('#modal_ticket_mod').modal('show');
@@ -465,6 +450,49 @@
                 },
                 error : function () {
                     location = '/login';
+                }
+            });
+        }
+        function crearPrestamo() {
+            var vNombre=$("#customerPrest").validationEngine('validate');
+            var vInteres=$("#interestPrest").validationEngine('validate');
+            var vTiempo=$("#timePrest").validationEngine('validate');
+            var vMonto=$("#montoPrest").validationEngine('validate');
+            var vCuota=$("#CuotaPrest").validationEngine('validate');
+
+            if (vNombre || vInteres || vTiempo || vMonto || vCuota)
+                return;
+            var customer=   $("#customerPrest").val();
+            var Interes=    $("#interestPrest").val();
+            var Tiempo=     $("#timePrest").val();
+            var Monto=      $("#montoPrest").val();
+            var Cuota=      $("#CuotaPrest").val();
+            var tipo=       $("#typePrest").val();
+
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: "POST",
+                url: "prestamos",
+                data: {
+                    customer:   customer,
+                    interes:    Interes,
+                    tiempo:     Tiempo,
+                    monto:      Monto,
+                    cuota:      Cuota,
+                    tipo:       tipo
+                },
+                success: function (datos) {
+                    $('#modal_prestamo').modal('hide');
+                    new PNotify({
+                        title: 'Exito',
+                        type: 'success',
+                        text: 'Se agregó el prestamo con exito'
+                    });
+                },
+                error : function () {
+                    ;
                 }
             });
         }
@@ -744,7 +772,7 @@
                         deferRender    : true,
                         destroy        : true,
                         ajax: {
-                            url  : '{!! route('get_tickets') !!}',
+                            url  : '{!! route('get_prestamos') !!}',
                             data : {
                                 type_car        : $("#type-car").val(),
                                 type            : $("#type").val(),
@@ -752,16 +780,16 @@
                                 range           : $("#Tiempo").val()
                             },
                             error : function () {
-                                location = '/login';
+                                ;
                             }
                         },
                         columns: [
-                            { data: 'plate', name: 'Placa', orderable  : false, searchable : false },
-                            { data: 'Tipo', name: 'Tipo', orderable  : false, searchable : false },
-                            { data: 'Estado', name: 'Estado', orderable  : false, searchable : false },
-                            { data: 'price', name: 'Precio', orderable  : false, searchable : false },
-                            { data: 'entrada', name: 'Locker', orderable  : false, searchable : false },
-                            { data: 'Atendio', name: 'Atendió', orderable  : false, searchable : false },
+                            { data: 'id_customer', name: 'Cliente', orderable  : false, searchable : false },
+                            { data: 'monto', name: 'Monto', orderable  : false, searchable : false },
+                            { data: 'interes', name: 'Interes', orderable  : false, searchable : false },
+                            { data: 'tiempo', name: 'Tiempo', orderable  : false, searchable : false },
+                            { data: 'tipo', name: 'Tipo', orderable  : false, searchable : false },
+                            { data: 'cuota', name: 'Cuota', orderable  : false, searchable : false },
                             { data: 'action', name: 'acciones', orderable  : false, searchable : false },
                         ],
                         lengthMenu: [[ 10, 25, 50, -1], [ 10, 25, 50, "Todos"]]

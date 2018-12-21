@@ -20,6 +20,7 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 Route::post('/cobrar', 'TicketController@update')->name('cobrar')->middleware('auth');
 Route::post('/customers', 'CustomerController@store')->name('customers')->middleware('auth');
+Route::post('/prestamos', 'PrestamoController@store')->name('prestamos')->middleware('auth');
 Route::post('/pdf', 'TicketController@pdf')->name('pdf')->middleware('auth');
 Route::post('/actualizar', 'TicketController@updateTicket')->name('actualizar')->middleware('auth');
 Route::post('/eliminar', 'TicketController@deleteTicket')->name('eliminar')->middleware('auth');
@@ -30,5 +31,6 @@ Route::post('/update_cuenta', 'PartnerController@update')->name('update_cuenta')
 Route::post('/update_parking', 'ParkingController@update')->name('update_parking')->middleware('auth');
 Route::post('/get_status', 'TicketController@getStatus')->name('get_status')->middleware('auth');
 Route::get('/get_tickets', 'TicketController@getTickets')->name('get_tickets')->middleware('auth');
+Route::get('/get_prestamos', 'PrestamoController@getPrestamos')->name('get_prestamos')->middleware('auth');
 Route::get('/get_months', 'TicketController@getMonths')->name('get_months')->middleware('auth');
 Route::resource('tickets', 'TicketController')->middleware('auth');
