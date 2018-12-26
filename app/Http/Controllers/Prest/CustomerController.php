@@ -446,4 +446,12 @@ class CustomerController extends Controller
 
         return ;
     }
+    public function getSelect(){
+        $customers = Customer::where('id_partner' ,Auth::user()->partner_id)->get();
+        $select="<option value=''>Seleccionar</option>";
+        foreach ($customers as $customer){
+            $select .='<option data-toggle="tooltip" title="'.$customer->observacion.'"value="'.$customer->id_customer.'">'.$customer->nombre.'</option>';
+        }
+        return $select;
+    }
 }

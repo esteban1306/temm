@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Abono;
-use App\Customer;
 use App\Models\Partner;
 use App\Parking;
-use App\Ticket;
+use App\Abono;
 use App\Prestamo;
 use Carbon\Carbon;
 use DateTime;
@@ -20,7 +18,7 @@ use App\Notifications\Message;
 use PDF; // at the top of the file
 
 
-class PrestamoController extends Controller
+class AbonoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -50,19 +48,19 @@ class PrestamoController extends Controller
     public function store(Request $request)
     {
         $now = new Datetime('now');
-        $ticket= new Prestamo();
-        $ticket->id_customer =$request->customer;
-        $ticket->interes =$request->interes;
-        $ticket->tiempo =$request->tiempo;
+        $ticket= new Abono();
+        $ticket->id_prestamo =$request->prestamo;
         $ticket->tipo =$request->tipo;
-        $ticket->monto =$request->monto;
-        $ticket->cuota =$request->cuota;
-        $ticket->actual =$request->cuota*($request->tiempo*$request->tipo);
-        $ticket->estado = 1;
+        $ticket->valor =$request->valor;
         $ticket->id_partner =Auth::user()->partner_id;
         $ticket->save();
+        if($ticket->tipo == 2 ){
+            $prestamo = Prestamo::find($request->prestamo);
+            $prestamo->estado = 2;
+            $prestamo->save();
+        }
 
-        return $ticket->ticket_id;
+        return 'exito';
     }
     /**
      * Display the specified resource.
@@ -447,81 +445,14 @@ class PrestamoController extends Controller
 
         return ;
     }
-    public function getPrestamos(Request $request)
+    public function getAbonos(Request $request)
     {
         $search = $request->get('search')['value'];
-        $schedule = $request->get('type');
-        $range = $request->get('range');
-        $status = $request->get('status');
+        $prestamo = $request->get('prestamo');
 
-        $tickets= Prestamo::select(['id_prestamo as Id', 'id_customer', 'interes', 'monto', 'cuota', 'actual', 'tipo', 'tiempo', 'created_at'])
-            ->where('id_partner',Auth::user()->partner_id)
-            ->orderBy('id_prestamo','desc');
-        //dd($tickets->toSql());
-        if ($search) {
-            $tickets = $tickets->where('monto', 'LIKE', "%$search%");
-        }
-        if (!empty($status))
-            $tickets = $tickets->where('estado', $status);
-        if (!empty($schedule))
-            $tickets = $tickets->where('tipo', $schedule);
-        $saldo = 'hola';
+        $tickets= Abono::select(['id_abono as Id', 'id_prestamo', 'valor', 'tipo', 'created_at'])->where('id_prestamo',$prestamo)->orderBy('id_abono','desc');
+
         return Datatables::of($tickets)
-            ->addColumn('saldo', function ($tickets) use ($saldo){
-                if($tickets->estado ==2)
-                    return '$0';
-                $now = new Datetime('now');
-                $interval = date_diff(new DateTime("".$tickets->created_at),$now);
-                $meses = ($interval->format("%M")*1)+($interval->format("%d")*1>=5?1:0)+($interval->format("%Y")*12);
-                $abonos = collect(Abono::select(['valor'])->where('id_prestamo',$tickets->Id)->get())->sum('valor');
-                $saldo = '$'.number_format((($tickets->monto*$tickets->interes/100)*($meses==0?1:$meses*1))+($tickets->monto*1)-($abonos*1),0,'','.');
-                return $saldo;
-            })
-            ->addColumn('action', function ($tickets) use ($saldo){
-                $customer = Customer::find($tickets->id_customer,['telefono','nombre']);
-                    return
-                        \Form::button('Listar Abonos', [
-                            'class'   => 'btn btn-info',
-                            'onclick' => "listarAbonos('$tickets->Id')",
-                            'data-toggle' => "tooltip",
-                            'data-placement' => "bottom",
-                            'title' => "Pagar !",
-
-                        ]).
-                        \Form::button('Pagar todo', [
-                            'class'   => 'btn btn-info',
-                            'onclick' => "openModalAbono('$tickets->Id',2,$tickets->cuota)",
-                            'data-toggle' => "tooltip",
-                            'data-placement' => "bottom",
-                            'title' => "Pagar !",
-
-                        ]).(
-                            \Form::button('Abonar', [
-                                'class'   => 'btn btn-info',
-                                'onclick' => "openModalAbono('$tickets->Id',1,$tickets->cuota)",
-                                'data-toggle' => "tooltip",
-                                'data-placement' => "bottom",
-                                'title' => "Abonar !!!",
-
-                            ])).
-                        (!empty($customer->telefono)?'<a class="btn btn-success" href="https://api.whatsapp.com/send?phone=57'.$customer->telefono.'&text=Hola%20'.$customer->name.',feliz%20día%20le%20saludo%20coordialmente%20y%20le%20informo%20que" target="_blank">Whatsapp</a>':'');
-            })
-            ->editColumn('monto', function ($tickets) {
-                return '$'.number_format($tickets->monto,0,'','.');
-            })
-            ->editColumn('cuota', function ($tickets) {
-                return '$'.number_format($tickets->cuota,0,'','.');
-            })
-            ->editColumn('tipo', function ($tickets) {
-                return $tickets->tipo==1?'Mensual':'Quincenal';
-            })
-            ->editColumn('tiempo', function ($tickets) {
-                return $tickets->tiempo*$tickets->tipo;
-            })
-            ->editColumn('id_customer', function ($tickets) {
-                $customer = Customer::find($tickets->id_customer,['nombre']);
-                return $customer->nombre;
-            })
             ->make(true);
     }
 }

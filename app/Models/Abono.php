@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 
-class Customer extends Model
+class Abono extends Model
 {
-    protected $table = 'customers';
-    protected $primaryKey='id_customer';
+    protected $table = 'abonos';
+    protected $primaryKey='id_abono';
 
 }

@@ -9,26 +9,27 @@
                 <div id="formAddCustomer" class="row">
                     <div class="form-group col-md-12">
                         <label for="nombre" class="control-label">Cliente</label>
-                        <input id="customerPrest" type="number" class="form-control validate[required]">
+                        <select class="form-control validate[required]" id="customerPrest">
+                        </select>
                     </div>
                     <div class="form-group col-md-4">
                         <label for="nombre" class="control-label">interes %</label>
-                        <input id="interestPrest" type="number" class="form-control validate[required]">
+                        <input id="interestPrest" onchange="calcularCuota()" type="number" class="form-control validate[required]">
                     </div>
                     <div class="form-group col-md-4">
-                        <label for="nombre" class="control-label">Tiempo (Meses)</label>
-                        <input id="timePrest" type="number" class="form-control validate[required]">
+                        <label for="nombre" class="control-label" >Tiempo (Meses)</label>
+                        <input id="timePrest" type="number" onchange="calcularCuota()" class="form-control validate[required]">
                     </div>
                     <div class="form-group col-md-4">
                         <label for="nombre" class="control-label">Tipo</label>
-                        <select class="form-control" id="typePrest">
+                        <select class="form-control" id="typePrest" onchange="calcularCuota()">
                             <option value="1">Mensual</option>
                             <option value="2">Quincenal</option>
                         </select>
                     </div>
                     <div class="form-group col-md-6">
                         <label for="nombre" class="control-label">Monto</label>
-                        <input id="montoPrest" type="number" class="form-control validate[required]">
+                        <input id="montoPrest" type="number" onchange="calcularCuota()" class="form-control validate[required]">
                     </div>
                     <div class="form-group col-md-6">
                         <label for="nombre" class="control-label">Cuota</label>

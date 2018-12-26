@@ -73,6 +73,7 @@
                             <th class="min-tablet">Tiempo</th>
                             <th class="min-tablet">Tipo</th>
                             <th class="min-tablet">Cuota</th>
+                            <th class="min-tablet">Saldo</th>
                             <th class="all">acciones</th>
                         </tr>
                         </thead>
@@ -155,6 +156,8 @@
 
     @include('customer.modal_add')
     @include('customer.modal_prestamo')
+    @include('customer.modal_abono')
+    @include('customer.modal_list_abonos')
     @include('ticket.modal_ticket_mod')
     @include('ticket.modal_ticket_pay')
 @endsection
@@ -176,7 +179,14 @@
         }
 
         function openModalPrestamo(){
+            loadCustomers();
             $('#modal_prestamo').modal('show');
+        }
+        function openModalAbono(prestamo,tipo,cuota){
+            $('#modal_abono').modal('show');
+            $('#tipoAbono').val(tipo);
+            $('#abonoPrestamo').val(prestamo);
+            $('#abonoValor').val(cuota);
         }
         function mensualidad(){
             var schedule = $("#schedule").val();
@@ -453,6 +463,10 @@
                 }
             });
         }
+        function listarAbonos(id_prestamo) {
+            desktop_index_vm.loadAbonos(id_prestamo);
+            $('#modal_list_abonos').modal('show');
+        }
         function crearPrestamo() {
             var vNombre=$("#customerPrest").validationEngine('validate');
             var vInteres=$("#interestPrest").validationEngine('validate');
@@ -496,36 +510,61 @@
                 }
             });
         }
-        function loadTicket(id) {
+        function calcularCuota(){
+            var Interes=    $("#interestPrest").val();
+            var Tiempo=     $("#timePrest").val();
+            var Monto=      $("#montoPrest").val();
+            var Cuota=      0;
+            var tipo=       $("#typePrest").val();
+            if(Interes =='' || Tiempo =='' || Monto=='' || tipo=='')
+                return ;
+            Cuota= (((Monto*Interes/100)*Tiempo)+(Monto*1))/(Tiempo*tipo);
+            $("#CuotaPrest").val(Math.ceil(Cuota/1000)*1000);
+        }
+        function crearAbono() {
+            var vPrestamo=$("#abonoPrestamo").validationEngine('validate');
+            var vMonto=$("#abonoValor").validationEngine('validate');
+
+            if (vPrestamo || vMonto)
+                return;
+            var prestamo=   $("#abonoPrestamo").val();
+            var Monto=      $("#abonoValor").val();
+            var tipo=       $("#tipoAbono").val();
+
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 type: "POST",
-                url: "get_ticket",
+                url: "abonos",
                 data: {
-                    ticket_id:id
+                    prestamo:   prestamo,
+                    valor:    Monto,
+                    tipo:       tipo,
                 },
                 success: function (datos) {
-                    $('#plate_mod').val(datos['plate']);
-                    $('#fecha_mod').val(datos['hour']);
-                    $('#typeIn_mod').val(datos['type']);
-                    $('#schedule_mod').val(datos['schedule']);
-                    $('#drawer_mod').val(datos['drawer']);
-                    $('#nombreIn_mod').val(datos['name']);
-                    $('#precioIn_mod').val(datos['price']);
-                    $('#emailIn_mod').val(datos['email']);
-                    $('#celularIn_mod').val(datos['phone']);
-                    $('#extra').val(datos['extra']);
-                    $('#date_range_mod').val(datos['hour']+' - '+datos['date_end']);
-                    mensualidad2();
-                    $('#date_range_mod').daterangepicker({
-                        "locale": {
-                            "format": "YYYY-MM-DD"
-                        },
-                        "opens": "center",
-                        "drops": "up"
+                    $('#modal_abono').modal('hide');
+                    new PNotify({
+                        title: 'Exito',
+                        type: 'success',
+                        text: 'Se agregó el abono con exito'
                     });
+                },
+                error : function () {
+                    console.log('ha ocurrido un error');
+                }
+            });
+        }
+        function loadCustomers() {
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: "POST",
+                url: "get_customers",
+
+                success: function (datos) {
+                    $('#customerPrest').html(datos);
                 },
                 error : function () {
                     location = '/login';
@@ -790,11 +829,37 @@
                             { data: 'tiempo', name: 'Tiempo', orderable  : false, searchable : false },
                             { data: 'tipo', name: 'Tipo', orderable  : false, searchable : false },
                             { data: 'cuota', name: 'Cuota', orderable  : false, searchable : false },
+                            { data: 'saldo', name: 'Saldo', orderable  : false, searchable : false },
                             { data: 'action', name: 'acciones', orderable  : false, searchable : false },
                         ],
                         lengthMenu: [[ 10, 25, 50, -1], [ 10, 25, 50, "Todos"]]
                     });
                     }
+                },
+                loadAbonos: function(id_prestamo){
+                    $('#abonos-table').DataTable({
+                        sDom           : 'r<Hlf><"datatable-scroll"t><Fip>',
+                        order          : [],
+                        processing     : true,
+                        serverSide     : true,
+                        deferRender    : true,
+                        destroy        : true,
+                        ajax: {
+                            url  : '{!! route('get_abonos') !!}',
+                            data : {
+                                prestamo        : id_prestamo
+                            },
+                            error : function () {
+                                ;
+                            }
+                        },
+                        columns: [
+                            { data: 'created_at', name: 'Fecha', orderable  : false, searchable : false },
+                            { data: 'tipo', name: 'Tipo', orderable  : false, searchable : false },
+                            { data: 'valor', name: 'Valor', orderable  : false, searchable : false },
+                        ],
+                        lengthMenu: [[ 10, 25, 50, -1], [ 10, 25, 50, "Todos"]]
+                    });
                 },
                 changeAccount : function() {
                     var nombre=$('input[name=new_name]').val();
