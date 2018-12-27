@@ -13,6 +13,7 @@
                             <th class="all">fecha</th>
                             <th class="min-tablet">Tipo</th>
                             <th class="min-tablet">Valor</th>
+                            <th class="min-tablet">Acciones</th>
                         </tr>
                         </thead>
                     </table>

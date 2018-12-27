@@ -350,7 +350,7 @@
             desktop_index_vm.changePrice();
         }
 
-        function eliminarTicket(id) {
+        function eliminarAbono(id) {
             (new PNotify({
                 title: 'Necesita confirmación',
                 text: 'Esta seguro de querer eliminar el registro?',
@@ -541,6 +541,7 @@
                         type: 'success',
                         text: 'Se agregó el prestamo con exito'
                     });
+                    $('#tickets-table').dataTable()._fnAjaxUpdate();
                 },
                 error : function () {
                     ;
@@ -611,6 +612,7 @@
                     });
                     $('#modal_prestamo_mod').modal('hide');
                     desktop_index_vm.load();
+                    $('#tickets-table').dataTable()._fnAjaxUpdate();
                 },
                 error : function () {
                     //location = '/login';
@@ -648,6 +650,7 @@
                         type: 'success',
                         text: 'Se agregó el abono con exito'
                     });
+                    $('#tickets-table').dataTable()._fnAjaxUpdate();
                 },
                 error : function () {
                     console.log('ha ocurrido un error');
@@ -958,6 +961,7 @@
                             { data: 'created_at', name: 'Fecha', orderable  : false, searchable : false },
                             { data: 'tipo', name: 'Tipo', orderable  : false, searchable : false },
                             { data: 'valor', name: 'Valor', orderable  : false, searchable : false },
+                            { data: 'action', name: 'Acciones', orderable  : false, searchable : false },
                         ],
                         lengthMenu: [[ 10, 25, 50, -1], [ 10, 25, 50, "Todos"]]
                     });
@@ -1049,28 +1053,23 @@
                         }
                     });
                 },
-                delete : function(ticket_id) {
+                delete : function(abono_id) {
                         $.ajax({
                             headers: {
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                             },
                             type: "POST",
-                            url: "eliminar",
+                            url: "eliminar_abono",
                             data: {
-                                ticket_id:ticket_id
+                                abono_id:abono_id
                             },
                             success: function (datos) {
                                 new PNotify({
                                     title: 'Exito',
                                     type: 'success',
-                                    text: 'Se Eliminó el ticket con exito'
+                                    text: 'Se Eliminó el abono con exito'
                                 });
-                                $('#tickets-table').dataTable()._fnAjaxUpdate();
-                                if($('#nav_inicio').hasClass('active'))
-                                    $('#tickets-table').dataTable()._fnAjaxUpdate();
-                                else
-                                    $('#month-table').dataTable()._fnAjaxUpdate();
-
+                                $('#abonos-table').dataTable()._fnAjaxUpdate();
                             },
                             error : function () {
                                 location = '/login';

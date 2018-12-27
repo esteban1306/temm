@@ -403,9 +403,9 @@ class AbonoController extends Controller
         $ticket->save();
         return ;
     }
-    public function deleteTicket(Request $request)
+    public function deleteAbono(Request $request)
     {
-        $ticket = Ticket::find($request->ticket_id);
+        $ticket = Abono::find($request->abono_id);
         $ticket->delete();
         return ;
     }
@@ -454,6 +454,17 @@ class AbonoController extends Controller
         $tickets= Abono::select(['id_abono as Id', 'id_prestamo', 'valor', 'tipo', 'created_at'])->where('id_prestamo',$prestamo)->orderBy('id_abono','desc');
 
         return Datatables::of($tickets)
+            ->addColumn('action', function ($tickets){
+                return
+                    \Form::button('Eliminar', [
+                        'class'   => 'btn btn-warning',
+                        'onclick' => "eliminarAbono('$tickets->Id')",
+                        'data-toggle' => "tooltip",
+                        'data-placement' => "bottom",
+                        'title' => "Eliminar !",
+
+                    ]);
+            })
             ->make(true);
     }
 }
