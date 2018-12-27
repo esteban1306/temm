@@ -24,10 +24,12 @@ Route::post('/prestamos', 'PrestamoController@store')->name('prestamos')->middle
 Route::post('/abonos', 'AbonoController@store')->name('abonos')->middleware('auth');
 Route::post('/pdf', 'TicketController@pdf')->name('pdf')->middleware('auth');
 Route::post('/actualizar', 'TicketController@updateTicket')->name('actualizar')->middleware('auth');
+Route::post('/actualizar_prestamo', 'PrestamoController@updatePrestamo')->name('actualizar_prestamo')->middleware('auth');
 Route::post('/eliminar', 'TicketController@deleteTicket')->name('eliminar')->middleware('auth');
 Route::post('/recuperar', 'TicketController@recoveryTicket')->name('recuperar')->middleware('auth');
 Route::post('/renovar', 'TicketController@renovarTicket')->name('renovar')->middleware('auth');
 Route::post('/get_ticket', 'TicketController@getTicket')->name('get_ticket')->middleware('auth');
+Route::post('/get_prestamo', 'PrestamoController@getPrestamo')->name('get_prestamo')->middleware('auth');
 Route::post('/get_customers', 'CustomerController@getSelect')->name('get_customers')->middleware('auth');
 Route::post('/update_cuenta', 'PartnerController@update')->name('update_cuenta')->middleware('auth');
 Route::post('/update_parking', 'ParkingController@update')->name('update_parking')->middleware('auth');

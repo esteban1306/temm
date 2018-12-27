@@ -57,8 +57,9 @@ class PrestamoController extends Controller
         $ticket->tipo =$request->tipo;
         $ticket->monto =$request->monto;
         $ticket->cuota =$request->cuota;
-        $ticket->actual =$request->cuota*($request->tiempo*$request->tipo);
+        $ticket->actual = ceil($request->cuota*($request->tiempo*$request->tipo)/100)*100;
         $ticket->estado = 1;
+        $ticket->created_at = $request->fecha;
         $ticket->id_partner =Auth::user()->partner_id;
         $ticket->save();
 
@@ -377,30 +378,23 @@ class PrestamoController extends Controller
         $status['extra'] = format_money($status['extra']);
         return $status;
     }
-    public function getTicket(Request $request)
+    public function getPrestamo(Request $request)
     {
-        $ticket = Ticket::find($request->ticket_id);
+        $ticket = Prestamo::find($request->prestamo_id);
         return $ticket;
     }
-    public function updateTicket(Request $request)
+    public function updatePrestamo(Request $request)
     {
-        $ticket = Ticket::find($request->ticket_id);
-        $now = new Datetime('now');
-        $ticket->plate =$request->plate;
-        $ticket->type =$request->type;
-        $ticket->schedule =$request->schedule;
-        if($request->schedule==3){
-            $dateRange = explode(" - ", $request->range);
-            $ticket->date_end = new \Carbon\Carbon($dateRange[1]);
-            $ticket->name = $request->name;
-            $ticket->hour = new \Carbon\Carbon($dateRange[0]);
-            $ticket->email = $request->email;
-            $ticket->phone = $request->movil;
-            $ticket->price = $request->price;
-        }
-        $ticket->partner_id = Auth::user()->partner_id;
-        $ticket->extra = $request->extra;
-        $ticket->drawer = $request->drawer;
+        $ticket = Prestamo::find($request->prestamo);
+        $ticket->id_customer =$request->customer;
+        $ticket->interes =$request->interes;
+        $ticket->tiempo =$request->tiempo;
+        $ticket->tipo =$request->tipo;
+        $ticket->monto =$request->monto;
+        $ticket->cuota =$request->cuota;
+        $ticket->actual = ceil($request->cuota*($request->tiempo*$request->tipo)/100)*100;
+        $ticket->estado = 1;
+        $ticket->created_at = $request->fecha;
         $ticket->save();
         return ;
     }
@@ -480,6 +474,14 @@ class PrestamoController extends Controller
             ->addColumn('action', function ($tickets) use ($saldo){
                 $customer = Customer::find($tickets->id_customer,['telefono','nombre']);
                     return
+                        \Form::button('Editar', [
+                            'class'   => 'btn btn-info',
+                            'onclick' => "openModalPrestamoMod('$tickets->Id')",
+                            'data-toggle' => "tooltip",
+                            'data-placement' => "bottom",
+                            'title' => "Editar !",
+
+                        ]).
                         \Form::button('Listar Abonos', [
                             'class'   => 'btn btn-info',
                             'onclick' => "listarAbonos('$tickets->Id')",

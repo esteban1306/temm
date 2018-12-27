@@ -67,6 +67,7 @@
                     <table class="table responsive" id="tickets-table">
                         <thead>
                         <tr>
+                            <th class="all">Fecha</th>
                             <th class="all">Cliente</th>
                             <th class="min-tablet">Monto</th>
                             <th class="min-tablet">Interes</th>
@@ -156,6 +157,7 @@
 
     @include('customer.modal_add')
     @include('customer.modal_prestamo')
+    @include('customer.modal_prestamo_mod')
     @include('customer.modal_abono')
     @include('customer.modal_list_abonos')
     @include('ticket.modal_ticket_mod')
@@ -181,6 +183,12 @@
         function openModalPrestamo(){
             loadCustomers();
             $('#modal_prestamo').modal('show');
+        }
+        function openModalPrestamoMod(idPrestamo){
+            loadCustomers();
+            $('#modal_prestamo_mod').modal('show');
+            $('#idPrestamoMod').val(idPrestamo);
+            loadPrestamo(idPrestamo);
         }
         function openModalAbono(prestamo,tipo,cuota){
             $('#modal_abono').modal('show');
@@ -467,14 +475,41 @@
             desktop_index_vm.loadAbonos(id_prestamo);
             $('#modal_list_abonos').modal('show');
         }
+        function loadPrestamo(id) {
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: "POST",
+                url: "get_prestamo",
+                data: {
+                    prestamo_id:id
+                },
+                success: function (datos) {
+                    $('#fechaPrestMod').val(datos['created_at'].substr(0,10));
+                    $('#interestPrestMod').val(datos['interes']);
+                    $('#timePrestMod').val(datos['tiempo']);
+                    $('#typePrestMod').val(datos['tipo']);
+                    $('#montoPrestMod').val(datos['monto']);
+                    $('#CuotaPrestMod').val(datos['cuota']);
+                    setTimeout(function () {
+                        $('#customerPrestMod').val(datos['id_customer']);
+                    }.bind(this),0);
+                },
+                error : function () {
+                    location = '/login';
+                }
+            });
+        }
         function crearPrestamo() {
             var vNombre=$("#customerPrest").validationEngine('validate');
             var vInteres=$("#interestPrest").validationEngine('validate');
             var vTiempo=$("#timePrest").validationEngine('validate');
             var vMonto=$("#montoPrest").validationEngine('validate');
             var vCuota=$("#CuotaPrest").validationEngine('validate');
+            var vFecha=$("#fechaPrest").validationEngine('validate');
 
-            if (vNombre || vInteres || vTiempo || vMonto || vCuota)
+            if (vNombre || vInteres || vTiempo || vMonto || vCuota|| vFecha)
                 return;
             var customer=   $("#customerPrest").val();
             var Interes=    $("#interestPrest").val();
@@ -482,6 +517,7 @@
             var Monto=      $("#montoPrest").val();
             var Cuota=      $("#CuotaPrest").val();
             var tipo=       $("#typePrest").val();
+            var fecha=      $("#fechaPrest").val();
 
             $.ajax({
                 headers: {
@@ -495,7 +531,8 @@
                     tiempo:     Tiempo,
                     monto:      Monto,
                     cuota:      Cuota,
-                    tipo:       tipo
+                    tipo:       tipo,
+                    fecha:      fecha
                 },
                 success: function (datos) {
                     $('#modal_prestamo').modal('hide');
@@ -521,15 +558,76 @@
             Cuota= (((Monto*Interes/100)*Tiempo)+(Monto*1))/(Tiempo*tipo);
             $("#CuotaPrest").val(Math.ceil(Cuota/1000)*1000);
         }
+        function calcularCuota2(){
+            var Interes=    $("#interestPrestMod").val();
+            var Tiempo=     $("#timePrestMod").val();
+            var Monto=      $("#montoPrestMod").val();
+            var Cuota=      0;
+            var tipo=       $("#typePrestMod").val();
+            if(Interes =='' || Tiempo =='' || Monto=='' || tipo=='')
+                return ;
+            Cuota= (((Monto*Interes/100)*Tiempo)+(Monto*1))/(Tiempo*tipo);
+            $("#CuotaPrestMod").val(Math.ceil(Cuota/1000)*1000);
+        }
+        function modificarPrestamo() {
+            var vNombre=$("#customerPrestMod").validationEngine('validate');
+            var vInteres=$("#interestPrestMod").validationEngine('validate');
+            var vTiempo=$("#timePrestMod").validationEngine('validate');
+            var vMonto=$("#montoPrestMod").validationEngine('validate');
+            var vCuota=$("#CuotaPrestMod").validationEngine('validate');
+            var vFecha=$("#fechaPrestMod").validationEngine('validate');
+
+            if (vNombre || vInteres || vTiempo || vMonto || vCuota|| vFecha)
+                return;
+            var prestamo=   $("#idPrestamoMod").val();
+            var customer=   $("#customerPrestMod").val();
+            var Interes=    $("#interestPrestMod").val();
+            var Tiempo=     $("#timePrestMod").val();
+            var Monto=      $("#montoPrestMod").val();
+            var Cuota=      $("#CuotaPrestMod").val();
+            var tipo=       $("#typePrestMod").val();
+            var fecha=      $("#fechaPrestMod").val();
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: "POST",
+                url: "actualizar_prestamo",
+                data: {
+                    prestamo:   prestamo,
+                    customer:   customer,
+                    interes:    Interes,
+                    tiempo:     Tiempo,
+                    monto:      Monto,
+                    cuota:      Cuota,
+                    tipo:       tipo,
+                    fecha:      fecha
+                },
+                success: function (datos) {
+                    new PNotify({
+                        title: 'Exito',
+                        type: 'success',
+                        text: 'Se modificó el prestamo con exito'
+                    });
+                    $('#modal_prestamo_mod').modal('hide');
+                    desktop_index_vm.load();
+                },
+                error : function () {
+                    //location = '/login';
+                }
+            });
+        }
         function crearAbono() {
             var vPrestamo=$("#abonoPrestamo").validationEngine('validate');
             var vMonto=$("#abonoValor").validationEngine('validate');
+            var vFecha=$("#abonoFecha").validationEngine('validate');
 
-            if (vPrestamo || vMonto)
+            if (vPrestamo || vMonto || vFecha)
                 return;
             var prestamo=   $("#abonoPrestamo").val();
             var Monto=      $("#abonoValor").val();
             var tipo=       $("#tipoAbono").val();
+            var fecha=       $("#abonoFecha").val();
 
             $.ajax({
                 headers: {
@@ -541,6 +639,7 @@
                     prestamo:   prestamo,
                     valor:    Monto,
                     tipo:       tipo,
+                    fecha:       fecha,
                 },
                 success: function (datos) {
                     $('#modal_abono').modal('hide');
@@ -565,6 +664,7 @@
 
                 success: function (datos) {
                     $('#customerPrest').html(datos);
+                    $('#customerPrestMod').html(datos);
                 },
                 error : function () {
                     location = '/login';
@@ -823,6 +923,7 @@
                             }
                         },
                         columns: [
+                            { data: 'created_at', name: 'Fecha', orderable  : false, searchable : false },
                             { data: 'id_customer', name: 'Cliente', orderable  : false, searchable : false },
                             { data: 'monto', name: 'Monto', orderable  : false, searchable : false },
                             { data: 'interes', name: 'Interes', orderable  : false, searchable : false },

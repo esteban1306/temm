@@ -11,7 +11,11 @@
                         <label for="nombre" class="control-label">prestamo</label>
                         <input id="abonoPrestamo" type="text" class="form-control validate[required]">
                     </div>
-                    <div class="form-group col-md-12">
+                    <div class="form-group col-md-6">
+                        <label for="nombre" class="control-label">Fecha</label>
+                        <input id="abonoFecha" type="date" class="form-control validate[required]">
+                    </div>
+                    <div class="form-group col-md-6">
                         <label for="nombre" class="control-label">Tipo</label>
                         <select class="form-control" id="tipoAbono">
                             <option value="1">Abono</option>

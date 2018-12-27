@@ -53,6 +53,7 @@ class AbonoController extends Controller
         $ticket->tipo =$request->tipo;
         $ticket->valor =$request->valor;
         $ticket->id_partner =Auth::user()->partner_id;
+        $ticket->created_at = $request->fecha;
         $ticket->save();
         if($ticket->tipo == 2 ){
             $prestamo = Prestamo::find($request->prestamo);
