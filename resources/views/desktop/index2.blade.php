@@ -378,6 +378,35 @@
                ;
             });
         }
+
+        function eliminarPrestamo(id) {
+            (new PNotify({
+                title: 'Necesita confirmación',
+                text: 'Esta seguro de querer eliminar el registro?',
+                icon: 'glyphicon glyphicon-question-sign',
+                hide: false,
+                confirm: {
+                    confirm: true
+                },
+                buttons: {
+                    closer: false,
+                    sticker: false
+                },
+                history: {
+                    history: false
+                },
+                addclass: 'stack-modal',
+                stack: {
+                    'dir1': 'down',
+                    'dir2': 'right',
+                    'modal': true
+                }
+            })).get().on('pnotify.confirm', function() {
+                desktop_index_vm.deletePrestamo(id);
+            }).on('pnotify.cancel', function() {
+               ;
+            });
+        }
         function recuperarTicket(id) {
             (new PNotify({
                 title: 'Necesita confirmación',
@@ -926,7 +955,7 @@
                             }
                         },
                         columns: [
-                            { data: 'created_at', name: 'Fecha', orderable  : false, searchable : false },
+                            { data: 'Fecha', name: 'Fecha', orderable  : true, searchable : false },
                             { data: 'id_customer', name: 'Cliente', orderable  : false, searchable : false },
                             { data: 'monto', name: 'Monto', orderable  : false, searchable : false },
                             { data: 'interes', name: 'Interes', orderable  : false, searchable : false },
@@ -1070,6 +1099,29 @@
                                     text: 'Se Eliminó el abono con exito'
                                 });
                                 $('#abonos-table').dataTable()._fnAjaxUpdate();
+                            },
+                            error : function () {
+                                location = '/login';
+                            }
+                        });
+                },
+                deletePrestamo : function(prestamo) {
+                        $.ajax({
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            type: "POST",
+                            url: "eliminar_prestamo",
+                            data: {
+                                prestamo:prestamo
+                            },
+                            success: function (datos) {
+                                new PNotify({
+                                    title: 'Exito',
+                                    type: 'success',
+                                    text: 'Se Eliminó el prestamo con exito'
+                                });
+                                $('#tickets-table').dataTable()._fnAjaxUpdate();
                             },
                             error : function () {
                                 location = '/login';

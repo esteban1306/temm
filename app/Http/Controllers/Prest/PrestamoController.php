@@ -398,9 +398,9 @@ class PrestamoController extends Controller
         $ticket->save();
         return ;
     }
-    public function deleteTicket(Request $request)
+    public function deletePrestamo(Request $request)
     {
-        $ticket = Ticket::find($request->ticket_id);
+        $ticket = Prestamo::find($request->prestamo);
         $ticket->delete();
         return ;
     }
@@ -448,7 +448,7 @@ class PrestamoController extends Controller
         $range = $request->get('range');
         $status = $request->get('status');
 
-        $tickets= Prestamo::select(['id_prestamo as Id', 'id_customer', 'interes', 'monto', 'cuota', 'actual', 'tipo', 'tiempo', 'created_at'])
+        $tickets= Prestamo::select(['id_prestamo as Id', 'id_customer', 'interes', 'monto', 'cuota', 'actual', 'tipo', 'tiempo', 'created_at as Fecha'])
             ->where('id_partner',Auth::user()->partner_id)
             ->orderBy('id_prestamo','desc');
         //dd($tickets->toSql());
@@ -480,6 +480,14 @@ class PrestamoController extends Controller
                             'data-toggle' => "tooltip",
                             'data-placement' => "bottom",
                             'title' => "Editar !",
+
+                        ]).
+                        \Form::button('Eliminar', [
+                            'class'   => 'btn btn-warning',
+                            'onclick' => "eliminarPrestamo('$tickets->Id')",
+                            'data-toggle' => "tooltip",
+                            'data-placement' => "bottom",
+                            'title' => "Eliminar !",
 
                         ]).
                         \Form::button('Listar Abonos', [

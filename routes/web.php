@@ -27,6 +27,7 @@ Route::post('/actualizar', 'TicketController@updateTicket')->name('actualizar')-
 Route::post('/actualizar_prestamo', 'PrestamoController@updatePrestamo')->name('actualizar_prestamo')->middleware('auth');
 Route::post('/eliminar', 'TicketController@deleteTicket')->name('eliminar')->middleware('auth');
 Route::post('/eliminar_abono', 'AbonoController@deleteAbono')->name('eliminar_abono')->middleware('auth');
+Route::post('/eliminar_prestamo', 'PrestamoController@deletePrestamo')->name('eliminar_prestamo')->middleware('auth');
 Route::post('/recuperar', 'TicketController@recoveryTicket')->name('recuperar')->middleware('auth');
 Route::post('/renovar', 'TicketController@renovarTicket')->name('renovar')->middleware('auth');
 Route::post('/get_ticket', 'TicketController@getTicket')->name('get_ticket')->middleware('auth');
