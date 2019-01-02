@@ -52,6 +52,13 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                {!! Form::label('tipoT', 'Cliente', ['class' => 'control-label']) !!}
+                                <select class="form-control" id="customerList">
+                                </select>
+                            </div>
+                        </div>
                         <div class="col-md-2 col-sm-2">
                             <div class="form-group">
                                 <label class="control-label">&nbsp;</label>
@@ -494,6 +501,7 @@
                         type: 'success',
                         text: 'Se agregó el cliente con exito'
                     });
+                    loadCustomers();
                 },
                 error : function () {
                     location = '/login';
@@ -697,6 +705,7 @@
                 success: function (datos) {
                     $('#customerPrest').html(datos);
                     $('#customerPrestMod').html(datos);
+                    $('#customerList').html(datos);
                 },
                 error : function () {
                     location = '/login';
@@ -844,6 +853,7 @@
             mounted    : function() {
                 this.loadTable();
                 setInterval(function(){$('#tickets-table').dataTable()._fnAjaxUpdate();}, 60000);
+                loadCustomers();
             },
             methods    : {
                 load : function() {
@@ -858,7 +868,8 @@
                             type_car        : $("#type-car").val(),
                             type            : $("#type").val(),
                             status          : $("#status").val(),
-                            range           : $("#Tiempo").val()
+                            range           : $("#Tiempo").val(),
+                            customer        : $("#customerList").val()
                         },
                         success: function (datos) {
                             var month= datos['month_expire_num'];
@@ -948,7 +959,8 @@
                                 type_car        : $("#type-car").val(),
                                 type            : $("#type").val(),
                                 status          : $("#status").val(),
-                                range           : $("#Tiempo").val()
+                                range           : $("#Tiempo").val(),
+                                customer        : $("#customerList").val()
                             },
                             error : function () {
                                 ;

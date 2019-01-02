@@ -447,6 +447,7 @@ class PrestamoController extends Controller
         $schedule = $request->get('type');
         $range = $request->get('range');
         $status = $request->get('status');
+        $customer = $request->get('customer');
 
         $tickets= Prestamo::select(['id_prestamo as Id', 'id_customer', 'interes', 'monto', 'cuota', 'actual', 'tipo', 'tiempo', 'created_at as Fecha','estado'])
             ->where('id_partner',Auth::user()->partner_id)
@@ -455,6 +456,8 @@ class PrestamoController extends Controller
         if ($search) {
             $tickets = $tickets->where('monto', 'LIKE', "%$search%");
         }
+        if (!empty($customer))
+            $tickets = $tickets->where('id_customer', $customer);
         if (!empty($status))
             $tickets = $tickets->where('estado', $status);
         if (!empty($schedule))
