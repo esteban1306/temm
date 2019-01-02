@@ -465,6 +465,12 @@ class AbonoController extends Controller
 
                     ]);
             })
+            ->editColumn('created_at', function ($tickets) {
+                return substr($tickets->created_at,0,10);
+            })
+            ->editColumn('tipo', function ($tickets) {
+                return $tickets->tipo==1?'Abono':'Total';
+            })
             ->make(true);
     }
 }

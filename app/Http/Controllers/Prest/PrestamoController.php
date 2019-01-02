@@ -448,7 +448,7 @@ class PrestamoController extends Controller
         $range = $request->get('range');
         $status = $request->get('status');
 
-        $tickets= Prestamo::select(['id_prestamo as Id', 'id_customer', 'interes', 'monto', 'cuota', 'actual', 'tipo', 'tiempo', 'created_at as Fecha'])
+        $tickets= Prestamo::select(['id_prestamo as Id', 'id_customer', 'interes', 'monto', 'cuota', 'actual', 'tipo', 'tiempo', 'created_at as Fecha','estado'])
             ->where('id_partner',Auth::user()->partner_id)
             ->orderBy('id_prestamo','desc');
         //dd($tickets->toSql());
@@ -531,6 +531,9 @@ class PrestamoController extends Controller
             ->editColumn('id_customer', function ($tickets) {
                 $customer = Customer::find($tickets->id_customer,['nombre']);
                 return $customer->nombre;
+            })
+            ->editColumn('Fecha', function ($tickets) {
+                return substr($tickets->Fecha,0,10);
             })
             ->make(true);
     }
