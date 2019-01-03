@@ -468,7 +468,7 @@ class PrestamoController extends Controller
                 if($tickets->estado ==2)
                     return '$0';
                 $now = new Datetime('now');
-                $interval = date_diff(new DateTime("".$tickets->created_at),$now);
+                $interval = date_diff(new DateTime("".$tickets->Fecha),$now);
                 $meses = ($interval->format("%M")*1)+($interval->format("%d")*1>=5?1:0)+($interval->format("%Y")*12);
                 $abonos = collect(Abono::select(['valor'])->where('id_prestamo',$tickets->Id)->get())->sum('valor');
                 $saldo = '$'.number_format((($tickets->monto*$tickets->interes/100)*($meses==0?1:$meses*1))+($tickets->monto*1)-($abonos*1),0,'','.');
