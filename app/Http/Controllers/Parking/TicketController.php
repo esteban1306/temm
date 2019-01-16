@@ -98,13 +98,13 @@ class TicketController extends Controller
         );
         PDF::SetTitle('Ticket');
         PDF::AddPage('P', 'A6');
-        PDF::SetMargins(4, 2, 49);
+        PDF::SetMargins(8, 0, 49);
         $parking = Parking::find(Auth::user()->parking_id);
-        $html = '<div style="text-align:center"><big style="margin-bottom: 1px"><b>&nbsp; PARQUEADERO '.$parking->name.'</b></big><br>
+        $html = '<div style="text-align:center; margin-top: -10px !important"><big style="margin-bottom: 1px"><b>&nbsp; PARQUEADERO '.$parking->name.'</b></big><br>
                 <em style="font-size: x-small;margin-top: 2px;margin-bottom: 1px">"Todo lo puedo en Cristo que<br> me fortalece": Fil 4:13 <br></em>
                 <small style="font-size: x-small;margin-top: 2px;margin-bottom: 1px"><b>'.$parking->address.'</b></small>'
-            .($parking->parking_id==3?'<small style="text-align:center;font-size: 7px"><br>
-    <b>SERVICIO: Lun-Sab 7am - 9pm</b><br>OLIVEROS HERNANDEZ VALENTINA <br> NIT: 1094965452-1 <br> TEL: 3104276986</small>':'')
+            .($parking->parking_id==3?'<small style="text-align:center;font-size: 8px"><br>
+    <b>SERVICIO: Lun-Sab 7am - 9pm</b><br>OLIVEROS HERNANDEZ VALENTINA <br> NIT: 1094965452-1 <br><b> TEL: 3104276986</b></small>':'')
             .($parking->parking_id==4?'<small style="text-align:center;font-size: 7px"><br>
     <b>SERVICIO: Lun-Sab 7am - 9pm</b><br>CARLOS E. MIDEROS <br> NIT: 80449231-4 <br> TEL: 9207119<br> CEL: 3013830790</small>':'');
         if(!isset($ticket->price)) {
@@ -155,7 +155,7 @@ class TicketController extends Controller
                 '</small>
 </div>';
         }
-        $html .= '<small style="text-align:left;font-size: 7px"><br>
+        $html .= '<small style="text-align:left;font-size: 6px"><br>
                  <b>IMPRESO POR TEMM SOFT 3207329971</b>
                  </small>';
         PDF::writeHTML($html, true, false, true, false, '');
