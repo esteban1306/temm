@@ -49,6 +49,10 @@
                                     <option value="">Todos</option>
                                     <option value="1">Carro</option>
                                     <option value="2">Moto</option>
+                                    @php($typeParking = App\Parking::find(\Auth::user()->parking_id)->type)
+                                    @if($typeParking == 2)
+                                    <option value="3">Camioneta</option>
+                                    @endif
                                 </select>
                             </div>
                         </div>
@@ -178,6 +182,7 @@
     <script src="{{ asset('js/validationEngine.min.js') }}"></script>
     <script src="{{ asset('js/validationEngine-es.min.js') }}"></script>
     <script>
+        var typeParking = {{ $typeParking }};
         function openModalIn(){
             $('#modal_ticket_in').modal('show');
             getFecha();
@@ -605,7 +610,8 @@
                 return true;
             }
             if(plate.length == 6 && !isNaN(plate.charAt(plate.length-1))){
-                $("#typeIn").val(1);
+                if($("#typeIn").val()==2 )
+                    $("#typeIn").val(1);
             }
             else{
                 $("#typeIn").val(2);

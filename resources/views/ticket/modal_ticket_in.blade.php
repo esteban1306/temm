@@ -23,6 +23,9 @@
                         <select name="type" class="form-control" id="typeIn">
                             <option value="1" selected >Carro</option>
                             <option value="2">Moto</option>
+                            @if($typeParking == 2)
+                                <option value="3">Camioneta</option>
+                            @endif
                         </select>
                     </div>
                     <div class="form-group col-md-6">

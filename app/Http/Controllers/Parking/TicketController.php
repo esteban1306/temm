@@ -106,7 +106,9 @@ class TicketController extends Controller
             .($parking->parking_id==3?'<small style="text-align:center;font-size: 6px"><br>
     NIT: 1094965452-1 <br>OLIVEROS HERNANDEZ VALENTINA<br> </small><small style="text-align:center;font-size: 8px"><b>SERVICIO: Lun-Sab 7am - 9pm</b><br> <b> TEL: 3104276986</b></small>':'')
             .($parking->parking_id==4?'<small style="text-align:center;font-size: 7px"><br>
-    <b>SERVICIO: Lun-Sab 7am - 9pm</b><br>CARLOS E. MIDEROS <br> NIT: 80449231-4 <br> TEL: 9207119<br> CEL: 3013830790</small>':'');
+    <b>SERVICIO: Lun-Sab 7am - 9pm</b><br>CARLOS E. MIDEROS <br> NIT: 80449231-4 <br> TEL: 9207119<br> CEL: 3013830790</small>':'').
+            ($parking->parking_id==5?'<small style="text-align:center;font-size: 6px"><br>
+    NIT: 89000746-1 <br>HUGO ALEXANDER VARGAS SANCHEZ<br> </small><small style="text-align:center;font-size: 8px"><b>SERVICIO: Lun-Dom 6:30am - 9:30pm</b><br> <b> TEL: 3173799831</b></small>':'');
         if(!isset($ticket->price)) {
             $html .= '<small style="text-align:left;font-size: small;margin-bottom: 1px;"><b><br>
                  ' . ($ticket->schedule==3? "FACTURA DE VENTA N° " . $ticket->ticket_id . "<br>" : '') .'
@@ -114,7 +116,7 @@ class TicketController extends Controller
                  Hora ingreso: ' . $hour->format('h:ia') . '<br>
                  ' . ($ticket->schedule==3? "   Fecha vencimiento: " . $hour2->format('d/m/Y') . "<br>" : '') .'
                  ' . ($ticket->schedule==3? "<b>".strtoupper($ticket->name) . "</b><br>" : '') .'
-                 Tipo: ' . ($ticket->type == 1 ? 'Carro' : 'Moto') . '<br>
+                 Tipo: ' . ($ticket->type == 1 ? 'Carro' : ($ticket->type == 3 ? 'Camioneta' : 'Moto')) . '<br>
                  Placa: ' . $ticket->plate . '<br>
                  ' . (isset($ticket->drawer) ? "Locker: " . $ticket->drawer . "<br>" : '') . '
                  </b></small>
@@ -148,7 +150,7 @@ class TicketController extends Controller
                  ' . ($ticket->schedule!=3? "   Fecha salida: " . $pay_day->format('d/m/Y') . "<br>" : '') .'
                  ' . ($ticket->schedule!=3? "   Hora salida: " . $pay_day->format('h:ia') . "<br>" : '') .'
                  ' . ($ticket->schedule==3? "   Fecha vencimiento: " . $hour2->format('d/m/Y') . "<br>" : '') .'
-                 Tipo: ' . ($ticket->type == 1 ? 'Carro' : 'Moto') . '<br>
+                 Tipo: ' . ($ticket->type == 1 ? 'Carro' : ($ticket->type == 3 ? 'Camioneta' : 'Moto')) . '<br>
                  Placa: ' . $ticket->plate . '<br>
                  ' . (isset($ticket->price) ? "   Precio: " . $ticket->price . "<br>" : '') .
                 (isset($ticket->extra) ? ($ticket->extra>0?"Incremento: ":"Descuento:" ). abs($ticket->extra) . "<br>Total: " . ($ticket->price+$ticket->extra) . "<br>" : '').
@@ -199,11 +201,11 @@ class TicketController extends Controller
             return 0;
         $horas = $horas==0? 1: $horas;
         if($schedule==1)
-            return ($tipo==1? $parking->hour_cars_price * $horas: $parking->hour_motorcycles_price * $horas );
+            return ($tipo==1? $parking->hour_cars_price * $horas: ($tipo==2? $parking->hour_motorcycles_price * $horas: $parking->hour_van_price * $horas ));
         if($schedule==2)
-            return ($tipo==1? $parking->day_cars_price: $parking->day_motorcycles_price);
+            return ($tipo==1? $parking->day_cars_price: ($tipo==2? $parking->day_motorcycles_price: $parking->day_van_price ));
         if($schedule==3)
-            return ($tipo==1? $parking->monthly_cars_price: $parking->monthly_motorcycles_price);
+            return ($tipo==1? $parking->monthly_cars_price: ($tipo==2? $parking->monthly_motorcycles_price: $parking->monthly_van_price ));
     }
 
     /**
@@ -335,7 +337,7 @@ class TicketController extends Controller
                         ]):'');
             })
             ->addColumn('Tipo', function ($tickets) {
-                return  $tickets->type == 1? 'Carro': 'Moto';
+                return  $tickets->type == 1? 'Carro': ($tickets->type == 3 ? 'Camioneta' : 'Moto');
             })
             ->addColumn('entrada', function ($tickets) {
                 $hour =new DateTime("".$tickets->hour);
