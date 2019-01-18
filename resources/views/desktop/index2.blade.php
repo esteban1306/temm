@@ -167,8 +167,6 @@
     @include('customer.modal_prestamo_mod')
     @include('customer.modal_abono')
     @include('customer.modal_list_abonos')
-    @include('ticket.modal_ticket_mod')
-    @include('ticket.modal_ticket_pay')
 @endsection
 @section('scripts')
     <script src="{{ asset('js/app.js') }}"></script>
