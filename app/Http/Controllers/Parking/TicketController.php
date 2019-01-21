@@ -98,8 +98,9 @@ class TicketController extends Controller
         );
         PDF::SetTitle('Ticket');
         PDF::AddPage('P', 'A6');
-        $marginRight = Auth::user()->parking_id == 5?50:45;
-        PDF::SetMargins(6, 0, $marginRight);
+        $marginRight = Auth::user()->parking_id == 5?49:45;
+        $marginLeft = Auth::user()->parking_id == 5?1:6;
+        PDF::SetMargins($marginLeft, 0, $marginRight);
         $parking = Parking::find(Auth::user()->parking_id);
         $html = '<div style="text-align:center; margin-top: -10px !important"><big style="margin-bottom: 1px"><b style="letter-spacing: -1 px;">&nbsp; PARQUEADERO '.$parking->name.'</b></big><br>
                 '.($parking->parking_id !=5?'<em style="font-size: 7px;margin-top: 2px;margin-bottom: 1px">"Todo lo puedo en Cristo que<br> me fortalece": Fil 4:13 <br></em>':'').'
