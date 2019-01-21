@@ -120,7 +120,7 @@ class TicketController extends Controller
                  ' . ($ticket->schedule==3? "   Fecha vencimiento: " . $hour2->format('d/m/Y') . "<br>" : '') .'
                  ' . ($ticket->schedule==3? "<b>".strtoupper($ticket->name) . "</b><br>" : '') .'
                  Tipo: ' . ($ticket->type == 1 ? 'Carro' : ($ticket->type == 3 ? 'Camioneta' : 'Moto')) . '<br>
-                 Placa: ' . $ticket->plate . '<br>
+                 <small style="text-align:left;font-size:small">Placa: ' . $ticket->plate . '</small><br>
                  ' . (isset($ticket->drawer) ? "Locker: " . $ticket->drawer . "<br>" : '') . '
                  </b></small>
                  <small style="text-align:left;font-size: 6px;margin-top: 1px"><br>
