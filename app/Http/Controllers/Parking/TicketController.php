@@ -98,21 +98,22 @@ class TicketController extends Controller
         );
         PDF::SetTitle('Ticket');
         PDF::AddPage('P', 'A6');
-        $marginRight = Auth::user()->parking_id == 5?49:45;
-        $marginLeft = Auth::user()->parking_id == 5?1:6;
+        $marginRight = Auth::user()->parking_id == 5?55:45;
+        $marginLeft = Auth::user()->parking_id == 5?2:6;
+        $size = Auth::user()->parking_id == 5?'8px':'small';
         PDF::SetMargins($marginLeft, 0, $marginRight);
         $parking = Parking::find(Auth::user()->parking_id);
         $html = '<div style="text-align:center; margin-top: -10px !important"><big style="margin-bottom: 1px"><b style="letter-spacing: -1 px;">&nbsp; PARQUEADERO '.$parking->name.'</b></big><br>
                 '.($parking->parking_id !=5?'<em style="font-size: 7px;margin-top: 2px;margin-bottom: 1px">"Todo lo puedo en Cristo que<br> me fortalece": Fil 4:13 <br></em>':'').'
                 <small style="font-size: x-small;margin-top: 1px;margin-bottom: 1px"><b>'.$parking->address.'</b></small>'
             .($parking->parking_id==3?'<small style="text-align:center;font-size: 6px"><br>
-    NIT: 1094965452-1 <br>OLIVEROS HERNANDEZ VALENTINA<br> </small><small style="text-align:center;font-size: 8px"><b>SERVICIO: Lun-Sab 7am - 9pm</b><br> <b> TEL: 3104276986</b></small>':'')
+    NIT: 1094965452-1 <br>OLIVEROS HERNANDEZ VALENTINA<br> </small><small style="text-align:center;font-size: '.(Auth::user()->parking_id != 5?'8px':'7px').'"><b>SERVICIO: Lun-Sab 7am - 9pm</b><br> <b> TEL: 3104276986</b></small>':'')
             .($parking->parking_id==4?'<small style="text-align:center;font-size: 7px"><br>
     <b>SERVICIO: Lun-Sab 7am - 9pm</b><br>CARLOS E. MIDEROS <br> NIT: 80449231-4 <br> TEL: 9207119<br> CEL: 3013830790</small>':'').
             ($parking->parking_id==5?'<small style="text-align:center;font-size: 6px"><br>
     NIT: 89000746-1 <br>HUGO ALEXANDER VARGAS SANCHEZ<br> </small><small style="text-align:center;font-size: 8px"><b>SERVICIO: Lun-Dom 6:30am - 9:30pm</b><br> <b> TEL: 3173799831</b></small>':'');
         if(!isset($ticket->price)) {
-            $html .= '<small style="text-align:left;font-size: small;margin-bottom: 1px;"><b><br>
+            $html .= '<small style="text-align:left;font-size: '.$size.';margin-bottom: 1px;"><b><br>
                  ' . ($ticket->schedule==3? "FACTURA DE VENTA N° " . $ticket->ticket_id . "<br>" : '') .'
                  Fecha ingreso: ' . $hour->format('d/m/Y') . '<br>
                  Hora ingreso: ' . $hour->format('h:ia') . '<br>
