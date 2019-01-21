@@ -98,8 +98,8 @@ class TicketController extends Controller
         );
         PDF::SetTitle('Ticket');
         PDF::AddPage('P', 'A6');
-        $marginRight = Auth::user()->parking_id == 5?55:45;
-        $marginLeft = Auth::user()->parking_id == 5?2:6;
+        $marginRight = Auth::user()->parking_id == 5?56:45;
+        $marginLeft = Auth::user()->parking_id == 5?3:6;
         $size = Auth::user()->parking_id == 5?'8px':'small';
         PDF::SetMargins($marginLeft, 0, $marginRight);
         $parking = Parking::find(Auth::user()->parking_id);
