@@ -94,7 +94,7 @@
                     <div class="widget_box_b">
                         <div class="contt">
                             <div class="fl_layer">
-                                <h4 class="title">Recaudadó</h4>
+                                <h4 class="title">Prestadó</h4>
                                 <span class="line"></span>
                                 <span class="data" id="total"> - </span>
                             </div>
@@ -105,7 +105,7 @@
                     <div class="widget_box_b">
                         <div class="contt">
                             <div class="fl_layer">
-                                <h4 class="title">motos</h4>
+                                <h4 class="title">Pagos</h4>
                                 <span class="line"></span>
                                 <span class="data" id="motos"> - </span>
                             </div>
@@ -116,7 +116,7 @@
                     <div class="widget_box_b">
                         <div class="contt">
                             <div class="fl_layer">
-                                <h4 class="title">Carros</h4>
+                                <h4 class="title">Pendientes</h4>
                                 <span class="line"></span>
                                 <span class="data total" id="carros"> - </span>
                             </div>
@@ -861,7 +861,7 @@
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
                         type: "POST",
-                        url: "get_status",
+                        url: "get_status_prestamo",
                         data: {
                             type_car        : $("#type-car").val(),
                             type            : $("#type").val(),
@@ -874,20 +874,21 @@
                             if(datos['extra']=='$0')
                                 $("#total").html(datos['total']);
                             else
-                                $("#total").html(datos['total']+'</br>('+datos['extra']+')');
+                                $("#total").html(datos['total']);
                             $("#motos").html(datos['motos']);
                             $("#carros").html(datos['carros']);
-                            $("#month_expired").html(datos['month_expire_num']);
-                            if( datos['month_expire_num']>0){
+                            $("#month_expired").html('Demo');
+                            /*if( datos['month_expire_num']>0){
                                 new PNotify({
                                     title: 'Mensualidades pendientes',
                                     text: datos['month_expire'],
                                     type: 'info'
                                 });
-                            }
+                            }*/
                             this.retired = 1;
                         },
                         error : function () {
+                            //alert('s');
                             location = '/login';
                         }
                     });

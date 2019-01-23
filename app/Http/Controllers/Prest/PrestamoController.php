@@ -326,23 +326,18 @@ class PrestamoController extends Controller
     public function getStatus(Request $request)
     {
         $schedule = $request->get('type');
-        $type = $request->get('type_car');
-        $range = $request->get('range');
         $status = $request->get('status');
+        $customer = $request->get('customer');
 
-        $tickets= Ticket::select(['plate', 'type', 'extra', 'schedule', 'price', 'name', 'status', 'date_end'])->where('parking_id',Auth::user()->parking_id)->where('status','<>',"3")->orderBy('ticket_id','desc');
-        if (!empty($schedule))
-        $tickets = $tickets->where('schedule', $schedule);
+        $tickets= Prestamo::select(['id_prestamo as Id', 'id_customer', 'interes', 'monto', 'cuota', 'actual', 'tipo', 'tiempo', 'created_at as Fecha','estado'])
+            ->where('id_partner',Auth::user()->partner_id)
+            ->orderBy('id_prestamo','desc');
+        if (!empty($customer))
+            $tickets = $tickets->where('id_customer', $customer);
         if (!empty($status))
-        $tickets = $tickets->where('status', $status);
-        if (!empty($type))
-            $tickets = $tickets->where('type', $type);
-        if (!empty($range)){
-            $dateRange = explode(" - ", $range);
-            $tickets = $tickets->whereBetween('created_at', [$dateRange[0], $dateRange[1]]);
-        }else{
-            $tickets = $tickets->whereBetween('created_at', [ new Datetime('today'), new Datetime('tomorrow')]);
-        }
+            $tickets = $tickets->where('estado', $status);
+        if (!empty($schedule))
+            $tickets = $tickets->where('tipo', $schedule);
         $status = [];
         $status['total'] = ZERO;
         $status['extra'] = ZERO;
@@ -353,29 +348,23 @@ class PrestamoController extends Controller
         $tickets=$tickets->get();
         $now = new Datetime('now');
         foreach ($tickets as $ticket){
-            $status['total'] += $ticket->price;
-            $status['extra'] += $ticket->extra;
-            if($ticket->type == 1)
+            if($ticket->estado ==2)
+                $saldo = 0;
+            else{
+                $now = new Datetime('now');
+                $interval = date_diff(new DateTime("".$ticket->Fecha),$now);
+                $meses = ($interval->format("%M")*1)+($interval->format("%d")*1>=5?1:0)+($interval->format("%Y")*12);
+                $abonos = collect(Abono::select(['valor'])->where('id_prestamo',$ticket->Id)->get())->sum('valor');
+                $saldo = (($ticket->monto*$ticket->interes/100)*($meses==0?1:$meses*1))+($ticket->monto*1)-($abonos*1);
+            }
+
+            $status['total'] += ($saldo*1);
+            if($ticket->estado == 1)
                 $status['carros'] ++;
-            if($ticket->type == 2)
+            if($ticket->estado == 2)
                 $status['motos'] ++;
         }
-        $ticketss= Ticket::select(['plate', 'type', 'extra', 'schedule', 'price', 'name', 'date_end'])->where('parking_id',Auth::user()->parking_id)->where('status','<>',"3")->orderBy('ticket_id','desc');
-        $ticketss = $ticketss->where('schedule', 3);
-        $ticketss=$ticketss->get();
-        foreach ($ticketss as $ticket){
-            if($ticket->schedule == 3 and !empty($ticket->date_end)){
-                $hour2 =new DateTime("".$ticket->date_end);
-                $diff=date_diff(new DateTime("".$ticket->date_end), $now);
-                $diff=$diff->format("%a");
-                if($diff<=2){
-                    $status['month_expire'] .= $ticket->name.' ('.$ticket->plate.') Vence '.$hour2->format('d/m/Y');
-                    $status['month_expire_num'] ++;
-                }
-            }
-        }
-        $status['total'] = format_money($status['total']);
-        $status['extra'] = format_money($status['extra']);
+
         return $status;
     }
     public function getPrestamo(Request $request)
