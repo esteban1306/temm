@@ -49,7 +49,7 @@ class CustomerController extends Controller
     {
         $now = new Datetime('now');
         $ticket= new Customer();
-        $ticket->nombre =$request->name;
+        $ticket->nombre =strtoupper($request->name);
         $ticket->telefono =$request->movil;
         $ticket->cedula =$request->cedula;
         $ticket->observacion =$request->observacion;
@@ -120,24 +120,13 @@ class CustomerController extends Controller
      */
     public function update(Request $request)
     {
-        $now = new Datetime('now');
-        $ticket = Ticket::find($request->ticket_id);
-        if($ticket->status == 2 && !empty($ticket->pay_day)){
-            $interval = date_diff(new DateTime("".$ticket->hour),new DateTime("".$ticket->pay_day));
-            return [$ticket->price,$interval->format("%H:%I")];
-        }
-        $interval = date_diff(new DateTime("".$ticket->hour),$now);
-        $ticket->status = 2;
-        $now2 = date("Y-m-d H:i:s");
-        $ticketss= Ticket::select(['plate'])->where('parking_id',Auth::user()->parking_id)->where('status','<>',"3")->where('plate',$ticket->plate)->where('date_end','>=',$now2)->orderBy('ticket_id','desc')->get();
-
-        if($ticket->schedule != 3 || empty($ticket->price))
-            $ticket->price = $this->precio($interval,$ticket->type, $ticket->schedule);
-        if($ticketss->count() > 0)
-            $ticket->price =0;
-        $ticket->pay_day =$now;
+        $ticket = Customer::find($request->id);
+        $ticket->nombre =strtoupper($request->name);
+        $ticket->telefono =$request->movil;
+        $ticket->cedula =$request->cedula;
+        $ticket->observacion =$request->observacion;
         $ticket->save();
-        return [$ticket->price,$interval->format("%H:%I")];
+        return [$ticket->cedula,$ticket->nombre];
     }
 
     /**
@@ -376,9 +365,9 @@ class CustomerController extends Controller
         $status['extra'] = format_money($status['extra']);
         return $status;
     }
-    public function getTicket(Request $request)
+    public function getCustomer(Request $request)
     {
-        $ticket = Ticket::find($request->ticket_id);
+        $ticket = Customer::find($request->cliente_id);
         return $ticket;
     }
     public function updateTicket(Request $request)

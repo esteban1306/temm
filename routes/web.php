@@ -20,6 +20,7 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 Route::post('/cobrar', 'TicketController@update')->name('cobrar')->middleware('auth');
 Route::post('/customers', 'CustomerController@store')->name('customers')->middleware('auth');
+Route::post('/customers_mod', 'CustomerController@update')->name('customers_mod')->middleware('auth');
 Route::post('/prestamos', 'PrestamoController@store')->name('prestamos')->middleware('auth');
 Route::post('/abonos', 'AbonoController@store')->name('abonos')->middleware('auth');
 Route::post('/pdf', 'TicketController@pdf')->name('pdf')->middleware('auth');
@@ -32,6 +33,7 @@ Route::post('/recuperar', 'TicketController@recoveryTicket')->name('recuperar')-
 Route::post('/renovar', 'TicketController@renovarTicket')->name('renovar')->middleware('auth');
 Route::post('/get_ticket', 'TicketController@getTicket')->name('get_ticket')->middleware('auth');
 Route::post('/get_prestamo', 'PrestamoController@getPrestamo')->name('get_prestamo')->middleware('auth');
+Route::post('/get_cliente', 'CustomerController@getCustomer')->name('get_cliente')->middleware('auth');
 Route::post('/get_customers', 'CustomerController@getSelect')->name('get_customers')->middleware('auth');
 Route::post('/update_cuenta', 'PartnerController@update')->name('update_cuenta')->middleware('auth');
 Route::post('/update_parking', 'ParkingController@update')->name('update_parking')->middleware('auth');

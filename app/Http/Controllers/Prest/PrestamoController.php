@@ -483,7 +483,7 @@ class PrestamoController extends Controller
 
                         ]).
                         \Form::button('Listar Abonos', [
-                            'class'   => 'btn btn-info',
+                            'class'   => 'btn btn-default',
                             'onclick' => "listarAbonos('$tickets->Id')",
                             'data-toggle' => "tooltip",
                             'data-placement' => "bottom",
@@ -491,11 +491,19 @@ class PrestamoController extends Controller
 
                         ]).
                         \Form::button('Pagar todo', [
-                            'class'   => 'btn btn-info',
+                            'class'   => 'btn btn-danger',
                             'onclick' => "openModalAbono('$tickets->Id',2,$tickets->cuota)",
                             'data-toggle' => "tooltip",
                             'data-placement' => "bottom",
                             'title' => "Pagar !",
+
+                        ]).
+                        \Form::button('Editar Cliente', [
+                            'class'   => 'btn btn-primary',
+                            'onclick' => "openModalClienteMod($tickets->id_customer)",
+                            'data-toggle' => "tooltip",
+                            'data-placement' => "bottom",
+                            'title' => "Editar Cliente",
 
                         ]).(
                             \Form::button('Abonar', [

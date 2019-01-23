@@ -547,7 +547,7 @@ class TicketController extends Controller
             $ticket->date_end = $date_end->addMonth();
             $ticket->name = strtoupper($tickets->name);
             $ticket->email = $tickets->email;
-            $ticket->phone = $tickets->movil;
+            $ticket->phone = $tickets->phone;
             $ticket->price = $tickets->price;
         }
         $ticket->parking_id = Auth::user()->parking_id;

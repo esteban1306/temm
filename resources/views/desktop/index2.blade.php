@@ -163,6 +163,7 @@
     </div>
 
     @include('customer.modal_add')
+    @include('customer.modal_mod')
     @include('customer.modal_prestamo')
     @include('customer.modal_prestamo_mod')
     @include('customer.modal_abono')
@@ -183,6 +184,10 @@
             $("#celularCustomer").val("");
             $("#observacionCustomer").val("");
             $("#cedulaCustomer").val("");
+        }
+        function openModalClienteMod(idCLiente){
+            loadCustomer(idCLiente);
+            $('#modal_mod').modal('show');
         }
 
         function openModalPrestamo(){
@@ -506,6 +511,46 @@
                 }
             });
         }
+        function modificarCliente() {
+            var vNombre=$("#nombreCustomerMod").validationEngine('validate');
+            var vtelefono=$("#celularCustomerMod").validationEngine('validate');
+            var vcedula=$("#cedulaCustomerMod").validationEngine('validate');
+
+            if (vNombre || vtelefono || vcedula)
+                return;
+            var id = $("#idCustomerMod").val();
+            var nombre = $("#nombreCustomerMod").val();
+            var telefono = $("#celularCustomerMod").val();
+            var cedula = $("#cedulaCustomerMod").val();
+            var observacion = $("#observacionCustomerMod").val();
+
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: "POST",
+                url: "customers_mod",
+                data: {
+                    id:id,
+                    name:nombre,
+                    movil:telefono,
+                    cedula:cedula,
+                    observacion:observacion,
+                },
+                success: function (datos) {
+                    $('#modal_mod').modal('hide');
+                    new PNotify({
+                        title: 'Exito',
+                        type: 'success',
+                        text: 'Se modificó el cliente con exito'
+                    });
+                    loadCustomers();
+                },
+                error : function () {
+                    location = '/login';
+                }
+            });
+        }
         function listarAbonos(id_prestamo) {
             desktop_index_vm.loadAbonos(id_prestamo);
             $('#modal_list_abonos').modal('show');
@@ -533,6 +578,28 @@
                 },
                 error : function () {
                     location = '/login';
+                }
+            });
+        }
+        function loadCustomer(id) {
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: "POST",
+                url: "get_cliente",
+                data: {
+                    cliente_id:id
+                },
+                success: function (datos) {
+                    $('#idCustomerMod').val(id);
+                    $('#nombreCustomerMod').val(datos['nombre']);
+                    $('#celularCustomerMod').val(datos['telefono']);
+                    $('#cedulaCustomerMod').val(datos['cedula']);
+                    $('#observacionCustomerMod').val(datos['observacion']);
+                },
+                error : function () {
+                    //location = '/login';
                 }
             });
         }
