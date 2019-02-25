@@ -160,7 +160,7 @@
 
     @include('product.modal_add')
     @include('product.modal_prestamo')
-    @include('product.modal_prestamo_mod')
+    @include('product.modal_product_mod')
     @include('product.modal_abono')
     @include('product.modal_list_abonos')
 @endsection
@@ -174,11 +174,11 @@
     <script src="{{ asset('js/validationEngine-es.min.js') }}"></script>
     <script>
         function openModalProduct(){
-            $('#modal_add').modal('show');
             $("#nombreCustomer").val("");
             $("#celularCustomer").val("");
             $("#observacionCustomer").val("");
             $("#cedulaCustomer").val("");
+            $('#modal_add').modal('show');
         }
 
         function openModalPrestamo(){
@@ -229,10 +229,10 @@
                 $("#rangeIn_mod").css("display","none");
             }
         }
-        function openModalMod(ticket_id){
-            $('#modal_ticket_mod').modal('show');
-            loadTicket(ticket_id);
-            $('#ticket_id_mod').val(ticket_id);
+        function openModalMod(product_id){
+            $('#modal_product_mod').modal('show');
+            loadProduct(product_id);
+            $('#idProductMod').val(product_id);
         }
         var getFecha = function(){
             var fecha = new Date();
@@ -273,48 +273,43 @@
             $('#id_pdf').val(id);
             $('#pdfsubmit').click();
         }
-        function modificarTicket() {
-            var ticket_id= $('#ticket_id_mod').val();
-            var plate= $('#plate_mod').val();
-            var type= $('#typeIn_mod').val();
-            var schedule= $('#schedule_mod').val();
-            var drawer= $('#drawer_mod').val();
-            var extra= $('#extra').val();
-            var name= $('#nombreIn_mod').val();
-            var precioIn = $("#precioIn_mod").val();
-            var emailIn = $("#emailIn_mod").val();
-            var celularIn = $("#celularIn_mod").val();
-            var range= $('#date_range_mod').val();
+        function modificarProducto() {
+            var vname=$("#namePrMod").validationEngine('validate');
+            var vprecio=$("#precioPrMod").validationEngine('validate');
+            if (vname || vprecio)
+                return;
+
+            var name=$("#namePrMod").val();
+            var description=$("#descriptionPrMod").val();
+            var minimo=$("#minimoPrMod").val();
+            var cantidad=$("#cantidadPrMod").val();
+            var precio=$("#precioPrMod").val();
+
+
+            var idProduct = $("#idProductMod").val();
+
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 type: "POST",
-                url: "actualizar",
+                url: "actualizar_producto",
                 data: {
-                    ticket_id:ticket_id,
-                    plate:plate,
-                    type:type,
-                    schedule:schedule,
-                    drawer:drawer,
+                    idProduct:idProduct,
                     name:name,
-                    price:precioIn,
-                    email:emailIn,
-                    movil:celularIn,
-                    extra:extra,
-                    range:range
+                    description:description,
+                    minimo:minimo,
+                    cantidad:cantidad,
+                    precio:precio,
                 },
                 success: function (datos) {
                     new PNotify({
                         title: 'Exito',
                         type: 'success',
-                        text: 'Se modificó el ticket con exito'
+                        text: 'Se modificó el producto con exito'
                     });
-                    $('#modal_ticket_mod').modal('hide');
+                    $('#modal_product_mod').modal('hide');
                     $('#tickets-table').dataTable()._fnAjaxUpdate();
-                    if(!$('#nav_inicio').hasClass('active'))
-                        $('#month-table').dataTable()._fnAjaxUpdate();
-                    desktop_index_vm.load();
                 },
                 error : function () {
                     location = '/login';
@@ -512,26 +507,22 @@
             desktop_index_vm.loadAbonos(id_prestamo);
             $('#modal_list_abonos').modal('show');
         }
-        function loadPrestamo(id) {
+        function loadProduct(id) {
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 type: "POST",
-                url: "get_prestamo",
+                url: "get_producto",
                 data: {
-                    prestamo_id:id
+                    product_id:id
                 },
                 success: function (datos) {
-                    $('#fechaPrestMod').val(datos['created_at'].substr(0,10));
-                    $('#interestPrestMod').val(datos['interes']);
-                    $('#timePrestMod').val(datos['tiempo']);
-                    $('#typePrestMod').val(datos['tipo']);
-                    $('#montoPrestMod').val(datos['monto']);
-                    $('#CuotaPrestMod').val(datos['cuota']);
-                    setTimeout(function () {
-                        $('#customerPrestMod').val(datos['id_customer']);
-                    }.bind(this),0);
+                    $("#namePrMod").val(datos['name']);
+                    $("#descriptionPrMod").val(datos['description']);
+                    $("#minimoPrMod").val(datos['minimo']);
+                    $("#cantidadPrMod").val(datos['cantidad']);
+                    $("#precioPrMod").val(datos['precio']);
                 },
                 error : function () {
                     location = '/login';

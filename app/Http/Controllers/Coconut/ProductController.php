@@ -420,30 +420,19 @@ class ProductController extends Controller
         $status['extra'] = format_money($status['extra']);
         return $status;
     }
-    public function getTicket(Request $request)
+    public function getProduct(Request $request)
     {
-        $ticket = Ticket::find($request->ticket_id);
+        $ticket = Product::find($request->product_id);
         return $ticket;
     }
-    public function updateTicket(Request $request)
+    public function updateProduct(Request $request)
     {
-        $ticket = Ticket::find($request->ticket_id);
-        $now = new Datetime('now');
-        $ticket->plate =$request->plate;
-        $ticket->type =$request->type;
-        $ticket->schedule =$request->schedule;
-        if($request->schedule==3){
-            $dateRange = explode(" - ", $request->range);
-            $ticket->date_end = new \Carbon\Carbon($dateRange[1]);
-            $ticket->name = $request->name;
-            $ticket->hour = new \Carbon\Carbon($dateRange[0]);
-            $ticket->email = $request->email;
-            $ticket->phone = $request->movil;
-            $ticket->price = $request->price;
-        }
-        $ticket->partner_id = Auth::user()->partner_id;
-        $ticket->extra = $request->extra;
-        $ticket->drawer = $request->drawer;
+        $ticket = Product::find($request->idProduct);
+        $ticket->name =strtoupper($request->name);
+        $ticket->description =strtoupper($request->description??'');
+        $ticket->minimo =$request->minimo??0;
+        $ticket->cantidad =$request->cantidad?? -1;
+        $ticket->precio =$request->precio;
         $ticket->save();
         return ;
     }
