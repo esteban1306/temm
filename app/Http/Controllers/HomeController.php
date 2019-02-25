@@ -25,11 +25,11 @@ class HomeController extends Controller
     public function index()
     {
         $user = Auth::user();
-        if($user->type == 1)
+        if($user->type == 1 || $user->type == 2)
             return view('desktop/index');
-        else if($user->type == 2)
-            return view('desktop/index2');
         else if($user->type == 3)
+            return view('desktop/index2');
+        else if($user->type == 4)
             return view('desktop/index3');
     }
 }
