@@ -3198,7 +3198,7 @@ fieldset[disabled] a.btn {
 
 .btn-primary:active,
 .btn-primary.active,
-.show > .btn-primary.dropdown-toggle {
+.open > .btn-primary.dropdown-toggle {
   color: #fff;
   background-color: #0e3269;
   background-image: none;
@@ -3231,7 +3231,7 @@ fieldset[disabled] a.btn {
 
 .btn-secondary:active,
 .btn-secondary.active,
-.show > .btn-secondary.dropdown-toggle {
+.open > .btn-secondary.dropdown-toggle {
   color: #292b2c;
   background-color: #e6e5e5;
   background-image: none;
@@ -3264,7 +3264,7 @@ fieldset[disabled] a.btn {
 
 .btn-info:active,
 .btn-info.active,
-.show > .btn-info.dropdown-toggle {
+.open > .btn-info.dropdown-toggle {
   color: #fff;
   background-color: #31b0d5;
   background-image: none;
@@ -3297,7 +3297,7 @@ fieldset[disabled] a.btn {
 
 .btn-success:active,
 .btn-success.active,
-.show > .btn-success.dropdown-toggle {
+.open > .btn-success.dropdown-toggle {
   color: #fff;
   background-color: #449d44;
   background-image: none;
@@ -3330,7 +3330,7 @@ fieldset[disabled] a.btn {
 
 .btn-warning:active,
 .btn-warning.active,
-.show > .btn-warning.dropdown-toggle {
+.open > .btn-warning.dropdown-toggle {
   color: #5C4B14;
   background-color: #ffc918;
   background-image: none;
@@ -3363,7 +3363,7 @@ fieldset[disabled] a.btn {
 
 .btn-danger:active,
 .btn-danger.active,
-.show > .btn-danger.dropdown-toggle {
+.open > .btn-danger.dropdown-toggle {
   color: #fff;
   background-color: #c9302c;
   background-image: none;
@@ -3397,7 +3397,7 @@ fieldset[disabled] a.btn {
 
 .btn-outline-primary:active,
 .btn-outline-primary.active,
-.show > .btn-outline-primary.dropdown-toggle {
+.open > .btn-outline-primary.dropdown-toggle {
   color: #fff;
   background-color: #144796;
   border-color: #144796;
@@ -3430,7 +3430,7 @@ fieldset[disabled] a.btn {
 
 .btn-outline-secondary:active,
 .btn-outline-secondary.active,
-.show > .btn-outline-secondary.dropdown-toggle {
+.open > .btn-outline-secondary.dropdown-toggle {
   color: #fff;
   background-color: #ccc;
   border-color: #ccc;
@@ -3463,7 +3463,7 @@ fieldset[disabled] a.btn {
 
 .btn-outline-info:active,
 .btn-outline-info.active,
-.show > .btn-outline-info.dropdown-toggle {
+.open > .btn-outline-info.dropdown-toggle {
   color: #fff;
   background-color: #5bc0de;
   border-color: #5bc0de;
@@ -3496,7 +3496,7 @@ fieldset[disabled] a.btn {
 
 .btn-outline-success:active,
 .btn-outline-success.active,
-.show > .btn-outline-success.dropdown-toggle {
+.open > .btn-outline-success.dropdown-toggle {
   color: #fff;
   background-color: #5cb85c;
   border-color: #5cb85c;
@@ -3529,7 +3529,7 @@ fieldset[disabled] a.btn {
 
 .btn-outline-warning:active,
 .btn-outline-warning.active,
-.show > .btn-outline-warning.dropdown-toggle {
+.open > .btn-outline-warning.dropdown-toggle {
   color: #fff;
   background-color: #FFD54B;
   border-color: #FFD54B;
@@ -3562,7 +3562,7 @@ fieldset[disabled] a.btn {
 
 .btn-outline-danger:active,
 .btn-outline-danger.active,
-.show > .btn-outline-danger.dropdown-toggle {
+.open > .btn-outline-danger.dropdown-toggle {
   color: #fff;
   background-color: #d9534f;
   border-color: #d9534f;
@@ -3642,7 +3642,7 @@ input[type="button"].btn-block {
   transition: opacity 0.15s linear;
 }
 
-.fade.show {
+.fade.open {
   opacity: 1;
 }
 
@@ -3654,15 +3654,15 @@ input[type="button"].btn-block {
   display: none;
 }
 
-.collapse.show {
+.collapse.open {
   display: block;
 }
 
-tr.collapse.show {
+tr.collapse.open {
   display: table-row;
 }
 
-tbody.collapse.show {
+tbody.collapse.open {
   display: table-row-group;
 }
 
@@ -3761,11 +3761,11 @@ tbody.collapse.show {
   background-color: transparent;
 }
 
-.show > .dropdown-menu {
+.open > .dropdown-menu {
   display: block;
 }
 
-.show > a {
+.open > a {
   outline: 0;
 }
 
@@ -4400,7 +4400,7 @@ tbody.collapse.show {
 }
 
 .nav-tabs .nav-link.active,
-.nav-tabs .nav-item.show .nav-link {
+.nav-tabs .nav-item.open .nav-link {
   color: #464a4c;
   background-color: #fff;
   border-color: #ddd #ddd #fff;
@@ -4417,7 +4417,7 @@ tbody.collapse.show {
 }
 
 .nav-pills .nav-link.active,
-.nav-pills .nav-item.show .nav-link {
+.nav-pills .nav-item.open .nav-link {
   color: #fff;
   cursor: default;
   background-color: #144796;
@@ -6098,7 +6098,7 @@ button.close {
   opacity: 0;
 }
 
-.tooltip.show {
+.tooltip.open {
   opacity: 0.9;
 }
 
@@ -10945,22 +10945,22 @@ select.selectpicker {
   margin-top: -1px;
 }
 
-.bootstrap-select.btn-group.show-tick .dropdown-menu li.selected a span.check-mark {
+.bootstrap-select.btn-group.open-tick .dropdown-menu li.selected a span.check-mark {
   position: absolute;
   display: inline-block;
   right: 15px;
   margin-top: 5px;
 }
 
-.bootstrap-select.btn-group.show-tick .dropdown-menu li a span.text {
+.bootstrap-select.btn-group.open-tick .dropdown-menu li a span.text {
   margin-right: 34px;
 }
 
-.bootstrap-select.show-menu-arrow.open > .dropdown-toggle {
+.bootstrap-select.open-menu-arrow.open > .dropdown-toggle {
   z-index: 1061;
 }
 
-.bootstrap-select.show-menu-arrow .dropdown-toggle:before {
+.bootstrap-select.open-menu-arrow .dropdown-toggle:before {
   content: '';
   border-left: 7px solid transparent;
   border-right: 7px solid transparent;
@@ -10971,7 +10971,7 @@ select.selectpicker {
   display: none;
 }
 
-.bootstrap-select.show-menu-arrow .dropdown-toggle:after {
+.bootstrap-select.open-menu-arrow .dropdown-toggle:after {
   content: '';
   border-left: 6px solid transparent;
   border-right: 6px solid transparent;
@@ -10982,32 +10982,32 @@ select.selectpicker {
   display: none;
 }
 
-.bootstrap-select.show-menu-arrow.dropup .dropdown-toggle:before {
+.bootstrap-select.open-menu-arrow.dropup .dropdown-toggle:before {
   bottom: auto;
   top: -3px;
   border-top: 7px solid rgba(204, 204, 204, 0.2);
   border-bottom: 0;
 }
 
-.bootstrap-select.show-menu-arrow.dropup .dropdown-toggle:after {
+.bootstrap-select.open-menu-arrow.dropup .dropdown-toggle:after {
   bottom: auto;
   top: -3px;
   border-top: 6px solid white;
   border-bottom: 0;
 }
 
-.bootstrap-select.show-menu-arrow.pull-right .dropdown-toggle:before {
+.bootstrap-select.open-menu-arrow.pull-right .dropdown-toggle:before {
   right: 12px;
   left: auto;
 }
 
-.bootstrap-select.show-menu-arrow.pull-right .dropdown-toggle:after {
+.bootstrap-select.open-menu-arrow.pull-right .dropdown-toggle:after {
   right: 13px;
   left: auto;
 }
 
-.bootstrap-select.show-menu-arrow.open > .dropdown-toggle:before,
-.bootstrap-select.show-menu-arrow.open > .dropdown-toggle:after {
+.bootstrap-select.open-menu-arrow.open > .dropdown-toggle:before,
+.bootstrap-select.open-menu-arrow.open > .dropdown-toggle:after {
   display: block;
 }
 
@@ -11061,7 +11061,7 @@ https://github.com/silviomoreto/bootstrap-select/issues/1135
           box-shadow: none;
 }
 
-.bootstrap-select.show > .dropdown-menu > .dropdown-menu {
+.bootstrap-select.open > .dropdown-menu > .dropdown-menu {
   display: block;
 }
 
