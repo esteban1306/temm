@@ -10,6 +10,7 @@
                     <div class="form-group col-md-12">
                         <label for="nombre" class="control-label">Productos</label>
                         <select class="form-control validate[required] selectpicker" id="productsList"  data-live-search="true" data-size="10">
+                            <option>Seleccionar</option>
                         </select>
                     </div>
                     <div class="form-group col-md-6">
