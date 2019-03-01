@@ -844,6 +844,10 @@
                 this.loadTable();
                 setInterval(function(){$('#tickets-table').dataTable()._fnAjaxUpdate();}, 60000);
                 loadCustomers();
+                $('.selectpicker').selectpicker({
+                    style: 'btn-default'
+                });
+                $('.selectpicker').selectpicker('refresh');
             },
             methods    : {
                 load : function() {
