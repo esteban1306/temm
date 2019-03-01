@@ -46,6 +46,7 @@ Route::post('/get_status_prestamo', 'PrestamoController@getStatus')->name('get_s
 Route::get('/get_tickets', 'TicketController@getTickets')->name('get_tickets')->middleware('auth');
 Route::get('/get_prestamos', 'PrestamoController@getPrestamos')->name('get_prestamos')->middleware('auth');
 Route::get('/get_productos', 'ProductController@getProducts')->name('get_productos')->middleware('auth');
+Route::post('/get_products', 'ProductController@getSelect')->name('get_products')->middleware('auth');
 Route::get('/get_abonos', 'AbonoController@getAbonos')->name('get_abonos')->middleware('auth');
 Route::get('/get_months', 'TicketController@getMonths')->name('get_months')->middleware('auth');
 Route::resource('tickets', 'TicketController')->middleware('auth');

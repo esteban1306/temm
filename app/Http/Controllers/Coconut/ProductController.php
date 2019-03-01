@@ -469,4 +469,12 @@ class ProductController extends Controller
 
         return ;
     }
+    public function getSelect(){
+        $products = Product::where('parking_id',Auth::user()->parking_id)->get();
+        $select="<option value=''>Seleccionar</option>";
+        foreach ($products as $product){
+            $select .='<option data-toggle="tooltip" title="'.$product->description.'"value="'.$product->id_product.'">'.$product->name.(!empty($product->cantidad)?' ('.$product->cantidad.')':'').'</option>';
+        }
+        return $select;
+    }
 }

@@ -8,8 +8,8 @@
                 <div class="col-md-6" style="text-align: center;">
                     <button type="button" onclick="openModalProduct()" class="btn btn-primary col-md-10 btn-lg">Nuevo Producto</button>
                 </div>
-                <div class="col-md-6" style="text-align: center;display: none">
-                    <button type="button" onclick="openModalPrestamo()" class="btn btn-default col-md-10 btn-lg">Nuevo Prestamo</button>
+                <div class="col-md-6" style="text-align: center;">
+                    <button type="button" onclick="openModalVenta()" class="btn btn-default col-md-10 btn-lg">Nueva Venta</button>
                 </div>
             </div>
             <p class="height_10"></p>
@@ -160,7 +160,7 @@
     </div>
 
     @include('product.modal_add')
-    @include('product.modal_prestamo')
+    @include('product.modal_venta')
     @include('product.modal_product_mod')
     @include('product.modal_abono')
     @include('product.modal_list_abonos')
@@ -182,9 +182,25 @@
             $('#modal_add').modal('show');
         }
 
-        function openModalPrestamo(){
-            loadCustomers();
-            $('#modal_prestamo').modal('show');
+        function openModalVenta(){
+            loadProducts();
+            $('#modal_venta').modal('show');
+        }
+        function loadProducts() {
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: "POST",
+                url: "get_products",
+
+                success: function (datos) {
+                    $('#productsList').html(datos);
+                },
+                error : function () {
+                    location = '/login';
+                }
+            });
         }
         function openModalPrestamoMod(idPrestamo){
             loadCustomers();
