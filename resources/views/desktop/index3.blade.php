@@ -183,7 +183,6 @@
         }
 
         function openModalVenta(){
-            loadProducts();
             $('#modal_venta').modal('show');
         }
         function loadProducts() {
@@ -196,6 +195,7 @@
 
                 success: function (datos) {
                     $('#productsList').html(datos);
+                    $('.selectpicker').selectpicker('refresh');
                 },
                 error : function () {
                     location = '/login';
@@ -842,11 +842,11 @@
             },
             mounted    : function() {
                 this.loadTable();
+                loadProducts();
                 setInterval(function(){$('#tickets-table').dataTable()._fnAjaxUpdate();}, 60000);
                 $('.selectpicker').selectpicker({
                     style: 'btn-default'
                 });
-                $('.selectpicker').selectpicker('refresh');
             },
             methods    : {
                 load : function() {
