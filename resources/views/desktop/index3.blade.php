@@ -79,6 +79,7 @@
                             <th class="min-tablet">Precio</th>
                             <th class="min-tablet">Cantidad</th>
                             <th class="min-tablet">Minimo</th>
+                            <th class="all">acciones</th>
                         </tr>
                         </thead>
                     </table>
@@ -346,10 +347,10 @@
             desktop_index_vm.changePrice();
         }
 
-        function eliminarAbono(id) {
+        function eliminarProduct(id) {
             (new PNotify({
                 title: 'Necesita confirmación',
-                text: 'Esta seguro de querer eliminar el registro?',
+                text: 'Esta seguro de querer eliminar el producto?',
                 icon: 'glyphicon glyphicon-question-sign',
                 hide: false,
                 confirm: {
@@ -369,7 +370,7 @@
                     'modal': true
                 }
             })).get().on('pnotify.confirm', function() {
-                desktop_index_vm.delete(id);
+                desktop_index_vm.deleteProduct(id);
             }).on('pnotify.cancel', function() {
                ;
             });
@@ -525,7 +526,7 @@
                     $("#precioPrMod").val(datos['precio']);
                 },
                 error : function () {
-                    location = '/login';
+                   // location = '/login';
                 }
             });
         }
@@ -938,6 +939,7 @@
                             { data: 'precio', name: 'Precio', orderable  : false, searchable : false },
                             { data: 'cantidad', name: 'Cantidad', orderable  : false, searchable : false },
                             { data: 'minimo', name: 'minimo', orderable  : false, searchable : false },
+                            { data: 'action', name: 'Acciones', orderable  : false, searchable : false },
                         ],
                         lengthMenu: [[ 10, 25, 50, -1], [ 10, 25, 50, "Todos"]]
                     });
@@ -1056,23 +1058,23 @@
                         }
                     });
                 },
-                delete : function(abono_id) {
+                deleteProduct : function(product) {
                         $.ajax({
                             headers: {
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                             },
                             type: "POST",
-                            url: "eliminar_abono",
+                            url: "eliminar_product",
                             data: {
-                                abono_id:abono_id
+                                product:product
                             },
                             success: function (datos) {
                                 new PNotify({
                                     title: 'Exito',
                                     type: 'success',
-                                    text: 'Se Eliminó el abono con exito'
+                                    text: 'Se Eliminó el producto con exito'
                                 });
-                                $('#abonos-table').dataTable()._fnAjaxUpdate();
+                                $('#tickets-table').dataTable()._fnAjaxUpdate();
                             },
                             error : function () {
                                 location = '/login';

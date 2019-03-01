@@ -267,29 +267,16 @@ class ProductController extends Controller
                     ]).
                     \Form::button('Eliminar', [
                         'class'   => 'btn btn-warning',
-                        'onclick' => "eliminarTicket('$tickets->Id')",
+                        'onclick' => "eliminarProduct('$tickets->Id')",
                         'data-toggle' => "tooltip",
                         'data-placement' => "bottom",
                         'title' => "Eliminar !",
 
                     ]);
-                    return (Auth::user()->type == 1?$htmlAdmin:'').
-                        \Form::button('Imprimir', [
-                            'class'   => 'btn btn-info',
-                            'onclick' => "form_pdf('$tickets->Id')",
-                            'data-toggle' => "tooltip",
-                            'data-placement' => "bottom",
-                            'title' => "Imprimir !",
-
-                        ]).($tickets->schedule != 3?
-                        \Form::button('Recuperar', [
-                            'class'   => 'btn btn-info',
-                            'onclick' => "recuperarTicket('$tickets->Id')",
-                            'data-toggle' => "tooltip",
-                            'data-placement' => "bottom",
-                            'title' => "Recuperar !",
-
-                        ]):'');
+                    return $htmlAdmin;
+            })
+            ->editColumn('precio', function ($tickets) {
+                return format_money($tickets->precio);
             })
             ->make(true);
     }
@@ -362,6 +349,9 @@ class ProductController extends Controller
             ->addColumn('Atendio', function ($tickets) {
                 $partner = Partner::find($tickets->partner_id);
                 return  $partner->name;
+            })
+            ->editColumn('price', function ($tickets) {
+                return format_money($tickets->price);
             })
             ->make(true);
     }
@@ -436,9 +426,9 @@ class ProductController extends Controller
         $ticket->save();
         return ;
     }
-    public function deleteTicket(Request $request)
+    public function deleteProduct(Request $request)
     {
-        $ticket = Ticket::find($request->ticket_id);
+        $ticket = Product::find($request->product);
         $ticket->delete();
         return ;
     }
