@@ -9,7 +9,7 @@
                 <div id="formAddCustomer" class="row">
                     <div class="form-group col-md-12" style="display: none">
                         <label for="nombre" class="control-label">producto</label>
-                        <input id="idProductMod" type="text" class="form-control validate[required] selectpicker">
+                        <input id="idProductMod" type="text" class="form-control validate[required]">
                     </div>
                     <div class="form-group col-md-12">
                         <label for="nombre" class="control-label">Nombre</label>
