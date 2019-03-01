@@ -514,6 +514,7 @@
                     $("#minimoPr").val('');
                     $("#cantidadPr").val('');
                     $("#precioPr").val('');
+                    loadProducts();
                 },
                 error : function () {
                     //location = '/login';
@@ -842,11 +843,13 @@
             },
             mounted    : function() {
                 this.loadTable();
-                loadProducts();
                 setInterval(function(){$('#tickets-table').dataTable()._fnAjaxUpdate();}, 60000);
                 $('.selectpicker').selectpicker({
                     style: 'btn-default'
                 });
+                setTimeout(function () {
+                    loadProducts();
+                },3000);
             },
             methods    : {
                 load : function() {
@@ -1117,6 +1120,7 @@
                                     text: 'Se Eliminó el prestamo con exito'
                                 });
                                 $('#tickets-table').dataTable()._fnAjaxUpdate();
+                                loadProducts();
                             },
                             error : function () {
                                 location = '/login';
