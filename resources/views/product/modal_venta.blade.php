@@ -7,15 +7,15 @@
             </div>
             <div class="modal-body" style="min-height: 130px;" >
                 <div id="formAddCustomer" class="row">
-                    <div class="form-group col-md-12">
+                    <div class="form-group col-md-6">
                         <label for="nombre" class="control-label">Productos</label>
                         <select class="form-control validate[required] selectpicker" id="productsList"  data-live-search="true" data-size="10">
                             <option>Seleccionar</option>
                         </select>
                     </div>
                     <div class="form-group col-md-6">
-                        <label for="nombre" class="control-label">Fecha</label>
-                        <input id="fechaPrest" type="date" class="form-control validate[required]">
+                        <label for="nombre" class="control-label">Cantidad</label>
+                        <input id="fechaPrest" type="number" class="form-control validate[required]">
                     </div>
                     <div class="form-group col-md-6">
                         <label for="nombre" class="control-label">interes %</label>
