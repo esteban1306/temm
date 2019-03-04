@@ -2,7 +2,7 @@
   opacity: 0;
   @include transition($transition-fade);
 
-  &.show {
+  &.open {
     opacity: 1;
   }
 
@@ -13,19 +13,19 @@
 
 .collapse {
   display: none;
-  &.show {
+  &.open {
     display: block;
   }
 }
 
 tr {
-  &.collapse.show {
+  &.collapse.open {
     display: table-row;
   }
 }
 
 tbody {
-  &.collapse.show {
+  &.collapse.open {
     display: table-row-group;
   }
 }

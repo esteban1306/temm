@@ -173,6 +173,7 @@
     <script src="{{ asset('js/pnotify.custom.min.js') }}"></script>
     <script src="{{ asset('js/validationEngine.min.js') }}"></script>
     <script src="{{ asset('js/validationEngine-es.min.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/js/bootstrap-select.min.js"></script>
     <script>
         function openModalProduct(){
             $("#nombreCustomer").val("");
@@ -186,21 +187,8 @@
             $('#modal_venta').modal('show');
         }
         function loadProducts() {
-            $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                type: "POST",
-                url: "get_products",
+            return;
 
-                success: function (datos) {
-                    $('#productsList').html(datos);
-                    $('.selectpicker').selectpicker('refresh');
-                },
-                error : function () {
-                    location = '/login';
-                }
-            });
         }
         function openModalPrestamoMod(idPrestamo){
             loadCustomers();
@@ -844,12 +832,7 @@
             mounted    : function() {
                 this.loadTable();
                 setInterval(function(){$('#tickets-table').dataTable()._fnAjaxUpdate();}, 60000);
-                $('.selectpicker').selectpicker({
-                    style: 'btn-default'
-                });
-                setTimeout(function () {
-                    loadProducts();
-                },3000);
+                $('.selectpicker2').selectpicker();
             },
             methods    : {
                 load : function() {

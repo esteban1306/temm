@@ -9,6 +9,7 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Styles -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/css/bootstrap-select.min.css">
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
     <link href="{{ asset('css/dataTables.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/daterangepicker.css') }}" rel="stylesheet">

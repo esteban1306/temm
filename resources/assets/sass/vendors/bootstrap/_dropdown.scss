@@ -101,8 +101,8 @@
 }
 
 // Open state for the dropdown
-.show {
-  // Show the menu
+.open {
+  // open the menu
   > .dropdown-menu {
     display: block;
   }
