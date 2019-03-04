@@ -38,6 +38,17 @@
                         </thead>
                     </table>
                 </div>
+                <div class="col-12"  style="overflow:  auto;">
+                    <div class="widget_box_b">
+                        <div class="contt">
+                            <div class="fl_layer">
+                                <h4 class="title">Precio</h4>
+                                <span class="line"></span>
+                                <span class="data" id="total"> - </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
