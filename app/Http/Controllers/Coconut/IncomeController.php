@@ -74,7 +74,7 @@ class IncomeController extends Controller
         $transaction->precio = $transaction->precio +$income->precio;
         $transaction->save();
 
-        return $id_transaction;
+        return $return['transaction_id'] = $id_transaction;
     }
     public function pdf(Request $request)
     {
@@ -260,14 +260,13 @@ class IncomeController extends Controller
     {
         //
     }
-    public function getProducts(Request $request)
+    public function getIncomes(Request $request)
     {
         $search = $request->get('search')['value'];
+        $transaction = $request->get('transaction');
 
-        $tickets= Product::select(['id_product as Id', 'name', 'precio', 'minimo', 'cantidad','description'])->where('parking_id',Auth::user()->parking_id)->orderBy('id_product','desc');
-        if ($search) {
-                $tickets = $tickets->where('name', 'LIKE', "%$search%");
-        }
+        $tickets= Income::select(['id_income as Id', 'precio', 'product_id', 'cantidad','description'])->where('parking_id',Auth::user()->parking_id)->where('transaction_id', $transaction)->orderBy('id_income','desc');
+
         return Datatables::of($tickets)
             ->addColumn('action', function ($tickets) {
                 $htmlAdmin= \Form::button('Editar', [
@@ -277,97 +276,20 @@ class IncomeController extends Controller
                         'data-placement' => "bottom",
                         'title' => "Editar !",
 
-                    ]).
-                    \Form::button('Eliminar', [
-                        'class'   => 'btn btn-warning',
-                        'onclick' => "eliminarProduct('$tickets->Id')",
-                        'data-toggle' => "tooltip",
-                        'data-placement' => "bottom",
-                        'title' => "Eliminar !",
-
                     ]);
                     return $htmlAdmin;
             })
             ->editColumn('precio', function ($tickets) {
                 return format_money($tickets->precio);
             })
-            ->make(true);
-    }
-
-    public function getMonths(Request $request)
-    {
-        $parking = Parking::find(Auth::user()->parking_id);
-        $search = $request->get('search')['value'];
-        $schedule = 3;
-
-        $tickets= Ticket::select(['ticket_id as Id', 'plate', 'type', 'name', 'date_end', 'partner_id', 'status', 'price','email','phone'])->where('parking_id',Auth::user()->parking_id)->where('status','<>',"3")->orderBy('ticket_id','desc');
-        if ($search) {
-            $tickets = $tickets->where('plate', 'LIKE', "%$search%");
-        }
-        if (!empty($schedule))
-            $tickets = $tickets->where('schedule', $schedule);
-
-        return Datatables::of($tickets)
-            ->addColumn('action', function ($tickets) use($parking){
-                if (Auth::user()->type == 1)
-                    return ($tickets->status == 1? \Form::button('Pagar', [
-                            'class'   => 'btn btn-info',
-                            'onclick' => "$('#modal_ticket_out').modal('show');$('#ticket_id').val('$tickets->Id')",
-                            'data-toggle' => "tooltip",
-                            'data-placement' => "bottom",
-                            'title' => "Pagar !",
-
-                        ]) : "").\Form::button('Editar', [
-                        'class'   => 'btn btn-primary',
-                        'onclick' => "openModalMod('$tickets->Id')",
-                        'data-toggle' => "tooltip",
-                        'data-placement' => "bottom",
-                        'title' => "Editar !",
-
-                    ]).
-                        \Form::button('Eliminar', [
-                            'class'   => 'btn btn-warning',
-                            'onclick' => "eliminarTicket('$tickets->Id')",
-                            'data-toggle' => "tooltip",
-                            'data-placement' => "bottom",
-                            'title' => "Eliminar !",
-
-                        ]).
-                        \Form::button('Imprimir', [
-                            'class'   => 'btn btn-info',
-                            'onclick' => "form_pdf('$tickets->Id')",
-                            'data-toggle' => "tooltip",
-                            'data-placement' => "bottom",
-                            'title' => "Imprimir !",
-
-                        ]).
-                        \Form::button('Renovar', [
-                            'class'   => 'btn btn-info',
-                            'onclick' => "renovarTicket('$tickets->Id')",
-                            'data-toggle' => "tooltip",
-                            'data-placement' => "bottom",
-                            'title' => "Renovar !",
-
-                        ]).(!empty($tickets->phone)?'<a class="btn btn-success" href="https://api.whatsapp.com/send?phone=57'.$tickets->phone.'&text=Hola%20'.$tickets->name.',parqueadero%20'.$parking->name.'%20le%20saluda%20coordialmente%20y%20le%20informa%20que%20el%20vehiculo%20con%20placa%20'.$tickets->plate.'%20tiene%20pago%20el%20parqueo%20con%20nosotros%20hasta%20la%20fecha:%20'.$tickets->date_end.'" target="_blank">Whatsapp</a>':'');
-                else
-                    return '';
-            })
-            ->addColumn('Tipo', function ($tickets) {
-                return  $tickets->type == 1? 'Carro': 'Moto';
-            })
-            ->addColumn('Estado', function ($tickets) {
-                $now = date("Y-m-d H:i:s");
-                return  $tickets->date_end >= $now? 'Activo': 'Vencido';
-            })
-            ->addColumn('Atendio', function ($tickets) {
-                $partner = Partner::find($tickets->partner_id);
-                return  $partner->name;
-            })
-            ->editColumn('price', function ($tickets) {
-                return format_money($tickets->price);
+            ->editColumn('product_id', function ($tickets) {
+                $product = Product::find($tickets->product_id,['name']);
+                return $product->name;
             })
             ->make(true);
     }
+
+
     public function getStatus(Request $request)
     {
         $schedule = $request->get('type');
@@ -453,41 +375,5 @@ class IncomeController extends Controller
         $ticket->pay_day =null;
         $ticket->save();
         return ;
-    }
-    public function renovarTicket(Request $request)
-    {
-        $tickets = Ticket::find($request->ticket_id);
-        $tickets->status = 3;
-        $tickets->save();
-
-        $now = new Datetime('now');
-        $ticket= new Ticket();
-        $ticket->hour =$now;
-        $ticket->plate =strtoupper($tickets->plate);
-        $ticket->status = 1;
-        $ticket->type =$tickets->type;
-        $ticket->schedule =$tickets->schedule;
-        if($tickets->schedule==3){
-            $date_end = new \Carbon\Carbon($tickets->date_end);
-            $ticket->date_end = $date_end->addMonth();
-            $ticket->name = strtoupper($tickets->name);
-            $ticket->email = $tickets->email;
-            $ticket->phone = $tickets->movil;
-            $ticket->price = $tickets->price;
-        }
-        $ticket->parking_id = Auth::user()->parking_id;
-        $ticket->partner_id = Auth::user()->partner_id;
-        $ticket->drawer = $tickets->drawer;
-        $ticket->save();
-
-        return ;
-    }
-    public function getSelect(){
-        $products = Product::where('parking_id',Auth::user()->parking_id)->get();
-        $select="<option value=''>Seleccionar</option>";
-        foreach ($products as $product){
-            $select .='<option data-toggle="tooltip" title="'.$product->description.'"value="'.$product->id_product.'">'.$product->name.(!empty($product->cantidad) && $product->cantidad !='-1'?' ('.$product->cantidad.')':'').'</option>';
-        }
-        return $select;
     }
 }

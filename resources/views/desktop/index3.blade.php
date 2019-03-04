@@ -9,7 +9,7 @@
                     <button type="button" onclick="openModalProduct()" class="btn btn-primary col-md-10 btn-lg">Nuevo Producto</button>
                 </div>
                 <div class="col-md-6" style="text-align: center;">
-                    <button type="button" onclick="openModalVenta()" class="btn btn-default col-md-10 btn-lg">Nueva Venta</button>
+                    <button type="button" onclick="openModalVenta('')" class="btn btn-default col-md-10 btn-lg">Nueva Venta</button>
                 </div>
             </div>
             <p class="height_10"></p>
@@ -183,8 +183,11 @@
             $('#modal_add').modal('show');
         }
 
-        function openModalVenta(){
+        function openModalVenta(transaction){
             $('#modal_venta').modal('show');
+            $('#id_transaction').val(transaction);
+            $('#income-table').dataTable()._fnAjaxUpdate();
+            loadIncomes();
         }
         function loadProducts() {
             return;
@@ -219,10 +222,9 @@
                     });
                     $("#productsList").val('');
                     $("#cantIncome").val(1);
-                    if(transaction !='')
+                    if(transaction =='')
                         $("#id_transaction").val(response);
-                    console.log(response);
-                    //$('#income-table').dataTable()._fnAjaxUpdate();
+                    loadIncomes();
                 },
                 error : function () {
                     //location = '/login';
@@ -272,6 +274,33 @@
                 $("#movilIn_mod").css("display","none");
                 $("#rangeIn_mod").css("display","none");
             }
+        }
+
+        function loadIncomes(){
+            $('#income-table').DataTable({
+                sDom           : 'r<Hlf><"datatable-scroll"t><Fip>',
+                order          : [],
+                processing     : true,
+                serverSide     : true,
+                deferRender    : true,
+                destroy        : true,
+                ajax: {
+                    url  : '{!! route('get_incomes') !!}',
+                    data : {
+                        transaction        : $("#id_transaction").val(),
+                    },
+                    error : function () {
+                        location = '/login';
+                    }
+                },
+                columns: [
+                    { data: 'product_id', name: 'Producto', orderable  : false, searchable : false },
+                    { data: 'cantidad', name: 'Cantidad', orderable  : false, searchable : false },
+                    { data: 'precio', name: 'Precio', orderable  : false, searchable : false },
+                    { data: 'action', name: 'acciones', orderable  : false, searchable : false },
+                ],
+                lengthMenu: [[ 10, 25, 50, -1], [ 10, 25, 50, "Todos"]]
+            });
         }
         function openModalMod(product_id){
             $('#modal_product_mod').modal('show');
