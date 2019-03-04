@@ -1,5 +1,5 @@
-<div id="modal_venta" class="modal fade" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+<div id="modal_venta" class="modal fade modal-xl" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">Nueva venta</h4>
