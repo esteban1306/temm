@@ -69,16 +69,14 @@
                 </div>
             </div>-->
 
-                <div class="row" v-show="all">
+            <div class="row" v-show="all">
                 <div class="col-12" style="overflow:  auto;">
-                    <table class="table responsive" id="tickets-table">
+                    <table class="table responsive" id="transaction-table">
                         <thead>
                         <tr>
-                            <th class="all">Nombre</th>
-                            <th class="all">Descripción</th>
+                            <th class="all">fecha</th>
                             <th class="min-tablet">Precio</th>
-                            <th class="min-tablet">Cantidad</th>
-                            <th class="min-tablet">Minimo</th>
+                            <th class="min-tablet">Atendió</th>
                             <th class="all">acciones</th>
                         </tr>
                         </thead>
@@ -130,6 +128,22 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+            <div class="row" v-show="all">
+                <div class="col-12" style="overflow:  auto;">
+                    <table class="table responsive" id="tickets-table">
+                        <thead>
+                        <tr>
+                            <th class="all">Nombre</th>
+                            <th class="all">Descripción</th>
+                            <th class="min-tablet">Precio</th>
+                            <th class="min-tablet">Cantidad</th>
+                            <th class="min-tablet">Minimo</th>
+                            <th class="all">acciones</th>
+                        </tr>
+                        </thead>
+                    </table>
                 </div>
             </div>
             <div class="row" v-show="month">
@@ -1013,6 +1027,27 @@
                             { data: 'precio', name: 'Precio', orderable  : false, searchable : false },
                             { data: 'cantidad', name: 'Cantidad', orderable  : false, searchable : false },
                             { data: 'minimo', name: 'minimo', orderable  : false, searchable : false },
+                            { data: 'action', name: 'Acciones', orderable  : false, searchable : false },
+                        ],
+                        lengthMenu: [[ 10, 25, 50, -1], [ 10, 25, 50, "Todos"]]
+                    });
+                    $('#transaction-table').DataTable({
+                        sDom           : 'r<Hlf><"datatable-scroll"t><Fip>',
+                        order          : [],
+                        processing     : true,
+                        serverSide     : true,
+                        deferRender    : true,
+                        destroy        : true,
+                        ajax: {
+                            url  : '{!! route('get_transactions') !!}',
+                            error : function () {
+                                ;
+                            }
+                        },
+                        columns: [
+                            { data: 'created_at', name: 'Fecha', orderable  : true, searchable : false },
+                            { data: 'precio', name: 'Precio', orderable  : false, searchable : false },
+                            { data: 'partner_id', name: 'Atendió', orderable  : false, searchable : false },
                             { data: 'action', name: 'Acciones', orderable  : false, searchable : false },
                         ],
                         lengthMenu: [[ 10, 25, 50, -1], [ 10, 25, 50, "Todos"]]

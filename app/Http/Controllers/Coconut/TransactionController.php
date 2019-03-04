@@ -19,7 +19,7 @@ use App\Notifications\Message;
 use PDF; // at the top of the file
 
 
-class IncomeController extends Controller
+class TransactionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -53,8 +53,6 @@ class IncomeController extends Controller
         if(empty($request->transaction)){
             $transaction = new Transaction();
             $transaction->precio = 0;
-            $transaction->parking_id = Auth::user()->parking_id;
-            $transaction->partnert_id = Auth::user()->partner_id;
             $transaction->save();
             $id_transaction = $transaction->id_transaction;
         }
@@ -168,18 +166,18 @@ class IncomeController extends Controller
     {
         //
     }
-    public function getIncomes(Request $request)
+    public function getTransactions(Request $request)
     {
         $search = $request->get('search')['value'];
         $transaction = $request->get('transaction');
 
-        $tickets= Income::select(['id_income as Id', 'precio', 'product_id', 'cantidad','description'])->where('parking_id',Auth::user()->parking_id)->where('transaction_id', $transaction)->orderBy('id_income','desc');
+        $tickets= Transaction::select(['id_transaction as Id', 'precio', 'partner_id','created_at'])->where('parking_id',Auth::user()->parking_id)->orderBy('id_income','desc');
 
         return Datatables::of($tickets)
             ->addColumn('action', function ($tickets) {
                     return \Form::button('Eliminar', [
                         'class'   => 'btn btn-warning',
-                        'onclick' => "eliminarIncome('$tickets->Id')",
+                        'onclick' => "eliminarTransaction('$tickets->Id')",
                         'data-toggle' => "tooltip",
                         'data-placement' => "bottom",
                         'title' => "Eliminar !",
@@ -189,9 +187,13 @@ class IncomeController extends Controller
             ->editColumn('precio', function ($tickets) {
                 return format_money($tickets->precio);
             })
-            ->editColumn('product_id', function ($tickets) {
-                $product = Product::find($tickets->product_id,['name']);
-                return $product->name;
+            ->editColumn('partner_id', function ($tickets) {
+                $partner = Partner::find($tickets->partner_id);
+                return  $partner->name;
+            })
+            ->editColumn('created_at', function ($tickets) {
+                $hour =new DateTime("".$tickets->created_at);
+                return  $hour->format('d/m/Y  h:ia') ;
             })
             ->make(true);
     }
@@ -268,9 +270,9 @@ class IncomeController extends Controller
         $ticket->save();
         return ;
     }
-    public function deleteIncome(Request $request)
+    public function deleteTransaction(Request $request)
     {
-        $ticket = Income::find($request->income);
+        $ticket = Transaction::find($request->transaction);
         $ticket->delete();
         return ;
     }
