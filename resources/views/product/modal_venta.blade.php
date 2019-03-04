@@ -7,11 +7,12 @@
             </div>
             <div class="modal-body" style="min-height: 130px;" >
                 <div id="formAddCustomer" class="row">
+                    <input id="id_transaction" type="number" class="form-control">
                     <div class="form-group col-md-6">
                         <label for="nombre" class="control-label">Productos</label>
                         @php($products = App\Product::where('parking_id',Illuminate\Support\Facades\Auth::user()->parking_id)->get())
                         <select class="validate[required] selectpicker2" id="productsList"  data-live-search="true" data-size="10">
-                            <option>Seleccionar</option>
+                            <option value="">Seleccionar</option>
                             @foreach($products as $product)
                                 {!! '<option data-toggle="tooltip" title="'.$product->description.'"value="'.$product->id_product.'">'.$product->name.(!empty($product->cantidad) && $product->cantidad !='-1'?' ('.$product->cantidad.')':'').'</option>' !!}
                             @endforeach

@@ -190,6 +190,45 @@
             return;
 
         }
+        function agregarIncome() {
+            var vproduct=$("#productsList").validationEngine('validate');
+            var vCant=$("#cantIncome").validationEngine('validate');
+            if (vproduct || vCant)
+                return;
+
+            var product=$("#productsList").val();
+            var cantidad=$("#cantIncome").val();
+            var transaction=$("#id_transaction").val();
+
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: "POST",
+                url: "incomes",
+                data: {
+                    product : product,
+                    cantidad : cantidad,
+                    transaction : transaction,
+                },
+                success: function (response) {
+                    new PNotify({
+                        title: 'Exito',
+                        type: 'success',
+                        text: 'Se agregó el producto con exito'
+                    });
+                    $("#productsList").val('');
+                    $("#cantIncome").val(1);
+                    if(transaction !='')
+                        $("#id_transaction").val(response);
+                    console.log(response);
+                    //$('#income-table').dataTable()._fnAjaxUpdate();
+                },
+                error : function () {
+                    //location = '/login';
+                }
+            });
+        }
         function openModalPrestamoMod(idPrestamo){
             loadCustomers();
             $('#modal_prestamo_mod').modal('show');
