@@ -19,35 +19,23 @@
                     </div>
                     <div class="form-group col-md-6">
                         <label for="nombre" class="control-label">Cantidad</label>
-                        <input id="fechaPrest" type="number" class="form-control validate[required]">
+                        <input id="cantIncome" type="number" class="form-control validate[required]">
                     </div>
-                    <div class="form-group col-md-6">
-                        <label for="nombre" class="control-label">interes %</label>
-                        <input id="interestPrest" onchange="calcularCuota()" type="number" class="form-control validate[required]">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="nombre" class="control-label" >Tiempo (Meses)</label>
-                        <input id="timePrest" type="number" onchange="calcularCuota()" class="form-control validate[required]">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="nombre" class="control-label">Tipo</label>
-                        <select class="form-control" id="typePrest" onchange="calcularCuota()">
-                            <option value="1">Mensual</option>
-                            <option value="2">Quincenal</option>
-                        </select>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="nombre" class="control-label">Monto</label>
-                        <input id="montoPrest" type="number" onchange="calcularCuota()" class="form-control validate[required]">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="nombre" class="control-label">Cuota</label>
-                        <input disabled id="CuotaPrest" type="number" class="form-control validate[required]">
-                    </div>
-
                     <div class="form-group col-md-12 pt-3">
-                        <button id="new_prestamo" class="btn btn-primary full-width waves-effect waves-light" onclick="crearPrestamo()"><strong>REGISTRAR</strong></button>
+                        <button id="new_income" class="btn btn-primary full-width waves-effect waves-light" onclick="agregarIncome()"><strong>Agregar</strong></button>
                     </div>
+                </div>
+                <div class="col-12"  style="overflow:  auto;">
+                    <table class="table responsive" id="income-table">
+                        <thead>
+                        <tr>
+                            <th class="all">Producto</th>
+                            <th class="min-tablet">Cantidad</th>
+                            <th class="min-tablet">Precio</th>
+                            <th class="all">acciones</th>
+                        </tr>
+                        </thead>
+                    </table>
                 </div>
             </div>
         </div><!-- /.modal-content -->
