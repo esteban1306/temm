@@ -44,7 +44,7 @@
                             <div class="fl_layer">
                                 <h4 class="title">Precio</h4>
                                 <span class="line"></span>
-                                <span class="data" id="total"> - </span>
+                                <span class="data" id="precioVenta"> - </span>
                             </div>
                         </div>
                     </div>

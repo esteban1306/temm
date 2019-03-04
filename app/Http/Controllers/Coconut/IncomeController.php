@@ -73,8 +73,10 @@ class IncomeController extends Controller
         $transaction = Transaction::find($id_transaction);
         $transaction->precio = $transaction->precio +$income->precio;
         $transaction->save();
+        $return['transaction_id'] = $id_transaction;
+        $return['precio'] = $transaction->precio;
 
-        return $return['transaction_id'] = $id_transaction;
+        return $return;
     }
     public function pdf(Request $request)
     {

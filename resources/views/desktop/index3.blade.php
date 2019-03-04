@@ -214,7 +214,7 @@
                     cantidad : cantidad,
                     transaction : transaction,
                 },
-                success: function (response) {
+                success: function (datos) {
                     new PNotify({
                         title: 'Exito',
                         type: 'success',
@@ -223,7 +223,8 @@
                     $("#productsList").val('');
                     $("#cantIncome").val(1);
                     if(transaction =='')
-                        $("#id_transaction").val(response);
+                        $("#id_transaction").val(datos['transaction_id']);
+                    $('#precioVenta').html(datos['precio']);
                     loadIncomes();
                 },
                 error : function () {
