@@ -74,107 +74,11 @@ class IncomeController extends Controller
         $transaction->precio = $transaction->precio +$income->precio;
         $transaction->save();
         $return['transaction_id'] = $id_transaction;
-        $return['precio'] = $transaction->precio;
+        $return['precio'] = format_money($transaction->precio);
 
         return $return;
     }
-    public function pdf(Request $request)
-    {
-        $id = $request->id_pdf;
-        $ticket= Ticket::find($id);
-        $hour =new DateTime("".$ticket->hour);
-        $hour2 =new DateTime("".$ticket->date_end);
-        $style = array(
-            'position' => '',
-            'align' => 'C',
-            'stretch' => false,
-            'fitwidth' => true,
-            'cellfitalign' => '',
-            'border' => false,
-            'hpadding' => 'auto',
-            'vpadding' => 'auto',
-            'fgcolor' => array(0,0,0),
-            'bgcolor' => false, //array(255,255,255),
-            'text' => true,
-            'font' => 'helvetica',
-            'fontsize' => 8,
-            'stretchtext' => 4
-        );
-        PDF::SetTitle('Ticket');
-        PDF::AddPage('P', 'A6');
-        PDF::SetMargins(6, 0, 45);
-        $parking = Parking::find(Auth::user()->parking_id);
-        $html = '<div style="text-align:center; margin-top: -10px !important"><big style="margin-bottom: 1px"><b style="letter-spacing: -1 px;">&nbsp; PARQUEADERO '.$parking->name.'</b></big><br>
-                '.($parking->parking_id !=5?'<em style="font-size: 7px;margin-top: 2px;margin-bottom: 1px">"Todo lo puedo en Cristo que<br> me fortalece": Fil 4:13 <br></em>':'').'
-                <small style="font-size: x-small;margin-top: 1px;margin-bottom: 1px"><b>'.$parking->address.'</b></small>'
-            .($parking->parking_id==3?'<small style="text-align:center;font-size: 6px"><br>
-    NIT: 1094965452-1 <br>OLIVEROS HERNANDEZ VALENTINA<br> </small><small style="text-align:center;font-size: 8px"><b>SERVICIO: Lun-Sab 7am - 9pm</b><br> <b> TEL: 3104276986</b></small>':'')
-            .($parking->parking_id==4?'<small style="text-align:center;font-size: 7px"><br>
-    <b>SERVICIO: Lun-Sab 7am - 9pm</b><br>CARLOS E. MIDEROS <br> NIT: 80449231-4 <br> TEL: 9207119<br> CEL: 3013830790</small>':'').
-            ($parking->parking_id==5?'<small style="text-align:center;font-size: 6px"><br>
-    NIT: 89000746-1 <br>HUGO ALEXANDER VARGAS SANCHEZ<br> </small><small style="text-align:center;font-size: 8px"><b>SERVICIO: Lun-Dom 6:30am - 9:30pm</b><br> <b> TEL: 3173799831</b></small>':'');
-        if(!isset($ticket->price)) {
-            $html .= '<small style="text-align:left;font-size: small;margin-bottom: 1px;"><b><br>
-                 ' . ($ticket->schedule==3? "FACTURA DE VENTA N° " . $ticket->ticket_id . "<br>" : '') .'
-                 Fecha ingreso: ' . $hour->format('d/m/Y') . '<br>
-                 Hora ingreso: ' . $hour->format('h:ia') . '<br>
-                 ' . ($ticket->schedule==3? "   Fecha vencimiento: " . $hour2->format('d/m/Y') . "<br>" : '') .'
-                 ' . ($ticket->schedule==3? "<b>".strtoupper($ticket->name) . "</b><br>" : '') .'
-                 Tipo: ' . ($ticket->type == 1 ? 'Carro' : ($ticket->type == 3 ? 'Camioneta' : 'Moto')) . '<br>
-                 Placa: ' . $ticket->plate . '<br>
-                 ' . (isset($ticket->drawer) ? "Locker: " . $ticket->drawer . "<br>" : '') . '
-                 </b></small>
-                 <small style="text-align:left;font-size: 6px;margin-top: 1px"><br>
-                 1.El vehiculo se entregara al portador de este recibo<br>
-                 2.No aceptamos ordenes escritas o por telefono<br>
-                 3.Despues de retirado el vehiculo no respondemos por daños, faltas o averias. Revise el vehiculo a la salida.<br>
-                 4.No respondemos por objetos dejados en el carro mientras sus puertas esten aseguradas<br>
-                 5.No somos responsables por daños o perdidas causadas en el parqueadero mientras el vehiculo no sea entregado personalmente<br>
-                 6.No respondemos por la perdida, deterioro o daños ocurridos por causa de incendio, terremoto o causas similares, motin,conmosion civil, revolucion <br>y otros eventos que impliquen fuerza mayor.
-                 </small></div>';
-        }else{
-            $pay_day = new DateTime("".$ticket->pay_day);
-            $interval = date_diff($hour,$pay_day);
-            $horas = $interval->format("%H");
-            $minutos = $interval->format("%I");
-            if($minutos<=5 && $horas==0 && $ticket->schedule==1){
-                $horas= 0;
-            }else{
-                $parking = Parking::find(Auth::user()->parking_id);
-                $minutos = ($minutos*1) - ($parking->free_time);
-                $horas = (24*$interval->format("%d"))+$horas*1 + (($minutos>=0? 1: 0)*1);
-                $horas = $horas==0? 1: $horas;
-            }
-            $html .= '<small style="text-align:left;font-size: small"><br>
-                    FACTURA DE VENTA N° ' . $ticket->ticket_id . '<br>
-                 ' . ($ticket->schedule==3?"<b>".strtoupper($ticket->name) . "</b><br>" : '') .'
-                 ' . ($ticket->schedule==1? "   Fracciones: " . $horas . "<br>" : '') .'
-                   Fecha ingreso: ' . $hour->format('d/m/Y') . '<br>
-                 Hora ingreso: ' . $hour->format('h:ia') . '<br>
-                 ' . ($ticket->schedule!=3? "   Fecha salida: " . $pay_day->format('d/m/Y') . "<br>" : '') .'
-                 ' . ($ticket->schedule!=3? "   Hora salida: " . $pay_day->format('h:ia') . "<br>" : '') .'
-                 ' . ($ticket->schedule==3? "   Fecha vencimiento: " . $hour2->format('d/m/Y') . "<br>" : '') .'
-                 Tipo: ' . ($ticket->type == 1 ? 'Carro' : ($ticket->type == 3 ? 'Camioneta' : 'Moto')) . '<br>
-                 Placa: ' . $ticket->plate . '<br>
-                 ' . (isset($ticket->price) ? "   Precio: " . $ticket->price . "<br>" : '') .
-                (isset($ticket->extra) ? ($ticket->extra>0?"Incremento: ":"Descuento:" ). abs($ticket->extra) . "<br>Total: " . ($ticket->price+$ticket->extra) . "<br>" : '').
-                '</small>
-</div>';
-        }
-        $html .= '<small style="text-align:left;font-size: 6px"><br>
-                 <b>IMPRESO POR TEMM SOFT 3207329971</b>
-                 </small>';
-        PDF::writeHTML($html, true, false, true, false, '');
-        if(!isset($ticket->price)){
-        $id_bar = substr('0000000000'.$ticket->ticket_id,-10);
-        PDF::write1DBarcode($id_bar, 'C128C', '', '', '', 18, 0.4, $style, 'N');
-        }
-        $js = 'print(true);';
-        PDF::IncludeJS($js);
-        PDF::Output('ticket.pdf');
 
-// set javascript
-    }
     /**
      * Display the specified resource.
      *
@@ -271,15 +175,14 @@ class IncomeController extends Controller
 
         return Datatables::of($tickets)
             ->addColumn('action', function ($tickets) {
-                $htmlAdmin= \Form::button('Editar', [
-                        'class'   => 'btn btn-primary',
-                        'onclick' => "openModalMod('$tickets->Id')",
+                    return \Form::button('Eliminar', [
+                        'class'   => 'btn btn-warning',
+                        'onclick' => "eliminarIncome('$tickets->Id')",
                         'data-toggle' => "tooltip",
                         'data-placement' => "bottom",
-                        'title' => "Editar !",
+                        'title' => "Eliminar !",
 
                     ]);
-                    return $htmlAdmin;
             })
             ->editColumn('precio', function ($tickets) {
                 return format_money($tickets->precio);
@@ -363,9 +266,9 @@ class IncomeController extends Controller
         $ticket->save();
         return ;
     }
-    public function deleteProduct(Request $request)
+    public function deleteIncome(Request $request)
     {
-        $ticket = Product::find($request->product);
+        $ticket = Income::find($request->income);
         $ticket->delete();
         return ;
     }

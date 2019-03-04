@@ -420,7 +420,7 @@
             desktop_index_vm.changePrice();
         }
 
-        function eliminarProduct(id) {
+        function eliminarIncome(id) {
             (new PNotify({
                 title: 'Necesita confirmación',
                 text: 'Esta seguro de querer eliminar el producto?',
@@ -443,7 +443,7 @@
                     'modal': true
                 }
             })).get().on('pnotify.confirm', function() {
-                desktop_index_vm.deleteProduct(id);
+                desktop_index_vm.deleteIncome(id);
             }).on('pnotify.cancel', function() {
                ;
             });
@@ -1149,6 +1149,29 @@
                                     text: 'Se Eliminó el producto con exito'
                                 });
                                 $('#tickets-table').dataTable()._fnAjaxUpdate();
+                            },
+                            error : function () {
+                                location = '/login';
+                            }
+                        });
+                },
+                deleteProduct : function(income) {
+                        $.ajax({
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            type: "POST",
+                            url: "eliminar_income",
+                            data: {
+                                income:income
+                            },
+                            success: function (datos) {
+                                new PNotify({
+                                    title: 'Exito',
+                                    type: 'success',
+                                    text: 'Se Eliminó el producto con exito'
+                                });
+                                loadIncomes();
                             },
                             error : function () {
                                 location = '/login';
