@@ -241,6 +241,7 @@
                     $('#precioVenta').html(datos['precio']);
                     loadIncomes();
                     $('.selectpicker2').selectpicker('refresh');
+                    $('#transaction-table').dataTable()._fnAjaxUpdate();
                 },
                 error : function () {
                     //location = '/login';
