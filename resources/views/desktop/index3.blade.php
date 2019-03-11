@@ -242,6 +242,7 @@
                     loadIncomes();
                     $('.selectpicker2').selectpicker('refresh');
                     $('#transaction-table').dataTable()._fnAjaxUpdate();
+                    desktop_index_vm.load();
                 },
                 error : function () {
                     //location = '/login';
