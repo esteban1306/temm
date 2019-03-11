@@ -16,7 +16,7 @@
             <!---->
             <p class="height_10" v-show="all"></p>
 
-            <!--
+
             <div class="box"  v-show="all">
                 <div class="box-title">
                     <h3>
@@ -32,7 +32,7 @@
                                 <input class="form-control" id="Tiempo" />
                             </div>
                         </div>
-                        <div class="col-md-2">
+                        <!--<div class="col-md-2">
                             <div class="form-group">
                                 {!! Form::label('Estado', 'Estado', ['class' => 'control-label']) !!}
                                 <select id="status" name="status" class="form-control">
@@ -51,7 +51,7 @@
                                     <option value="2">Quincenal</option>
                                 </select>
                             </div>
-                        </div>
+                        </div>-->
                         <div class="col-md-2">
                             <div class="form-group">
                                 {!! Form::label('tipoT', 'Cliente', ['class' => 'control-label']) !!}
@@ -67,7 +67,7 @@
                         </div>
                     </div>
                 </div>
-            </div>-->
+            </div>
 
             <div class="row" v-show="all">
                 <div class="col-12" style="overflow:  auto;">
@@ -816,7 +816,7 @@
                 "locale": {
                     "format": "YYYY-MM-DD"
                 },
-                "startDate": "<?php $now = Carbon::now(); echo Carbon::yesterday()->format('Y-m-d')?>",
+                "startDate": "<?php $now = Carbon::now(); echo Carbon::now()->format('Y-m-d')?>",
                 "endDate": "<?php   echo $now->addDay()->format('Y-m-d')?>",
                 "opens": "center",
                 "drops": "up"
