@@ -463,7 +463,7 @@
             });
         }
 
-        function eliminarPrestamo(id) {
+        function eliminarTransaction(id) {
             (new PNotify({
                 title: 'Necesita confirmación',
                 text: 'Esta seguro de querer eliminar el registro?',
@@ -486,7 +486,7 @@
                     'modal': true
                 }
             })).get().on('pnotify.confirm', function() {
-                desktop_index_vm.deletePrestamo(id);
+                desktop_index_vm.deleteTransaction(id);
             }).on('pnotify.cancel', function() {
                ;
             });
@@ -1207,6 +1207,28 @@
                                     text: 'Se Eliminó el producto con exito'
                                 });
                                 loadIncomes();
+                            },
+                            error : function () {
+                                location = '/login';
+                            }
+                        });
+                },
+                deleteTransaction : function(transaction) {
+                        $.ajax({
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            type: "POST",
+                            url: "eliminar_transaction",
+                            data: {
+                                transaction:transaction
+                            },
+                            success: function (datos) {
+                                new PNotify({
+                                    title: 'Exito',
+                                    type: 'success',
+                                    text: 'Se Eliminó la venta con exito'
+                                });
                             },
                             error : function () {
                                 location = '/login';

@@ -182,7 +182,14 @@ class TransactionController extends Controller
                         'data-placement' => "bottom",
                         'title' => "Eliminar !",
 
-                    ]);
+                    ]).\Form::button('Editar', [
+                            'class'   => 'btn btn-primary',
+                            'onclick' => "openModalVenta('$tickets->Id')",
+                            'data-toggle' => "tooltip",
+                            'data-placement' => "bottom",
+                            'title' => "Editar !",
+
+                        ]);
             })
             ->editColumn('precio', function ($tickets) {
                 return format_money($tickets->precio);
