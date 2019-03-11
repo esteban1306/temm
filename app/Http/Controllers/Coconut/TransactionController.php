@@ -171,7 +171,7 @@ class TransactionController extends Controller
         $search = $request->get('search')['value'];
         $transaction = $request->get('transaction');
 
-        $tickets= Transaction::select(['id_transaction as Id', 'precio', 'partner_id','created_at'])->where('parking_id',Auth::user()->parking_id)->orderBy('id_income','desc');
+        $tickets= Transaction::select(['id_transaction as Id', 'precio', 'partner_id','created_at'])->where('parking_id',Auth::user()->parking_id)->orderBy('id_transaction','desc');
 
         return Datatables::of($tickets)
             ->addColumn('action', function ($tickets) {
