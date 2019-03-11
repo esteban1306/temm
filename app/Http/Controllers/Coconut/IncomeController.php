@@ -270,8 +270,11 @@ class IncomeController extends Controller
     }
     public function deleteIncome(Request $request)
     {
-        $ticket = Income::find($request->income);
-        $ticket->delete();
+        $income = Income::find($request->income);
+        $transaction = Transaction::find($income->transaction_id);
+        $transaction->precio = $transaction->precio -$income->precio;
+        $transaction->save();
+        $income->delete();
         return ;
     }
     public function recoveryTicket(Request $request)
