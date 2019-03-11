@@ -218,7 +218,10 @@ class TransactionController extends Controller
         $status = $request->get('status');
 
         $tickets= Transaction::select(['id_transaction as Id', 'precio', 'partner_id','created_at'])->where('parking_id',Auth::user()->parking_id)->orderBy('id_transaction','desc');
-
+        if (!empty($range)) {
+            $dateRange = explode(" - ", $range);
+            $tickets = $tickets->whereBetween('created_at', [$dateRange[0], $dateRange[1]]);
+        }
         $status = [];
         $status['total'] = ZERO;
         $status['extra'] = ZERO;

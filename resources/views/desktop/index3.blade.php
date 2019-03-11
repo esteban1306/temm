@@ -932,6 +932,9 @@
                         },
                         type: "POST",
                         url: "get_status_transaction",
+                        data : {
+                            range           : $("#Tiempo").val()
+                        },
                         success: function (datos) {
                             var total= datos['total'];
                             $("#total").html(datos['total']);
