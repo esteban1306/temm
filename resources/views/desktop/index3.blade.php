@@ -9,7 +9,7 @@
                     <button type="button" onclick="openModalProduct()" class="btn btn-primary col-md-10 btn-lg">Nuevo Producto</button>
                 </div>
                 <div class="col-md-6" style="text-align: center;">
-                    <button type="button" onclick="openModalVenta('')" class="btn btn-default col-md-10 btn-lg">Nueva Venta</button>
+                    <button type="button" onclick="openModalVenta('','')" class="btn btn-default col-md-10 btn-lg">Nueva Venta</button>
                 </div>
             </div>
             <p class="height_10"></p>
@@ -197,9 +197,10 @@
             $('#modal_add').modal('show');
         }
 
-        function openModalVenta(transaction){
+        function openModalVenta(transaction,precio){
             $('#modal_venta').modal('show');
             $('#id_transaction').val(transaction);
+            $('#precioVenta').html(precio);
             loadIncomes();
         }
         function loadProducts() {

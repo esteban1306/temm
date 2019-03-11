@@ -184,7 +184,7 @@ class TransactionController extends Controller
 
                     ]).\Form::button('Editar', [
                             'class'   => 'btn btn-primary',
-                            'onclick' => "openModalVenta('$tickets->Id')",
+                            'onclick' => "openModalVenta('$tickets->Id','".format_money($tickets->precio)."')",
                             'data-toggle' => "tooltip",
                             'data-placement' => "bottom",
                             'title' => "Editar !",
