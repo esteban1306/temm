@@ -226,29 +226,9 @@ class TransactionController extends Controller
         $tickets=$tickets->get();
         $now = new Datetime('now');
         foreach ($tickets as $ticket){
-            $status['total'] += $ticket->price;
-            $status['extra'] += $ticket->extra;
-            if($ticket->type == 1)
-                $status['carros'] ++;
-            if($ticket->type == 2)
-                $status['motos'] ++;
-        }
-        $ticketss= Ticket::select(['plate', 'type', 'extra', 'schedule', 'price', 'name', 'date_end'])->where('parking_id',Auth::user()->parking_id)->where('status','<>',"3")->orderBy('ticket_id','desc');
-        $ticketss = $ticketss->where('schedule', 3);
-        $ticketss=$ticketss->get();
-        foreach ($ticketss as $ticket){
-            if($ticket->schedule == 3 and !empty($ticket->date_end)){
-                $hour2 =new DateTime("".$ticket->date_end);
-                $diff=date_diff(new DateTime("".$ticket->date_end), $now);
-                $diff=$diff->format("%a");
-                if($diff<=2){
-                    $status['month_expire'] .= $ticket->name.' ('.$ticket->plate.') Vence '.$hour2->format('d/m/Y');
-                    $status['month_expire_num'] ++;
-                }
-            }
+            $status['total'] += $ticket->precio;
         }
         $status['total'] = format_money($status['total']);
-        $status['extra'] = format_money($status['extra']);
         return $status;
     }
     public function getProduct(Request $request)

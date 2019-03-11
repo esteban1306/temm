@@ -45,6 +45,7 @@ Route::post('/get_producto', 'ProductController@getProduct')->name('get_producto
 Route::post('/update_cuenta', 'PartnerController@update')->name('update_cuenta')->middleware('auth');
 Route::post('/update_parking', 'ParkingController@update')->name('update_parking')->middleware('auth');
 Route::post('/get_status', 'TicketController@getStatus')->name('get_status')->middleware('auth');
+Route::post('/get_status_transaction', 'TransactionController@getStatus')->name('get_status_transaction')->middleware('auth');
 Route::post('/get_status_prestamo', 'PrestamoController@getStatus')->name('get_status_prestamo')->middleware('auth');
 Route::get('/get_tickets', 'TicketController@getTickets')->name('get_tickets')->middleware('auth');
 Route::get('/get_prestamos', 'PrestamoController@getPrestamos')->name('get_prestamos')->middleware('auth');

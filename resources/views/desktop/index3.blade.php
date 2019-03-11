@@ -91,7 +91,7 @@
                             <div class="fl_layer">
                                 <h4 class="title">Recaudadó</h4>
                                 <span class="line"></span>
-                                <span class="data" id="total"> - </span>
+                                <span class="data" id="recaudado"> - </span>
                             </div>
                         </div>
                     </div>
@@ -100,7 +100,7 @@
                     <div class="widget_box_b">
                         <div class="contt">
                             <div class="fl_layer">
-                                <h4 class="title">motos</h4>
+                                <h4 class="title">Surtido</h4>
                                 <span class="line"></span>
                                 <span class="data" id="motos"> - </span>
                             </div>
@@ -111,7 +111,7 @@
                     <div class="widget_box_b">
                         <div class="contt">
                             <div class="fl_layer">
-                                <h4 class="title">Carros</h4>
+                                <h4 class="title">Gastos</h4>
                                 <span class="line"></span>
                                 <span class="data total" id="carros"> - </span>
                             </div>
@@ -122,9 +122,9 @@
                     <div class="widget_box_b bdred">
                         <div class="contt">
                             <div class="fl_layer">
-                                <h4 class="title">Mensualidades por vencer</h4>
+                                <h4 class="title">Total</h4>
                                 <span class="line"></span>
-                                <span class="data red" id="month_expired"> - </span>
+                                <span class="data red" id="total"> - </span>
                             </div>
                         </div>
                     </div>
@@ -239,6 +239,7 @@
                         $("#id_transaction").val(datos['transaction_id']);
                     $('#precioVenta').html(datos['precio']);
                     loadIncomes();
+                    $('.selectpicker2').selectpicker('refresh');
                 },
                 error : function () {
                     //location = '/login';
@@ -915,40 +916,20 @@
                 this.loadTable();
                 setInterval(function(){$('#tickets-table').dataTable()._fnAjaxUpdate();}, 60000);
                 $('.selectpicker2').selectpicker();
+                this.load();
             },
             methods    : {
                 load : function() {
-                    $("#Tiempo").val();
                     $.ajax({
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
                         type: "POST",
-                        url: "get_status",
-                        data: {
-                            type_car        : $("#type-car").val(),
-                            type            : $("#type").val(),
-                            status          : $("#status").val(),
-                            range           : $("#Tiempo").val(),
-                            customer        : $("#customerList").val()
-                        },
+                        url: "get_status_transaction",
                         success: function (datos) {
-                            var month= datos['month_expire_num'];
-                            if(datos['extra']=='$0')
-                                $("#total").html(datos['total']);
-                            else
-                                $("#total").html(datos['total']+'</br>('+datos['extra']+')');
-                            $("#motos").html(datos['motos']);
-                            $("#carros").html(datos['carros']);
-                            $("#month_expired").html(datos['month_expire_num']);
-                            if( datos['month_expire_num']>0){
-                                new PNotify({
-                                    title: 'Mensualidades pendientes',
-                                    text: datos['month_expire'],
-                                    type: 'info'
-                                });
-                            }
-                            this.retired = 1;
+                            var total= datos['total'];
+                            $("#total").html(datos['total']);
+                            $("#recaudado").html(datos['total']);
                         },
                         error : function () {
                             location = '/login';
