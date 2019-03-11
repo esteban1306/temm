@@ -1003,9 +1003,6 @@
                         destroy        : true,
                         ajax: {
                             url  : '{!! route('get_productos') !!}',
-                            data : {
-                                range           : $("#Tiempo").val()
-                            },
                             error : function () {
                                 ;
                             }
@@ -1029,6 +1026,9 @@
                         destroy        : true,
                         ajax: {
                             url  : '{!! route('get_transactions') !!}',
+                            data : {
+                                range           : $("#Tiempo").val()
+                            },
                             error : function () {
                                 ;
                             }
