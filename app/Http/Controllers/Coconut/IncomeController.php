@@ -274,6 +274,11 @@ class IncomeController extends Controller
         $transaction = Transaction::find($income->transaction_id);
         $transaction->precio = $transaction->precio -$income->precio;
         $transaction->save();
+        $product = Product::find($income->product_id);
+        if($product->cantidad != '-1'){
+            $product->cantidad = $product->cantidad + $income->cantidad;
+            $product->save();
+        }
         $income->delete();
         $return['precio'] = format_money($transaction->precio);
         return $return;
