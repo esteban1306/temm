@@ -1194,6 +1194,7 @@
                                 loadIncomes();
                                 $('#precioVenta').html(datos['precio']);
                                 $('#transaction-table').dataTable()._fnAjaxUpdate();
+                                this.load();
                             },
                             error : function () {
                                 location = '/login';
