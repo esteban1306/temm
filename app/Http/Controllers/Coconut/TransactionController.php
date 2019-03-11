@@ -186,7 +186,7 @@ class TransactionController extends Controller
             })
             ->editColumn('precio', function ($tickets) {
                 return format_money($tickets->precio);
-            })/*
+            })
             ->editColumn('partner_id', function ($tickets) {
                 $partner = Partner::find($tickets->partner_id);
                 return  $partner->name;
@@ -194,7 +194,7 @@ class TransactionController extends Controller
             ->editColumn('created_at', function ($tickets) {
                 $hour =new DateTime("".$tickets->created_at);
                 return  $hour->format('d/m/Y  h:ia') ;
-            })*/
+            })
             ->make(true);
     }
 
