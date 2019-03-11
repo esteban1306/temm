@@ -54,7 +54,7 @@ class IncomeController extends Controller
             $transaction = new Transaction();
             $transaction->precio = 0;
             $transaction->parking_id = Auth::user()->parking_id;
-            $transaction->partnert_id = Auth::user()->partner_id;
+            $transaction->partner_id = Auth::user()->partner_id;
             $transaction->save();
             $id_transaction = $transaction->id_transaction;
         }
