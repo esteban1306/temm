@@ -275,7 +275,8 @@ class IncomeController extends Controller
         $transaction->precio = $transaction->precio -$income->precio;
         $transaction->save();
         $income->delete();
-        return ;
+        $return['precio'] = format_money($transaction->precio);
+        return $return;
     }
     public function recoveryTicket(Request $request)
     {

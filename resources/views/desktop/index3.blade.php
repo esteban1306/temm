@@ -914,7 +914,10 @@
             },
             mounted    : function() {
                 this.loadTable();
-                setInterval(function(){$('#tickets-table').dataTable()._fnAjaxUpdate();}, 60000);
+                setInterval(function(){
+                    $('#tickets-table').dataTable()._fnAjaxUpdate();
+                    $('#transaction-table').dataTable()._fnAjaxUpdate();
+                    }, 60000);
                 $('.selectpicker2').selectpicker();
                 this.load();
             },
@@ -1187,6 +1190,8 @@
                                     text: 'Se Eliminó el producto con exito'
                                 });
                                 loadIncomes();
+                                $('#precioVenta').html(datos['precio']);
+                                $('#transaction-table').dataTable()._fnAjaxUpdate();
                             },
                             error : function () {
                                 location = '/login';
@@ -1209,6 +1214,8 @@
                                     type: 'success',
                                     text: 'Se Eliminó la venta con exito'
                                 });
+                                this.load();
+                                $('#transaction-table').dataTable()._fnAjaxUpdate();
                             },
                             error : function () {
                                 location = '/login';
