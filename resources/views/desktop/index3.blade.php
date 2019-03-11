@@ -842,6 +842,7 @@
             });
             $('#advanced_search').click(function() {
                 desktop_index_vm.loadTable();
+                desktop_index_vm.load();
             });
         });
         function getOpt() {
