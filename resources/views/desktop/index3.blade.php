@@ -200,7 +200,6 @@
         function openModalVenta(transaction){
             $('#modal_venta').modal('show');
             $('#id_transaction').val(transaction);
-            $('#income-table').dataTable()._fnAjaxUpdate();
             loadIncomes();
         }
         function loadProducts() {

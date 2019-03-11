@@ -213,19 +213,8 @@ class TransactionController extends Controller
         $range = $request->get('range');
         $status = $request->get('status');
 
-        $tickets= Ticket::select(['plate', 'type', 'extra', 'schedule', 'price', 'name', 'status', 'date_end'])->where('parking_id',Auth::user()->parking_id)->where('status','<>',"3")->orderBy('ticket_id','desc');
-        if (!empty($schedule))
-        $tickets = $tickets->where('schedule', $schedule);
-        if (!empty($status))
-        $tickets = $tickets->where('status', $status);
-        if (!empty($type))
-            $tickets = $tickets->where('type', $type);
-        if (!empty($range)){
-            $dateRange = explode(" - ", $range);
-            $tickets = $tickets->whereBetween('created_at', [$dateRange[0], $dateRange[1]]);
-        }else{
-            $tickets = $tickets->whereBetween('created_at', [ new Datetime('today'), new Datetime('tomorrow')]);
-        }
+        $tickets= Transaction::select(['id_transaction as Id', 'precio', 'partner_id','created_at'])->where('parking_id',Auth::user()->parking_id)->orderBy('id_transaction','desc');
+
         $status = [];
         $status['total'] = ZERO;
         $status['extra'] = ZERO;
@@ -233,6 +222,7 @@ class TransactionController extends Controller
         $status['motos'] = ZERO;
         $status['month_expire'] = 'Mensualidades por vencer:';
         $status['month_expire_num'] = ZERO;
+
         $tickets=$tickets->get();
         $now = new Datetime('now');
         foreach ($tickets as $ticket){
