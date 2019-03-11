@@ -1003,6 +1003,9 @@
                         destroy        : true,
                         ajax: {
                             url  : '{!! route('get_productos') !!}',
+                            data : {
+                                range           : $("#Tiempo").val()
+                            },
                             error : function () {
                                 ;
                             }
