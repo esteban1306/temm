@@ -269,4 +269,22 @@ class TransactionController extends Controller
         $ticket->save();
         return ;
     }
+    public function export(Request $request)
+    {
+        $id = $request->get('id_transaction');
+
+        $income= Transaction::incomes($id)->get();
+        $date_bill = new DateTime($income[0]->fecha_pago);
+        $date_bill = $date_bill->format('M. - Y');
+        $date = Carbon::now()->toDateString();
+        $data     = [
+            'date'                 => $date,
+            'date_bill'                 => $date_bill,
+            'income'               => $income,
+            'transaction'          => Transaction::find($id),
+            'partner'              => Auth::user()->first_name.' '. Auth::user()->last_name,
+            'type_partner'         => Auth::user()->type,
+        ];
+        return \PDF2::loadView('PDF.transaction', $data)->stream("reporte_$date.pdf");
+    }
 }

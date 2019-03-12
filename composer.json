@@ -6,11 +6,14 @@
     "type": "project",
     "require": {
         "php": ">=7.0.0",
+        "barryvdh/laravel-debugbar": "^2.2",
+        "barryvdh/laravel-dompdf": "^0.8.2",
         "elibyy/tcpdf-laravel": "5.5.*",
         "fideloper/proxy": "~3.3",
         "laravel/framework": "5.5.*",
         "laravel/tinker": "~1.0",
         "laravelcollective/html": "~5.0",
+        "lord/laroute": "2.*",
         "nexmo/laravel": "^1.1",
         "webup/laravel-sendinblue": "^1.1",
         "yajra/laravel-datatables-oracle": "~8.0"
