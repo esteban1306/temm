@@ -7,7 +7,7 @@
                     <div class="col-lg-8 col-lg-8">
                         <div class="text-center">
                             <!--<figure><img src="images/wasi-partner.svg" class="img-fluid" alt=""></figure>-->
-                            <h2>SOFTWARE PARA GESTIÓN DE <strong>PARQUEADEROS</strong></h2>
+                            <h2>SOFTWARE PARA GESTIÓN DE <strong>PARQUEADEROS, CAFÉS Y MUCHO MAS</strong></h2>
                             <img src="images/box-shadow.png" width="220" alt="">
                             <!--<p>Integer fringilla enim eget accumsan tempus. Vivamus nec odio eget sapien convallis condimentum Etiam ac eros quis purus egestas ornare
                                 ut eu augue.</p>-->
@@ -111,25 +111,22 @@
                         <div class="col-lg-4">
                             <div class="item">
                                 <figure><img src="images/ico-partner-01.svg" class="img-fluid" alt=""></figure>
-                                <h3>Etiam ac eros quis purus egestas</h3>
-                                <p>Integer fringilla enim eget accumsan tempus. Vivamus nec odio eget sapien convallis condimentum. Pellentesque nisi metus, tincidunt vel
-                                    feugiat quis, tincidunt in lorem. Etiam ac eros quis purus egestas ornare ut eu augue.</p>
+                                <h3>Date a conocer</h3>
+                                <p>Cuando eres ordenado tus clientes lo notan y tu lo disfrutas.</p>
                             </div>
                         </div>
                         <div class="col-lg-4">
                             <div class="item">
                                 <figure><img src="images/ico-partner-02.svg" class="img-fluid" alt=""></figure>
-                                <h3>Etiam ac eros quis purus egestas</h3>
-                                <p>Integer fringilla enim eget accumsan tempus. Vivamus nec odio eget sapien convallis condimentum. Pellentesque nisi metus, tincidunt vel
-                                    feugiat quis, tincidunt in lorem. Etiam ac eros quis purus egestas ornare ut eu augue.</p>
+                                <h3>Trabaja desde cualquier lugar</h3>
+                                <p>Deja atras las antiguas herramientas en donde estas amarrado a un solo dispositivo, con nosotros puedes estar atento de tu negocio desde cualquier lugar</p>
                             </div>
                         </div>
                         <div class="col-lg-4">
                             <div class="item">
                                 <figure><img src="images/ico-partner-03.svg" class="img-fluid" alt=""></figure>
-                                <h3>Etiam ac eros quis purus egestas</h3>
-                                <p>Integer fringilla enim eget accumsan tempus. Vivamus nec odio eget sapien convallis condimentum. Pellentesque nisi metus, tincidunt vel
-                                    feugiat quis, tincidunt in lorem. Etiam ac eros quis purus egestas ornare ut eu augue.</p>
+                                <h3>Aumenta tu productividad</h3>
+                                <p>Cuando conoces tus gastos y tus ingresos puedes planear mucho mejor que hacer con tu dinero.</p>
                             </div>
                         </div>
                     </div>
