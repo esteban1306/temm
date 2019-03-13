@@ -171,12 +171,16 @@ class TransactionController extends Controller
         $search = $request->get('search')['value'];
         $transaction = $request->get('transaction');
         $range = $request->get('range');
+        $customer = $request->get('customer');
 
-        $tickets= Transaction::select(['id_transaction as Id', 'precio', 'partner_id','created_at'])->where('parking_id',Auth::user()->parking_id)->orderBy('id_transaction','desc');
+        $tickets= Transaction::select(['id_transaction as Id', 'precio', 'partner_id','created_at','customer_id'])->where('parking_id',Auth::user()->parking_id)->orderBy('id_transaction','desc');
         if (!empty($range)) {
             $dateRange = explode(" - ", $range);
             $tickets = $tickets->whereBetween('created_at', [$dateRange[0], $dateRange[1]]);
         }
+        if (!empty($customer))
+            $tickets = $tickets->where('customer_id', $customer);
+
         return Datatables::of($tickets)
             ->addColumn('action', function ($tickets) {
                     return \Form::button('Eliminar', [
@@ -193,7 +197,16 @@ class TransactionController extends Controller
                             'data-placement' => "bottom",
                             'title' => "Editar !",
 
-                        ]);
+                        ])
+                        .(!empty($tickets->customer_id)?
+                        \Form::button('Editar Cliente', [
+                            'class'   => 'btn btn-primary',
+                            'onclick' => "openModalClienteMod($tickets->customer_id)",
+                            'data-toggle' => "tooltip",
+                            'data-placement' => "bottom",
+                            'title' => "Editar Cliente",
+
+                        ]) :'');
             })
             ->editColumn('precio', function ($tickets) {
                 return format_money($tickets->precio);

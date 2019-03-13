@@ -1064,7 +1064,8 @@
                         type: "POST",
                         url: "get_status_transaction",
                         data : {
-                            range           : $("#Tiempo").val()
+                            range           : $("#Tiempo").val(),
+                            customer        :$('#customerList').val()
                         },
                         success: function (datos) {
                             var total= datos['total'];
@@ -1161,7 +1162,8 @@
                         ajax: {
                             url  : '{!! route('get_transactions') !!}',
                             data : {
-                                range           : $("#Tiempo").val()
+                                range           : $("#Tiempo").val(),
+                                customer        :$('#customerList').val()
                             },
                             error : function () {
                                 ;
