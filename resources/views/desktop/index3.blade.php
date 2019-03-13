@@ -6,9 +6,6 @@
             <!---->
             <div class="row">
                 <div class="col-md-6" style="text-align: center;">
-                    <button type="button" onclick="openModalProduct()" class="btn btn-primary col-md-10 btn-lg">Nuevo Producto</button>
-                </div>
-                <div class="col-md-6" style="text-align: center;">
                     <button type="button" onclick="openModalVenta('','')" class="btn btn-default col-md-10 btn-lg">Nueva Venta</button>
                 </div>
             </div>
@@ -55,7 +52,7 @@
                         <div class="col-md-2">
                             <div class="form-group">
                                 {!! Form::label('tipoT', 'Cliente', ['class' => 'control-label']) !!}
-                                <select class="form-control" id="customerList">
+                                <select class="form-control selectpicker2" id="customerList">
                                 </select>
                             </div>
                         </div>
@@ -130,6 +127,15 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-6" style="text-align: center;">
+                    <button type="button" onclick="openModalProduct()" class="btn btn-primary col-md-10 btn-lg">Nuevo Producto</button>
+                </div>
+                <div class="col-md-6" style="text-align: center;">
+                    <button type="button" onclick="openModalCliente()" class="btn btn-primary col-md-10 btn-lg">Nuevo Cliente</button>
+                </div>
+            </div>
+            <p class="height_10"></p>
             <div class="row" v-show="all">
                 <div class="col-12" style="overflow:  auto;">
                     <table class="table responsive" id="tickets-table">
@@ -178,6 +184,8 @@
     @include('product.modal_product_mod')
     @include('product.modal_abono')
     @include('product.modal_list_abonos')
+    @include('customer.modal_add')
+    @include('customer.modal_mod')
 @endsection
 @section('scripts')
     <script src="{{ asset('js/app.js') }}"></script>
@@ -189,12 +197,45 @@
     <script src="{{ asset('js/validationEngine-es.min.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/js/bootstrap-select.min.js"></script>
     <script>
+        function openModalCliente(){
+            $('#modal_add').modal('show');
+            $("#nombreCustomer").val("");
+            $("#celularCustomer").val("");
+            $("#observacionCustomer").val("");
+            $("#cedulaCustomer").val("");
+        }
+        function openModalClienteMod(idCLiente){
+            loadCustomer(idCLiente);
+            $('#modal_mod').modal('show');
+        }
         function openModalProduct(){
             $("#nombreCustomer").val("");
             $("#celularCustomer").val("");
             $("#observacionCustomer").val("");
             $("#cedulaCustomer").val("");
-            $('#modal_add').modal('show');
+            $('#modal_add_product').modal('show');
+        }
+        function loadCustomer(id) {
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: "POST",
+                url: "get_cliente",
+                data: {
+                    cliente_id:id
+                },
+                success: function (datos) {
+                    $('#idCustomerMod').val(id);
+                    $('#nombreCustomerMod').val(datos['nombre']);
+                    $('#celularCustomerMod').val(datos['telefono']);
+                    $('#cedulaCustomerMod').val(datos['cedula']);
+                    $('#observacionCustomerMod').val(datos['observacion']);
+                },
+                error : function () {
+                    //location = '/login';
+                }
+            });
         }
 
         function openModalVenta(transaction,precio){
@@ -249,11 +290,21 @@
                 }
             });
         }
-        function openModalPrestamoMod(idPrestamo){
-            loadCustomers();
-            $('#modal_prestamo_mod').modal('show');
-            $('#idPrestamoMod').val(idPrestamo);
-            loadPrestamo(idPrestamo);
+        function loadCustomers() {
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: "POST",
+                url: "get_customers",
+
+                success: function (datos) {
+                    $('#customerList').html(datos);
+                },
+                error : function () {
+                    location = '/login';
+                }
+            });
         }
         function openModalAbono(prestamo,tipo,cuota){
             $('#modal_abono').modal('show');
@@ -576,7 +627,7 @@
                     precio : precio,
                 },
                 success: function (datos) {
-                    $('#modal_add').modal('hide');
+                    $('#modal_add_product').modal('hide');
                     new PNotify({
                         title: 'Exito',
                         type: 'success',
@@ -924,6 +975,7 @@
                     }, 60000);
                 $('.selectpicker2').selectpicker();
                 this.load();
+                loadCustomers();
             },
             methods    : {
                 load : function() {
