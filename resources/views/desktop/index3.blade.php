@@ -237,7 +237,84 @@
                 }
             });
         }
+        function crearCliente() {
+            var vNombre=$("#nombreCustomer").validationEngine('validate');
+            var vtelefono=$("#celularCustomer").validationEngine('validate');
+            var vcedula=$("#cedulaCustomer").validationEngine('validate');
 
+            if (vNombre || vtelefono || vcedula)
+                return;
+            var nombre = $("#nombreCustomer").val();
+            var telefono = $("#celularCustomer").val();
+            var cedula = $("#cedulaCustomer").val();
+            var observacion = $("#observacionCustomer").val();
+
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: "POST",
+                url: "customers",
+                data: {
+                    name:nombre,
+                    movil:telefono,
+                    cedula:cedula,
+                    observacion:observacion,
+                },
+                success: function (datos) {
+                    $('#modal_add').modal('hide');
+                    new PNotify({
+                        title: 'Exito',
+                        type: 'success',
+                        text: 'Se agregó el cliente con exito'
+                    });
+                    loadCustomers();
+                },
+                error : function () {
+                    location = '/login';
+                }
+            });
+        }
+        function modificarCliente() {
+            var vNombre=$("#nombreCustomerMod").validationEngine('validate');
+            var vtelefono=$("#celularCustomerMod").validationEngine('validate');
+            var vcedula=$("#cedulaCustomerMod").validationEngine('validate');
+
+            if (vNombre || vtelefono || vcedula)
+                return;
+            var id = $("#idCustomerMod").val();
+            var nombre = $("#nombreCustomerMod").val();
+            var telefono = $("#celularCustomerMod").val();
+            var cedula = $("#cedulaCustomerMod").val();
+            var observacion = $("#observacionCustomerMod").val();
+
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: "POST",
+                url: "customers_mod",
+                data: {
+                    id:id,
+                    name:nombre,
+                    movil:telefono,
+                    cedula:cedula,
+                    observacion:observacion,
+                },
+                success: function (datos) {
+                    $('#modal_mod').modal('hide');
+                    new PNotify({
+                        title: 'Exito',
+                        type: 'success',
+                        text: 'Se modificó el cliente con exito'
+                    });
+                    loadCustomers();
+                },
+                error : function () {
+                    location = '/login';
+                }
+            });
+        }
         function openModalVenta(transaction,precio){
             $('#modal_venta').modal('show');
             $('#id_transaction').val(transaction);
