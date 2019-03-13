@@ -345,6 +345,7 @@
                     product : product,
                     cantidad : cantidad,
                     transaction : transaction,
+                    customer    : $('#customerList_id').val()
                 },
                 success: function (datos) {
                     new PNotify({
@@ -377,6 +378,7 @@
 
                 success: function (datos) {
                     $('#customerList').html(datos);
+                    $('#customerList_id').html(datos);
                     $('.selectpicker2').selectpicker('refresh');
                 },
                 error : function () {

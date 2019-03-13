@@ -25,6 +25,13 @@
                     <div class="form-group col-md-12 pt-3">
                         <button id="new_income" class="btn btn-primary full-width waves-effect waves-light" onclick="agregarIncome()"><strong>Agregar</strong></button>
                     </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            {!! Form::label('tipoT', 'Cliente', ['class' => 'control-label']) !!}
+                            <select class="form-control selectpicker2" id="customerList_id">
+                            </select>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-12"  style="overflow:  auto;">
                     <table class="table responsive" id="income-table">
