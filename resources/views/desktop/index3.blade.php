@@ -377,6 +377,7 @@
 
                 success: function (datos) {
                     $('#customerList').html(datos);
+                    $('.selectpicker2').selectpicker('refresh');
                 },
                 error : function () {
                     location = '/login';
