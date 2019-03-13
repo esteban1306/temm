@@ -6,7 +6,7 @@
             <!---->
             <div class="row">
                 <div class="col-md-6" style="text-align: center;">
-                    <button type="button" onclick="openModalVenta('','')" class="btn btn-default col-md-10 btn-lg">Nueva Venta</button>
+                    <button type="button" onclick="openModalVenta('','','')" class="btn btn-default col-md-10 btn-lg">Nueva Venta</button>
                 </div>
             </div>
             <p class="height_10"></p>
@@ -315,10 +315,12 @@
                 }
             });
         }
-        function openModalVenta(transaction,precio){
+        function openModalVenta(transaction,precio, customer){
             $('#modal_venta').modal('show');
             $('#id_transaction').val(transaction);
             $('#precioVenta').html(precio);
+            $('#customerList_id').val(customer);
+            $('.selectpicker2').selectpicker('refresh');
             loadIncomes();
         }
         function loadProducts() {
