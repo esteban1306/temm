@@ -253,11 +253,11 @@ class TransactionController extends Controller
             }
             if($ticket->tipo == 2){
                 $status['surtido'] += $ticket->precio;
-                $status['recaudado'] -= $ticket->precio;
+                $status['total'] -= $ticket->precio;
             }
             if($ticket->tipo == 3){
                 $status['gastos'] += $ticket->precio;
-                $status['recaudado'] -= $ticket->precio;
+                $status['total'] -= $ticket->precio;
             }
         }
         $status['total'] = format_money($status['total']);
