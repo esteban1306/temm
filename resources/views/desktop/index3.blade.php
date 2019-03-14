@@ -65,6 +65,9 @@
                     </div>
                 </div>
             </div>
+            <br>
+            <hr>
+            <br>
 
             <div class="row" v-show="all">
                 <div class="col-12" style="overflow:  auto;">
@@ -80,6 +83,9 @@
                     </table>
                 </div>
             </div>
+            <br>
+            <hr>
+            <br>
             <h2 class="title_a"  v-show="all" >Estado actual</h2>
             <div class="row" v-show="all">
                 <div class="col-lg-3 col-md-6">
@@ -1056,14 +1062,14 @@
 
             },
             mounted    : function() {
-                this.loadTable();
+                loadCustomers();
                 setInterval(function(){
                     $('#tickets-table').dataTable()._fnAjaxUpdate();
                     $('#transaction-table').dataTable()._fnAjaxUpdate();
                     }, 60000);
                 $('.selectpicker2').selectpicker();
+                this.loadTable();
                 this.load();
-                loadCustomers();
             },
             methods    : {
                 load : function() {
@@ -1140,7 +1146,7 @@
                             lengthMenu: [[ 10, 25, 50, -1], [ 10, 25, 50, "Todos"]]
                         });
                     }else{
-                        //this.load();
+                        this.load();
                     $('#tickets-table').DataTable({
                         sDom           : 'r<Hlf><"datatable-scroll"t><Fip>',
                         order          : [],
