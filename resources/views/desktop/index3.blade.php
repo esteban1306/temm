@@ -99,7 +99,7 @@
                             <div class="fl_layer">
                                 <h4 class="title">Surtido</h4>
                                 <span class="line"></span>
-                                <span class="data" id="motos"> - </span>
+                                <span class="data" id="surtido"> - </span>
                             </div>
                         </div>
                     </div>
@@ -110,7 +110,7 @@
                             <div class="fl_layer">
                                 <h4 class="title">Gastos</h4>
                                 <span class="line"></span>
-                                <span class="data total" id="carros"> - </span>
+                                <span class="data total" id="gastos"> - </span>
                             </div>
                         </div>
                     </div>
@@ -1074,7 +1074,9 @@
                         success: function (datos) {
                             var total= datos['total'];
                             $("#total").html(datos['total']);
-                            $("#recaudado").html(datos['total']);
+                            $("#recaudado").html(datos['recaudado']);
+                            $("#surtido").html(datos['surtido']);
+                            $("#gastos").html(datos['gastos']);
                         },
                         error : function () {
                             location = '/login';

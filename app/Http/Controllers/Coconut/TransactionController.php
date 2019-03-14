@@ -231,25 +231,39 @@ class TransactionController extends Controller
         $range = $request->get('range');
         $status = $request->get('status');
 
-        $tickets= Transaction::select(['id_transaction as Id', 'precio', 'partner_id','created_at'])->where('parking_id',Auth::user()->parking_id)->orderBy('id_transaction','desc');
+        $tickets= Transaction::select(['id_transaction as Id', 'precio', 'partner_id','created_at','tipo'])->where('parking_id',Auth::user()->parking_id)->orderBy('id_transaction','desc');
         if (!empty($range)) {
             $dateRange = explode(" - ", $range);
             $tickets = $tickets->whereBetween('created_at', [$dateRange[0], $dateRange[1]]);
         }
         $status = [];
         $status['total'] = ZERO;
-        $status['extra'] = ZERO;
-        $status['carros'] = ZERO;
-        $status['motos'] = ZERO;
+        $status['surtido'] = ZERO;
+        $status['gastos'] = ZERO;
+        $status['recaudado'] = ZERO;
         $status['month_expire'] = 'Mensualidades por vencer:';
         $status['month_expire_num'] = ZERO;
 
         $tickets=$tickets->get();
         $now = new Datetime('now');
         foreach ($tickets as $ticket){
-            $status['total'] += $ticket->precio;
+            if($ticket->tipo == 1){
+                $status['total'] += $ticket->precio;
+                $status['recaudado'] += $ticket->precio;
+            }
+            if($ticket->tipo == 2){
+                $status['surtido'] += $ticket->precio;
+                $status['recaudado'] -= $ticket->precio;
+            }
+            if($ticket->tipo == 3){
+                $status['gastos'] += $ticket->precio;
+                $status['recaudado'] -= $ticket->precio;
+            }
         }
         $status['total'] = format_money($status['total']);
+        $status['surtido'] = format_money($status['surtido']);
+        $status['gastos'] = format_money($status['gastos']);
+        $status['recaudado'] = format_money($status['recaudado']);
         return $status;
     }
     public function getProduct(Request $request)
