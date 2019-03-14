@@ -53,6 +53,7 @@ class TransactionController extends Controller
         if(empty($request->transaction)){
             $transaction = new Transaction();
             $transaction->precio = 0;
+            $transaction->tipo = 1;
             $transaction->save();
             $id_transaction = $transaction->id_transaction;
         }
