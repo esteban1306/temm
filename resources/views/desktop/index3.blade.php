@@ -127,6 +127,9 @@
                     </div>
                 </div>
             </div>
+            <br>
+            <hr>
+            <br>
             <div class="row">
                 <div class="col-md-6" style="text-align: center;">
                     <button type="button" onclick="openModalProduct()" class="btn btn-outline-info col-md-10 btn-lg">Nuevo Producto</button>
@@ -135,6 +138,9 @@
                     <button type="button" onclick="openModalCliente()" class="btn btn-outline-dark col-md-10 btn-lg">Nuevo Cliente</button>
                 </div>
             </div>
+            <br>
+            <hr>
+            <br>
             <p class="height_10"></p>
             <div class="row" v-show="all">
                 <div class="col-12" style="overflow:  auto;">
