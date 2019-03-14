@@ -6,7 +6,7 @@
             <!---->
             <div class="row">
                 <div class="col-md-6" style="text-align: center;">
-                    <button type="button" onclick="openModalVenta('','','')" class="btn btn-outline-primary col-md-10 btn-lg">Nueva Venta</button>
+                    <button type="button" onclick="openModalVenta('','','')" class="btn btn-primary col-md-10 btn-lg">Nueva Venta</button>
                 </div>
             </div>
             <p class="height_10"></p>
@@ -129,10 +129,10 @@
             </div>
             <div class="row">
                 <div class="col-md-6" style="text-align: center;">
-                    <button type="button" onclick="openModalProduct()" class="btn btn-primary col-md-10 btn-lg">Nuevo Producto</button>
+                    <button type="button" onclick="openModalProduct()" class="btn btn-outline-info col-md-10 btn-lg">Nuevo Producto</button>
                 </div>
                 <div class="col-md-6" style="text-align: center;">
-                    <button type="button" onclick="openModalCliente()" class="btn btn-secondary col-md-10 btn-lg">Nuevo Cliente</button>
+                    <button type="button" onclick="openModalCliente()" class="btn btn-outline-dark col-md-10 btn-lg">Nuevo Cliente</button>
                 </div>
             </div>
             <p class="height_10"></p>
