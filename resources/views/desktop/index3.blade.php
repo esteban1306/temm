@@ -6,7 +6,7 @@
             <!---->
             <div class="row">
                 <div class="col-md-6" style="text-align: center;">
-                    <button type="button" onclick="openModalVenta('','','')" class="btn btn-info col-md-10 btn-lg">Nueva Venta</button>
+                    <button type="button" onclick="openModalVenta('','','')" class="btn btn-outline-primary col-md-10 btn-lg">Nueva Venta</button>
                 </div>
             </div>
             <p class="height_10"></p>
