@@ -135,7 +135,7 @@
                     <button type="button" onclick="openModalProduct()" class="btn btn-outline-info col-md-10 btn-lg">Nuevo Producto</button>
                 </div>
                 <div class="col-md-6" style="text-align: center;">
-                    <button type="button" onclick="openModalCliente()" class="btn btn-outline-dark col-md-10 btn-lg">Nuevo Cliente</button>
+                    <button type="button" onclick="openModalCliente()" class="btn btn-outline-success col-md-10 btn-lg">Nuevo Cliente</button>
                 </div>
             </div>
             <br>
