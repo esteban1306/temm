@@ -196,6 +196,7 @@
 
     @include('product.modal_add')
     @include('transaction.modal_add')
+    @include('transaction.modal_mod')
     @include('product.modal_venta')
     @include('product.modal_product_mod')
     @include('product.modal_abono')
@@ -477,6 +478,11 @@
             loadProduct(product_id);
             $('#idProductMod').val(product_id);
         }
+        function openModalMod(gasto_id){
+            $('#openModalGastoMod').modal('show');
+            loadGasto(gasto_id);
+            $('#transaction_id_mod').val(gasto_id);
+        }
         var getFecha = function(){
             var fecha = new Date();
             var fechaActual=fecha.getDate()+"/0"+(fecha.getMonth()+1)+"/"+fecha.getFullYear()
@@ -552,6 +558,45 @@
                         text: 'Se modificó el producto con exito'
                     });
                     $('#modal_product_mod').modal('hide');
+                    $('#tickets-table').dataTable()._fnAjaxUpdate();
+                },
+                error : function () {
+                    location = '/login';
+                }
+            });
+        }
+        function modificarGasto() {
+            var vname=$("#descriptionGtMod").validationEngine('validate');
+            var vprecio=$("#precioGtMod").validationEngine('validate');
+            if (vname || vprecio)
+                return;
+
+            var tipo=$("#tipoGtMod").val();
+            var description=$("#descriptionGtMod").val();
+            var precio=$("#precioGtMod").val();
+
+
+            var transaction = $("#transaction_id_mod").val();
+
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: "POST",
+                url: "actualizar_transaction",
+                data: {
+                    tipo : tipo,
+                    description : description,
+                    precio : precio,
+                    transaction : transaction,
+                },
+                success: function (datos) {
+                    new PNotify({
+                        title: 'Exito',
+                        type: 'success',
+                        text: 'Se modificó el gasto con exito'
+                    });
+                    $('#openModalGastoMod').modal('hide');
                     $('#tickets-table').dataTable()._fnAjaxUpdate();
                 },
                 error : function () {
@@ -806,6 +851,26 @@
                     $("#minimoPrMod").val(datos['minimo']);
                     $("#cantidadPrMod").val(datos['cantidad']);
                     $("#precioPrMod").val(datos['precio']);
+                },
+                error : function () {
+                   // location = '/login';
+                }
+            });
+        }
+        function loadGasto(id) {
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: "POST",
+                url: "get_transaction",
+                data: {
+                    id:id
+                },
+                success: function (datos) {
+                    $("#tipoGtMod").val(datos['tipo']);
+                    $("#descriptionGtMod").val(datos['description']);
+                    $("#precioGtMod").val(datos['precio']);
                 },
                 error : function () {
                    // location = '/login';

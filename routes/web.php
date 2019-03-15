@@ -30,6 +30,7 @@ Route::post('/pdf', 'TicketController@pdf')->name('pdf')->middleware('auth');
 Route::post('/actualizar', 'TicketController@updateTicket')->name('actualizar')->middleware('auth');
 Route::post('/actualizar_prestamo', 'PrestamoController@updatePrestamo')->name('actualizar_prestamo')->middleware('auth');
 Route::post('/actualizar_producto', 'ProductController@updateProduct')->name('actualizar_producto')->middleware('auth');
+Route::post('/actualizar_transaction', 'TransactionController@updateTransaction')->name('actualizar_transaction')->middleware('auth');
 Route::post('/eliminar', 'TicketController@deleteTicket')->name('eliminar')->middleware('auth');
 Route::post('/eliminar_abono', 'AbonoController@deleteAbono')->name('eliminar_abono')->middleware('auth');
 Route::post('/eliminar_product', 'ProductController@deleteProduct')->name('eliminar_product')->middleware('auth');
@@ -43,6 +44,7 @@ Route::post('/get_prestamo', 'PrestamoController@getPrestamo')->name('get_presta
 Route::post('/get_cliente', 'CustomerController@getCustomer')->name('get_cliente')->middleware('auth');
 Route::post('/get_customers', 'CustomerController@getSelect')->name('get_customers')->middleware('auth');
 Route::post('/get_producto', 'ProductController@getProduct')->name('get_producto')->middleware('auth');
+Route::post('/get_transaction', 'TransactionController@getTransaction')->name('get_transaction')->middleware('auth');
 Route::post('/update_cuenta', 'PartnerController@update')->name('update_cuenta')->middleware('auth');
 Route::post('/update_parking', 'ParkingController@update')->name('update_parking')->middleware('auth');
 Route::post('/get_status', 'TicketController@getStatus')->name('get_status')->middleware('auth');

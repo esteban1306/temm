@@ -51,11 +51,21 @@ class TransactionController extends Controller
         $transaction = new Transaction();
         $transaction->precio = $request->precio;
         $transaction->tipo = $request->tipo;
-        $transaction->description = $request->description;
+        $transaction->description = strtoupper($request->description);
         $transaction->parking_id = Auth::user()->parking_id;
         $transaction->partner_id = Auth::user()->partner_id;
         $transaction->save();
 
+        return ;
+    }
+
+    public function updateTransaction(Request $request)
+    {
+        $ticket = Transaction::find($request->transaction);
+        $ticket->description =strtoupper($request->description??'');
+        $ticket->tipo =$request->tipo;
+        $ticket->precio =$request->precio;
+        $ticket->save();
         return ;
     }
 
@@ -153,7 +163,7 @@ class TransactionController extends Controller
         $range = $request->get('range');
         $customer = $request->get('customer');
 
-        $tickets= Transaction::select(['id_transaction as Id', 'precio', 'partner_id','created_at','customer_id'])->where('parking_id',Auth::user()->parking_id)->orderBy('id_transaction','desc');
+        $tickets= Transaction::select(['id_transaction as Id', 'precio', 'partner_id','created_at','customer_id','tipo'])->where('parking_id',Auth::user()->parking_id)->orderBy('id_transaction','desc');
         if (!empty($range)) {
             $dateRange = explode(" - ", $range);
             $tickets = $tickets->whereBetween('created_at', [$dateRange[0], $dateRange[1]]);
@@ -185,6 +195,15 @@ class TransactionController extends Controller
                             'data-toggle' => "tooltip",
                             'data-placement' => "bottom",
                             'title' => "Editar Cliente",
+
+                        ]) :'')
+                        .($tickets->tipo != 1?
+                        \Form::button('Editar Gasto', [
+                            'class'   => 'btn btn-primary',
+                            'onclick' => "openModalGastoMod($tickets->customer_id)",
+                            'data-toggle' => "tooltip",
+                            'data-placement' => "bottom",
+                            'title' => "Editar Gasto",
 
                         ]) :'');
             })
@@ -245,21 +264,10 @@ class TransactionController extends Controller
         $status['recaudado'] = format_money($status['recaudado']);
         return $status;
     }
-    public function getProduct(Request $request)
+    public function getTransaction(Request $request)
     {
-        $ticket = Product::find($request->product_id);
+        $ticket = Transaction::find($request->id);
         return $ticket;
-    }
-    public function updateProduct(Request $request)
-    {
-        $ticket = Product::find($request->idProduct);
-        $ticket->name =strtoupper($request->name);
-        $ticket->description =strtoupper($request->description??'');
-        $ticket->minimo =$request->minimo??0;
-        $ticket->cantidad =$request->cantidad?? -1;
-        $ticket->precio =$request->precio;
-        $ticket->save();
-        return ;
     }
     public function deleteTransaction(Request $request)
     {
