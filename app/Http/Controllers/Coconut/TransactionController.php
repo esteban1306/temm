@@ -52,6 +52,8 @@ class TransactionController extends Controller
         $transaction->precio = $request->precio;
         $transaction->tipo = $request->tipo;
         $transaction->description = $request->description;
+        $transaction->parking_id = Auth::user()->parking_id;
+        $transaction->partner_id = Auth::user()->partner_id;
         $transaction->save();
 
         return ;
