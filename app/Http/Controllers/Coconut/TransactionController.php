@@ -48,36 +48,13 @@ class TransactionController extends Controller
      */
     public function store(Request $request)
     {
-        //return 2;
-        $id_transaction =$request->transaction;
-        if(empty($request->transaction)){
-            $transaction = new Transaction();
-            $transaction->precio = 0;
-            $transaction->tipo = 1;
-            $transaction->save();
-            $id_transaction = $transaction->id_transaction;
-        }
-        $product = Product::find($request->product);
-        $income = new Income();
-        $income->cantidad =$request->cantidad?? -1;
-        $income->product_id =$request->product;
-        $income->transaction_id =$id_transaction;
-        $income->parking_id = Auth::user()->parking_id;
-        $income->precio = $product->precio*1*$income->cantidad;
-
-        $income->save();
-
-        if($product->cantidad != '-1'){
-            $product->cantidad = $product->cantidad - $income->cantidad;
-            $product->save();
-        }
-        $transaction = Transaction::find($id_transaction);
-        $transaction->precio = $transaction->precio +$income->precio;
+        $transaction = new Transaction();
+        $transaction->precio = $request->precio;
+        $transaction->tipo = $request->tipo;
+        $transaction->description = $request->description;
         $transaction->save();
-        $return['transaction_id'] = $id_transaction;
-        $return['precio'] = format_money($transaction->precio);
 
-        return $return;
+        return ;
     }
 
     /**

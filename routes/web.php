@@ -23,6 +23,7 @@ Route::post('/customers', 'CustomerController@store')->name('customers')->middle
 Route::post('/customers_mod', 'CustomerController@update')->name('customers_mod')->middleware('auth');
 Route::post('/prestamos', 'PrestamoController@store')->name('prestamos')->middleware('auth');
 Route::post('/productos', 'ProductController@store')->name('productos')->middleware('auth');
+Route::post('/transaction', 'TransactionController@store')->name('transaction')->middleware('auth');
 Route::post('/incomes', 'IncomeController@store')->name('incomes')->middleware('auth');
 Route::post('/abonos', 'AbonoController@store')->name('abonos')->middleware('auth');
 Route::post('/pdf', 'TicketController@pdf')->name('pdf')->middleware('auth');
