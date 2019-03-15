@@ -597,7 +597,8 @@
                         text: 'Se modificó el gasto con exito'
                     });
                     $('#modal_mod_transaction').modal('hide');
-                    $('#tickets-table').dataTable()._fnAjaxUpdate();
+                    $('#transaction-table').dataTable()._fnAjaxUpdate();
+                    desktop_index_vm.load();
                 },
                 error : function () {
                     location = '/login';
