@@ -163,7 +163,7 @@ class TransactionController extends Controller
         $range = $request->get('range');
         $customer = $request->get('customer');
 
-        $tickets= Transaction::select(['id_transaction as Id', 'precio', 'partner_id','created_at','customer_id','tipo'])->where('parking_id',Auth::user()->parking_id)->orderBy('id_transaction','desc');
+        $tickets= Transaction::select(['id_transaction as Id', 'precio', 'partner_id','created_at','customer_id','tipo','description'])->where('parking_id',Auth::user()->parking_id)->orderBy('id_transaction','desc');
         if (!empty($range)) {
             $dateRange = explode(" - ", $range);
             $tickets = $tickets->whereBetween('created_at', [$dateRange[0], $dateRange[1]]);
@@ -217,7 +217,7 @@ class TransactionController extends Controller
             })
             ->editColumn('created_at', function ($tickets) {
                 $hour =new DateTime("".$tickets->created_at);
-                return  $hour->format('d/m/Y  h:ia') ;
+                return  $hour->format('d/m/Y  h:ia').' '.$tickets->description ;
             })
             ->make(true);
     }

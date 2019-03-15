@@ -77,7 +77,7 @@
                     <table class="table responsive" id="transaction-table">
                         <thead>
                         <tr>
-                            <th class="all">fecha</th>
+                            <th class="all">Descripción</th>
                             <th class="min-tablet">Precio</th>
                             <th class="min-tablet">Atendió</th>
                             <th class="all">acciones</th>
@@ -1299,7 +1299,7 @@
                             }
                         },
                         columns: [
-                            { data: 'created_at', name: 'Fecha', orderable  : true, searchable : false },
+                            { data: 'created_at', name: 'Descripción', orderable  : true, searchable : false },
                             { data: 'precio', name: 'Precio', orderable  : false, searchable : false },
                             { data: 'partner_id', name: 'Atendió', orderable  : false, searchable : false },
                             { data: 'action', name: 'Acciones', orderable  : false, searchable : false },
