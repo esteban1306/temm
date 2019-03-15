@@ -195,7 +195,7 @@
     </div>
 
     @include('product.modal_add')
-    @include('transaction.modal_add.blade')
+    @include('transaction.modal_add')
     @include('product.modal_venta')
     @include('product.modal_product_mod')
     @include('product.modal_abono')
