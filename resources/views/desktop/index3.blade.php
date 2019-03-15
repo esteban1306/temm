@@ -478,8 +478,8 @@
             loadProduct(product_id);
             $('#idProductMod').val(product_id);
         }
-        function openModalMod(gasto_id){
-            $('#openModalGastoMod').modal('show');
+        function openModalGastoMod(gasto_id){
+            $('#modal_mod_transaction').modal('show');
             loadGasto(gasto_id);
             $('#transaction_id_mod').val(gasto_id);
         }
@@ -596,7 +596,7 @@
                         type: 'success',
                         text: 'Se modificó el gasto con exito'
                     });
-                    $('#openModalGastoMod').modal('hide');
+                    $('#modal_mod_transaction').modal('hide');
                     $('#tickets-table').dataTable()._fnAjaxUpdate();
                 },
                 error : function () {

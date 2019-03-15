@@ -201,7 +201,7 @@ class TransactionController extends Controller
                         .($tickets->tipo != 1?
                         \Form::button('Editar Gasto', [
                             'class'   => 'btn btn-primary',
-                            'onclick' => "openModalMod($tickets->Id)",
+                            'onclick' => "openModalGastoMod($tickets->Id)",
                             'data-toggle' => "tooltip",
                             'data-placement' => "bottom",
                             'title' => "Editar Gasto",
