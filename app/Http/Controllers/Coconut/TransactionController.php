@@ -180,14 +180,15 @@ class TransactionController extends Controller
                         'data-placement' => "bottom",
                         'title' => "Eliminar !",
 
-                    ]).\Form::button('Editar', [
-                            'class'   => 'btn btn-primary',
-                            'onclick' => "openModalVenta('$tickets->Id','".format_money($tickets->precio)."','".($tickets->customer_id ?? '')."')",
-                            'data-toggle' => "tooltip",
-                            'data-placement' => "bottom",
-                            'title' => "Editar !",
+                    ]).($tickets->tipo == 1?
+                            \Form::button('Editar', [
+                                'class'   => 'btn btn-primary',
+                                'onclick' => "openModalVenta('$tickets->Id','".format_money($tickets->precio)."','".($tickets->customer_id ?? '')."')",
+                                'data-toggle' => "tooltip",
+                                'data-placement' => "bottom",
+                                'title' => "Editar !",
 
-                        ])
+                            ]) :'')
                         .(!empty($tickets->customer_id)?
                         \Form::button('Editar Cliente', [
                             'class'   => 'btn btn-primary',
@@ -200,7 +201,7 @@ class TransactionController extends Controller
                         .($tickets->tipo != 1?
                         \Form::button('Editar Gasto', [
                             'class'   => 'btn btn-primary',
-                            'onclick' => "openModalGastoMod($tickets->customer_id)",
+                            'onclick' => "openModalMod($tickets->Id)",
                             'data-toggle' => "tooltip",
                             'data-placement' => "bottom",
                             'title' => "Editar Gasto",
