@@ -117,7 +117,7 @@
                     <div class="widget_box_b">
                         <div class="contt">
                             <div class="fl_layer">
-                                <h4 class="title">Extenciones</h4>
+                                <h4 class="title">Extensiones</h4>
                                 <span class="line"></span>
                                 <span class="data total" id="gastos"> - </span>
                             </div>
@@ -196,7 +196,7 @@
     @include('product.modal_add')
     @include('transaction.modal_add')
     @include('transaction.modal_mod')
-    @include('product.modal_venta')
+    @include('acueducto.modal_venta')
     @include('product.modal_product_mod')
     @include('product.modal_abono')
     @include('product.modal_list_abonos')
@@ -338,7 +338,6 @@
             $('#modal_venta').modal('show');
             $('#id_transaction').val(transaction);
             $('#precioVenta').html(precio);
-            $('#customerList_id').val(customer);
             $('.selectpicker2').selectpicker('refresh');
             loadIncomes();
         }
@@ -366,7 +365,6 @@
                     product : product,
                     cantidad : cantidad,
                     transaction : transaction,
-                    customer    : $('#customerList_id').val()
                 },
                 success: function (datos) {
                     new PNotify({
@@ -399,7 +397,7 @@
 
                 success: function (datos) {
                     $('#customerList').html(datos);
-                    $('#customerList_id').html(datos);
+                    //$('#customerList_id').html(datos);
                     $('.selectpicker2').selectpicker('refresh');
                 },
                 error : function () {
