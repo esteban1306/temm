@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-    @include('app/nav_panel')
+    @include('app/nav_panel_cofee')
     <div class="container-fluid">
         <div class="panelPartner auto_margin">
             <!---->
@@ -167,17 +167,41 @@
                     </table>
                 </div>
             </div>
-            <div class="row" v-show="month">
+            <div class="row" v-show="recaudado">
                 <div class="col-12"  style="overflow:  auto;">
-                    <table class="table responsive" id="month-table">
+                    <table class="table responsive" id="recaudado-table">
                         <thead>
                         <tr>
-                            <th class="all">Placa</th>
-                            <th class="min-tablet">Tipo</th>
-                            <th class="min-tablet">Estado</th>
+                            <th class="all">Descripción</th>
                             <th class="min-tablet">Precio</th>
-                            <th class="min-tablet">Fecha vencimiento</th>
-                            <th class="min-tablet">Nombre</th>
+                            <th class="min-tablet">Atendió</th>
+                            <th class="all">acciones</th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+            <div class="row" v-show="gastos">
+                <div class="col-12"  style="overflow:  auto;">
+                    <table class="table responsive" id="gastos-table">
+                        <thead>
+                        <tr>
+                            <th class="all">Descripción</th>
+                            <th class="min-tablet">Precio</th>
+                            <th class="min-tablet">Atendió</th>
+                            <th class="all">acciones</th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+            <div class="row" v-show="surtido">
+                <div class="col-12"  style="overflow:  auto;">
+                    <table class="table responsive" id="surtido-table">
+                        <thead>
+                        <tr>
+                            <th class="all">Descripción</th>
+                            <th class="min-tablet">Precio</th>
                             <th class="min-tablet">Atendió</th>
                             <th class="all">acciones</th>
                         </tr>
