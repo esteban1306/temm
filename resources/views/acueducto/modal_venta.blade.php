@@ -10,10 +10,11 @@
                     <input id="id_transaction" type="number" class="form-control" style="display: none">
                     <div class="form-group col-md-12">
                         <label for="nombre" class="control-label">Descripción</label>
-                        <input id="descripcionE" type="number" class="form-control validate[required]">
+                        <input id="descripcionIncome" type="number" class="form-control validate[required]">
                     </div>
-                    <div class="form-group col-md-6">
-                        <label for="nombre" class="control-label">Productos</label>
+                    <hr>
+                    <div class="form-group col-md-12">
+                        <label for="nombre" class="control-label">Producto</label>
                         @php($products = App\Product::where('parking_id',Illuminate\Support\Facades\Auth::user()->parking_id)->get())
                         <select class="validate[required] selectpicker2" id="productsList"  data-live-search="true" data-size="10">
                             <option value="">Seleccionar</option>
@@ -26,10 +27,15 @@
                         <label for="nombre" class="control-label">Cantidad</label>
                         <input id="cantIncome" type="number" class="form-control validate[required]">
                     </div>
+                    <div class="form-group col-md-6">
+                        <label for="nombre" class="control-label">Precio (Unitario)</label>
+                        <input id="precioIncome" type="number" class="form-control validate[required]">
+                    </div>
                     <div class="form-group col-md-12 pt-3">
                         <button id="new_income" class="btn btn-primary full-width waves-effect waves-light" onclick="agregarIncome()"><strong>Agregar</strong></button>
                     </div>
                 </div>
+                <hr>
                 <div class="col-12"  style="overflow:  auto;">
                     <table class="table responsive" id="income-table">
                         <thead>

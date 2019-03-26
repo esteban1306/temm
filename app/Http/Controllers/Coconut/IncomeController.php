@@ -82,6 +82,43 @@ class IncomeController extends Controller
 
         return $return;
     }
+    public function storeA(Request $request)
+    {
+        //return 2;
+        $id_transaction =$request->transaction;
+        if(empty($request->transaction)){
+            $transaction = new Transaction();
+            $transaction->precio = 0;
+            $transaction->parking_id = Auth::user()->parking_id;
+            $transaction->partner_id = Auth::user()->partner_id;
+            $transaction->description = $request->descripcion;
+            $transaction->tipo = 1;
+            $transaction->save();
+            $id_transaction = $transaction->id_transaction;
+        }
+        $product = Product::find($request->product);
+        $income = new Income();
+        $income->cantidad =$request->cantidad?? -1;
+        $income->product_id =$request->product;
+        $income->transaction_id =$id_transaction;
+        $income->parking_id = Auth::user()->parking_id;
+        $income->precio = $request->precio;
+
+        $income->save();
+
+        $product->precio = (($product->precio * $product->cantidad)+($request->cantidad * $request->precio))/($product->cantidad - $income->cantidad);
+        $product->cantidad = $product->cantidad + $income->cantidad;
+        $product->save();
+
+        $transaction = Transaction::find($id_transaction);
+        $transaction->description = $request->descripcion;
+        $transaction->precio = $transaction->precio +($income->precio*$income->cantidad);
+        $transaction->save();
+        $return['transaction_id'] = $id_transaction;
+        $return['precio'] = format_money($transaction->precio);
+
+        return $return;
+    }
 
     /**
      * Display the specified resource.
