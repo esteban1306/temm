@@ -6,10 +6,10 @@
             <!---->
             <div class="row">
                 <div class="col-md-6" style="text-align: center;">
-                    <button type="button" onclick="openModalVenta('','','')" class="btn btn-primary col-md-10 btn-lg">Nueva Salida</button>
+                    <button type="button" onclick="openModalVenta('','','')" class="btn btn-primary col-md-10 btn-lg">Nueva Entrada</button>
                 </div>
                 <div class="col-md-6" style="text-align: center;">
-                    <button type="button" onclick="openModalGasto()" class="btn btn-outline-info col-md-10 btn-lg">Nuevo Entrada</button>
+                    <button type="button" onclick="openModalGasto()" class="btn btn-outline-info col-md-10 btn-lg">Nueva Salida</button>
                 </div>
             </div>
             <p class="height_10"></p>
@@ -41,17 +41,18 @@
                                     <option value="2">Pagó</option>
                                 </select>
                             </div>
-                        </div>
+                        </div>-->
                         <div class="col-md-2">
                             <div class="form-group">
-                                {!! Form::label('tipoT', 'Tipo Tiempo', ['class' => 'control-label']) !!}
-                                <select id="type" name="type" class="form-control">
+                                {!! Form::label('tipoT', 'Tipo', ['class' => 'control-label']) !!}
+                                <select id="typeS" name="type" class="form-control">
                                     <option value="">Todos</option>
-                                    <option value="1">Mensual</option>
-                                    <option value="2">Quincenal</option>
+                                    <option value="1">Reparaciones</option>
+                                    <option value="2">Instalaciones</option>
+                                    <option value="3">Extensiones</option>
                                 </select>
                             </div>
-                        </div>-->
+                        </div>
                         <div class="col-md-2">
                             <div class="form-group">
                                 {!! Form::label('tipoT', 'Cliente', ['class' => 'control-label']) !!}
@@ -193,7 +194,7 @@
         </div>
     </div>
 
-    @include('product.modal_add')
+    @include('acueducto.modal_add')
     @include('transaction.modal_add')
     @include('transaction.modal_mod')
     @include('acueducto.modal_venta')
@@ -748,12 +749,13 @@
         function crearProducto() {
             var vname=$("#namePr").validationEngine('validate');
             var vprecio=$("#precioPr").validationEngine('validate');
-            if (vname || vprecio)
+            var vminimo=$("#minimoPr").validationEngine('validate');
+            if (vname || vprecio || vminimo)
                 return;
 
             var name=$("#namePr").val();
-            var description=$("#descriptionPr").val();
             var minimo=$("#minimoPr").val();
+            var description=$("#descriptionPr").val();
             var cantidad=$("#cantidadPr").val();
             var precio=$("#precioPr").val();
 

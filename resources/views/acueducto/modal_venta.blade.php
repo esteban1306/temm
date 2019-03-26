@@ -8,6 +8,10 @@
             <div class="modal-body" style="min-height: 130px;" >
                 <div id="formAddCustomer" class="row">
                     <input id="id_transaction" type="number" class="form-control" style="display: none">
+                    <div class="form-group col-md-12">
+                        <label for="nombre" class="control-label">Descripción</label>
+                        <input id="descripcionE" type="number" class="form-control validate[required]">
+                    </div>
                     <div class="form-group col-md-6">
                         <label for="nombre" class="control-label">Productos</label>
                         @php($products = App\Product::where('parking_id',Illuminate\Support\Facades\Auth::user()->parking_id)->get())
