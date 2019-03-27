@@ -12,10 +12,6 @@
                         <input onkeyup="mayus(this);" id="namePr" type="text" class="form-control validate[required]">
                     </div>
                     <div class="form-group col-md-12">
-                        <label for="fechas" class="control-label">Descripción</label>
-                        <input id="descriptionPr" type="text" class="form-control">
-                    </div>
-                    <div class="form-group col-md-12">
                         <label for="nombre" class="control-label">minimo</label>
                         <select id="minimoPr" name="type" class="form-control validate[required]">
                             <option value="">Seleccionar</option>
