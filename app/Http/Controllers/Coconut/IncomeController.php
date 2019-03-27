@@ -107,7 +107,7 @@ class IncomeController extends Controller
         $income->save();
 
         $product->precio = 20000;//(($product->precio*1 * $product->cantidad*1)+($request->cantidad*1 * $request->precio*1))/($product->cantidad*1 - $income->cantidad*1);
-        $product->cantidad = 5;//$product->cantidad + $income->cantidad;
+        $product->cantidad = ($product->cantidad*1) + ($income->cantidad*1);
         $product->save();
 
         $transaction = Transaction::find($id_transaction);
