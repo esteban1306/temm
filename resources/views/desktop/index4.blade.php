@@ -364,7 +364,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 type: "POST",
-                url: "incomesA",
+                url: "incomes_a",
                 data: {
                     product : product,
                     cantidad : cantidad,
@@ -760,7 +760,6 @@
 
             var name=$("#namePr").val();
             var minimo=$("#minimoPr").val();
-            var description=$("#descriptionPr").val();
             var cantidad=$("#cantidadPr").val();
             var precio=$("#precioPr").val();
 
@@ -772,7 +771,6 @@
                 url: "productos",
                 data: {
                     name : name,
-                    description : description,
                     minimo : minimo,
                     cantidad : cantidad,
                     precio : precio,
@@ -786,7 +784,6 @@
                     });
                     $('#tickets-table').dataTable()._fnAjaxUpdate();
                     $("#namePr").val('');
-                    $("#descriptionPr").val('');
                     $("#minimoPr").val('');
                     $("#cantidadPr").val('');
                     $("#precioPr").val('');

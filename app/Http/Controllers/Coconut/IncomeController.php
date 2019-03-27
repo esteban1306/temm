@@ -91,7 +91,7 @@ class IncomeController extends Controller
             $transaction->precio = 0;
             $transaction->parking_id = Auth::user()->parking_id;
             $transaction->partner_id = Auth::user()->partner_id;
-            $transaction->description = $request->descripcion;
+            $transaction->description = $request->descripcion??'';
             $transaction->tipo = 1;
             $transaction->save();
             $id_transaction = $transaction->id_transaction;
@@ -106,13 +106,13 @@ class IncomeController extends Controller
 
         $income->save();
 
-        $product->precio = (($product->precio * $product->cantidad)+($request->cantidad * $request->precio))/($product->cantidad - $income->cantidad);
+        $product->precio = (($product->precio*1 * $product->cantidad*1)+($request->cantidad*1 * $request->precio*1))/($product->cantidad*1 - $income->cantidad*1);
         $product->cantidad = $product->cantidad + $income->cantidad;
         $product->save();
 
         $transaction = Transaction::find($id_transaction);
-        $transaction->description = $request->descripcion;
-        $transaction->precio = $transaction->precio +($income->precio*$income->cantidad);
+        $transaction->description = $request->descripcion??'';
+        $transaction->precio = $transaction->precio*1 +($income->precio*1*$income->cantidad);
         $transaction->save();
         $return['transaction_id'] = $id_transaction;
         $return['precio'] = format_money($transaction->precio);
