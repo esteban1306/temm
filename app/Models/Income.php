@@ -10,5 +10,5 @@ class Income extends Model
 {
     protected $table = 'incomes';
     protected $primaryKey='id_income';
-
+    use SoftDeletes;
 }

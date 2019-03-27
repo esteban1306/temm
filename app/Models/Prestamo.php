@@ -11,4 +11,5 @@ class Prestamo extends Model
     protected $table = 'prestamo';
     protected $primaryKey='id_prestamo';
 
+    use SoftDeletes;
 }

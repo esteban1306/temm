@@ -11,5 +11,5 @@ class Abono extends Model
     protected $table = 'abonos';
     protected $primaryKey='id_abono';
     protected $dates = ['deleted_at'];
-
+    use SoftDeletes;
 }
