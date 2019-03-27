@@ -106,7 +106,7 @@ class IncomeController extends Controller
 
         $income->save();
 
-        $product->precio = ((($product->precio*1) * ($product->cantidad*1))+(($request->cantidad*1) * ($request->precio*1)))/(($product->cantidad*1) - ($income->cantidad*1));
+        $product->precio = ((($product->precio*1) * ($product->cantidad*1))+(($request->cantidad*1) * ($request->precio*1)))/(($product->cantidad*1) + ($income->cantidad*1));
         $product->cantidad = ($product->cantidad*1) + ($income->cantidad*1);
         $product->save();
 
