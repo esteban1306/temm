@@ -167,7 +167,7 @@
                     </table>
                 </div>
             </div>
-            <div class="row" v-show="recaudado">
+            <div class="row" v-show="nav=='recaudado'">
                 <div class="col-12"  style="overflow:  auto;">
                     <table class="table responsive" id="recaudado-table">
                         <thead>
@@ -181,7 +181,7 @@
                     </table>
                 </div>
             </div>
-            <div class="row" v-show="gastos">
+            <div class="row" v-show="nav=='gastos'">
                 <div class="col-12"  style="overflow:  auto;">
                     <table class="table responsive" id="gastos-table">
                         <thead>
@@ -195,7 +195,7 @@
                     </table>
                 </div>
             </div>
-            <div class="row" v-show="surtido">
+            <div class="row" v-show="nav=='surtido'">
                 <div class="col-12"  style="overflow:  auto;">
                     <table class="table responsive" id="surtido-table">
                         <thead>
