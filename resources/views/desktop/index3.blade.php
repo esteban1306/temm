@@ -137,36 +137,6 @@
                 </div>
             </div>
             <br>
-            <hr>
-            <br>
-            <div class="row">
-                <div class="col-md-6" style="text-align: center;">
-                    <button type="button" onclick="openModalProduct()" class="btn btn-outline-info col-md-10 btn-lg">Nuevo Producto</button>
-                </div>
-                <div class="col-md-6" style="text-align: center;">
-                    <button type="button" onclick="openModalCliente()" class="btn btn-outline-success col-md-10 btn-lg">Nuevo Cliente</button>
-                </div>
-            </div>
-            <br>
-            <hr>
-            <br>
-            <p class="height_10"></p>
-            <div class="row" v-show="all">
-                <div class="col-12" style="overflow:  auto;">
-                    <table class="table responsive" id="tickets-table">
-                        <thead>
-                        <tr>
-                            <th class="all">Nombre</th>
-                            <th class="all">Descripción</th>
-                            <th class="min-tablet">Precio</th>
-                            <th class="min-tablet">Cantidad</th>
-                            <th class="min-tablet">Minimo</th>
-                            <th class="all">acciones</th>
-                        </tr>
-                        </thead>
-                    </table>
-                </div>
-            </div>
             <div class="row" v-show="nav=='recaudado'">
                 <div class="col-12"  style="overflow:  auto;">
                     <table class="table responsive" id="recaudado-table">
@@ -209,6 +179,37 @@
                     </table>
                 </div>
             </div>
+            <hr>
+            <br>
+            <div class="row">
+                <div class="col-md-6" style="text-align: center;">
+                    <button type="button" onclick="openModalProduct()" class="btn btn-outline-info col-md-10 btn-lg">Nuevo Producto</button>
+                </div>
+                <div class="col-md-6" style="text-align: center;">
+                    <button type="button" onclick="openModalCliente()" class="btn btn-outline-success col-md-10 btn-lg">Nuevo Cliente</button>
+                </div>
+            </div>
+            <br>
+            <hr>
+            <br>
+            <p class="height_10"></p>
+            <div class="row" v-show="all">
+                <div class="col-12" style="overflow:  auto;">
+                    <table class="table responsive" id="tickets-table">
+                        <thead>
+                        <tr>
+                            <th class="all">Nombre</th>
+                            <th class="all">Descripción</th>
+                            <th class="min-tablet">Precio</th>
+                            <th class="min-tablet">Cantidad</th>
+                            <th class="min-tablet">Minimo</th>
+                            <th class="all">acciones</th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+
             <form id="form_pdf" class="row" method="POST" action="{{ route('pdf') }}" TARGET="_blank" hidden>
             {{ csrf_field() }}
                 <input id="id_pdf" type="text" class="form-control" name="id_pdf">

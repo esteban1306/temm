@@ -15,10 +15,10 @@
 <nav class="nav_patner_panel">
     <div class="container-fluid">
         <ul class="auto_margin">
-            <li id="nav_inicio" v-bind:class="{ active : nav == 'all' }"><a href="#!" v-on:click="all = true; nav = 'all'; month= false; loadTable()">Inicio</a></li>
-            <li v-bind:class="{ active : nav == 'recaudado' }"><a href="#!" v-on:click="all = false; month= true; nav = 'month'; loadTable('month')">Recaudado</a></li>
-            <li v-bind:class="{ active : nav == 'gastos' }"><a href="#!" v-on:click="all = false; month= true; nav = 'month'; loadTable('month')">Gastos</a></li>
-            <li v-bind:class="{ active : nav == 'sustido' }"><a href="#!" v-on:click="all = false; month= true; nav = 'month'; loadTable('month')">Surtido</a></li>
+            <li id="nav_inicio" v-bind:class="{ active : nav == 'all' }"><a href="#!" v-on:click="all = true; nav = 'all'; loadTable()">Inicio</a></li>
+            <li v-bind:class="{ active : nav == 'recaudado' }"><a href="#!" v-on:click="all = false; month= true; nav = 'recaudado'; ">Recaudado</a></li>
+            <li v-bind:class="{ active : nav == 'gastos' }"><a href="#!" v-on:click="all = false; month= true; nav = 'gastos'; ">Gastos</a></li>
+            <li v-bind:class="{ active : nav == 'surtido' }"><a href="#!" v-on:click="all = false; month= true; nav = 'surtido';">Surtido</a></li>
             <li v-bind:class="{ active : nav == 'account' }"><a href="#!" v-on:click="all = false; month= false; nav = 'account'">Mi cuenta</a></li>
         </ul>
     </div>
