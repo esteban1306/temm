@@ -407,6 +407,9 @@
                     loadIncomes();
                     $('.selectpicker2').selectpicker('refresh');
                     $('#transaction-table').dataTable()._fnAjaxUpdate();
+                    $('#recaudado-table').dataTable()._fnAjaxUpdate();
+                    $('#gastos-table').dataTable()._fnAjaxUpdate();
+                    $('#surtido-table').dataTable()._fnAjaxUpdate();
                     desktop_index_vm.load();
                 },
                 error : function () {
@@ -622,6 +625,9 @@
                     });
                     $('#modal_mod_transaction').modal('hide');
                     $('#transaction-table').dataTable()._fnAjaxUpdate();
+                    $('#recaudado-table').dataTable()._fnAjaxUpdate();
+                    $('#gastos-table').dataTable()._fnAjaxUpdate();
+                    $('#surtido-table').dataTable()._fnAjaxUpdate();
                     desktop_index_vm.load();
                 },
                 error : function () {
@@ -849,6 +855,9 @@
                     $("#precioGt").val('');
                     $("#descriptionGt").val('');
                     $('#transaction-table').dataTable()._fnAjaxUpdate();
+                    $('#recaudado-table').dataTable()._fnAjaxUpdate();
+                    $('#gastos-table').dataTable()._fnAjaxUpdate();
+                    $('#surtido-table').dataTable()._fnAjaxUpdate();
                     desktop_index_vm.load();
                 },
                 error : function () {
@@ -1202,6 +1211,9 @@
                 setInterval(function(){
                     $('#tickets-table').dataTable()._fnAjaxUpdate();
                     $('#transaction-table').dataTable()._fnAjaxUpdate();
+                    $('#recaudado-table').dataTable()._fnAjaxUpdate();
+                    $('#gastos-table').dataTable()._fnAjaxUpdate();
+                    $('#surtido-table').dataTable()._fnAjaxUpdate();
                     }, 60000);
                 $('.selectpicker2').selectpicker();
                 this.loadTable();
@@ -1331,6 +1343,84 @@
                         ],
                         lengthMenu: [[ 10, 25, 50, -1], [ 10, 25, 50, "Todos"]]
                     });
+                        $('#recaudado-table').DataTable({
+                            sDom           : 'r<Hlf><"datatable-scroll"t><Fip>',
+                            order          : [],
+                            processing     : true,
+                            serverSide     : true,
+                            deferRender    : true,
+                            destroy        : true,
+                            ajax: {
+                                url  : '{!! route('get_transactions') !!}',
+                                data : {
+                                    range           : $("#Tiempo").val(),
+                                    customer        :$('#customerList').val(),
+                                    tipo            :1
+                                },
+                                error : function () {
+                                    ;
+                                }
+                            },
+                            columns: [
+                                { data: 'created_at', name: 'Descripción', orderable  : true, searchable : false },
+                                { data: 'precio', name: 'Precio', orderable  : false, searchable : false },
+                                { data: 'partner_id', name: 'Atendió', orderable  : false, searchable : false },
+                                { data: 'action', name: 'Acciones', orderable  : false, searchable : false },
+                            ],
+                            lengthMenu: [[ 10, 25, 50, -1], [ 10, 25, 50, "Todos"]]
+                        });
+                        $('#gastos-table').DataTable({
+                            sDom           : 'r<Hlf><"datatable-scroll"t><Fip>',
+                            order          : [],
+                            processing     : true,
+                            serverSide     : true,
+                            deferRender    : true,
+                            destroy        : true,
+                            ajax: {
+                                url  : '{!! route('get_transactions') !!}',
+                                data : {
+                                    range           : $("#Tiempo").val(),
+                                    customer        :$('#customerList').val(),
+                                    tipo            : 3
+                                },
+                                error : function () {
+                                    ;
+                                }
+                            },
+                            columns: [
+                                { data: 'created_at', name: 'Descripción', orderable  : true, searchable : false },
+                                { data: 'precio', name: 'Precio', orderable  : false, searchable : false },
+                                { data: 'partner_id', name: 'Atendió', orderable  : false, searchable : false },
+                                { data: 'action', name: 'Acciones', orderable  : false, searchable : false },
+                            ],
+                            lengthMenu: [[ 10, 25, 50, -1], [ 10, 25, 50, "Todos"]]
+                        });
+                        $('#surtido-table').DataTable({
+                            sDom           : 'r<Hlf><"datatable-scroll"t><Fip>',
+                            order          : [],
+                            processing     : true,
+                            serverSide     : true,
+                            deferRender    : true,
+                            destroy        : true,
+                            ajax: {
+                                url  : '{!! route('get_transactions') !!}',
+                                data : {
+                                    range           : $("#Tiempo").val(),
+                                    customer        :$('#customerList').val(),
+                                    tipo            : 2
+                                },
+                                error : function () {
+                                    ;
+                                }
+                            },
+                            columns: [
+                                { data: 'created_at', name: 'Descripción', orderable  : true, searchable : false },
+                                { data: 'precio', name: 'Precio', orderable  : false, searchable : false },
+                                { data: 'partner_id', name: 'Atendió', orderable  : false, searchable : false },
+                                { data: 'action', name: 'Acciones', orderable  : false, searchable : false },
+                            ],
+                            lengthMenu: [[ 10, 25, 50, -1], [ 10, 25, 50, "Todos"]]
+                        });
                     }
                 },
                 loadAbonos: function(id_prestamo){
@@ -1488,6 +1578,9 @@
                                 loadIncomes();
                                 $('#precioVenta').html(datos['precio']);
                                 $('#transaction-table').dataTable()._fnAjaxUpdate();
+                                $('#recaudado-table').dataTable()._fnAjaxUpdate();
+                                $('#gastos-table').dataTable()._fnAjaxUpdate();
+                                $('#surtido-table').dataTable()._fnAjaxUpdate();
                                 this.load();
                             },
                             error : function () {
@@ -1513,6 +1606,9 @@
                                 });
                                 this.load();
                                 $('#transaction-table').dataTable()._fnAjaxUpdate();
+                                $('#recaudado-table').dataTable()._fnAjaxUpdate();
+                                $('#gastos-table').dataTable()._fnAjaxUpdate();
+                                $('#surtido-table').dataTable()._fnAjaxUpdate();
                             },
                             error : function () {
                                 location = '/login';

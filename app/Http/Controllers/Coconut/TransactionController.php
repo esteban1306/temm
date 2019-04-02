@@ -162,6 +162,7 @@ class TransactionController extends Controller
         $transaction = $request->get('transaction');
         $range = $request->get('range');
         $customer = $request->get('customer');
+        $tipo = $request->get('tipo')?? null;
 
         $tickets= Transaction::select(['id_transaction as Id', 'precio', 'partner_id','created_at','customer_id','tipo','description'])->where('parking_id',Auth::user()->parking_id)->orderBy('id_transaction','desc');
         if (!empty($range)) {
@@ -170,6 +171,8 @@ class TransactionController extends Controller
         }
         if (!empty($customer))
             $tickets = $tickets->where('customer_id', $customer);
+        if (!empty($tipo))
+            $tickets = $tickets->where('tipo', $tipo);
 
         return Datatables::of($tickets)
             ->addColumn('action', function ($tickets) {
