@@ -17,7 +17,7 @@
             <p class="height_10" v-show="all"></p>
 
 
-            <div class="box"  v-show="all">
+            <div class="box"  v-show="nav != 'account'">
                 <div class="box-title">
                     <h3>
                         <i class="fa fa-search"></i>
@@ -418,6 +418,52 @@
                 }
             });
         }
+        function agregarIncome2() {
+            var vproduct=$("#productsList_2").validationEngine('validate');
+            var vCant=$("#cantIncome_2").validationEngine('validate');
+            if (vproduct || vCant)
+                return;
+
+            var product=$("#productsList_2").val();
+            var cantidad=$("#cantIncome_2").val();
+            var transaction=$("#transaction_id_2").val();
+
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: "POST",
+                url: "incomes",
+                data: {
+                    product : product,
+                    cantidad : cantidad,
+                    transaction : transaction,
+                    gasto: 1,
+                    precio: $('#precioGt').val(),
+                },
+                success: function (datos) {
+                    new PNotify({
+                        title: 'Exito',
+                        type: 'success',
+                        text: 'Se agregó el producto con exito'
+                    });
+                    $("#productsList_2").val('');
+                    $("#cantIncome_2").val(1);
+                    if(transaction =='')
+                        $("#transaction_id_2").val(datos['transaction_id']);
+                    loadIncomes2();
+                    $('.selectpicker2').selectpicker('refresh');
+                    $('#transaction-table').dataTable()._fnAjaxUpdate();
+                    $('#recaudado-table').dataTable()._fnAjaxUpdate();
+                    $('#gastos-table').dataTable()._fnAjaxUpdate();
+                    $('#surtido-table').dataTable()._fnAjaxUpdate();
+                    desktop_index_vm.load();
+                },
+                error : function () {
+                    //location = '/login';
+                }
+            });
+        }
         function loadCustomers() {
             $.ajax({
                 headers: {
@@ -496,6 +542,31 @@
                     { data: 'product_id', name: 'Producto', orderable  : false, searchable : false },
                     { data: 'cantidad', name: 'Cantidad', orderable  : false, searchable : false },
                     { data: 'precio', name: 'Precio', orderable  : false, searchable : false },
+                    { data: 'action', name: 'acciones', orderable  : false, searchable : false },
+                ],
+                lengthMenu: [[ 10, 25, 50, -1], [ 10, 25, 50, "Todos"]]
+            });
+        }
+        function loadIncomes2(){
+            $('#income-table-2').DataTable({
+                sDom           : 'r<Hlf><"datatable-scroll"t><Fip>',
+                order          : [],
+                processing     : true,
+                serverSide     : true,
+                deferRender    : true,
+                destroy        : true,
+                ajax: {
+                    url  : '{!! route('get_incomes') !!}',
+                    data : {
+                        transaction        : $("#id_transaction_2").val(),
+                    },
+                    error : function () {
+                        location = '/login';
+                    }
+                },
+                columns: [
+                    { data: 'product_id', name: 'Producto', orderable  : false, searchable : false },
+                    { data: 'cantidad', name: 'Cantidad', orderable  : false, searchable : false },
                     { data: 'action', name: 'acciones', orderable  : false, searchable : false },
                 ],
                 lengthMenu: [[ 10, 25, 50, -1], [ 10, 25, 50, "Todos"]]
@@ -906,6 +977,9 @@
                     $("#tipoGtMod").val(datos['tipo']);
                     $("#descriptionGtMod").val(datos['description']);
                     $("#precioGtMod").val(datos['precio']);
+                    setTimeout(function () {
+                        tipoGasto();
+                    },1000);
                 },
                 error : function () {
                    // location = '/login';
@@ -1030,6 +1104,16 @@
                 }
             });
         }
+        function tipoGasto() {
+            var tipogt =$('#tipoGt').val();
+            if(tipogt==2){
+                $('#gasto_opt').css('display','none');
+                $('#surtido_opt').css('display','inline');
+            }else{
+                $('#gasto_opt').css('display','inline');
+                $('#surtido_opt').css('display','none');
+            }
+        }
         function crearAbono() {
             var vPrestamo=$("#abonoPrestamo").validationEngine('validate');
             var vMonto=$("#abonoValor").validationEngine('validate');
@@ -1134,6 +1218,9 @@
             $('#advanced_search').click(function() {
                 desktop_index_vm.loadTable();
                 desktop_index_vm.load();
+            });
+            $('#tipoGt').change(function() {
+                tipoGasto();
             });
         });
         function getOpt() {
@@ -1577,6 +1664,7 @@
                                     text: 'Se Eliminó el producto con exito'
                                 });
                                 loadIncomes();
+                                loadIncomes2();
                                 $('#precioVenta').html(datos['precio']);
                                 $('#transaction-table').dataTable()._fnAjaxUpdate();
                                 $('#recaudado-table').dataTable()._fnAjaxUpdate();

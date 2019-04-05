@@ -50,6 +50,7 @@ class IncomeController extends Controller
     {
         //return 2;
         $id_transaction =$request->transaction;
+        $gasto =$request->gasto??'';
         if(empty($request->transaction)){
             $transaction = new Transaction();
             $transaction->precio = 0;
@@ -75,7 +76,11 @@ class IncomeController extends Controller
         }
         $transaction = Transaction::find($id_transaction);
         $transaction->customer_id = $request->customer;
-        $transaction->precio = $transaction->precio +$income->precio;
+        if(empty($gasto))
+            $transaction->precio = $transaction->precio +$income->precio;
+        else
+            $transaction->precio = $request->precio;
+
         $transaction->save();
         $return['transaction_id'] = $id_transaction;
         $return['precio'] = format_money($transaction->precio);
