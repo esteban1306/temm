@@ -319,6 +319,16 @@ class TransactionController extends Controller
         $id = $request->id_pdf;
         $ticket= Transaction::find($id);
         $hour =new DateTime("".$ticket->created_at);
+        $incomes = Income::select(['id_income as Id', 'precio', 'product_id', 'cantidad','description'])->where('parking_id',Auth::user()->parking_id)->where('transaction_id', $id)->orderBy('id_income','desc')->get();
+        $incomes_text = "";
+        foreach ($incomes as $income){
+            $incomes_text.="<tr>
+    <td>".$income->product_id."</td>
+    <td>".$income->cantidad."</td> 
+    <td>".format_money($income->precio)."</td>
+  </tr>";
+        }
+
         $style = array(
             'position' => '',
             'align' => 'C',
@@ -349,12 +359,22 @@ class TransactionController extends Controller
     NIT: 123123123-3 <br>NOMBRE REPRESENTANTE<br> </small><small style="text-align:center;font-size: 8px"><b>SERVICIO: 24 HORAS</b><br> <b> TEL: 3213212311</b></small>':'');
 
         $html .= '<small style="text-align:left;font-size: '.$size.';margin-bottom: 1px;"><b><br>
-             ' . ($ticket->schedule==3? "FACTURA DE VENTA N° " . $id . "<br>" : '') .'
+            FACTURA DE VENTA N°  '. $id . '<br> 
              Fecha ingreso: ' . $hour->format('d/m/Y') . '<br>
              Hora ingreso: ' . $hour->format('h:ia') . '<br>
+             Precio: ' . format_money($ticket->precio) . '<br>
              
             
-             </div>';
+             </div>
+             <table style="width:100%">
+  <tr>
+    <th>Producto</th>
+    <th>Cantidad</th> 
+    <th>Precio Total</th>
+  </tr>
+  '.$incomes_text.'
+</table>
+             ';
 
         $html .= '<small style="text-align:left;font-size: 6px"><br>
                  <b>IMPRESO POR TEMM SOFT 3207329971</b>
