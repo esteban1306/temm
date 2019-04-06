@@ -389,8 +389,8 @@ class TransactionController extends Controller
                  <b>IMPRESO POR TEMM SOFT 3207329971</b>
                  </small>';
         PDF::writeHTML($html, true, false, true, false, '');
-        PDF::AddPage('L', 'A6');
-        $html =' FACTURA DE VENTA N°  '. $id . ' <table style="width:100%">
+        PDF::AddPage('P', 'A4');
+        $html =' FACTURA DE VENTA N°  '. $id . '<br> <table style="width:100%">
   <tr>
     <th width="70%">Producto</th>
     <th  width="30%">Cant</th> 
