@@ -321,12 +321,17 @@ class TransactionController extends Controller
         $hour =new DateTime("".$ticket->created_at);
         $incomes = Income::select(['id_income as Id', 'precio', 'product_id', 'cantidad','description'])->where('parking_id',Auth::user()->parking_id)->where('transaction_id', $id)->orderBy('id_income','desc')->get();
         $incomes_text = "";
+        $incomes_text2 = "";
         foreach ($incomes as $income){
             $product = Product::find($income->product_id);
             $incomes_text.="<tr>
     <td><small  style='font-size:4px'>".$product->name."</small></td>
     <td>".$income->cantidad."</td> 
     <td>".format_money($income->precio)."</td>
+  </tr>";
+            $incomes_text2.="<tr>
+    <td><small  style='font-size:4px'>".$product->name."</small></td>
+    <td>".$income->cantidad."</td> 
   </tr>";
         }
 
@@ -384,14 +389,13 @@ class TransactionController extends Controller
                  <b>IMPRESO POR TEMM SOFT 3207329971</b>
                  </small>';
         PDF::writeHTML($html, true, false, true, false, '');
-        PDF::AddPage('P', 'A6');
-        $html =' <table style="width:100%">
+        PDF::AddPage('L', 'A6');
+        $html =' FACTURA DE VENTA N°  '. $id . ' <table style="width:100%">
   <tr>
-    <th width="50%">Producto</th>
-    <th  width="24%">Cant</th> 
-    <th>Precio Total</th>
+    <th width="70%">Producto</th>
+    <th  width="30%">Cant</th> 
   </tr>
-  '.$incomes_text.'
+  '.$incomes_text2.'
 </table>';
         PDF::writeHTML($html, true, false, true, false, '');
         /*if(!isset($ticket->price)){
