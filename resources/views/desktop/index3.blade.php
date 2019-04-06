@@ -21,7 +21,7 @@
                 <div class="box-title">
                     <h3>
                         <i class="fa fa-search"></i>
-                        <h2 class="title_a">Opciones de Busqueda{{ route('pdf_transaction') }}  -- {{ route('pdf') }}</h2>
+                        <h2 class="title_a">Opciones de Busqueda</h2>
                     </h3>
                 </div>
                 <div class="box-content">
