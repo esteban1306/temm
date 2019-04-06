@@ -27,7 +27,7 @@
                         <button id="new_customer" class="btn btn-primary full-width waves-effect waves-light" onclick="crearGasto()"><strong>REGISTRAR</strong></button>
                     </div>
                 </div>
-                <div class="row" id="surtido_opt">
+                <div class="row" id="surtido_opt" style="display:none">
                     <input id="id_transaction_2" type="number" class="form-control" style="display: none">
                     <div class="form-group col-md-6">
                         <label for="nombre" class="control-label">Productos</label>
@@ -46,24 +46,17 @@
                     <div class="form-group col-md-12 pt-3">
                         <button id="new_income_2" class="btn btn-primary full-width waves-effect waves-light" onclick="agregarIncome2()"><strong>Agregar</strong></button>
                     </div>
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            {!! Form::label('tipoT', 'Cliente', ['class' => 'control-label']) !!}
-                            <select class="form-control selectpicker2" id="customerList_id_2">
-                            </select>
-                        </div>
+                    <div class="col-12"  style="overflow:  auto;">
+                        <table class="table responsive" id="income-table-2">
+                            <thead>
+                            <tr>
+                                <th class="all">Producto</th>
+                                <th class="min-tablet">Cantidad</th>
+                                <th class="all">acciones</th>
+                            </tr>
+                            </thead>
+                        </table>
                     </div>
-                </div>
-                <div class="col-12"  style="overflow:  auto;">
-                    <table class="table responsive" id="income-table-2">
-                        <thead>
-                        <tr>
-                            <th class="all">Producto</th>
-                            <th class="min-tablet">Cantidad</th>
-                            <th class="all">acciones</th>
-                        </tr>
-                        </thead>
-                    </table>
                 </div>
             </div>
         </div><!-- /.modal-content -->

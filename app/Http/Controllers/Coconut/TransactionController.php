@@ -209,7 +209,15 @@ class TransactionController extends Controller
                             'data-placement' => "bottom",
                             'title' => "Editar Gasto",
 
-                        ]) :'');
+                        ]) :'').($tickets->tipo == 1?
+                            \Form::button('Imprimir', [
+                                'class'   => 'btn btn-info',
+                                'onclick' => "form_pdf('$tickets->Id')",
+                                'data-toggle' => "tooltip",
+                                'data-placement' => "bottom",
+                                'title' => "Imprimir !",
+
+                            ]) :'');
             })
             ->editColumn('precio', function ($tickets) {
                 return format_money($tickets->precio);
@@ -305,5 +313,61 @@ class TransactionController extends Controller
             'type_partner'         => Auth::user()->type,
         ];
         return \PDF2::loadView('PDF.transaction', $data)->stream("reporte_$date.pdf");
+    }
+    public function pdf(Request $request)
+    {
+        $id = $request->id_pdf;
+        $ticket= Transaction::find($id);
+        $hour =new DateTime("".$ticket->created_at);
+        $style = array(
+            'position' => '',
+            'align' => 'C',
+            'stretch' => false,
+            'fitwidth' => true,
+            'cellfitalign' => '',
+            'border' => false,
+            'hpadding' => 'auto',
+            'vpadding' => 'auto',
+            'fgcolor' => array(0,0,0),
+            'bgcolor' => false, //array(255,255,255),
+            'text' => true,
+            'font' => 'helvetica',
+            'fontsize' => 8,
+            'stretchtext' => 4
+        );
+        PDF::SetTitle('Venta');
+        PDF::AddPage('P', 'A6');
+        $marginRight = Auth::user()->parking_id == 5?57:45;
+        $marginLeft = Auth::user()->parking_id == 5?2:6;
+        $size = Auth::user()->parking_id == 5?'8px':'small';
+        PDF::SetMargins($marginLeft, 0, $marginRight);
+        $parking = Parking::find(Auth::user()->parking_id);
+        $html = '<div style="text-align:center; margin-top: -10px !important"><big style="margin-bottom: 1px"><b style="letter-spacing: -1 px;">&nbsp;'.$parking->name.'</b></big><br>
+                '.($parking->parking_id !=5?'<em style="font-size: 7px;margin-top: 2px;margin-bottom: 1px">"Todo lo puedo en Cristo que<br> me fortalece": Fil 4:13 <br></em>':'').'
+                <small style="font-size: x-small;margin-top: 1px;margin-bottom: 1px"><b>'.$parking->address.'</b></small>'
+            .($parking->parking_id!=1?'<small style="text-align:center;font-size: 6px"><br>
+    NIT: 123123123-3 <br>NOMBRE REPRESENTANTE<br> </small><small style="text-align:center;font-size: 8px"><b>SERVICIO: 24 HORAS</b><br> <b> TEL: 3213212311</b></small>':'');
+
+        $html .= '<small style="text-align:left;font-size: '.$size.';margin-bottom: 1px;"><b><br>
+             ' . ($ticket->schedule==3? "FACTURA DE VENTA N° " . $id . "<br>" : '') .'
+             Fecha ingreso: ' . $hour->format('d/m/Y') . '<br>
+             Hora ingreso: ' . $hour->format('h:ia') . '<br>
+             
+            
+             </div>';
+
+        $html .= '<small style="text-align:left;font-size: 6px"><br>
+                 <b>IMPRESO POR TEMM SOFT 3207329971</b>
+                 </small>';
+        PDF::writeHTML($html, true, false, true, false, '');
+        /*if(!isset($ticket->price)){
+            $id_bar = substr('0000000000'.$ticket->ticket_id,-10);
+            PDF::write1DBarcode($id_bar, 'C128C', '', '', '', 18, 0.4, $style, 'N');
+        }*/
+        $js = 'print(true);';
+        PDF::IncludeJS($js);
+        PDF::Output('ticket.pdf');
+
+// set javascript
     }
 }
