@@ -244,7 +244,7 @@ class TransactionController extends Controller
         $tickets= Transaction::select(['id_transaction as Id', 'precio', 'partner_id','created_at','tipo'])->where('parking_id',Auth::user()->parking_id)->orderBy('id_transaction','desc');
         if (!empty($range)) {
             $dateRange = explode(" - ", $range);
-            $tickets = $tickets->whereBetween('created_at', [$dateRange[0], $dateRange[1]]);
+            $tickets = $tickets->whereBetween('created_at', [$dateRange[0].' 00:00:00', $dateRange[1].' 23:59:59']);
         }
         $status = [];
         $status['total'] = ZERO;
@@ -407,5 +407,75 @@ class TransactionController extends Controller
         PDF::Output('ticket.pdf');
 
 // set javascript
+    }
+    public function pdfReport(Request $request)
+    {
+        $range = $request->date_pdf;
+        $tickets= Transaction::select(['id_transaction as Id', 'precio', 'partner_id','created_at','tipo','description'])->where('parking_id',Auth::user()->parking_id)->orderBy('id_transaction','desc');
+        if (!empty($range)) {
+            $dateRange = explode(" - ", $range);
+            $tickets = $tickets->whereBetween('created_at', [$dateRange[0].' 00:00:00', $dateRange[1].' 23:59:59']);
+        }
+        $tickets=$tickets->get();
+        $now = new Datetime('now');
+        $status = [];
+        $status['gastos_html'] = "";
+        $status['surtido_html'] = "";
+        foreach ($tickets as $ticket){
+            if($ticket->tipo == 1){
+                $status['total'] += $ticket->precio;
+                $status['recaudado'] += $ticket->precio;
+            }
+            if($ticket->tipo == 2){
+                $status['surtido'] += $ticket->precio;
+                $status['total'] -= $ticket->precio;
+                $status['surtido_html'].='<tr>
+                                            <td span="2"><small>'.$ticket->description.'</small></td> 
+                                            <td>'.format_money($ticket->precio).'</td> 
+                                          </tr>';
+            }
+            if($ticket->tipo == 3){
+                $status['gastos'] += $ticket->precio;
+                $status['total'] -= $ticket->precio;
+                $status['gastos_html'].='<tr>
+                                            <td span="2"><small>'.$ticket->description.'</small></td> 
+                                            <td>'.format_money($ticket->precio).'</td> 
+                                          </tr>';
+            }
+        }
+        $status['total'] = format_money($status['total']);
+        $status['surtido'] = format_money($status['surtido']);
+        $status['gastos'] = format_money($status['gastos']);
+        $status['recaudado'] = format_money($status['recaudado']);
+
+        PDF::SetTitle('Reporte PDF');
+        PDF::AddPage('P', 'A6');
+
+        $html = '<table style="width:100%">
+  <tr>
+    <th>'.$dateRange[0].'</th>
+    <th>'.$dateRange[1].'</th> 
+    <th>Precio</th>
+  </tr>
+  <tr>
+    <td span="2"><b>Recaudado</b></td>
+    <td>'.$status['recaudado'].'</td> 
+  </tr>
+  <tr>
+    <td span="2"><b>Gastos</b></td>
+    <td>'.$status['gastos'].'</td> 
+  </tr>
+  '.$status['gastos_html'].'
+  <tr>
+    <td span="2"><b>Surtido</b></td>
+    <td>'.$status['surtido'].'</td> 
+  </tr>
+  '.$status['surtido_html'].'
+</table><br>Base:  <br> Total Día = '.$status['total'].'<br>';
+
+        PDF::writeHTML($html, true, false, true, false, '');
+        $js = 'print(true);';
+        PDF::IncludeJS($js);
+        PDF::Output('ticket.pdf');
     }
 }

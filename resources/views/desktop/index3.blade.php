@@ -210,6 +210,12 @@
                 </div>
             </div>
 
+            <form id="form_pdf_report" class="row" method="POST" action="{{ route('pdf_report') }}" TARGET="_blank" hidden>
+                {{ csrf_field() }}
+                <input id="date_pdf" type="text" class="form-control" name="">
+                <button id="pdfReportsubmit" type="submit" form="form_pdf">Submit</button>
+            </form>
+
             <form id="form_pdf" class="row" method="POST" action="{{ route('pdf_transaction') }}" TARGET="_blank" hidden>
             {{ csrf_field() }}
                 <input id="id_pdf" type="text" class="form-control" name="id_pdf">
@@ -620,6 +626,11 @@
         function form_pdf(id) {
             $('#id_pdf').val(id);
             $('#pdfsubmit').click();
+        }
+        function form_pdf_report() {
+            var fecha =$("#Tiempo").val();
+            $('#date_pdf').val(fecha);
+            $('#pdfReportsubmit').click();
         }
         function modificarProducto() {
             var vname=$("#namePrMod").validationEngine('validate');
