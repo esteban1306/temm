@@ -210,7 +210,7 @@
                 </div>
             </div>
 
-            <form id="form_pdf" class="row" method="POST" action="{{ route('pdf') }}" TARGET="_blank" hidden>
+            <form id="form_pdf" class="row" method="POST" action="{{ route('pdf_transaction') }}" TARGET="_blank" hidden>
             {{ csrf_field() }}
                 <input id="id_pdf" type="text" class="form-control" name="id_pdf">
                 <button id="pdfsubmit" type="submit" form="form_pdf">Submit</button>
@@ -558,7 +558,7 @@
                 ajax: {
                     url  : '{!! route('get_incomes') !!}',
                     data : {
-                        transaction        : $("#id_transaction_2").val(),
+                        transaction        : $("#transaction_id_2").val(),
                     },
                     error : function () {
                         location = '/login';

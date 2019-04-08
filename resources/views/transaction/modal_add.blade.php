@@ -27,7 +27,7 @@
                         <button id="new_customer" class="btn btn-primary full-width waves-effect waves-light" onclick="crearGasto()"><strong>REGISTRAR</strong></button>
                     </div>
                 </div>
-                <div class="row" id="surtido_opt" style="display: none">
+                <div class="row" id="surtido_opt" style="display:none">
                     <input id="id_transaction_2" type="number" class="form-control" style="display: none">
                     <div class="form-group col-md-6">
                         <label for="nombre" class="control-label">Productos</label>

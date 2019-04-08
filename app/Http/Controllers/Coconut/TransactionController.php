@@ -209,7 +209,15 @@ class TransactionController extends Controller
                             'data-placement' => "bottom",
                             'title' => "Editar Gasto",
 
-                        ]) :'');
+                        ]) :'').($tickets->tipo == 1?
+                            \Form::button('Imprimir', [
+                                'class'   => 'btn btn-info',
+                                'onclick' => "form_pdf('$tickets->Id')",
+                                'data-toggle' => "tooltip",
+                                'data-placement' => "bottom",
+                                'title' => "Imprimir !",
+
+                            ]) :'');
             })
             ->editColumn('precio', function ($tickets) {
                 return format_money($tickets->precio);
@@ -305,5 +313,99 @@ class TransactionController extends Controller
             'type_partner'         => Auth::user()->type,
         ];
         return \PDF2::loadView('PDF.transaction', $data)->stream("reporte_$date.pdf");
+    }
+    public function pdf(Request $request)
+    {
+        $id = $request->id_pdf;
+        $ticket= Transaction::find($id);
+        $hour =new DateTime("".$ticket->created_at);
+        $incomes = Income::select(['id_income as Id', 'precio', 'product_id', 'cantidad','description'])->where('parking_id',Auth::user()->parking_id)->where('transaction_id', $id)->orderBy('id_income','desc')->get();
+        $incomes_text = "";
+        $incomes_text2 = "";
+        foreach ($incomes as $income){
+            $product = Product::find($income->product_id);
+            $incomes_text.="<tr>
+    <td><small  style='font-size:4px'>".$product->name."</small></td>
+    <td>".$income->cantidad."</td> 
+    <td>".format_money($income->precio)."</td>
+  </tr>";
+            $incomes_text2.="<tr>
+    <td><small  style='font-size:4px'>".$product->name."</small></td>
+    <td>".$income->cantidad."</td> 
+  </tr>";
+        }
+
+        $style = array(
+            'position' => '',
+            'align' => 'C',
+            'stretch' => false,
+            'fitwidth' => true,
+            'cellfitalign' => '',
+            'border' => false,
+            'hpadding' => 'auto',
+            'vpadding' => 'auto',
+            'fgcolor' => array(0,0,0),
+            'bgcolor' => false, //array(255,255,255),
+            'text' => true,
+            'font' => 'helvetica',
+            'fontsize' => 8,
+            'stretchtext' => 4
+        );
+        PDF::SetTitle('Venta');
+        PDF::AddPage('P', 'A6');
+        $marginRight = Auth::user()->parking_id == 5?57:45;
+        $marginLeft = Auth::user()->parking_id == 5?2:6;
+        $size = Auth::user()->parking_id == 5?'8px':'small';
+        PDF::SetMargins($marginLeft, 0, $marginRight);
+        $parking = Parking::find(Auth::user()->parking_id);
+        $html = '<div style="text-align:center; margin-top: -10px !important"><big style="margin-bottom: 1px"><b style="letter-spacing: -1 px;">&nbsp;'.$parking->name.'</b></big><br>
+                '.($parking->parking_id !=5?'<em style="font-size: 7px;margin-top: 2px;margin-bottom: 1px">Cambia tu rutina <br></em>':'').'
+                <small style="font-size: x-small;margin-top: 1px;margin-bottom: 1px"><b>'.$parking->address.'</b></small>'
+            .($parking->parking_id!=1?'<small style="text-align:center;font-size: 6px"><br>
+    NIT:41917760-5  <br>GLORIA LILIANA GRISALES<br> </small><small style="text-align:center;font-size: 8px"><b>SERVICIO: lun-vie 7am-5pm, sab 7am-1pm</b><br> <b> TEL: 3146246181-7328098</b></small>':'');
+
+        $html .= '<small style="text-align:left;font-size: '.$size.';margin-bottom: 1px;"><b><br>
+            FACTURA DE VENTA N°  '. $id . '<br> 
+             Fecha ingreso: ' . $hour->format('d/m/Y') . '<br>
+             Hora ingreso: ' . $hour->format('h:ia') . '<br>
+             
+             
+            
+             </div>
+             <table style="width:100%">
+  <tr>
+    <th width="50%">Producto</th>
+    <th  width="24%">Cant</th> 
+    <th>Precio Total</th>
+  </tr>
+  '.$incomes_text.'
+</table>
+<br>
+<hr>
+<b>Precio: ' . format_money($ticket->precio) . '</b><br>
+             ';
+
+        $html .= '<small style="text-align:left;font-size: 6px"><br>
+                 <b>IMPRESO POR TEMM SOFT 3207329971</b>
+                 </small>';
+        PDF::writeHTML($html, true, false, true, false, '');
+        PDF::AddPage('P', 'A4');
+        $html =' FACTURA DE VENTA N°  '. $id . '<br> <table style="width:100%">
+  <tr>
+    <th width="70%">Producto</th>
+    <th  width="30%">Cant</th> 
+  </tr>
+  '.$incomes_text2.'
+</table>';
+        //PDF::writeHTML($html, true, false, true, false, '');
+        /*if(!isset($ticket->price)){
+            $id_bar = substr('0000000000'.$ticket->ticket_id,-10);
+            PDF::write1DBarcode($id_bar, 'C128C', '', '', '', 18, 0.4, $style, 'N');
+        }*/
+        $js = 'print(true);';
+        PDF::IncludeJS($js);
+        PDF::Output('ticket.pdf');
+
+// set javascript
     }
 }
