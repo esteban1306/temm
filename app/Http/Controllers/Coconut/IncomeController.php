@@ -90,6 +90,12 @@ class IncomeController extends Controller
         $transaction = Transaction::find($id_transaction);
         $transaction->description = strtoupper($request->descripcion??'');
         $transaction->customer_id = $request->customer;
+        if(empty($gasto)) {
+            $transaction->tipo = 1;
+        }
+        else
+            $transaction->tipo = 2;
+
         if(empty($gasto))
             $transaction->precio = $transaction->precio +$income->precio;
         else

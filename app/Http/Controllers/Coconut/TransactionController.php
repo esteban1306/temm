@@ -49,7 +49,10 @@ class TransactionController extends Controller
      */
     public function store(Request $request)
     {
-        $transaction = new Transaction();
+        if(!empty($request->transaction??''))
+            $ticket = Transaction::find($request->transaction);
+        else
+            $transaction = new Transaction();
         $transaction->precio = $request->precio;
         $transaction->tipo = $request->tipo;
         $transaction->description = strtoupper($request->description);
@@ -205,7 +208,7 @@ class TransactionController extends Controller
                             'title' => "Editar Cliente",
 
                         ]) :'')
-                        .($tickets->tipo != 1 && empty($tickets->estado && false)?
+                        .($tickets->tipo != 1 && empty($tickets->estado)?
                         \Form::button('Editar Gasto', [
                             'class'   => 'btn btn-primary',
                             'onclick' => "openModalGasto($tickets->Id,".$tickets->precio.",".$tickets->description.",".$tickets->tipo.")",

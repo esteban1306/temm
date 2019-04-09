@@ -968,6 +968,7 @@
             var tipo=$("#tipoGt").val();
             var description=$("#descriptionGt").val();
             var precio=$("#precioGt").val();
+            var transaction=$("#transaction_id_2").val();
 
             $.ajax({
                 headers: {
@@ -979,6 +980,7 @@
                     tipo : tipo,
                     description : description,
                     precio : precio,
+                    transaction : transaction
                 },
                 success: function (datos) {
                     $('#modal_add_transaction').modal('hide');
