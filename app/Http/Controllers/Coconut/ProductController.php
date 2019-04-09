@@ -278,6 +278,17 @@ class ProductController extends Controller
             ->editColumn('precio', function ($tickets) {
                 return format_money($tickets->precio);
             })
+            ->editColumn('minimo', function ($tickets) {
+                if(Auth::user()->type == 5){
+                    if($tickets->minimo==1)
+                        return 'Alta';
+                    if($tickets->minimo==2)
+                        return 'Media';
+                    return 'Baja';
+                }
+
+                return $tickets->minimo;
+            })
             ->make(true);
     }
 

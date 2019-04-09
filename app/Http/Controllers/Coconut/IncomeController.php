@@ -334,17 +334,27 @@ class IncomeController extends Controller
     }
     public function deleteIncome(Request $request)
     {
+        $tipo =$request->tipo ??'';
         $income = Income::find($request->income);
         $transaction = Transaction::find($income->transaction_id);
-        if($transaction->tipo == 1)
-            $transaction->precio = $transaction->precio -$income->precio;
+        if($transaction->tipo == 1){
+            if(!empty($tipo)){
+                $transaction->precio = $transaction->precio -($income->precio * $income->cantidad);
+            }else
+                $transaction->precio = $transaction->precio -$income->precio;
+        }
         $transaction->save();
         $product = Product::find($income->product_id);
         if($product->cantidad != '-1'){
             if($transaction->tipo == 2)
                 $product->cantidad = $product->cantidad - $income->cantidad;
-            if($transaction->tipo == 1)
-                $product->cantidad = $product->cantidad + $income->cantidad;
+            if($transaction->tipo == 1){
+                if(!empty($tipo)){
+                    $product->precio= intval((($product->cantidad*($product->precio*1)) - ($income->cantidad*($income->precio*1))) /($product->cantidad-$income->cantidad));
+                    $product->cantidad = $product->cantidad-$income->cantidad;
+                }else
+                    $product->cantidad = $product->cantidad + $income->cantidad;
+            }
             $product->save();
         }
         $income->delete();

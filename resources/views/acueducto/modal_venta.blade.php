@@ -10,7 +10,7 @@
                     <input id="id_transaction" type="number" class="form-control" style="display: none">
                     <div class="form-group col-md-12">
                         <label for="nombre" class="control-label">Descripción</label>
-                        <input id="descripcionIncome" type="number" class="form-control validate[required]">
+                        <input id="descripcionIncome" type="text" class="form-control validate[required]">
                     </div>
                     <hr>
                     <div class="form-group col-md-12">

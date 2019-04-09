@@ -53,13 +53,6 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                {!! Form::label('tipoT', 'Cliente', ['class' => 'control-label']) !!}
-                                <select class="form-control selectpicker2" id="customerList">
-                                </select>
-                            </div>
-                        </div>
                         <div class="col-md-2 col-sm-2">
                             <div class="form-group">
                                 <label class="control-label">&nbsp;</label>
@@ -198,7 +191,7 @@
     @include('transaction.modal_add')
     @include('transaction.modal_mod')
     @include('acueducto.modal_venta')
-    @include('product.modal_product_mod')
+    @include('acueducto.modal_product_mod')
     @include('product.modal_abono')
     @include('product.modal_list_abonos')
     @include('customer.modal_add')
@@ -1074,8 +1067,8 @@
                 "locale": {
                     "format": "YYYY-MM-DD"
                 },
-                "startDate": "<?php $now = Carbon::now(); echo Carbon::now()->format('Y-m-d')?>",
-                "endDate": "<?php   echo $now->addDay()->format('Y-m-d')?>",
+                "startDate": "<?php $now = Carbon::now(); echo $now->format('Y-m-d')?>",
+                "endDate": "<?php   echo $now->format('Y-m-d')?>",
                 "opens": "center",
                 "drops": "up"
             }, function(start, end, label) {
@@ -1134,6 +1127,35 @@
             else{
                 $("#typeIn").val(2);
             }
+        }
+        function eliminarProduct(id){
+
+            (new PNotify({
+                title: 'Necesita confirmación',
+                text: 'Esta seguro de querer eliminar el producto?',
+                icon: 'glyphicon glyphicon-question-sign',
+                hide: false,
+                confirm: {
+                    confirm: true
+                },
+                buttons: {
+                    closer: false,
+                    sticker: false
+                },
+                history: {
+                    history: false
+                },
+                addclass: 'stack-modal',
+                stack: {
+                    'dir1': 'down',
+                    'dir2': 'right',
+                    'modal': true
+                }
+            })).get().on('pnotify.confirm', function() {
+                desktop_index_vm.deleteProduct(id);
+            }).on('pnotify.cancel', function() {
+                ;
+            });
         }
         function createDataTableStandar(selector, opt) {
             if (typeof opt.scroll === 'undefined')
@@ -1453,7 +1475,8 @@
                             type: "POST",
                             url: "eliminar_income",
                             data: {
-                                income:income
+                                income:income,
+                                tipo : 1
                             },
                             success: function (datos) {
                                 new PNotify({
@@ -1479,7 +1502,8 @@
                             type: "POST",
                             url: "eliminar_transaction",
                             data: {
-                                transaction:transaction
+                                transaction:transaction,
+                                tipo:1
                             },
                             success: function (datos) {
                                 new PNotify({
