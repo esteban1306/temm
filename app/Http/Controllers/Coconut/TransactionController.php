@@ -193,7 +193,7 @@ class TransactionController extends Controller
                     ]):'').($tickets->tipo == 1  && empty($tickets->estado)?
                             \Form::button('Editar', [
                                 'class'   => 'btn btn-primary',
-                                'onclick' => "openModalVenta('$tickets->Id','".format_money($tickets->precio)."','".($tickets->customer_id ?? '')."')",
+                                'onclick' => "openModalVenta('$tickets->Id','".format_money($tickets->precio)."','".($tickets->customer_id ?? '')."','".$tickets->description."')",
                                 'data-toggle' => "tooltip",
                                 'data-placement' => "bottom",
                                 'title' => "Editar !",
