@@ -45,6 +45,10 @@
                         </thead>
                     </table>
                 </div>
+
+                <div class="form-group col-md-12 pt-3">
+                    <button id="" class="btn btn-secondary full-width waves-effect waves-light" onclick="pdfVenta()"><strong>Imprimir</strong></button>
+                </div>
                 <div class="col-12"  style="overflow:  auto;">
                     <div class="widget_box_b">
                         <div class="contt">

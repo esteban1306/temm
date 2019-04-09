@@ -29,6 +29,7 @@ Route::post('/incomes_a', 'IncomeController@storeA')->name('incomes_a')->middlew
 Route::post('/abonos', 'AbonoController@store')->name('abonos')->middleware('auth');
 Route::post('/pdf', 'TicketController@pdf')->name('pdf')->middleware('auth');
 Route::post('/pdf_transaction', 'TransactionController@pdf')->name('pdf_transaction')->middleware('auth');
+Route::post('/pdf_report', 'TransactionController@pdfReport')->name('pdf_report')->middleware('auth');
 Route::post('/actualizar', 'TicketController@updateTicket')->name('actualizar')->middleware('auth');
 Route::post('/actualizar_prestamo', 'PrestamoController@updatePrestamo')->name('actualizar_prestamo')->middleware('auth');
 Route::post('/actualizar_producto', 'ProductController@updateProduct')->name('actualizar_producto')->middleware('auth');
