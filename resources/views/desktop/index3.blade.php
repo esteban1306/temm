@@ -216,7 +216,7 @@
                 </div>
             </div>
 
-            <form id="form_pdf_report" class="row" method="POST" action="{{ route('pdf_report') }}" TARGET="_blank" >
+            <form id="form_pdf_report" class="row" method="POST" action="{{ route('pdf_report') }}" TARGET="_blank" hidden>
                 {{ csrf_field() }}
                 <input id="date_pdf" type="text" class="form-control" name="date_pdf">
                 <input id="base" type="text" class="form-control" name="base">
