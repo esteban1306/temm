@@ -169,7 +169,10 @@ class TransactionController extends Controller
         $customers = $request->get('customers')??null;
         $tipo = $request->get('tipo')?? null;
 
-        $tickets= Transaction::select(['id_transaction as Id', 'precio', 'partner_id','created_at','customer_id','tipo','description','estado'])->where('parking_id',Auth::user()->parking_id)->orderBy('id_transaction','desc');
+        $tickets= Transaction::select(['id_transaction as Id', 'precio', 'partner_id','created_at','customer_id','tipo','description','estado'])
+            ->where('parking_id',Auth::user()->parking_id)
+            ->where('precio','>',0)
+            ->orderBy('id_transaction','desc');
         if (!empty($range) && empty($customer)) {
             $dateRange = explode(" - ", $range);
             $tickets = $tickets->whereBetween('created_at', [$dateRange[0].' 00:00:00', $dateRange[1].' 23:59:59']);

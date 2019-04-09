@@ -86,6 +86,17 @@
             <h2 class="title_a"  v-show="all" >Estado actual</h2>
             <div class="row" v-show="all">
                 <div class="col-lg-3 col-md-6">
+                    <div class="widget_box_b bdred">
+                        <div class="contt">
+                            <div class="fl_layer">
+                                <h4 class="title">Entradas</h4>
+                                <span class="line"></span>
+                                <span class="data red" id="total"> - </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
                     <div class="widget_box_b">
                         <div class="contt">
                             <div class="fl_layer">
@@ -114,17 +125,6 @@
                                 <h4 class="title">Extensiones</h4>
                                 <span class="line"></span>
                                 <span class="data total" id="gastos"> - </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="widget_box_b bdred">
-                        <div class="contt">
-                            <div class="fl_layer">
-                                <h4 class="title">Total</h4>
-                                <span class="line"></span>
-                                <span class="data red" id="total"> - </span>
                             </div>
                         </div>
                     </div>
