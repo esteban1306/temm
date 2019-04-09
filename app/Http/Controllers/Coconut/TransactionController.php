@@ -411,6 +411,8 @@ class TransactionController extends Controller
     public function pdfReport(Request $request)
     {
         $range = $request->date_pdf;
+        $base = $request->base?? 500000;
+        //dd($range);
         $tickets= Transaction::select(['id_transaction as Id', 'precio', 'partner_id','created_at','tipo','description'])->where('parking_id',Auth::user()->parking_id)->orderBy('id_transaction','desc');
         if (!empty($range)) {
             $dateRange = explode(" - ", $range);
@@ -421,6 +423,10 @@ class TransactionController extends Controller
         $status = [];
         $status['gastos_html'] = "";
         $status['surtido_html'] = "";
+        $status['total'] = ZERO;
+        $status['surtido'] = ZERO;
+        $status['gastos'] = ZERO;
+        $status['recaudado'] = ZERO;
         foreach ($tickets as $ticket){
             if($ticket->tipo == 1){
                 $status['total'] += $ticket->precio;
@@ -430,7 +436,7 @@ class TransactionController extends Controller
                 $status['surtido'] += $ticket->precio;
                 $status['total'] -= $ticket->precio;
                 $status['surtido_html'].='<tr>
-                                            <td span="2"><small>'.$ticket->description.'</small></td> 
+                                            <td colspan="2"><small>'.$ticket->description.'</small></td> 
                                             <td>'.format_money($ticket->precio).'</td> 
                                           </tr>';
             }
@@ -438,11 +444,12 @@ class TransactionController extends Controller
                 $status['gastos'] += $ticket->precio;
                 $status['total'] -= $ticket->precio;
                 $status['gastos_html'].='<tr>
-                                            <td span="2"><small>'.$ticket->description.'</small></td> 
+                                            <td colspan="2"><small>'.$ticket->description.'</small></td> 
                                             <td>'.format_money($ticket->precio).'</td> 
                                           </tr>';
             }
         }
+        $status['totalBase'] = format_money($status['total']*1+$base*1);
         $status['total'] = format_money($status['total']);
         $status['surtido'] = format_money($status['surtido']);
         $status['gastos'] = format_money($status['gastos']);
@@ -458,20 +465,20 @@ class TransactionController extends Controller
     <th>Precio</th>
   </tr>
   <tr>
-    <td span="2"><b>Recaudado</b></td>
+    <td colspan="2"><b>Recaudado</b></td>
     <td>'.$status['recaudado'].'</td> 
   </tr>
   <tr>
-    <td span="2"><b>Gastos</b></td>
+    <td colspan="2"><b>Gastos</b></td>
     <td>'.$status['gastos'].'</td> 
   </tr>
   '.$status['gastos_html'].'
   <tr>
-    <td span="2"><b>Surtido</b></td>
+    <td colspan="2"><b>Surtido</b></td>
     <td>'.$status['surtido'].'</td> 
   </tr>
   '.$status['surtido_html'].'
-</table><br>Base:  <br> Total Día = '.$status['total'].'<br>';
+</table><hr><br> Total Día = '.$status['total'].'<br> Base='. format_money($base) .'<br><b>Total en caja = '. $status['totalBase'].'</b>';
 
         PDF::writeHTML($html, true, false, true, false, '');
         $js = 'print(true);';

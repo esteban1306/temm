@@ -65,6 +65,12 @@
                                 <button class="btn btn-success form-control" id="advanced_search"><i class="fa fa-search"></i> Buscar</button>
                             </div>
                         </div>
+                        <div class="col-md-2 col-sm-2">
+                            <div class="form-group">
+                                <label class="control-label">&nbsp;</label>
+                                <button class="btn btn-red form-control" onclick="form_pdf_report()"><i class="fa fa-search"></i> Reporte</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -210,10 +216,11 @@
                 </div>
             </div>
 
-            <form id="form_pdf_report" class="row" method="POST" action="{{ route('pdf_report') }}" TARGET="_blank" hidden>
+            <form id="form_pdf_report" class="row" method="POST" action="{{ route('pdf_report') }}" TARGET="_blank" >
                 {{ csrf_field() }}
-                <input id="date_pdf" type="text" class="form-control" name="">
-                <button id="pdfReportsubmit" type="submit" form="form_pdf">Submit</button>
+                <input id="date_pdf" type="text" class="form-control" name="date_pdf">
+                <input id="base" type="text" class="form-control" name="base">
+                <button id="pdfReportsubmit" type="submit" form="form_pdf_report">Submit</button>
             </form>
 
             <form id="form_pdf" class="row" method="POST" action="{{ route('pdf_transaction') }}" TARGET="_blank" hidden>
@@ -444,6 +451,7 @@
                     product : product,
                     cantidad : cantidad,
                     transaction : transaction,
+                    descripcion : $('#descriptionGt').val(),
                     gasto: 1,
                     precio: $('#precioGt').val(),
                 },
@@ -623,14 +631,39 @@
                 }
             });
         }
+        function pdfVenta(){
+            var id = $("#id_transaction").val();
+            form_pdf(id);
+        }
         function form_pdf(id) {
-            $('#id_pdf').val(id);
-            $('#pdfsubmit').click();
+            if(typeof id != "undefined"){
+                $('#id_pdf').val(id);
+                $('#pdfsubmit').click();
+            }
         }
         function form_pdf_report() {
-            var fecha =$("#Tiempo").val();
-            $('#date_pdf').val(fecha);
-            $('#pdfReportsubmit').click();
+            (new PNotify({
+                title: 'Base',
+                text: 'Cuál es la base del día?',
+                icon: 'glyphicon glyphicon-question-sign',
+                hide: false,
+                confirm: {
+                    prompt: true
+                },
+                buttons: {
+                    closer: false,
+                    sticker: false
+                },
+                history: {
+                    history: false
+                }
+            })).get().on('pnotify.confirm', function(e, notice, val) {
+
+                var fecha =$("#Tiempo").val();
+                $('#base').val(val);
+                $('#date_pdf').val(fecha);
+                $('#pdfReportsubmit').click();
+            });
         }
         function modificarProducto() {
             var vname=$("#namePrMod").validationEngine('validate');
@@ -1044,16 +1077,8 @@
                 }
             });
         }
-        function calcularCuota(){
-            var Interes=    $("#interestPrest").val();
-            var Tiempo=     $("#timePrest").val();
-            var Monto=      $("#montoPrest").val();
-            var Cuota=      0;
-            var tipo=       $("#typePrest").val();
-            if(Interes =='' || Tiempo =='' || Monto=='' || tipo=='')
-                return ;
-            Cuota= (((Monto*Interes/100)*Tiempo)+(Monto*1))/(Tiempo*tipo);
-            $("#CuotaPrest").val(Math.ceil(Cuota/1000)*1000);
+        function eliminarProduct(id){
+            desktop_index_vm.deleteProduct(id);
         }
         function calcularCuota2(){
             var Interes=    $("#interestPrestMod").val();

@@ -56,6 +56,7 @@ class IncomeController extends Controller
             $transaction->precio = 0;
             $transaction->parking_id = Auth::user()->parking_id;
             $transaction->partner_id = Auth::user()->partner_id;
+            $transaction->description = strtoupper($request->descripcion??'');
             if(empty($gasto)) {
                 $transaction->tipo = 1;
             }
@@ -87,6 +88,7 @@ class IncomeController extends Controller
             $product->save();
         }
         $transaction = Transaction::find($id_transaction);
+        $transaction->description = strtoupper($request->descripcion??'');
         $transaction->customer_id = $request->customer;
         if(empty($gasto))
             $transaction->precio = $transaction->precio +$income->precio;
@@ -108,7 +110,7 @@ class IncomeController extends Controller
             $transaction->precio = 0;
             $transaction->parking_id = Auth::user()->parking_id;
             $transaction->partner_id = Auth::user()->partner_id;
-            $transaction->description = $request->descripcion??'';
+            $transaction->description = strtoupper($request->descripcion??'');
             $transaction->tipo = 1;
             $transaction->save();
             $id_transaction = $transaction->id_transaction;
@@ -328,11 +330,15 @@ class IncomeController extends Controller
     {
         $income = Income::find($request->income);
         $transaction = Transaction::find($income->transaction_id);
-        $transaction->precio = $transaction->precio -$income->precio;
+        if($transaction->tipo == 1)
+            $transaction->precio = $transaction->precio -$income->precio;
         $transaction->save();
         $product = Product::find($income->product_id);
         if($product->cantidad != '-1'){
-            $product->cantidad = $product->cantidad + $income->cantidad;
+            if($transaction->tipo == 2)
+                $product->cantidad = $product->cantidad - $income->cantidad;
+            if($transaction->tipo == 1)
+                $product->cantidad = $product->cantidad + $income->cantidad;
             $product->save();
         }
         $income->delete();
