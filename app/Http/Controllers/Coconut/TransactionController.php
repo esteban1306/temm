@@ -205,7 +205,7 @@ class TransactionController extends Controller
                             'title' => "Editar Cliente",
 
                         ]) :'')
-                        .($tickets->tipo != 1 && empty($tickets->estado)?
+                        .($tickets->tipo != 1 && empty($tickets->estado && false)?
                         \Form::button('Editar Gasto', [
                             'class'   => 'btn btn-primary',
                             'onclick' => "openModalGastoMod($tickets->Id)",

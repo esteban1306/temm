@@ -473,7 +473,7 @@ class ProductController extends Controller
         $products = Product::where('parking_id',Auth::user()->parking_id)->get();
         $select="<option value=''>Seleccionar</option>";
         foreach ($products as $product){
-            $select .='<option data-toggle="tooltip" title="'.$product->description.'"value="'.$product->id_product.'">'.$product->name.(!empty($product->cantidad) && $product->cantidad !='-1'?' ('.$product->cantidad.')':'').'</option>';
+            $select .='<option data-toggle="tooltip" title="'.$product->description.'"value="'.$product->id_product.'">'.$product->name.(!empty($product->cantidad) && $product->cantidad !='-1'?' ('.$product->cantidad.')':'').$product->description.'</option>';
         }
         return $select;
     }
