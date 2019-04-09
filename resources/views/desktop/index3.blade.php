@@ -292,6 +292,7 @@
             $("#tipoGt").val(tipo);
             tipoGasto();
             $('#modal_add_transaction').modal('show');
+            loadIncomes2();
         }
         function loadCustomer(id) {
             $.ajax({

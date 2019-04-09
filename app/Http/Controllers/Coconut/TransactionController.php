@@ -50,7 +50,7 @@ class TransactionController extends Controller
     public function store(Request $request)
     {
         if(!empty($request->transaction??''))
-            $ticket = Transaction::find($request->transaction);
+            $transaction = Transaction::find($request->transaction);
         else
             $transaction = new Transaction();
         $transaction->precio = $request->precio;
