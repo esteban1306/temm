@@ -52,13 +52,7 @@
                                 </select>
                             </div>
                         </div>-->
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                {!! Form::label('tipoT', 'Cliente', ['class' => 'control-label']) !!}
-                                <select class="form-control selectpicker2" id="customerList">
-                                </select>
-                            </div>
-                        </div>
+
                         <div class="col-md-2 col-sm-2">
                             <div class="form-group">
                                 <label class="control-label">&nbsp;</label>
@@ -174,6 +168,27 @@
             <div class="row" v-show="nav=='surtido'">
                 <div class="col-12"  style="overflow:  auto;">
                     <table class="table responsive" id="surtido-table">
+                        <thead>
+                        <tr>
+                            <th class="all">Descripción</th>
+                            <th class="min-tablet">Precio</th>
+                            <th class="min-tablet">Atendió</th>
+                            <th class="all">acciones</th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+            <div class="row" v-show="nav=='clientes'">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        {!! Form::label('tipoT', 'Cliente', ['class' => 'control-label']) !!}
+                        <select class="form-control selectpicker2" id="customerList">
+                        </select>
+                    </div>
+                </div>
+                <div class="col-12"  style="overflow:  auto;">
+                    <table class="table responsive" id="clientes-table">
                         <thead>
                         <tr>
                             <th class="all">Descripción</th>
@@ -1255,6 +1270,9 @@
                 desktop_index_vm.loadTable();
                 desktop_index_vm.load();
             });
+            $('#customerList').change(function() {
+                desktop_index_vm.loadClientes();
+            });
             $('#tipoGt').change(function() {
                 tipoGasto();
             });
@@ -1353,7 +1371,6 @@
                         url: "get_status_transaction",
                         data : {
                             range           : $("#Tiempo").val(),
-                            customer        :$('#customerList').val()
                         },
                         success: function (datos) {
                             var total= datos['total'];
@@ -1453,7 +1470,6 @@
                             url  : '{!! route('get_transactions') !!}',
                             data : {
                                 range           : $("#Tiempo").val(),
-                                customer        :$('#customerList').val()
                             },
                             error : function () {
                                 ;
@@ -1478,7 +1494,6 @@
                                 url  : '{!! route('get_transactions') !!}',
                                 data : {
                                     range           : $("#Tiempo").val(),
-                                    customer        :$('#customerList').val(),
                                     tipo            :1
                                 },
                                 error : function () {
@@ -1504,7 +1519,6 @@
                                 url  : '{!! route('get_transactions') !!}',
                                 data : {
                                     range           : $("#Tiempo").val(),
-                                    customer        :$('#customerList').val(),
                                     tipo            : 3
                                 },
                                 error : function () {
@@ -1530,7 +1544,6 @@
                                 url  : '{!! route('get_transactions') !!}',
                                 data : {
                                     range           : $("#Tiempo").val(),
-                                    customer        :$('#customerList').val(),
                                     tipo            : 2
                                 },
                                 error : function () {
@@ -1568,6 +1581,32 @@
                             { data: 'created_at', name: 'Fecha', orderable  : false, searchable : false },
                             { data: 'tipo', name: 'Tipo', orderable  : false, searchable : false },
                             { data: 'valor', name: 'Valor', orderable  : false, searchable : false },
+                            { data: 'action', name: 'Acciones', orderable  : false, searchable : false },
+                        ],
+                        lengthMenu: [[ 10, 25, 50, -1], [ 10, 25, 50, "Todos"]]
+                    });
+                },
+                loadClientes:function(){
+                    $('#clientes-table').DataTable({
+                        sDom           : 'r<Hlf><"datatable-scroll"t><Fip>',
+                        order          : [],
+                        processing     : true,
+                        serverSide     : true,
+                        deferRender    : true,
+                        destroy        : true,
+                        ajax: {
+                            url  : '{!! route('get_transactions') !!}',
+                            data : {
+                                customer        :$('#customerList').val(),
+                            },
+                            error : function () {
+                                ;
+                            }
+                        },
+                        columns: [
+                            { data: 'created_at', name: 'Descripción', orderable  : true, searchable : false },
+                            { data: 'precio', name: 'Precio', orderable  : false, searchable : false },
+                            { data: 'partner_id', name: 'Atendió', orderable  : false, searchable : false },
                             { data: 'action', name: 'Acciones', orderable  : false, searchable : false },
                         ],
                         lengthMenu: [[ 10, 25, 50, -1], [ 10, 25, 50, "Todos"]]

@@ -19,6 +19,7 @@
             <li v-bind:class="{ active : nav == 'recaudado' }"><a href="#!" v-on:click="all = false; month= true; nav = 'recaudado'; ">Recaudado</a></li>
             <li v-bind:class="{ active : nav == 'gastos' }"><a href="#!" v-on:click="all = false; month= true; nav = 'gastos'; ">Gastos</a></li>
             <li v-bind:class="{ active : nav == 'surtido' }"><a href="#!" v-on:click="all = false; month= true; nav = 'surtido';">Surtido</a></li>
+            <li v-bind:class="{ active : nav == 'clientes' }"><a href="#!" v-on:click="all = false; month= true; nav = 'clientes';">Clientes</a></li>
             <li v-bind:class="{ active : nav == 'account' }"><a href="#!" v-on:click="all = false; month= false; nav = 'account'">Mi cuenta</a></li>
         </ul>
     </div>
