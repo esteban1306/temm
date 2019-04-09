@@ -162,7 +162,7 @@ class TransactionController extends Controller
         $transaction = $request->get('transaction');
         $range = $request->get('range');
         $customer = $request->get('customer');
-        $customers = $request->get('customers')??0;
+        $customers = $request->get('customers')??null;
         $tipo = $request->get('tipo')?? null;
 
         $tickets= Transaction::select(['id_transaction as Id', 'precio', 'partner_id','created_at','customer_id','tipo','description','estado'])->where('parking_id',Auth::user()->parking_id)->orderBy('id_transaction','desc');
@@ -170,16 +170,16 @@ class TransactionController extends Controller
             $dateRange = explode(" - ", $range);
             $tickets = $tickets->whereBetween('created_at', [$dateRange[0].' 00:00:00', $dateRange[1].' 23:59:59']);
         }
-        if (!empty($customer))
+        if (!empty($customer)){
             $tickets = $tickets->where('customer_id', $customer);
-        if (!empty($customers))
             $tickets = $tickets->where('estado','<>' ,'1');
+        }
         if (!empty($tipo))
             $tickets = $tickets->where('tipo', $tipo);
 
         return Datatables::of($tickets)
             ->addColumn('action', function ($tickets) use($customers){
-                    return ($tickets->estado == null?\Form::button('Eliminar', [
+                    return (empty($tickets->estado) ?\Form::button('Eliminar', [
                         'class'   => 'btn btn-warning',
                         'onclick' => "eliminarTransaction('$tickets->Id')",
                         'data-toggle' => "tooltip",
