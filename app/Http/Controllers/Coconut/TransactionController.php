@@ -299,6 +299,18 @@ class TransactionController extends Controller
     public function deleteTransaction(Request $request)
     {
         $ticket = Transaction::find($request->transaction);
+        $incomes = Income::select(['id_income as Id', 'precio', 'product_id', 'cantidad','description'])->where('parking_id',Auth::user()->parking_id)->where('transaction_id', $request->transaction)->orderBy('id_income','desc')->get();
+        foreach ($incomes as $income) {
+            $product = Product::find($income->product_id);
+            if($product->cantidad != '-1'){
+                if($ticket->tipo==1){
+                    $product->cantidad = $product->cantidad + $income->cantidad;
+                }else{
+                    $product->cantidad = $product->cantidad - $income->cantidad;
+                }
+                $product->save();
+            }
+        }
         $ticket->delete();
         return ;
     }
