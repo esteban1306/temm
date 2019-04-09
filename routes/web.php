@@ -37,6 +37,7 @@ Route::post('/actualizar_transaction', 'TransactionController@updateTransaction'
 Route::post('/eliminar', 'TicketController@deleteTicket')->name('eliminar')->middleware('auth');
 Route::post('/eliminar_abono', 'AbonoController@deleteAbono')->name('eliminar_abono')->middleware('auth');
 Route::post('/eliminar_product', 'ProductController@deleteProduct')->name('eliminar_product')->middleware('auth');
+Route::post('/pagar_venta', 'TransactionController@pagarVenta')->name('pagar_venta')->middleware('auth');
 Route::post('/eliminar_income', 'IncomeController@deleteIncome')->name('eliminar_income')->middleware('auth');
 Route::post('/eliminar_transaction', 'TransactionController@deleteTransaction')->name('eliminar_transaction')->middleware('auth');
 Route::post('/eliminar_prestamo', 'PrestamoController@deletePrestamo')->name('eliminar_prestamo')->middleware('auth');

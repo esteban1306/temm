@@ -54,6 +54,7 @@ class CustomerController extends Controller
         $ticket->cedula =$request->cedula;
         $ticket->observacion =$request->observacion;
         $ticket->id_partner =Auth::user()->partner_id;
+        $ticket->id_parking =Auth::user()->parking_id;
         $ticket->save();
 
         /*Nexmo::message()->send([
@@ -436,7 +437,7 @@ class CustomerController extends Controller
         return ;
     }
     public function getSelect(){
-        $customers = Customer::where('id_partner' ,Auth::user()->partner_id)->get();
+        $customers = Customer::where('id_parking' ,Auth::user()->parking_id)->get();
         $select="<option value=''>Seleccionar</option>";
         foreach ($customers as $customer){
             $select .='<option data-toggle="tooltip" title="'.$customer->observacion.'"value="'.$customer->id_customer.'">'.$customer->nombre.'</option>';

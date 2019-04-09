@@ -162,28 +162,31 @@ class TransactionController extends Controller
         $transaction = $request->get('transaction');
         $range = $request->get('range');
         $customer = $request->get('customer');
+        $customers = $request->get('customers')??0;
         $tipo = $request->get('tipo')?? null;
 
-        $tickets= Transaction::select(['id_transaction as Id', 'precio', 'partner_id','created_at','customer_id','tipo','description'])->where('parking_id',Auth::user()->parking_id)->orderBy('id_transaction','desc');
+        $tickets= Transaction::select(['id_transaction as Id', 'precio', 'partner_id','created_at','customer_id','tipo','description','estado'])->where('parking_id',Auth::user()->parking_id)->orderBy('id_transaction','desc');
         if (!empty($range) && empty($customer)) {
             $dateRange = explode(" - ", $range);
             $tickets = $tickets->whereBetween('created_at', [$dateRange[0].' 00:00:00', $dateRange[1].' 23:59:59']);
         }
         if (!empty($customer))
             $tickets = $tickets->where('customer_id', $customer);
+        if (!empty($customers))
+            $tickets = $tickets->where('estado','<>' ,'1');
         if (!empty($tipo))
             $tickets = $tickets->where('tipo', $tipo);
 
         return Datatables::of($tickets)
-            ->addColumn('action', function ($tickets) {
-                    return \Form::button('Eliminar', [
+            ->addColumn('action', function ($tickets) use($customers){
+                    return ($tickets->estado == null?\Form::button('Eliminar', [
                         'class'   => 'btn btn-warning',
                         'onclick' => "eliminarTransaction('$tickets->Id')",
                         'data-toggle' => "tooltip",
                         'data-placement' => "bottom",
                         'title' => "Eliminar !",
 
-                    ]).($tickets->tipo == 1?
+                    ]):'').($tickets->tipo == 1  && $customers==0?
                             \Form::button('Editar', [
                                 'class'   => 'btn btn-primary',
                                 'onclick' => "openModalVenta('$tickets->Id','".format_money($tickets->precio)."','".($tickets->customer_id ?? '')."')",
@@ -201,7 +204,7 @@ class TransactionController extends Controller
                             'title' => "Editar Cliente",
 
                         ]) :'')
-                        .($tickets->tipo != 1?
+                        .($tickets->tipo != 1 && $customers==0?
                         \Form::button('Editar Gasto', [
                             'class'   => 'btn btn-primary',
                             'onclick' => "openModalGastoMod($tickets->Id)",
@@ -216,6 +219,14 @@ class TransactionController extends Controller
                                 'data-toggle' => "tooltip",
                                 'data-placement' => "bottom",
                                 'title' => "Imprimir !",
+
+                            ]) :'').($customers == 1?
+                            \Form::button('Pagar', [
+                                'class'   => 'btn btn-info',
+                                'onclick' => "pagarV('$tickets->Id')",
+                                'data-toggle' => "tooltip",
+                                'data-placement' => "bottom",
+                                'title' => "Pagar !",
 
                             ]) :'');
             })
@@ -285,6 +296,13 @@ class TransactionController extends Controller
     {
         $ticket = Transaction::find($request->transaction);
         $ticket->delete();
+        return ;
+    }
+    public function pagarVenta(Request $request)
+    {
+        $ticket = Transaction::find($request->transaction);
+        $ticket->estado = 1;
+        $ticket->save();
         return ;
     }
     public function recoveryTicket(Request $request)

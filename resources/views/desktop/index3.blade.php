@@ -183,7 +183,7 @@
                 <div class="col-md-8">
                     <div class="form-group">
                         {!! Form::label('tipoT', 'Cliente', ['class' => 'control-label']) !!}
-                        <select class="form-control selectpicker2" id="customerList">
+                        <select class="form-control" id="customerList">
                         </select>
                     </div>
                 </div>
@@ -1093,7 +1093,36 @@
             });
         }
         function eliminarProduct(id){
-            desktop_index_vm.deleteProduct(id);
+
+            (new PNotify({
+                title: 'Necesita confirmación',
+                text: 'Esta seguro de querer eliminar el producto?',
+                icon: 'glyphicon glyphicon-question-sign',
+                hide: false,
+                confirm: {
+                    confirm: true
+                },
+                buttons: {
+                    closer: false,
+                    sticker: false
+                },
+                history: {
+                    history: false
+                },
+                addclass: 'stack-modal',
+                stack: {
+                    'dir1': 'down',
+                    'dir2': 'right',
+                    'modal': true
+                }
+            })).get().on('pnotify.confirm', function() {
+                desktop_index_vm.deleteProduct(id);
+            }).on('pnotify.cancel', function() {
+                ;
+            });
+        }
+        function pagarV(id) {
+            desktop_index_vm.pagarVenta(id);
         }
         function calcularCuota2(){
             var Interes=    $("#interestPrestMod").val();
@@ -1598,6 +1627,7 @@
                             url  : '{!! route('get_transactions') !!}',
                             data : {
                                 customer        :$('#customerList').val(),
+                                customers       :1,
                             },
                             error : function () {
                                 ;
@@ -1698,6 +1728,29 @@
                             location = '/login';
                         }
                     });
+                },
+                pagarVenta : function(venta) {
+                        $.ajax({
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            type: "POST",
+                            url: "pagar_venta",
+                            data: {
+                                transaction:venta
+                            },
+                            success: function (datos) {
+                                new PNotify({
+                                    title: 'Exito',
+                                    type: 'success',
+                                    text: 'Se Pagó con exito'
+                                });
+                                $('#clientes-table').dataTable()._fnAjaxUpdate();
+                            },
+                            error : function () {
+                                location = '/login';
+                            }
+                        });
                 },
                 deleteProduct : function(product) {
                         $.ajax({
