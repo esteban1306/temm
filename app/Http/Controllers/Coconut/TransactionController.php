@@ -172,7 +172,7 @@ class TransactionController extends Controller
         }
         if (!empty($customer)){
             $tickets = $tickets->where('customer_id', $customer);
-            $tickets = $tickets->where('estado','<>' ,'1');
+            $tickets = $tickets->whereNull('estado');
         }
         if (!empty($tipo))
             $tickets = $tickets->where('tipo', $tipo);
@@ -186,7 +186,7 @@ class TransactionController extends Controller
                         'data-placement' => "bottom",
                         'title' => "Eliminar !",
 
-                    ]):'').($tickets->tipo == 1  && $customers==0?
+                    ]):'').($tickets->tipo == 1  && empty($tickets->estado)?
                             \Form::button('Editar', [
                                 'class'   => 'btn btn-primary',
                                 'onclick' => "openModalVenta('$tickets->Id','".format_money($tickets->precio)."','".($tickets->customer_id ?? '')."')",
@@ -204,7 +204,7 @@ class TransactionController extends Controller
                             'title' => "Editar Cliente",
 
                         ]) :'')
-                        .($tickets->tipo != 1 && $customers==0?
+                        .($tickets->tipo != 1 && empty($tickets->estado)?
                         \Form::button('Editar Gasto', [
                             'class'   => 'btn btn-primary',
                             'onclick' => "openModalGastoMod($tickets->Id)",
@@ -220,7 +220,7 @@ class TransactionController extends Controller
                                 'data-placement' => "bottom",
                                 'title' => "Imprimir !",
 
-                            ]) :'').($customers == 1?
+                            ]) :'').($customers == 1 && empty($tickets->estado)?
                             \Form::button('Pagar', [
                                 'class'   => 'btn btn-info',
                                 'onclick' => "pagarV('$tickets->Id')",
