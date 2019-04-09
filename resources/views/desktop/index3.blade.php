@@ -1122,7 +1122,32 @@
             });
         }
         function pagarV(id) {
-            desktop_index_vm.pagarVenta(id);
+            (new PNotify({
+                title: 'Necesita confirmación',
+                text: 'Esta seguro de querer Pagar este credito?',
+                icon: 'glyphicon glyphicon-question-sign',
+                hide: false,
+                confirm: {
+                    confirm: true
+                },
+                buttons: {
+                    closer: false,
+                    sticker: false
+                },
+                history: {
+                    history: false
+                },
+                addclass: 'stack-modal',
+                stack: {
+                    'dir1': 'down',
+                    'dir2': 'right',
+                    'modal': true
+                }
+            })).get().on('pnotify.confirm', function() {
+                desktop_index_vm.pagarVenta(id);
+            }).on('pnotify.cancel', function() {
+                ;
+            });
         }
         function calcularCuota2(){
             var Interes=    $("#interestPrestMod").val();

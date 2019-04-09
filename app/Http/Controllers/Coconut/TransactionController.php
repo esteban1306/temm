@@ -7,6 +7,7 @@ use App\Parking;
 use App\Product;
 use App\Income;
 use App\Transaction;
+use App\Customer;
 use Carbon\Carbon;
 use DateTime;
 use Illuminate\Http\Request;
@@ -431,7 +432,7 @@ class TransactionController extends Controller
         $range = $request->date_pdf;
         $base = $request->base?? 500000;
         //dd($range);
-        $tickets= Transaction::select(['id_transaction as Id', 'precio', 'partner_id','created_at','tipo','description'])->where('parking_id',Auth::user()->parking_id)->orderBy('id_transaction','desc');
+        $tickets= Transaction::select(['id_transaction as Id', 'precio', 'partner_id','created_at','tipo','description','customer_id'])->where('parking_id',Auth::user()->parking_id)->orderBy('id_transaction','desc');
         if (!empty($range)) {
             $dateRange = explode(" - ", $range);
             $tickets = $tickets->whereBetween('created_at', [$dateRange[0].' 00:00:00', $dateRange[1].' 23:59:59']);
@@ -439,6 +440,7 @@ class TransactionController extends Controller
         $tickets=$tickets->get();
         $now = new Datetime('now');
         $status = [];
+        $status['creditos_html'] = "";
         $status['gastos_html'] = "";
         $status['surtido_html'] = "";
         $status['total'] = ZERO;
@@ -449,6 +451,13 @@ class TransactionController extends Controller
             if($ticket->tipo == 1){
                 $status['total'] += $ticket->precio;
                 $status['recaudado'] += $ticket->precio;
+                if(!empty($ticket->customer_id)){
+                    $customer = Customer::find($ticket->customer_id);
+                    $status['creditos_html'].='<tr>
+                                            <td colspan="2"><small>'.$customer->nombre.'</small></td> 
+                                            <td>'.format_money($ticket->precio).'</td> 
+                                          </tr>';
+                }
             }
             if($ticket->tipo == 2){
                 $status['surtido'] += $ticket->precio;
@@ -484,16 +493,17 @@ class TransactionController extends Controller
   </tr>
   <tr>
     <td colspan="2"><b>Recaudado</b></td>
-    <td>'.$status['recaudado'].'</td> 
+    <td><b>'.$status['recaudado'].'</b></td> 
   </tr>
+  '.$status['creditos_html'].'
   <tr>
     <td colspan="2"><b>Gastos</b></td>
-    <td>'.$status['gastos'].'</td> 
+    <td><b>'.$status['gastos'].'</b></td> 
   </tr>
   '.$status['gastos_html'].'
   <tr>
     <td colspan="2"><b>Surtido</b></td>
-    <td>'.$status['surtido'].'</td> 
+    <td><b>'.$status['surtido'].'</b></td> 
   </tr>
   '.$status['surtido_html'].'
 </table><hr><br> Total Día = '.$status['total'].'<br> Base='. format_money($base) .'<br><b>Total en caja = '. $status['totalBase'].'</b>';
