@@ -316,7 +316,10 @@ class TransactionController extends Controller
                     else
                         $product->cantidad = $product->cantidad + $income->cantidad;
                 }else{
-                    $product->cantidad = $product->cantidad - $income->cantidad;
+                    if(!empty($tipo)){
+                        $product->cantidad = $product->cantidad + $income->cantidad;
+                    }else
+                        $product->cantidad = $product->cantidad - $income->cantidad;
                 }
                 $product->save();
             }

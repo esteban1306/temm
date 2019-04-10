@@ -26,6 +26,7 @@ Route::post('/productos', 'ProductController@store')->name('productos')->middlew
 Route::post('/transaction', 'TransactionController@store')->name('transaction')->middleware('auth');
 Route::post('/incomes', 'IncomeController@store')->name('incomes')->middleware('auth');
 Route::post('/incomes_a', 'IncomeController@storeA')->name('incomes_a')->middleware('auth');
+Route::post('/incomes_acueducto', 'IncomeController@storeAcueducto')->name('incomes_acueducto')->middleware('auth');
 Route::post('/abonos', 'AbonoController@store')->name('abonos')->middleware('auth');
 Route::post('/pdf', 'TicketController@pdf')->name('pdf')->middleware('auth');
 Route::post('/pdf_transaction', 'TransactionController@pdf')->name('pdf_transaction')->middleware('auth');

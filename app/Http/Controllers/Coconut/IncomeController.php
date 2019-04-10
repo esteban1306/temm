@@ -146,6 +146,46 @@ class IncomeController extends Controller
 
         return $return;
     }
+    public function storeAcueducto(Request $request)
+    {
+        //return 2;
+        $id_transaction =$request->transaction;
+        $fecha =$request->fecha;
+        $tipo =$request->tipo;
+        if(empty($request->transaction)){
+            $transaction = new Transaction();
+            $transaction->precio = 0;
+            $transaction->parking_id = Auth::user()->parking_id;
+            $transaction->partner_id = Auth::user()->partner_id;
+            $transaction->description = strtoupper($request->descripcion??'');
+            $transaction->tipo = $tipo;
+            $transaction->save();
+            $id_transaction = $transaction->id_transaction;
+        }
+        $product = Product::find($request->product);
+        $income = new Income();
+        $income->cantidad =$request->cantidad?? -1;
+        $income->product_id =$request->product;
+        $income->transaction_id =$id_transaction;
+        $income->parking_id = Auth::user()->parking_id;
+        $income->precio = intval($request->cantidad*$product->precio);
+
+        $income->save();
+
+        $product->cantidad = ($product->cantidad*1) - ($income->cantidad*1);
+        $product->save();
+
+        $transaction = Transaction::find($id_transaction);
+        $transaction->created_at = Carbon::parse($fecha??'');
+        $transaction->description = $request->descripcion??'';
+        $transaction->tipo = $tipo??'';
+        $transaction->precio = $transaction->precio*1 +($income->precio);
+        $transaction->save();
+        $return['transaction_id'] = $id_transaction;
+        $return['precio'] = format_money($transaction->precio);
+
+        return $return;
+    }
 
     /**
      * Display the specified resource.
@@ -238,12 +278,20 @@ class IncomeController extends Controller
     {
         $search = $request->get('search')['value'];
         $transaction = $request->get('transaction');
+        $tipo = $request->get('tipo')??'';
 
         $tickets= Income::select(['id_income as Id', 'precio', 'product_id', 'cantidad','description'])->where('parking_id',Auth::user()->parking_id)->where('transaction_id', $transaction)->orderBy('id_income','desc');
 
         return Datatables::of($tickets)
-            ->addColumn('action', function ($tickets) {
-                    return \Form::button('Eliminar', [
+            ->addColumn('action', function ($tickets) use($tipo){
+                    return $tipo==2?\Form::button('Eliminar', [
+                        'class'   => 'btn btn-warning',
+                        'onclick' => "eliminarIncome2('$tickets->Id')",
+                        'data-toggle' => "tooltip",
+                        'data-placement' => "bottom",
+                        'title' => "Eliminar !",
+
+                    ]):\Form::button('Eliminar', [
                         'class'   => 'btn btn-warning',
                         'onclick' => "eliminarIncome('$tickets->Id')",
                         'data-toggle' => "tooltip",
@@ -348,14 +396,18 @@ class IncomeController extends Controller
         $transaction->save();
         $product = Product::find($income->product_id);
         if($product->cantidad != '-1'){
-            if($transaction->tipo == 2)
-                $product->cantidad = $product->cantidad - $income->cantidad;
-            if($transaction->tipo == 1){
-                if(!empty($tipo)){
-                    $product->precio= intval((($product->cantidad*($product->precio*1)) - ($income->cantidad*($income->precio*1))) /($product->cantidad-$income->cantidad));
-                    $product->cantidad = $product->cantidad-$income->cantidad;
-                }else
-                    $product->cantidad = $product->cantidad + $income->cantidad;
+            if($tipo==2){
+                $product->cantidad = $product->cantidad + $income->cantidad;
+            }else{
+                if($transaction->tipo == 2)
+                    $product->cantidad = $product->cantidad - $income->cantidad;
+                if($transaction->tipo == 1){
+                    if(!empty($tipo)){
+                        $product->precio= intval((($product->cantidad*($product->precio*1)) - ($income->cantidad*($income->precio*1))) /($product->cantidad-$income->cantidad));
+                        $product->cantidad = $product->cantidad-$income->cantidad;
+                    }else
+                        $product->cantidad = $product->cantidad + $income->cantidad;
+                }
             }
             $product->save();
         }

@@ -47,9 +47,9 @@
                                 {!! Form::label('tipoT', 'Tipo', ['class' => 'control-label']) !!}
                                 <select id="typeS" name="type" class="form-control">
                                     <option value="">Todos</option>
-                                    <option value="1">Reparaciones</option>
-                                    <option value="2">Instalaciones</option>
-                                    <option value="3">Extensiones</option>
+                                    <option value="2">Reparaciones</option>
+                                    <option value="3">Instalaciones</option>
+                                    <option value="4">Extensiones</option>
                                 </select>
                             </div>
                         </div>
@@ -188,7 +188,7 @@
     </div>
 
     @include('acueducto.modal_add')
-    @include('transaction.modal_add')
+    @include('acueducto.modal_add')
     @include('transaction.modal_mod')
     @include('acueducto.modal_venta')
     @include('acueducto.modal_product_mod')
@@ -389,6 +389,79 @@
                 error : function () {
                     //location = '/login';
                 }
+            });
+        }
+        function agregarIncome2() {
+            var vproduct=$("#productsList_2").validationEngine('validate');
+            var vCant=$("#cantIncome_2").validationEngine('validate');
+            var vFecha=$("#FechaIncome").validationEngine('validate');
+            if (vproduct || vCant || vFecha)
+                return;
+
+            var product=$("#productsList_2").val();
+            var cantidad=$("#cantIncome_2").val();
+            var transaction=$("#transaction_id_2").val();
+            var fecha=$("#FechaIncome").val();
+            var tipo=$("#tipoGts").val();
+
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: "POST",
+                url: "incomes_acueducto",
+                data: {
+                    product : product,
+                    cantidad : cantidad,
+                    transaction : transaction,
+                    descripcion : $('#descriptionGt').val(),
+                    tipo: tipo,
+                    fecha: fecha
+                },
+                success: function (datos) {
+                    new PNotify({
+                        title: 'Exito',
+                        type: 'success',
+                        text: 'Se agregó el producto con exito'
+                    });
+                    $("#productsList_2").val('');
+                    $("#cantIncome_2").val(1);
+                    if(transaction =='')
+                        $("#transaction_id_2").val(datos['transaction_id']);
+                    loadIncomes2();
+                    $('.selectpicker2').selectpicker('refresh');
+                    $('#transaction-table').dataTable()._fnAjaxUpdate();
+                    desktop_index_vm.load();
+                },
+                error : function () {
+                    //location = '/login';
+                }
+            });
+        }
+        function loadIncomes2(){
+            $('#income-table-2').DataTable({
+                sDom           : 'r<Hlf><"datatable-scroll"t><Fip>',
+                order          : [],
+                processing     : true,
+                serverSide     : true,
+                deferRender    : true,
+                destroy        : true,
+                ajax: {
+                    url  : '{!! route('get_incomes') !!}',
+                    data : {
+                        transaction        : $("#transaction_id_2").val(),
+                        tipo        : 2,
+                    },
+                    error : function () {
+                        location = '/login';
+                    }
+                },
+                columns: [
+                    { data: 'product_id', name: 'Producto', orderable  : false, searchable : false },
+                    { data: 'cantidad', name: 'Cantidad', orderable  : false, searchable : false },
+                    { data: 'action', name: 'acciones', orderable  : false, searchable : false },
+                ],
+                lengthMenu: [[ 10, 25, 50, -1], [ 10, 25, 50, "Todos"]]
             });
         }
         function loadCustomers() {
@@ -660,6 +733,34 @@
                 }
             })).get().on('pnotify.confirm', function() {
                 desktop_index_vm.deleteIncome(id);
+            }).on('pnotify.cancel', function() {
+               ;
+            });
+        }
+        function eliminarIncome2(id) {
+            (new PNotify({
+                title: 'Necesita confirmación',
+                text: 'Esta seguro de querer eliminar el producto?',
+                icon: 'glyphicon glyphicon-question-sign',
+                hide: false,
+                confirm: {
+                    confirm: true
+                },
+                buttons: {
+                    closer: false,
+                    sticker: false
+                },
+                history: {
+                    history: false
+                },
+                addclass: 'stack-modal',
+                stack: {
+                    'dir1': 'down',
+                    'dir2': 'right',
+                    'modal': true
+                }
+            })).get().on('pnotify.confirm', function() {
+                desktop_index_vm.deleteIncome2(id);
             }).on('pnotify.cancel', function() {
                ;
             });
@@ -1492,6 +1593,35 @@
                                 loadIncomes();
                                 $('#precioVenta').html(datos['precio']);
                                 $('#transaction-table').dataTable()._fnAjaxUpdate();
+                                this.load();
+                            },
+                            error : function () {
+                                location = '/login';
+                            }
+                        });
+                },
+                deleteIncome2 : function(income) {
+                        $.ajax({
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            type: "POST",
+                            url: "eliminar_income",
+                            data: {
+                                income:income,
+                                tipo : 2
+                            },
+                            success: function (datos) {
+                                new PNotify({
+                                    title: 'Exito',
+                                    type: 'success',
+                                    text: 'Se Eliminó el producto con exito'
+                                });
+                                loadIncomes2();
+                                $('#precioSalida').html(datos['precio']);
+                                $('#transaction-table').dataTable()._fnAjaxUpdate();
+                                $('#income-table-2').dataTable()._fnAjaxUpdate();
+                                $('#income-table').dataTable()._fnAjaxUpdate();
                                 this.load();
                             },
                             error : function () {
