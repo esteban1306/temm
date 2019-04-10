@@ -332,6 +332,7 @@
             $('#modal_venta').modal('show');
             $('#id_transaction').val(transaction);
             $('#descripcionIncome').val(descripcion);
+            $('#FechaIncome').val(fecha);
             $('#precioVenta').html(precio);
             $('.selectpicker2').selectpicker('refresh');
             loadIncomes();
