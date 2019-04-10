@@ -9,7 +9,7 @@
                     <button type="button" onclick="openModalVenta('','','','','')" class="btn btn-primary col-md-10 btn-lg">Nueva Entrada</button>
                 </div>
                 <div class="col-md-6" style="text-align: center;">
-                    <button type="button" onclick="openModalGasto()" class="btn btn-outline-info col-md-10 btn-lg">Nueva Salida</button>
+                    <button type="button" onclick="openModalGasto('','','','','')" class="btn btn-outline-info col-md-10 btn-lg">Nueva Salida</button>
                 </div>
             </div>
             <p class="height_10"></p>
@@ -225,8 +225,14 @@
             $("#cedulaCustomer").val("");
             $('#modal_add_product').modal('show');
         }
-        function openModalGasto(){
+        function openModalGasto(transaction,precio,descripcion,tipo,fecha){
+            $('#transaction_id_2').val(transaction);
+            $('#precioSalida').val(precio);
+            $('#descriptionGt').val(descripcion);
+            $('#tipoGts').val(tipo);
+            $('#FechaGts').val(fecha);
             $('#modal_add_transaction').modal('show');
+            loadIncomes2();
         }
         function loadCustomer(id) {
             $.ajax({

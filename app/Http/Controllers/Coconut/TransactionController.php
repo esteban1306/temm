@@ -215,7 +215,7 @@ class TransactionController extends Controller
                         .($tickets->tipo != 1 && empty($tickets->estado)?
                         \Form::button('Editar Gasto', [
                             'class'   => 'btn btn-primary',
-                            'onclick' => "openModalGasto($tickets->Id,'".$tickets->precio."','".$tickets->description."','".$tickets->tipo."')",
+                            'onclick' => "openModalGasto($tickets->Id,'".$tickets->precio."','".$tickets->description."','".$tickets->tipo."','".$hour->format('Y-m-d')."')",
                             'data-toggle' => "tooltip",
                             'data-placement' => "bottom",
                             'title' => "Editar Gasto",
