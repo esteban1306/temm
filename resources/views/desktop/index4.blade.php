@@ -435,6 +435,7 @@
                     if(transaction =='')
                         $("#transaction_id_2").val(datos['transaction_id']);
                     loadIncomes2();
+                    $('#precioSalida').html(datos['precio']);
                     $('.selectpicker2').selectpicker('refresh');
                     $('#transaction-table').dataTable()._fnAjaxUpdate();
                     desktop_index_vm.load();
