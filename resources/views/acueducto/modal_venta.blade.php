@@ -12,7 +12,11 @@
                         <label for="nombre" class="control-label">Descripción</label>
                         <input id="descripcionIncome" type="text" class="form-control validate[required]">
                     </div>
-                    <hr>
+                    <div class="form-group col-md-12">
+                        <label for="nombre" class="control-label">Fecha</label>
+                        <input id="FechaIncome" type="date" class="form-control validate[required]">
+                        <hr>
+                    </div>
                     <div class="form-group col-md-12">
                         <label for="nombre" class="control-label">Producto</label>
                         @php($products = App\Product::where('parking_id',Illuminate\Support\Facades\Auth::user()->parking_id)->get())

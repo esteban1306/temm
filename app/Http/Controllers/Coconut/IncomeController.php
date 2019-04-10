@@ -111,6 +111,7 @@ class IncomeController extends Controller
     {
         //return 2;
         $id_transaction =$request->transaction;
+        $fecha =$request->fecha;
         if(empty($request->transaction)){
             $transaction = new Transaction();
             $transaction->precio = 0;
@@ -136,6 +137,7 @@ class IncomeController extends Controller
         $product->save();
 
         $transaction = Transaction::find($id_transaction);
+        $transaction->created_at = Carbon::parse($fecha??'');
         $transaction->description = $request->descripcion??'';
         $transaction->precio = $transaction->precio*1 +($income->precio*1*$income->cantidad);
         $transaction->save();

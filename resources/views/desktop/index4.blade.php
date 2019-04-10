@@ -343,8 +343,9 @@
         function agregarIncome() {
             var vproduct=$("#productsList").validationEngine('validate');
             var vCant=$("#cantIncome").validationEngine('validate');
+            var vFecha=$("#FechaIncome").validationEngine('validate');
             var vPrecio=$("#precioIncome").validationEngine('validate');
-            if (vproduct || vCant)
+            if (vproduct || vCant || vFecha)
                 return;
 
             var product=$("#productsList").val();
@@ -352,6 +353,7 @@
             var precio=$("#precioIncome").val();
             var descripcion=$("#descripcionIncome").val();
             var transaction=$("#id_transaction").val();
+            var fecha=$("#FechaIncome").val();
 
             $.ajax({
                 headers: {
@@ -364,7 +366,8 @@
                     cantidad : cantidad,
                     transaction : transaction,
                     precio      : precio,
-                    descripcion : descripcion
+                    descripcion : descripcion,
+                    fecha       :fecha
                 },
                 success: function (datos) {
                     new PNotify({
