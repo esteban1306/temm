@@ -6,7 +6,7 @@
             <!---->
             <div class="row">
                 <div class="col-md-6" style="text-align: center;">
-                    <button type="button" onclick="openModalVenta('','','','')" class="btn btn-primary col-md-10 btn-lg">Nueva Venta</button>
+                    <button type="button" onclick="openModalVenta('','','','','')" class="btn btn-primary col-md-10 btn-lg">Nueva Venta</button>
                 </div>
                 <div class="col-md-6" style="text-align: center;">
                     <button type="button" onclick="openModalGasto('','','',3)" class="btn btn-outline-info col-md-10 btn-lg">Nuevo Gasto</button>
@@ -394,7 +394,7 @@
                 }
             });
         }
-        function openModalVenta(transaction,precio, customer,descripcion){
+        function openModalVenta(transaction,precio, customer,descripcion,fecha){
             $('#modal_venta').modal('show');
             $('#id_transaction').val(transaction);
             $('#precioVenta').html(precio);

@@ -186,6 +186,7 @@ class TransactionController extends Controller
 
         return Datatables::of($tickets)
             ->addColumn('action', function ($tickets) use($customers){
+                $hour =new DateTime("".$tickets->created_at);
                     return (empty($tickets->estado) ?\Form::button('Eliminar', [
                         'class'   => 'btn btn-warning',
                         'onclick' => "eliminarTransaction('$tickets->Id')",
@@ -196,7 +197,7 @@ class TransactionController extends Controller
                     ]):'').($tickets->tipo == 1  && empty($tickets->estado)?
                             \Form::button('Editar', [
                                 'class'   => 'btn btn-primary',
-                                'onclick' => "openModalVenta('$tickets->Id','".format_money($tickets->precio)."','".($tickets->customer_id ?? '')."','".$tickets->description."')",
+                                'onclick' => "openModalVenta('$tickets->Id','".format_money($tickets->precio)."','".($tickets->customer_id ?? '')."','".$tickets->description."','".$hour->format('Y-m-d')."')",
                                 'data-toggle' => "tooltip",
                                 'data-placement' => "bottom",
                                 'title' => "Editar !",
