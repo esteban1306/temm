@@ -25,11 +25,8 @@
                         <input id="FechaGts" type="date" class="form-control validate[required]">
                         <hr>
                     </div>
-                    <div class="form-group col-md-12 pt-3" id="gasto_opt">
-                        <button id="new_customer" class="btn btn-primary full-width waves-effect waves-light" onclick="crearGasto()"><strong>Guardar</strong></button>
-                    </div>
                 </div>
-                <div class="row" id="surtido_opt" style="display:none">
+                <div class="row" id="surtido_opt" style="">
                     <input id="id_transaction_2" type="number" class="form-control" style="display: none">
                     <div class="form-group col-md-6">
                         <label for="nombre" class="control-label">Productos</label>

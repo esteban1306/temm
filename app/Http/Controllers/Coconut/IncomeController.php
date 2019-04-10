@@ -393,6 +393,9 @@ class IncomeController extends Controller
             }else
                 $transaction->precio = $transaction->precio -$income->precio;
         }
+        if($tipo == 2){
+            $transaction->precio = $transaction->precio -$income->precio;
+        }
         $transaction->save();
         $product = Product::find($income->product_id);
         if($product->cantidad != '-1'){
