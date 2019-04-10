@@ -188,7 +188,7 @@
     </div>
 
     @include('acueducto.modal_add')
-    @include('acueducto.modal_add')
+    @include('acueducto.modal_add2')
     @include('transaction.modal_mod')
     @include('acueducto.modal_venta')
     @include('acueducto.modal_product_mod')
