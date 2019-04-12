@@ -469,22 +469,25 @@ class TransactionController extends Controller
         $now = new Datetime('now');
         $status = [];
         $status['creditos_html'] = "";
+        $status['creditos'] = ZERO;
         $status['gastos_html'] = "";
         $status['surtido_html'] = "";
-        $status['total'] = ZERO;
+        $status['total'] = $base;
         $status['surtido'] = ZERO;
         $status['gastos'] = ZERO;
         $status['recaudado'] = ZERO;
         foreach ($tickets as $ticket){
             if($ticket->tipo == 1){
-                $status['total'] += $ticket->precio;
-                $status['recaudado'] += $ticket->precio;
                 if(!empty($ticket->customer_id)){
                     $customer = Customer::find($ticket->customer_id);
                     $status['creditos_html'].='<tr>
                                             <td colspan="2"><small>'.$customer->nombre.'</small></td> 
                                             <td>'.format_money($ticket->precio).'</td> 
                                           </tr>';
+                    $status['creditos'] += $ticket->precio;
+                }else{
+                    $status['recaudado'] += $ticket->precio;
+                    $status['total'] += $ticket->precio;
                 }
             }
             if($ticket->tipo == 2){
@@ -504,7 +507,8 @@ class TransactionController extends Controller
                                           </tr>';
             }
         }
-        $status['totalBase'] = format_money($status['total']*1+$base*1);
+        $status['totalSinBase'] = format_money($status['total']*1-$base*1);
+        $status['totalDia'] = format_money($status['total']*1-$base*1+$status['creditos']);
         $status['total'] = format_money($status['total']);
         $status['surtido'] = format_money($status['surtido']);
         $status['gastos'] = format_money($status['gastos']);
@@ -514,27 +518,53 @@ class TransactionController extends Controller
         PDF::AddPage('P', 'A6');
 
         $html = '<table style="width:100%">
-  <tr>
-    <th>'.$dateRange[0].'</th>
-    <th>'.$dateRange[1].'</th> 
-    <th>Precio</th>
-  </tr>
-  <tr>
-    <td colspan="2"><b>Recaudado</b></td>
-    <td><b>'.$status['recaudado'].'</b></td> 
-  </tr>
-  '.$status['creditos_html'].'
-  <tr>
-    <td colspan="2"><b>Gastos</b></td>
-    <td><b>'.$status['gastos'].'</b></td> 
-  </tr>
-  '.$status['gastos_html'].'
-  <tr>
-    <td colspan="2"><b>Surtido</b></td>
-    <td><b>'.$status['surtido'].'</b></td> 
-  </tr>
-  '.$status['surtido_html'].'
-</table><hr><br> Total Día = '.$status['total'].'<br> Base='. format_money($base) .'<br><b>Total en caja = '. $status['totalBase'].'</b>';
+      <tr>
+        <td colspan="2"><b>Surtido</b></td>
+        <td><b>'.$status['surtido'].'</b></td> 
+      </tr>
+      '.$status['surtido_html'].'
+      <tr>
+        <th>'.$dateRange[0].'</th>
+        <th>'.$dateRange[1].'</th> 
+        <th>Precio</th>
+      </tr>
+      <tr>
+        <td colspan="2"><b>Gastos</b></td>
+        <td><b>'.$status['gastos'].'</b></td> 
+      </tr>
+      '.$status['gastos_html'].'
+  </table>
+  <hr>
+  <table style="width:100%">
+      <tr>
+        <td colspan="2"><b>Ventas en Efectivo</b></td>
+        <td><b>'.$status['recaudado'].'</b></td> 
+      </tr>
+      <tr>
+        <td colspan="2"><b>Total Efectivo en caja</b></td>
+        <td><b>'.$status['total'].'</b></td> 
+      </tr>
+      <tr>
+        <td colspan="2"><b>Base</b></td>
+        <td><b>'.format_money($base).'</b></td> 
+      </tr>
+      <tr>
+        <td colspan="2"><b>Efectivo a retirar</b></td>
+        <td><b>'.$status['totalSinBase'].'</b></td> 
+      </tr>
+  </table>
+  <hr>
+  <table style="width:100%">
+      <tr>
+        <td colspan="2"><b>Creditos</b></td>
+        <td><b>'.format_money($status['creditos']).'</b></td> 
+      </tr>
+    '.$status['creditos_html'].'
+     <tr>
+        <td colspan="2"><b>Total Ventas</b></td>
+        <td><b>'.$status['totalDia'].'</b></td> 
+      </tr>
+    </table>';
 
         PDF::writeHTML($html, true, false, true, false, '');
         $js = 'print(true);';
