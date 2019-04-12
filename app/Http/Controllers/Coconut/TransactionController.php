@@ -518,16 +518,17 @@ class TransactionController extends Controller
         PDF::AddPage('P', 'A6');
 
         $html = '<table style="width:100%">
+        <tr>
+        <th>'.$dateRange[0].'</th>
+        <th>'.$dateRange[1].'</th> 
+        <th>Precio</th>
+      </tr>
       <tr>
         <td colspan="2"><b>Surtido</b></td>
         <td><b>'.$status['surtido'].'</b></td> 
       </tr>
       '.$status['surtido_html'].'
-      <tr>
-        <th>'.$dateRange[0].'</th>
-        <th>'.$dateRange[1].'</th> 
-        <th>Precio</th>
-      </tr>
+      
       <tr>
         <td colspan="2"><b>Gastos</b></td>
         <td><b>'.$status['gastos'].'</b></td> 
