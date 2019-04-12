@@ -509,6 +509,7 @@ class TransactionController extends Controller
         }
         $status['totalSinBase'] = format_money($status['total']*1-$base*1);
         $status['totalDia'] = format_money($status['total']*1-$base*1+$status['creditos']);
+        $status['totalVentas'] = format_money($status['recaudado']*1+$status['creditos']);
         $status['total'] = format_money($status['total']);
         $status['surtido'] = format_money($status['surtido']);
         $status['gastos'] = format_money($status['gastos']);
@@ -540,6 +541,10 @@ class TransactionController extends Controller
       <tr>
         <td colspan="2"><b>Ventas en Efectivo</b></td>
         <td><b>'.$status['recaudado'].'</b></td> 
+      </tr>
+      <tr>
+        <td colspan="2"><b>Total Ventas</b></td>
+        <td><b>'.$status['totalVentas'].'</b></td> 
       </tr>
       <tr>
         <td colspan="2"><b>Total Efectivo en caja</b></td>
