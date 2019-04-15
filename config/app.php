@@ -181,6 +181,7 @@ return [
         Collective\Html\HtmlServiceProvider::class,
         Nexmo\Laravel\NexmoServiceProvider::class,
         Webup\LaravelSendinBlue\SendinBlueServiceProvider::class,
+        Maatwebsite\Excel\ExcelServiceProvider::class,
     ],
 
     /*
@@ -234,6 +235,7 @@ return [
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
         'Nexmo' => Nexmo\Laravel\Facade\Nexmo::class,
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
     ],
 
 ];
