@@ -655,6 +655,7 @@
         function pdfVenta(){
             var id = $("#id_transaction").val();
             form_pdf(id);
+            $('#modal_venta').modal('hide');
         }
         function form_pdf(id) {
             if(typeof id != "undefined"){

@@ -46,6 +46,9 @@
                     <div class="form-group col-md-12 pt-3">
                         <button id="new_income_2" class="btn btn-primary full-width waves-effect waves-light" onclick="agregarIncome2()"><strong>Agregar</strong></button>
                     </div>
+                    <div class="form-group col-md-12 pt-3">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Terminar</button>
+                    </div>
                     <div class="col-12"  style="overflow:  auto;">
                         <table class="table responsive" id="income-table-2">
                             <thead>
