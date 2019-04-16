@@ -498,10 +498,12 @@ class ProductController extends Controller
                 $sheet->row(1, [
                     'Producto', 'Cantidad'
                 ]);
-                foreach ($products as $index =>$product){
-                    $sheet->row($index+2, [
+                $index =2;
+                foreach ($products as $product){
+                    $sheet->row($index, [
                         $product->name, $product->cantidad
                     ]);
+                    $index ++;
                 }
 
             });
