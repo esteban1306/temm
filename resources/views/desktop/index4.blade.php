@@ -137,9 +137,9 @@
                 <div class="col-md-6" style="text-align: center;">
                     <button type="button" onclick="openModalProduct()" class="btn btn-outline-info col-md-10 btn-lg">Nuevo Producto</button>
                 </div>
-                <!--<div class="col-md-6" style="text-align: center;">
-                    <button type="button" onclick="openModalCliente()" class="btn btn-outline-success col-md-10 btn-lg">Nuevo Cliente</button>
-                </div>-->
+                <div class="col-md-6" style="text-align: center;">
+                    <button type="button" onclick="reporteProductos()" class="btn btn-primary col-md-10 btn-lg">Reporte Productos</button>
+                </div>
             </div>
             <br>
             <hr>
@@ -255,6 +255,10 @@
                     //location = '/login';
                 }
             });
+        }
+
+        function reporteProductos(){
+            $.get( "export_products" );
         }
         function crearCliente() {
             var vNombre=$("#nombreCustomer").validationEngine('validate');

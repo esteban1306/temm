@@ -488,4 +488,24 @@ class ProductController extends Controller
         }
         return $select;
     }
+    public function exportProducts(){
+        $now = new Datetime('now');
+        \Excel::create($now, function($excel) {
+
+            $products = Product::where('parking_id',Auth::user()->parking_id)->get();
+
+            $excel->sheet('Productos', function($sheet) use($products) {
+                $sheet->row(1, [
+                    'Producto', 'Cantidad'
+                ]);
+                foreach ($products as $index =>$product){
+                    $sheet->row($index+2, [
+                        $product->name, $product->cantidad
+                    ]);
+                }
+
+            });
+
+        })->export('xlsx');
+    }
 }
