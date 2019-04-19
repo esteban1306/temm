@@ -13,6 +13,8 @@ use Yajra\DataTables\DataTables;
 use Illuminate\Html\HtmlServiceProvider;
 use Nexmo\Laravel\Facade\Nexmo;
 use App\Notifications\Message;
+use App\Exports\ProductsExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 use PDF; // at the top of the file
 
@@ -490,24 +492,19 @@ class ProductController extends Controller
     }
     public function exportProducts(){
         $now = new Datetime('now');
-        \Excel::create($now, function($excel) {
+        return Excel::download(new ProductsExport, 'Productos'.$now->format('Y-m-d').'.xlsx');
+        Excel::create($now, function($excel) {
 
             $products = Product::where('parking_id',Auth::user()->parking_id)->get();
 
-            $excel->sheet('Productos', function($sheet) use($products) {
+            $excel->sheet('Productos', function($sheet)  {
                 $sheet->row(1, [
                     'Producto', 'Cantidad'
                 ]);
-                $index =2;
-                foreach ($products as $product){
-                    $sheet->row($index, [
-                        $product->name, $product->cantidad
-                    ]);
-                    $index ++;
-                }
+
 
             });
 
-        })->export('xlsx');
+        })->export('xls');
     }
 }

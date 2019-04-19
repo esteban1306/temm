@@ -258,7 +258,7 @@
         }
 
         function reporteProductos(){
-            $.get( "export_products" );
+            window.open("{!! route('export_products') !!}", "_blank");
         }
         function crearCliente() {
             var vNombre=$("#nombreCustomer").validationEngine('validate');
