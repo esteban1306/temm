@@ -34,7 +34,7 @@
                         <select class="validate[required] selectpicker2" id="productsList_2"  data-live-search="true" data-size="10">
                             <option value="">Seleccionar</option>
                             @foreach($products as $product)
-                                {!! '<option data-toggle="tooltip" title="'.$product->description.'"value="'.$product->id_product.'">'.$product->name.(!empty($product->cantidad) && $product->cantidad !='-1'?' ('.$product->cantidad.')':'').'</option>' !!}
+                                {!! '<option data-toggle="tooltip" title="'.$product->name.'"value="'.$product->id_product.'">'.$product->name.(!empty($product->cantidad) && $product->cantidad !='-1'?' ('.$product->cantidad.' '.$product->description.')':'').'</option>' !!}
                             @endforeach
                         </select>
                     </div>
