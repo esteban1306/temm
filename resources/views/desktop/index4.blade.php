@@ -59,6 +59,12 @@
                                 <button class="btn btn-success form-control" id="advanced_search"><i class="fa fa-search"></i> Buscar</button>
                             </div>
                         </div>
+                        <div class="col-md-2 col-sm-2">
+                            <div class="form-group">
+                                <label class="control-label">&nbsp;</label>
+                                <button class="btn btn-outline-info form-control" onclick="modalReport()"><i class="fa fa-search"></i> Reporte</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -91,7 +97,7 @@
                             <div class="fl_layer">
                                 <h4 class="title">Entradas</h4>
                                 <span class="line"></span>
-                                <span class="data red" id="total"> - </span>
+                                <span class="data red" id="entradas"> - </span>
                             </div>
                         </div>
                     </div>
@@ -102,7 +108,7 @@
                             <div class="fl_layer">
                                 <h4 class="title">Reparaciones</h4>
                                 <span class="line"></span>
-                                <span class="data" id="recaudado"> - </span>
+                                <span class="data" id="reparaciones"> - </span>
                             </div>
                         </div>
                     </div>
@@ -113,7 +119,7 @@
                             <div class="fl_layer">
                                 <h4 class="title">Instalaciones</h4>
                                 <span class="line"></span>
-                                <span class="data" id="surtido"> - </span>
+                                <span class="data" id="instalaciones"> - </span>
                             </div>
                         </div>
                     </div>
@@ -124,7 +130,7 @@
                             <div class="fl_layer">
                                 <h4 class="title">Extensiones</h4>
                                 <span class="line"></span>
-                                <span class="data total" id="gastos"> - </span>
+                                <span class="data total" id="extensiones"> - </span>
                             </div>
                         </div>
                     </div>
@@ -178,9 +184,9 @@
                     </table>
                 </div>
             </div>
-            <form id="form_pdf" class="row" method="POST" action="{{ route('pdf') }}" TARGET="_blank" hidden>
+            <form id="form_pdf" class="row" method="POST" action="{{ route('pdf_acueducto') }}" TARGET="_blank" hidden>
             {{ csrf_field() }}
-                <input id="id_pdf" type="text" class="form-control" name="id_pdf">
+                <input id="fechaReporte" type="text" class="form-control" name="fechaReporte">
                 <button id="pdfsubmit" type="submit" form="form_pdf">Submit</button>
             </form>
             @include('desktop.account')
@@ -188,6 +194,7 @@
     </div>
 
     @include('acueducto.modal_add')
+    @include('acueducto.modal_report')
     @include('acueducto.modal_add2')
     @include('transaction.modal_mod')
     @include('acueducto.modal_venta')
@@ -207,6 +214,9 @@
     <script src="{{ asset('js/validationEngine-es.min.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/js/bootstrap-select.min.js"></script>
     <script>
+        function modalReport(){
+            $('#modal_report').modal('show');
+        }
         function openModalCliente(){
             $('#modal_add').modal('show');
             $("#nombreCustomer").val("");
@@ -603,8 +613,9 @@
                 }
             });
         }
-        function form_pdf(id) {
-            $('#id_pdf').val(id);
+        function crearReporte() {
+            var mes =$("#mesReport").val();
+            $('#fechaReporte').val(mes);
             $('#pdfsubmit').click();
         }
         function modificarProducto() {
@@ -1330,17 +1341,16 @@
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
                         type: "POST",
-                        url: "get_status_transaction",
+                        url: "get_status_acueducto",
                         data : {
                             range           : $("#Tiempo").val(),
                             customer        :$('#customerList').val()
                         },
                         success: function (datos) {
-                            var total= datos['total'];
-                            $("#total").html(datos['total']);
-                            $("#recaudado").html(datos['recaudado']);
-                            $("#surtido").html(datos['surtido']);
-                            $("#gastos").html(datos['gastos']);
+                            $("#entradas").html(datos['entradas']);
+                            $("#instalaciones").html(datos['instalaciones']);
+                            $("#reparaciones").html(datos['reparaciones']);
+                            $("#extensiones").html(datos['extensiones']);
                         },
                         error : function () {
                             location = '/login';
