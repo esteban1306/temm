@@ -16,10 +16,6 @@
                         <input onkeyup="mayus(this);" id="namePrMod" type="text" class="form-control validate[required]">
                     </div>
                     <div class="form-group col-md-12">
-                        <label for="fechas" class="control-label">Descripción</label>
-                        <input id="descriptionPrMod" type="text" class="form-control">
-                    </div>
-                    <div class="form-group col-md-12">
                         <label for="nombre" class="control-label">minimo</label>
                         <select id="minimoPrMod" name="type" class="form-control validate[required]">
                             <option value="">Seleccionar</option>
@@ -31,6 +27,14 @@
                     <div class="form-group col-md-12">
                         <label for="nombre" class="control-label">cantidad</label>
                         <input id="cantidadPrMod" type="number" class="form-control validate[required]">
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label for="nombre" class="control-label">Unidad de medida</label>
+                        <select id="unidPrMod" name="type" class="form-control validate[required]">
+                            <option value="">Seleccionar</option>
+                            <option value="UNIDADES">Unidades</option>
+                            <option value="METROS">Metros</option>
+                        </select>
                     </div>
                     <div class="form-group col-md-12">
                         <label for="nombre" class="control-label">precio</label>

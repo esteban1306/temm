@@ -621,9 +621,11 @@ class TransactionController extends Controller
     public function pdfAcueducto(Request $request)
     {
         $fecha = $request->fechaReporte;
-        $dateRange = explode(" - ", $fecha);
+        $dateRange = explode("-", $fecha);
         $mes = $dateRange[1];
         $anio = $dateRange[0];
+        $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+        //dd($fecha);
         $tickets= Transaction::select(['id_transaction as Id', 'precio', 'partner_id','created_at','tipo','description','customer_id'])->where('parking_id',Auth::user()->parking_id)->orderBy('id_transaction','desc');
         if (!empty($mes)) {
             $tickets = $tickets->whereMonth('created_at',$mes);
@@ -637,8 +639,8 @@ class TransactionController extends Controller
         $status['reparaciones'] = ZERO;
         $status['instalaciones'] = ZERO;
         $status['extensiones'] = ZERO;
+        $status['salidas'] = ZERO;
 
-        $tickets=$tickets->get();
         $now = new Datetime('now');
         foreach ($tickets as $ticket){
             if($ticket->tipo == 1){
@@ -646,45 +648,57 @@ class TransactionController extends Controller
             }
             if($ticket->tipo == 2){
                 $status['reparaciones'] += $ticket->precio;
+                $status['salidas'] += $ticket->precio;
             }
             if($ticket->tipo == 3){
                 $status['instalaciones'] += $ticket->precio;
+                $status['salidas'] += $ticket->precio;
             }
             if($ticket->tipo == 4){
                 $status['extensiones'] += $ticket->precio;
+                $status['salidas'] += $ticket->precio;
             }
         }
         $status['entradas'] = format_money($status['entradas']);
+        $status['salidas'] = format_money($status['salidas']);
         $status['reparaciones'] = format_money($status['reparaciones']);
         $status['instalaciones'] = format_money($status['instalaciones']);
         $status['extensiones'] = format_money($status['extensiones']);
 
         PDF::SetTitle('Reporte PDF');
-        PDF::AddPage('P', 'A6');
+        PDF::AddPage('P', 'A4');
 
-        $html = '<table style="width:100%">
-        <tr>
-        <th>'.$dateRange[0].'</th>
-        <th>'.$dateRange[1].'</th> 
-        <th></th>
+        $html = '<div style="margin: 30px;align: center"><table style="width:80%; padding: 7px auto;">
+      <tr style="padding-bottom: 14px">
+        <th colspan="3" style="text-align: center"><b>MOVIMIENTO DE INVENTARIO</b><br></th>
       </tr>
+      <tr>
+        <th>Mes :' .$meses[$mes - 1].'</th>
+        <th></th>
+        <th>Año :'.$anio.'</th> 
+      </tr>
+      <br>
       <tr>
         <td colspan="2"><b>Entradas</b></td>
-        <td><b>'.$status['entradas'].'</b></td> 
+        <td style="text-align: right"><b>'.$status['entradas'].'</b></td> 
       </tr>
       <tr>
-        <td colspan="2"><b>Instalaciones</b></td>
-        <td><b>'.$status['instalaciones'].'</b></td> 
+        <td colspan="2"><b>Salidas</b></td>
+        <td style="text-align: right"><b>'.$status['salidas'].'</b></td> 
       </tr>
       <tr>
-        <td colspan="2"><b>Reparaciones</b></td>
-        <td><b>'.$status['reparaciones'].'</b></td> 
+        <td colspan="2">Instalaciones</td>
+        <td style="text-align: right">'.$status['instalaciones'].'</td>  
       </tr>
       <tr>
-        <td colspan="2"><b>Extensiones</b></td>
-        <td><b>'.$status['extensiones'].'</b></td> 
+        <td colspan="2">Reparaciones</td>
+        <td style="text-align: right">'.$status['reparaciones'].'</td> 
       </tr>
-  </table>';
+      <tr>
+        <td colspan="2">Extensiones</td>
+        <td style="text-align: right">'.$status['extensiones'].'</td> 
+      </tr>
+  </table></div>';
 
         PDF::writeHTML($html, true, false, true, false, '');
         $js = 'print(true);';

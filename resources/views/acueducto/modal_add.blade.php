@@ -25,6 +25,14 @@
                         <input id="cantidadPr" type="number" class="form-control validate[required]">
                     </div>
                     <div class="form-group col-md-12">
+                        <label for="nombre" class="control-label">Unidad de medida</label>
+                        <select id="unidPr" name="type" class="form-control validate[required]">
+                            <option value="">Seleccionar</option>
+                            <option value="UNIDADES">Unidades</option>
+                            <option value="METROS">Metros</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-12">
                         <label for="nombre" class="control-label">precio</label>
                         <input id="precioPr" type="number" class="form-control validate[required]">
                     </div>

@@ -493,18 +493,5 @@ class ProductController extends Controller
     public function exportProducts(){
         $now = new Datetime('now');
         return Excel::download(new ProductsExport, 'Productos'.$now->format('Y-m-d').'.xlsx');
-        Excel::create($now, function($excel) {
-
-            $products = Product::where('parking_id',Auth::user()->parking_id)->get();
-
-            $excel->sheet('Productos', function($sheet)  {
-                $sheet->row(1, [
-                    'Producto', 'Cantidad'
-                ]);
-
-
-            });
-
-        })->export('xls');
     }
 }

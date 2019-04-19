@@ -625,7 +625,7 @@
                 return;
 
             var name=$("#namePrMod").val();
-            var description=$("#descriptionPrMod").val();
+            var description=$("#unidPrMod").val();
             var minimo=$("#minimoPrMod").val();
             var cantidad=$("#cantidadPrMod").val();
             var precio=$("#precioPrMod").val();
@@ -883,6 +883,7 @@
             var minimo=$("#minimoPr").val();
             var cantidad=$("#cantidadPr").val();
             var precio=$("#precioPr").val();
+            var description=$("#unidPr").val();
 
             $.ajax({
                 headers: {
@@ -895,6 +896,7 @@
                     minimo : minimo,
                     cantidad : cantidad,
                     precio : precio,
+                    description : description,
                 },
                 success: function (datos) {
                     $('#modal_add_product').modal('hide');
@@ -970,7 +972,7 @@
                 },
                 success: function (datos) {
                     $("#namePrMod").val(datos['name']);
-                    $("#descriptionPrMod").val(datos['description']);
+                    $("#unidPrMod").val(datos['description']);
                     $("#minimoPrMod").val(datos['minimo']);
                     $("#cantidadPrMod").val(datos['cantidad']);
                     $("#precioPrMod").val(datos['precio']);
@@ -1195,8 +1197,8 @@
                 "locale": {
                     "format": "YYYY-MM-DD"
                 },
-                "startDate": "<?php $now = Carbon::now(); echo $now->format('Y-m-d')?>",
-                "endDate": "<?php   echo $now->format('Y-m-d')?>",
+                "startDate": "<?php $now = Carbon::now()->startOfMonth(); echo $now->format('Y-m-d')?>",
+                "endDate": "<?php  $now = Carbon::now()->endOfMonth();  echo $now->format('Y-m-d')?>",
                 "opens": "center",
                 "drops": "up"
             }, function(start, end, label) {
@@ -1331,8 +1333,8 @@
                     $('#transaction-table').dataTable()._fnAjaxUpdate();
                     }, 60000);
                 $('.selectpicker2').selectpicker();
-                this.loadTable();
-                this.load();
+                setTimeout(function (){desktop_index_vm.loadTable();desktop_index_vm.load();},2000);
+
             },
             methods    : {
                 load : function() {
