@@ -131,8 +131,11 @@ class IncomeController extends Controller
         $income->precio = $request->precio;
 
         $income->save();
+        if(Auth::user()->parking_id == 8)
+            $product->precio = round((($product->cantidad*($product->precio*1)) + ($income->cantidad*($income->precio*1))) /($product->cantidad+$income->cantidad),2);
+        else
+            $product->precio = intval((($product->cantidad*($product->precio*1)) + ($income->cantidad*($income->precio*1))) /($product->cantidad+$income->cantidad));
 
-        $product->precio = intval((($product->cantidad*($product->precio*1)) + ($income->cantidad*($income->precio*1))) /($product->cantidad+$income->cantidad));
         $product->cantidad = ($product->cantidad*1) + ($income->cantidad*1);
         $product->save();
 
@@ -168,7 +171,7 @@ class IncomeController extends Controller
         $income->product_id =$request->product;
         $income->transaction_id =$id_transaction;
         $income->parking_id = Auth::user()->parking_id;
-        $income->precio = intval($request->cantidad*$product->precio);
+        $income->precio = round($request->cantidad*$product->precio,2);
 
         $income->save();
 
@@ -406,7 +409,10 @@ class IncomeController extends Controller
                     $product->cantidad = $product->cantidad - $income->cantidad;
                 if($transaction->tipo == 1){
                     if(!empty($tipo)){
-                        $product->precio= intval((($product->cantidad*($product->precio*1)) - ($income->cantidad*($income->precio*1))) /($product->cantidad-$income->cantidad));
+                        if(Auth::user()->parking_id == 8)
+                            $product->precio= round((($product->cantidad*($product->precio*1)) - ($income->cantidad*($income->precio*1))) /($product->cantidad-$income->cantidad),2);
+                        else
+                            $product->precio= intval((($product->cantidad*($product->precio*1)) - ($income->cantidad*($income->precio*1))) /($product->cantidad-$income->cantidad));
                         $product->cantidad = $product->cantidad-$income->cantidad;
                     }else
                         $product->cantidad = $product->cantidad + $income->cantidad;
