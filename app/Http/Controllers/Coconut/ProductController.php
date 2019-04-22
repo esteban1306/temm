@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Partner;
 use App\Parking;
 use App\Product;
+use App\Income;
+use App\Transaction;
 use Carbon\Carbon;
 use DateTime;
 use Illuminate\Http\Request;
@@ -274,7 +276,15 @@ class ProductController extends Controller
                         'data-placement' => "bottom",
                         'title' => "Eliminar !",
 
-                    ]);
+                    ]).(Auth::user()->type == 5?
+                        \Form::button('Movimientos', [
+                        'class'   => 'btn btn-primary',
+                        'onclick' => "openMovimientos('$tickets->Id')",
+                        'data-toggle' => "tooltip",
+                        'data-placement' => "bottom",
+                        'title' => "Movimientos !",
+
+                    ]):'');
                     return $htmlAdmin;
             })
             ->addColumn('valor', function ($tickets) {
@@ -505,5 +515,35 @@ class ProductController extends Controller
     public function exportProducts(){
         $now = new Datetime('now');
         return Excel::download(new ProductsExport, 'Productos'.$now->format('Y-m-d').'.xlsx');
+    }
+
+    public function getMovimientos(Request $request){
+        $movimiento = $request->get('movimiento');
+        $tickets = Income::select(['id_income as Id', 'description', 'precio', 'cantidad', 'created_at'])->where('parking_id',Auth::user()->parking_id)->where('product_id',$movimiento)->orderBy('id_income','asc');
+        return Datatables::of($tickets)
+            ->editColumn('precio', function ($tickets) {
+                return format_money($tickets->precio);
+            })
+            ->editColumn('cantidad', function ($tickets) {
+                if(Auth::user()->type == 5){
+                    return $tickets->cantidad." ". $tickets->description;
+                }
+                return $tickets->cantidad;
+            })
+            ->editColumn('minimo', function ($tickets) {
+                if(Auth::user()->type == 5){
+                    if($tickets->minimo==1)
+                        return 'Alta';
+                    if($tickets->minimo==2)
+                        return 'Media';
+                    return 'Baja';
+                }
+
+                return $tickets->minimo;
+            })->editColumn('description', function ($tickets) {
+                $transaction = Transaction::find($tickets->transaction_id);
+                return $transaction->description;
+            })
+            ->make(true);
     }
 }

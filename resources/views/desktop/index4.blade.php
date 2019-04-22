@@ -228,6 +228,7 @@
     @include('acueducto.modal_product_mod')
     @include('product.modal_abono')
     @include('product.modal_list_abonos')
+    @include('product.modal_movimientos')
     @include('customer.modal_add')
     @include('customer.modal_mod')
 @endsection
@@ -383,6 +384,10 @@
             $('#precioVenta').html(precio);
             $('.selectpicker2').selectpicker('refresh');
             loadIncomes();
+        }
+        function openMovimientos(product){
+            $('#modal_movimientos').modal('show');
+            loadMovimientos(product);
         }
         function loadProducts() {
             return;
@@ -591,6 +596,32 @@
                     { data: 'cantidad', name: 'Cantidad', orderable  : false, searchable : false },
                     { data: 'precio', name: 'Precio', orderable  : false, searchable : false },
                     { data: 'action', name: 'acciones', orderable  : false, searchable : false },
+                ],
+                lengthMenu: [[ 10, 25, 50, -1], [ 10, 25, 50, "Todos"]]
+            });
+        }
+        function loadMovimientos(product){
+            $('#movimientos-table').DataTable({
+                sDom           : 'r<Hlf><"datatable-scroll"t><Fip>',
+                order          : [],
+                processing     : true,
+                serverSide     : true,
+                deferRender    : true,
+                destroy        : true,
+                ajax: {
+                    url  : '{!! route('get_movimientos') !!}',
+                    data : {
+                        product        : product,
+                    },
+                    error : function () {
+                        //location = '/login';
+                    }
+                },
+                columns: [
+                    { data: 'product_id', name: 'Descripción', orderable  : false, searchable : false },
+                    { data: 'cantidad', name: 'Cantidad', orderable  : false, searchable : false },
+                    { data: 'precio', name: 'Precio', orderable  : false, searchable : false },
+                    { data: 'created_at', name: 'Fecha', orderable  : false, searchable : false },
                 ],
                 lengthMenu: [[ 10, 25, 50, -1], [ 10, 25, 50, "Todos"]]
             });
