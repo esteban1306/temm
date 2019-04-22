@@ -3,7 +3,11 @@
         <section class="areaBread auto_margin">
             <div class="row">
                 <div class="col-9">
-                    <h1>"¿Que, pues, diremos a esto? Si Dios es por nosotros, ¿Quién contra nosotros?" : Romanos 8:31</h1>
+                    @if(\Auth::user()->parking_id != 5)
+                        <h1>"¿Que, pues, diremos a esto? Si Dios es por nosotros, ¿Quién contra nosotros?" : Romanos 8:31</h1>
+                    @else
+                        <h1> Parqueadero JR la 5</h1>
+                    @endif
                 </div>
                 <div class="col-3 text-right">
                     <span class="member">Hola, {{ Auth::user()->name }}</span>
