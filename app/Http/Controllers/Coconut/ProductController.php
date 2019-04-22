@@ -277,6 +277,12 @@ class ProductController extends Controller
                     ]);
                     return $htmlAdmin;
             })
+            ->addColumn('valor', function ($tickets) {
+                if($tickets->cantidad == '-1')
+                    return '$ 0';
+                else
+                    return format_money($tickets->cantidad * $tickets->precio);
+            })
             ->editColumn('precio', function ($tickets) {
                 return format_money($tickets->precio);
             })

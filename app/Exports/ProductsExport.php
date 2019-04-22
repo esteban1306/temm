@@ -13,8 +13,12 @@ class ProductsExport implements FromCollection
     */
     public function collection()
     {
-        $collection = collect([["Nombre Producto", "Cantidad"]]);
-        $products = Product::select(['name', 'cantidad'])->where('parking_id',Auth::user()->parking_id)->orderBy('name','asc')->get();
-        return $collection->push($products);
+        $collection = collect([["Nombre Producto", "Cantidad", "Precio Unitario", "Valor Total"]]);
+        $products = Product::select(['name', 'cantidad', 'precio'])->where('parking_id',Auth::user()->parking_id)->orderBy('name','asc')->get();
+        foreach ($products as $product){
+            $product->valor = $product->cantidad =='-1'? '0':($product->cantidad * $product->precio);
+            $collection->push($product);
+        }
+        return $collection;
     }
 }

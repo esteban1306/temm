@@ -159,11 +159,60 @@
                             <th class="all">Nombre</th>
                             <th class="min-tablet">Precio</th>
                             <th class="min-tablet">Cantidad</th>
+                            <th class="min-tablet">Valor</th>
                             <th class="min-tablet">Minimo</th>
                             <th class="all">acciones</th>
                         </tr>
                         </thead>
                     </table>
+                </div>
+            </div>
+            <br>
+            <h2 class="title_a"  v-show="all" >Estado Inventario</h2>
+            <div class="row" v-show="all">
+                <div class="col-lg-3 col-md-6">
+                    <div class="widget_box_b bdred">
+                        <div class="contt">
+                            <div class="fl_layer">
+                                <h4 class="title">Entradas</h4>
+                                <span class="line"></span>
+                                <span class="data red" id="entradas"> - </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="widget_box_b">
+                        <div class="contt">
+                            <div class="fl_layer">
+                                <h4 class="title">Reparaciones</h4>
+                                <span class="line"></span>
+                                <span class="data" id="reparaciones"> - </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="widget_box_b">
+                        <div class="contt">
+                            <div class="fl_layer">
+                                <h4 class="title">Instalaciones</h4>
+                                <span class="line"></span>
+                                <span class="data" id="instalaciones"> - </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="widget_box_b">
+                        <div class="contt">
+                            <div class="fl_layer">
+                                <h4 class="title">Extensiones</h4>
+                                <span class="line"></span>
+                                <span class="data total" id="extensiones"> - </span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="row" v-show="month">
@@ -1428,6 +1477,7 @@
                             { data: 'name', name: 'Nombre', orderable  : true, searchable : false },
                             { data: 'precio', name: 'Precio', orderable  : false, searchable : false },
                             { data: 'cantidad', name: 'Cantidad', orderable  : false, searchable : false },
+                            { data: 'valor', name: 'Valor', orderable  : false, searchable : false },
                             { data: 'minimo', name: 'minimo', orderable  : false, searchable : false },
                             { data: 'action', name: 'Acciones', orderable  : false, searchable : false },
                         ],
