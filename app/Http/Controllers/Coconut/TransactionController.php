@@ -331,11 +331,6 @@ class TransactionController extends Controller
                 $status['extensiones'] += $ticket->precio;
             }
         }
-        $status['entradas'] = format_money($status['entradas']);
-        $status['reparaciones'] = format_money($status['reparaciones']);
-        $status['instalaciones'] = format_money($status['instalaciones']);
-        $status['extensiones'] = format_money($status['extensiones']);
-
         $products = Product::where('parking_id',Auth::user()->parking_id)->orderBy('name','asc')->get();
         foreach ($products as $product){
             if($product->cantidad !='-1'){
@@ -343,6 +338,13 @@ class TransactionController extends Controller
                 $status['cantidad'] += $product->cantidad;
             }
         }
+
+        $status['entradas'] = format_money($status['entradas']);
+        $status['reparaciones'] = format_money($status['reparaciones']);
+        $status['instalaciones'] = format_money($status['instalaciones']);
+        $status['extensiones'] = format_money($status['extensiones']);
+        $status['inventario'] = format_money($status['inventario']);
+
         return $status;
     }
     public function getTransaction(Request $request)
