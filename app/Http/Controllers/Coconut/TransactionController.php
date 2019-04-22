@@ -312,6 +312,8 @@ class TransactionController extends Controller
         $status['reparaciones'] = ZERO;
         $status['instalaciones'] = ZERO;
         $status['extensiones'] = ZERO;
+        $status['inventario'] = ZERO;
+        $status['cantidad'] = ZERO;
 
         $tickets=$tickets->get();
         $now = new Datetime('now');
@@ -333,6 +335,14 @@ class TransactionController extends Controller
         $status['reparaciones'] = format_money($status['reparaciones']);
         $status['instalaciones'] = format_money($status['instalaciones']);
         $status['extensiones'] = format_money($status['extensiones']);
+
+        $products = Product::where('parking_id',Auth::user()->parking_id)->orderBy('name','asc')->get();
+        foreach ($products as $product){
+            if($product->cantidad !='-1'){
+                $status['inventario'] += ($product->cantidad *$product->precio);
+                $status['cantidad'] += $product->cantidad;
+            }
+        }
         return $status;
     }
     public function getTransaction(Request $request)
