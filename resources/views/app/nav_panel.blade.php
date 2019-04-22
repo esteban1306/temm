@@ -6,7 +6,14 @@
                     @if(\Auth::user()->parking_id != 5)
                         <h1>"¿Que, pues, diremos a esto? Si Dios es por nosotros, ¿Quién contra nosotros?" : Romanos 8:31</h1>
                     @else
-                        <h1> Parqueadero JR la 5</h1>
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="logo"><a href=""><img src="images/jr5.jpeg" class="img-retina" alt="" style="max-width: 150px;"></a></div>
+                            </div>
+                            <div class="col-8">
+                            <h1> Parqueadero JR la 5</h1>
+                            </div>
+                        </div>
                     @endif
                 </div>
                 <div class="col-3 text-right">
