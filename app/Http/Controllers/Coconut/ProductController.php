@@ -253,7 +253,7 @@ class ProductController extends Controller
     {
         $search = $request->get('search')['value'];
 
-        $tickets= Product::select(['id_product as Id', 'name', 'precio', 'minimo', 'cantidad','description'])->where('parking_id',Auth::user()->parking_id)->orderBy('id_product','desc');
+        $tickets= Product::select(['id_product as Id', 'name', 'precio', 'minimo', 'cantidad','description'])->where('parking_id',Auth::user()->parking_id)->orderBy('name','asc');
         if ($search) {
                 $tickets = $tickets->where('name', 'LIKE', "%$search%");
         }
@@ -489,7 +489,7 @@ class ProductController extends Controller
         return ;
     }
     public function getSelect(){
-        $products = Product::where('parking_id',Auth::user()->parking_id)->get();
+        $products = Product::where('parking_id',Auth::user()->parking_id)->orderBy('name','asc')->get();
         $select="<option value=''>Seleccionar</option>";
         foreach ($products as $product){
             $select .='<option data-toggle="tooltip" title="'.$product->description.'"value="'.$product->id_product.'">'.$product->name.(!empty($product->cantidad) && $product->cantidad !='-1'?' ('.$product->cantidad.')':'').$product->description.'</option>';
