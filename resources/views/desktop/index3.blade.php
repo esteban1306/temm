@@ -293,6 +293,7 @@
             tipoGasto();
             $('#modal_add_transaction').modal('show');
             loadIncomes2();
+            $('#tickets-table').dataTable()._fnAjaxUpdate();
         }
         function loadCustomer(id) {
             $.ajax({
@@ -446,6 +447,7 @@
                     $('#gastos-table').dataTable()._fnAjaxUpdate();
                     $('#surtido-table').dataTable()._fnAjaxUpdate();
                     desktop_index_vm.load();
+                    $('#tickets-table').dataTable()._fnAjaxUpdate();
                 },
                 error : function () {
                     //location = '/login';
@@ -493,6 +495,7 @@
                     $('#gastos-table').dataTable()._fnAjaxUpdate();
                     $('#surtido-table').dataTable()._fnAjaxUpdate();
                     desktop_index_vm.load();
+                    $('#tickets-table').dataTable()._fnAjaxUpdate();
                 },
                 error : function () {
                     //location = '/login';
@@ -581,6 +584,7 @@
                 ],
                 lengthMenu: [[ 10, 25, 50, -1], [ 10, 25, 50, "Todos"]]
             });
+            $('#tickets-table').dataTable()._fnAjaxUpdate();
         }
         function loadIncomes2(){
             $('#income-table-2').DataTable({
@@ -606,6 +610,7 @@
                 ],
                 lengthMenu: [[ 10, 25, 50, -1], [ 10, 25, 50, "Todos"]]
             });
+            $('#tickets-table').dataTable()._fnAjaxUpdate();
         }
         function openModalMod(product_id){
             $('#modal_product_mod').modal('show');
@@ -1421,8 +1426,11 @@
                     $('#surtido-table').dataTable()._fnAjaxUpdate();
                     }, 60000);
                 $('.selectpicker2').selectpicker();
-                this.loadTable();
-                this.load();
+                setTimeout(function (){
+                    desktop_index_vm.loadTable();
+                    desktop_index_vm.load();
+                    },1000
+                );
             },
             methods    : {
                 load : function() {
