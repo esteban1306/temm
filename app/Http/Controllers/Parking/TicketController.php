@@ -133,7 +133,7 @@ class TicketController extends Controller
                  4.No respondemos por objetos dejados en el carro mientras sus puertas esten aseguradas<br>
                  5.No somos responsables por daños o perdidas causadas en el parqueadero mientras el vehiculo no sea entregado personalmente<br>
                  6.No respondemos por la perdida, deterioro o daños ocurridos por causa de incendio, terremoto o causas similares, motin,conmosion civil, revolucion <br>y otros eventos que impliquen fuerza mayor.
-                 </small></div>');
+                 </small>').'</div>';
         }else{
             $pay_day = new DateTime("".$ticket->pay_day);
             $interval = date_diff($hour,$pay_day);
