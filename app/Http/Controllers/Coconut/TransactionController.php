@@ -436,6 +436,15 @@ class TransactionController extends Controller
     <td>".$income->cantidad."</td> 
   </tr>";
         }
+        $customer_html='';
+        if(!empty($ticket->customer_id)){
+            try{
+                $customer = Customer::find($ticket->customer_id);
+                $customer_html= 'Cliente: '.$customer->nombre.'<br>';
+            }catch (\Exception $e){
+                ;
+            }
+        }
 
         $style = array(
             'position' => '',
@@ -469,7 +478,9 @@ class TransactionController extends Controller
         $html .= '<small style="text-align:left;font-size: '.$size.';margin-bottom: 1px;"><b><br>
             FACTURA DE VENTA N°  '. $id . '<br> 
              Fecha ingreso: ' . $hour->format('d/m/Y') . '<br>
-             Hora ingreso: ' . $hour->format('h:ia') . '<br>
+             Hora ingreso: ' . $hour->format('h:ia') . '<br>'.
+            $customer_html.
+            '
              
              
             
