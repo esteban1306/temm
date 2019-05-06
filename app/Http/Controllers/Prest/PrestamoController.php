@@ -364,6 +364,22 @@ class PrestamoController extends Controller
             if($ticket->estado == 2)
                 $status['motos'] ++;
         }
+        $tickets= Prestamo::select(['id_prestamo', 'id_customer', 'interes', 'monto', 'cuota', 'actual', 'tipo', 'tiempo', 'created_at','estado'])
+            ->where('id_partner',Auth::user()->partner_id)
+            ->where('estado','1')
+            ->orderBy('id_prestamo','desc')->get();
+        foreach ($tickets as $ticket){
+            $abonos = Abono::select(['id_abono'])->where('id_prestamo',$ticket->id_prestamo)->count();
+            $interval = date_diff(new DateTime("".$ticket->created_at),$now);
+            $meses = ($interval->format("%M")*1)+($interval->format("%d")*1>=5?1:0)+($interval->format("%Y")*12);
+            $quincena = $ticket->tipo==2?($interval->format("%d")*1>=15?1:0)+($meses*2):0;
+            if($meses > $abonos && $ticket->tipo==1){
+                // si es vencido
+            }
+            if($quincena > $abonos && $ticket->tipo==2){
+                // si es vencido
+            }
+        }
 
         return $status;
     }
