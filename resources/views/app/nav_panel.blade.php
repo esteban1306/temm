@@ -1,10 +1,21 @@
+@php($random = random_int (0,4))
 <div id="Bread_top">
     <div class="container-fluid">
         <section class="areaBread auto_margin">
             <div class="row">
                 <div class="col-9">
                     @if(\Auth::user()->parking_id != 5)
+                        @if($random==1)
                         <h1>"¿Que, pues, diremos a esto? Si Dios es por nosotros, ¿Quién contra nosotros?" : Romanos 8:31</h1>
+                        @elseif($random==2)
+                        <h1>"Si puedes soñarlo, puedes hacerlo" : Walt Disney</h1>
+                        @elseif($random==3)
+                        <h1>"El éxito no es la clave de la felicidad. La felicidad es la clave del éxito" : Albert Schweitzer</h1>
+                        @elseif($random==4)
+                        <h1>"Si crees que puedes, ya estás a medio camino" : Theodore Roosevelt</h1>
+                        @else
+                        <h1>TEMM Soft te desea un excelente día</h1>
+                        @endif
                     @else
                         <div class="row">
                             <div class="col-4">
