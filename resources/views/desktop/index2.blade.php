@@ -944,19 +944,19 @@
                                 $("#total").html(datos['total']);
                             $("#motos").html(datos['motos']);
                             $("#carros").html(datos['carros']);
-                            $("#month_expired").html('Demo');
-                            /*if( datos['month_expire_num']>0){
+                            $("#month_expired").html(datos['month_expire_num']);
+                            if( datos['month_expire_num']>0){
                                 new PNotify({
-                                    title: 'Mensualidades pendientes',
+                                    title: 'Prestamos pendientes de pago',
                                     text: datos['month_expire'],
                                     type: 'info'
                                 });
-                            }*/
+                            }
                             this.retired = 1;
                         },
                         error : function () {
                             //alert('s');
-                            location = '/login';
+                            //location = '/login';
                         }
                     });
                 },

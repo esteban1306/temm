@@ -343,7 +343,7 @@ class PrestamoController extends Controller
         $status['extra'] = ZERO;
         $status['carros'] = ZERO;
         $status['motos'] = ZERO;
-        $status['month_expire'] = 'Mensualidades por vencer:';
+        $status['month_expire'] = '';
         $status['month_expire_num'] = ZERO;
         $tickets=$tickets->get();
         $now = new Datetime('now');
@@ -371,13 +371,17 @@ class PrestamoController extends Controller
         foreach ($tickets as $ticket){
             $abonos = Abono::select(['id_abono'])->where('id_prestamo',$ticket->id_prestamo)->count();
             $interval = date_diff(new DateTime("".$ticket->created_at),$now);
-            $meses = ($interval->format("%M")*1)+($interval->format("%d")*1>=5?1:0)+($interval->format("%Y")*12);
+            $meses = ($interval->format("%M")*1)+($interval->format("%Y")*12);
             $quincena = $ticket->tipo==2?($interval->format("%d")*1>=15?1:0)+($meses*2):0;
             if($meses > $abonos && $ticket->tipo==1){
-                // si es vencido
+                $customer = Customer::find($ticket->id_customer,['nombre']);
+                $status['month_expire'] .= $customer->nombre.' ('.($meses-$abonos).') <br>';
+                $status['month_expire_num'] ++;
             }
             if($quincena > $abonos && $ticket->tipo==2){
-                // si es vencido
+                $customer = Customer::find($ticket->id_customer,['nombre']);
+                $status['month_expire'] .= $customer->nombre.' ('.($quincena-$abonos).') <br>';
+                $status['month_expire_num'] ++;
             }
         }
 
