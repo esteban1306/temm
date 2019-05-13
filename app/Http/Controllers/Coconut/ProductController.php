@@ -519,7 +519,7 @@ class ProductController extends Controller
 
     public function getMovimientos(Request $request){
         $movimiento = $request->get('movimiento');
-        $tickets = Income::select(['id_income as Id', 'description', 'precio', 'cantidad', 'created_at'])->where('parking_id',Auth::user()->parking_id)->where('product_id',$movimiento)->orderBy('id_income','asc');
+        $tickets = Income::select(['id_income as Id', 'description', 'precio', 'cantidad', 'created_at','minimo'])->where('parking_id',Auth::user()->parking_id)->where('product_id',$movimiento)->orderBy('id_income','asc');
         return Datatables::of($tickets)
             ->editColumn('precio', function ($tickets) {
                 return format_money($tickets->precio);
