@@ -308,7 +308,7 @@ class IncomeController extends Controller
             })
             ->editColumn('product_id', function ($tickets) {
                 $product = Product::find($tickets->product_id,['name']);
-                return $product->name;
+                return $product->name??'';
             })
             ->make(true);
     }

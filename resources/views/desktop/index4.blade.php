@@ -618,10 +618,9 @@
                     }
                 },
                 columns: [
-                    { data: 'product_id', name: 'Descripción', orderable  : false, searchable : false },
+                    { data: 'description', name: 'Descripción', orderable  : false, searchable : false },
                     { data: 'cantidad', name: 'Cantidad', orderable  : false, searchable : false },
                     { data: 'precio', name: 'Precio', orderable  : false, searchable : false },
-                    { data: 'created_at', name: 'Fecha', orderable  : false, searchable : false },
                 ],
                 lengthMenu: [[ 10, 25, 50, -1], [ 10, 25, 50, "Todos"]]
             });

@@ -518,8 +518,11 @@ class ProductController extends Controller
     }
 
     public function getMovimientos(Request $request){
-        $movimiento = $request->get('movimiento');
-        $tickets = Income::select(['id_income as Id', 'description', 'precio', 'cantidad', 'created_at','minimo'])->where('parking_id',Auth::user()->parking_id)->where('product_id',$movimiento)->orderBy('id_income','asc');
+        $movimiento = $request->get('product');
+        $tickets = Income::select(['id_income as Id', 'description', 'precio', 'cantidad', 'created_at'])
+            ->where('parking_id',Auth::user()->parking_id)
+            ->where('product_id',$movimiento)
+            ->orderBy('id_income','asc');
         return Datatables::of($tickets)
             ->editColumn('precio', function ($tickets) {
                 return format_money($tickets->precio);
@@ -530,19 +533,10 @@ class ProductController extends Controller
                 }
                 return $tickets->cantidad;
             })
-            ->editColumn('minimo', function ($tickets) {
-                if(Auth::user()->type == 5){
-                    if($tickets->minimo==1)
-                        return 'Alta';
-                    if($tickets->minimo==2)
-                        return 'Media';
-                    return 'Baja';
-                }
-
-                return $tickets->minimo;
-            })->editColumn('description', function ($tickets) {
+            ->editColumn('description', function ($tickets) {
                 $transaction = Transaction::find($tickets->transaction_id);
-                return $transaction->description;
+                $hour = $transaction? new DateTime("".$transaction->created_at):'';
+                return $transaction? $hour->format('d/m/Y  h:ia').' '.$transaction->description :'';
             })
             ->make(true);
     }
