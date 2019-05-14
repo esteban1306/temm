@@ -265,7 +265,7 @@
         }
         function openModalGasto(transaction,precio,descripcion,tipo,fecha){
             $('#transaction_id_2').val(transaction);
-            $('#precioSalida').val(precio);
+            $('#precioSalida').html(precio);
             $('#descriptionGt').val(descripcion);
             $('#tipoGts').val(tipo);
             $('#FechaGts').val(fecha);
