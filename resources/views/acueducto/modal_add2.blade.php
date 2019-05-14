@@ -28,7 +28,7 @@
                 </div>
                 <div class="row" id="surtido_opt" style="">
                     <input id="id_transaction_2" type="number" class="form-control" style="display: none">
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-12">
                         <label for="nombre" class="control-label">Productos</label>
                         @php($products = App\Product::where('parking_id',Illuminate\Support\Facades\Auth::user()->parking_id)->get())
                         <select class="validate[required] selectpicker2" id="productsList_2"  data-live-search="true" data-size="10">
@@ -38,7 +38,7 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-12">
                         <label for="nombre" class="control-label">Cantidad</label>
                         <input id="cantIncome_2" type="number" class="form-control validate[required]">
                     </div>
