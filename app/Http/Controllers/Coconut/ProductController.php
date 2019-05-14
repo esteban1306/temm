@@ -519,7 +519,7 @@ class ProductController extends Controller
 
     public function getMovimientos(Request $request){
         $movimiento = $request->get('product');
-        $tickets = Income::select(['id_income as Id', 'description', 'precio', 'cantidad', 'created_at'])
+        $tickets = Income::select(['id_income as Id', 'description', 'precio', 'cantidad', 'created_at','transaction_id'])
             ->where('parking_id',Auth::user()->parking_id)
             ->where('product_id',$movimiento)
             ->orderBy('id_income','asc');
