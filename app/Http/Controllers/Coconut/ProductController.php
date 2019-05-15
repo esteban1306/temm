@@ -324,6 +324,7 @@ class ProductController extends Controller
 
         $tickets= Ticket::select(['ticket_id as Id', 'plate', 'type', 'name', 'date_end', 'partner_id', 'status', 'price','email','phone'])->where('parking_id',Auth::user()->parking_id)->where('status','<>',"3")->orderBy('ticket_id','desc');
         if ($search) {
+            $search = strtoupper($search);
             $tickets = $tickets->where('plate', 'LIKE', "%$search%");
         }
         if (!empty($schedule))
@@ -524,6 +525,9 @@ class ProductController extends Controller
             ->where('product_id',$movimiento)
             ->orderBy('id_income','asc');
         return Datatables::of($tickets)
+            ->addColumn('total', function ($tickets) {
+                return  format_money($tickets->cantidad*1*$tickets->precio);
+            })
             ->editColumn('precio', function ($tickets) {
                 return format_money($tickets->precio);
             })
@@ -537,6 +541,10 @@ class ProductController extends Controller
                 $transaction = Transaction::find($tickets->transaction_id);
                 $hour = $transaction? new DateTime("".$transaction->created_at):'';
                 return $transaction? $hour->format('d/m/Y  h:ia').' '.$transaction->description :'';
+            })
+            ->editColumn('tipo', function ($tickets) {
+                $transaction = Transaction::find($tickets->transaction_id);
+                return $transaction?( $transaction->tipo == 1?'Entrada': ($transaction->tipo == 2?'Reparación':( $transaction->tipo == 3?'Instalación':($transaction->tipo == 4?'Extensión': '') ) )):'';
             })
             ->make(true);
     }

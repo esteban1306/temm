@@ -261,6 +261,8 @@
             $("#celularCustomer").val("");
             $("#observacionCustomer").val("");
             $("#cedulaCustomer").val("");
+            $("#cantidadPr").val(0);
+            $("#precioPr").val(0);
             $('#modal_add_product').modal('show');
         }
         function openModalGasto(transaction,precio,descripcion,tipo,fecha){
@@ -270,6 +272,9 @@
             $('#tipoGts').val(tipo);
             $('#FechaGts').val(fecha);
             $('#modal_add_transaction').modal('show');
+            $('#cantIncome_2').val('');
+            $('#productsList_2').val('');
+            $('.selectpicker2').selectpicker('refresh');
             loadIncomes2();
         }
         function loadCustomer(id) {
@@ -380,6 +385,9 @@
             $('#modal_venta').modal('show');
             $('#id_transaction').val(transaction);
             $('#descripcionIncome').val(descripcion);
+            $('#cantIncome').val('');
+            $('#precioIncome').val('');
+            $('#productsList').val('');
             $('#FechaIncome').val(fecha);
             $('#precioVenta').html(precio);
             $('.selectpicker2').selectpicker('refresh');
@@ -619,8 +627,10 @@
                 },
                 columns: [
                     { data: 'description', name: 'Descripción', orderable  : false, searchable : false },
+                    { data: 'tipo', name: 'Tipo', orderable  : false, searchable : false },
                     { data: 'cantidad', name: 'Cantidad', orderable  : false, searchable : false },
                     { data: 'precio', name: 'Precio', orderable  : false, searchable : false },
+                    { data: 'total', name: 'Total', orderable  : false, searchable : false },
                 ],
                 lengthMenu: [[ 10, 25, 50, -1], [ 10, 25, 50, "Todos"]]
             });

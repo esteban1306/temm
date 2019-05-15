@@ -377,6 +377,7 @@ class TransactionController extends Controller
                         $product->cantidad = $product->cantidad - $income->cantidad;
                 }
                 $product->save();
+                $income->delete();
             }
         }
         $ticket->delete();
@@ -664,6 +665,7 @@ class TransactionController extends Controller
         $status['entradas'] = ZERO;
         $status['reparaciones'] = ZERO;
         $status['instalaciones'] = ZERO;
+        $status['instalaciones_list'] = "";
         $status['extensiones'] = ZERO;
         $status['salidas'] = ZERO;
 
@@ -678,6 +680,10 @@ class TransactionController extends Controller
             }
             if($ticket->tipo == 3){
                 $status['instalaciones'] += $ticket->precio;
+                $status['instalaciones_list'].='<tr>
+                                                    <td colspan="2">  - '.$ticket->description.'</td>
+                                                    <td style="text-align: right">'.format_money($ticket->precio).'</td>  
+                                                  </tr>';
                 $status['salidas'] += $ticket->precio;
             }
             if($ticket->tipo == 4){
@@ -715,7 +721,8 @@ class TransactionController extends Controller
       <tr>
         <td colspan="2">Instalaciones</td>
         <td style="text-align: right">'.$status['instalaciones'].'</td>  
-      </tr>
+      </tr>'.
+      $status['instalaciones_list'].'
       <tr>
         <td colspan="2">Reparaciones</td>
         <td style="text-align: right">'.$status['reparaciones'].'</td> 

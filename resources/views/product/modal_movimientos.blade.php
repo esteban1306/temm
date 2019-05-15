@@ -1,5 +1,5 @@
 <div id="modal_movimientos" class="modal fade" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">Movimientos</h4>
@@ -11,8 +11,10 @@
                         <thead>
                         <tr>
                             <th class="all">Descripción</th>
+                            <th class="all">Tipo</th>
                             <th class="min-tablet">Cantidad</th>
                             <th class="all">Precio</th>
+                            <th class="all">Total</th>
                         </tr>
                         </thead>
                     </table>
