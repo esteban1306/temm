@@ -365,7 +365,7 @@ class TransactionController extends Controller
                         if(Auth::user()->parking_id == 8)
                             $product->precio= ($product->cantidad-$income->cantidad == 0) ? 0: round((($product->cantidad*($product->precio*1)) - ($income->cantidad*($income->precio*1))) /($product->cantidad-$income->cantidad),2);
                         else
-                            $product->precio= intval((($product->cantidad*($product->precio*1)) - ($income->cantidad*($income->precio*1))) /($product->cantidad-$income->cantidad));
+                            $product->precio= ($product->cantidad-$income->cantidad == 0) ? 0:intval((($product->cantidad*($product->precio*1)) - ($income->cantidad*($income->precio*1))) /($product->cantidad-$income->cantidad));
                         $product->cantidad = $product->cantidad-$income->cantidad;
                     }
                     else
