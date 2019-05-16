@@ -1743,7 +1743,7 @@
                                 $('#transaction-table').dataTable()._fnAjaxUpdate();
                             },
                             error : function () {
-                                location = '/login';
+                                //location = '/login';
                             }
                         });
                 },
