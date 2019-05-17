@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-    @include('app/nav_panel')
+    @include('app/nav_panel_acueducto')
     <div class="container-fluid">
         <div class="panelPartner auto_margin">
             <!---->
@@ -151,7 +151,7 @@
             <hr>
             <br>
             <p class="height_10"></p>
-            <div class="row" v-show="all">
+            <div class="row" v-show="nav=='products' || all">
                 <div class="col-12" style="overflow:  auto;">
                     <table class="table responsive" id="tickets-table">
                         <thead>
@@ -191,24 +191,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="row" v-show="month">
-                <div class="col-12"  style="overflow:  auto;">
-                    <table class="table responsive" id="month-table">
-                        <thead>
-                        <tr>
-                            <th class="all">Placa</th>
-                            <th class="min-tablet">Tipo</th>
-                            <th class="min-tablet">Estado</th>
-                            <th class="min-tablet">Precio</th>
-                            <th class="min-tablet">Fecha vencimiento</th>
-                            <th class="min-tablet">Nombre</th>
-                            <th class="min-tablet">Atendió</th>
-                            <th class="all">acciones</th>
-                        </tr>
-                        </thead>
-                    </table>
                 </div>
             </div>
             <form id="form_pdf" class="row" method="POST" action="{{ route('pdf_acueducto') }}" TARGET="_blank" hidden>
