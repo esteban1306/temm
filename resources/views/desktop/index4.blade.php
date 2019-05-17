@@ -242,6 +242,7 @@
     <script src="{{ asset('js/validationEngine-es.min.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/js/bootstrap-select.min.js"></script>
     <script>
+
         function modalReport(){
             $('#modal_report').modal('show');
         }
@@ -401,13 +402,17 @@
             return;
 
         }
-        function agregarIncome() {
-            var vproduct=$("#productsList").validationEngine('validate');
-            var vCant=$("#cantIncome").validationEngine('validate');
-            var vFecha=$("#FechaIncome").validationEngine('validate');
-            var vPrecio=$("#precioIncome").validationEngine('validate');
-            if (vproduct || vCant || vFecha)
+        function agregarIncome(validar='1') {
+            if($("#id_transaction").val() == '' && validar ==2)
                 return;
+            if(validar==1) {
+                var vproduct = $("#productsList").validationEngine('validate');
+                var vCant = $("#cantIncome").validationEngine('validate');
+                var vFecha = $("#FechaIncome").validationEngine('validate');
+                var vPrecio = $("#precioIncome").validationEngine('validate');
+                if (vproduct || vCant || vFecha)
+                    return;
+            }
 
             var product=$("#productsList").val();
             var cantidad=$("#cantIncome").val();
@@ -415,6 +420,10 @@
             var descripcion=$("#descripcionIncome").val();
             var transaction=$("#id_transaction").val();
             var fecha=$("#FechaIncome").val();
+            if(validar==2){
+                product='';
+                cantidad='';
+            }
 
             $.ajax({
                 headers: {
@@ -431,13 +440,17 @@
                     fecha       :fecha
                 },
                 success: function (datos) {
+                    var texto ='Se agregó el producto con exito';
+                    if(validar == '')
+                        texto = 'Se actualizó la entrada con exito';
                     new PNotify({
                         title: 'Exito',
                         type: 'success',
-                        text: 'Se agregó el producto con exito'
+                        text: texto
                     });
                     $("#productsList").val('');
-                    $("#cantIncome").val(1);
+                    $("#cantIncome").val('');
+                    $("#precioIncome").val('');
                     if(transaction =='')
                         $("#id_transaction").val(datos['transaction_id']);
                     $('#precioVenta').html(datos['precio']);
@@ -451,18 +464,26 @@
                 }
             });
         }
-        function agregarIncome2() {
-            var vproduct=$("#productsList_2").validationEngine('validate');
-            var vCant=$("#cantIncome_2").validationEngine('validate');
-            var vFecha=$("#FechaIncome").validationEngine('validate');
-            if (vproduct || vCant || vFecha)
+        function agregarIncome2(validar='1') {
+            if($("#transaction_id_2").val() == '' && validar ==2)
                 return;
+            if(validar==1){
+                var vproduct=$("#productsList_2").validationEngine('validate');
+                var vCant=$("#cantIncome_2").validationEngine('validate');
+                var vFecha=$("#FechaGts").validationEngine('validate');
+                if (vproduct || vCant || vFecha)
+                    return;
+            }
 
             var product=$("#productsList_2").val();
             var cantidad=$("#cantIncome_2").val();
             var transaction=$("#transaction_id_2").val();
-            var fecha=$("#FechaIncome").val();
+            var fecha=$("#FechaGts").val();
             var tipo=$("#tipoGts").val();
+            if(validar==2){
+                product='';
+                cantidad='';
+            }
 
             $.ajax({
                 headers: {
@@ -479,13 +500,17 @@
                     fecha: fecha
                 },
                 success: function (datos) {
+                    var texto ='Se agregó el producto con exito';
+                    if(validar == '')
+                        texto = 'Se actualizo la salida con exito';
+
                     new PNotify({
                         title: 'Exito',
                         type: 'success',
-                        text: 'Se agregó el producto con exito'
+                        text: texto
                     });
                     $("#productsList_2").val('');
-                    $("#cantIncome_2").val(1);
+                    $("#cantIncome_2").val('');
                     if(transaction =='')
                         $("#transaction_id_2").val(datos['transaction_id']);
                     loadIncomes2();
@@ -1230,6 +1255,14 @@
                 e.value = e.value.toUpperCase();
         }
         $(function() {
+            $("#descriptionGt, #tipoGts, #FechaGts").change(function(){
+                if($("#transaction_id_2").val() !='')
+                    agregarIncome2(2);
+            });
+            $("#descripcionIncome, #FechaIncome").change(function(){
+                if($("#id_transaction").val() !='')
+                    agregarIncome(2);
+            });
             $("#ticket_id").keypress(function(e) {
                 if(e.which == 13) {
                     // Acciones a realizar, por ej: enviar formulario.
@@ -1291,6 +1324,10 @@
             $('#advanced_search').click(function() {
                 desktop_index_vm.loadTable();
                 desktop_index_vm.load();
+                var tiempo = $('#Tiempo').val();
+                if(tiempo != ''){
+                    setCookie("tiempo", tiempo, 1)
+                }
             });
         });
         function getOpt() {
@@ -1377,6 +1414,28 @@
             }
             return myTable;
         }
+        function setCookie(cname, cvalue, exdays) {
+            var d = new Date();
+            d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+            var expires = "expires="+d.toUTCString();
+            document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+        }
+
+        function getCookie(cname) {
+            var name = cname + "=";
+            var ca = document.cookie.split(';');
+            for(var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
+
         var desktop_index_vm = new Vue({
             el         : '#main',
             data       : {
@@ -1400,7 +1459,14 @@
                     $('#transaction-table').dataTable()._fnAjaxUpdate();
                     }, 60000);
                 $('.selectpicker2').selectpicker();
-                setTimeout(function (){desktop_index_vm.loadTable();desktop_index_vm.load();},2000);
+                setTimeout(function (){
+                    var tiempo = getCookie('tiempo');
+                    if(tiempo !=''){
+                        $('#Tiempo').val(tiempo);
+                    }
+                    desktop_index_vm.loadTable();
+                    desktop_index_vm.load();
+                },2000);
 
             },
             methods    : {

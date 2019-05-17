@@ -122,6 +122,15 @@ class IncomeController extends Controller
             $transaction->save();
             $id_transaction = $transaction->id_transaction;
         }
+        $transaction = Transaction::find($id_transaction);
+        if($request->product == ''){
+            $transaction->created_at = Carbon::parse($fecha??'');
+            $transaction->description = $request->descripcion??'';
+            $transaction->save();
+            $return['transaction_id'] = $id_transaction;
+            $return['precio'] = format_money($transaction->precio);
+            return $return;
+        }
         $product = Product::find($request->product);
         $income = new Income();
         $income->cantidad =$request->cantidad?? -1;
@@ -139,7 +148,6 @@ class IncomeController extends Controller
         $product->cantidad = ($product->cantidad*1) + ($income->cantidad*1);
         $product->save();
 
-        $transaction = Transaction::find($id_transaction);
         $transaction->created_at = Carbon::parse($fecha??'');
         $transaction->description = $request->descripcion??'';
         $transaction->precio = $transaction->precio*1 +($income->precio*1*$income->cantidad);
@@ -165,6 +173,16 @@ class IncomeController extends Controller
             $transaction->save();
             $id_transaction = $transaction->id_transaction;
         }
+        $transaction = Transaction::find($id_transaction);
+        if($request->product == ''){
+            $transaction->created_at = Carbon::parse($fecha??'');
+            $transaction->description = $request->descripcion??'';
+            $transaction->tipo = $tipo??'';
+            $transaction->save();
+            $return['transaction_id'] = $id_transaction;
+            $return['precio'] = format_money($transaction->precio);
+            return $return;
+        }
         $product = Product::find($request->product);
         $income = new Income();
         $income->cantidad =$request->cantidad?? -1;
@@ -178,7 +196,6 @@ class IncomeController extends Controller
         $product->cantidad = ($product->cantidad*1) - ($income->cantidad*1);
         $product->save();
 
-        $transaction = Transaction::find($id_transaction);
         $transaction->created_at = Carbon::parse($fecha??'');
         $transaction->description = $request->descripcion??'';
         $transaction->tipo = $tipo??'';

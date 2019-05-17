@@ -171,7 +171,6 @@ class TransactionController extends Controller
 
         $tickets= Transaction::select(['id_transaction as Id', 'precio', 'partner_id','created_at','customer_id','tipo','description','estado'])
             ->where('parking_id',Auth::user()->parking_id)
-            ->where('precio','>',0)
             ->orderBy('id_transaction','desc');
         if (!empty($range) && empty($customer)) {
             $dateRange = explode(" - ", $range);
