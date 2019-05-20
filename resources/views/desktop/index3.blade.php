@@ -407,15 +407,24 @@
             return;
 
         }
-        function agregarIncome() {
-            var vproduct=$("#productsList").validationEngine('validate');
-            var vCant=$("#cantIncome").validationEngine('validate');
-            if (vproduct || vCant)
+        function agregarIncome(validar='1') {
+            if($("#id_transaction").val() == '' && validar ==2)
                 return;
+            if(validar==1) {
+                var vproduct = $("#productsList").validationEngine('validate');
+                var vCant = $("#cantIncome").validationEngine('validate');
+                if (vproduct || vCant)
+                    return;
+            }
 
             var product=$("#productsList").val();
             var cantidad=$("#cantIncome").val();
             var transaction=$("#id_transaction").val();
+
+            if(validar==2){
+                product='';
+                cantidad='';
+            }
 
             $.ajax({
                 headers: {
@@ -1276,6 +1285,10 @@
                 e.value = e.value.toUpperCase();
         }
         $(function() {
+            $("#customerList_id").change(function(){
+                if($("#id_transaction").val() !='')
+                    agregarIncome(2);
+            });
             $("#ticket_id").keypress(function(e) {
                 if(e.which == 13) {
                     // Acciones a realizar, por ej: enviar formulario.

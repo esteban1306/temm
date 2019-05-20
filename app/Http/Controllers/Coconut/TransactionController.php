@@ -440,7 +440,7 @@ class TransactionController extends Controller
         if(!empty($ticket->customer_id)){
             try{
                 $customer = Customer::find($ticket->customer_id);
-                $customer_html= 'Cliente: '.$customer->nombre.'<br>';
+                $customer_html= 'Cliente: '.$customer->nombre.'<br>NIT: '.$customer->cedula.'<br>';
             }catch (\Exception $e){
                 ;
             }

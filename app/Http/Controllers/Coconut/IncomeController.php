@@ -66,6 +66,14 @@ class IncomeController extends Controller
             $transaction->save();
             $id_transaction = $transaction->id_transaction;
         }
+        $transaction = Transaction::find($id_transaction);
+        if($request->product == ''){
+            $transaction->customer_id = $request->customer;
+            $transaction->save();
+            $return['transaction_id'] = $id_transaction;
+            $return['precio'] = format_money($transaction->precio);
+            return $return;
+        }
         $product = Product::find($request->product);
         $income = new Income();
         $income->cantidad =$request->cantidad?? -1;
