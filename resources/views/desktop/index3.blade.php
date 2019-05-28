@@ -407,7 +407,7 @@
             return;
 
         }
-        function agregarIncome(validar='1') {
+        function agregarIncome(validar) {
             if($("#id_transaction").val() == '' && validar ==2)
                 return;
             if(validar==1) {
