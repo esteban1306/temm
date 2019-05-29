@@ -591,20 +591,21 @@ class TransactionController extends Controller
         <th>Precio</th>
       </tr>
       <tr>
-        <td colspan="2"><b>Surtido</b></td>
-        <td><b>'.$status['surtido'].'</b></td> 
-      </tr>
-      '.$status['surtido_html'].'
-      
-      <tr>
         <td colspan="2"><b>Gastos</b></td>
         <td><b>'.$status['gastos'].'</b></td> 
       </tr>
       '.$status['gastos_html'].'
-  </table>
-  <hr>
-  <table style="width:100%">
       <tr>
+        <td colspan="2"><b>Surtido</b></td>
+        <td><b>'.$status['surtido'].'</b></td> 
+      </tr>
+      '.$status['surtido_html'].'
+      <tr>
+        <td colspan="2"><b>Creditos</b></td>
+        <td><b>'.format_money($status['creditos']).'</b></td> 
+      </tr>
+    '.$status['creditos_html'].'
+    <tr>
         <td colspan="2"><b>Ventas en Efectivo</b></td>
         <td><b>'.$status['recaudado'].'</b></td> 
       </tr>
@@ -612,6 +613,26 @@ class TransactionController extends Controller
         <td colspan="2"><b>Total Ventas</b></td>
         <td><b>'.$status['totalVentas'].'</b></td> 
       </tr>
+      <hr>
+      <tr>
+        <td colspan="2"><b>Saldo</b></td>
+        <td><b>'.$status['totalDia'].'</b></td> 
+      </tr>
+      <hr>
+  </table>
+  
+  <table style="width:100%">
+      
+      <tr>
+        <td colspan="2"><b> - Creditos</b></td>
+        <td><b>'.format_money($status['creditos']).'</b></td> 
+      </tr>
+      <tr>
+        <td colspan="2"><b>Efectivo a retirar</b></td>
+        <td><b>'.$status['totalSinBase'].'</b></td> 
+      </tr>
+      <hr>
+      
       <tr>
         <td colspan="2"><b>Total Efectivo en caja</b></td>
         <td><b>'.$status['total'].'</b></td> 
@@ -620,23 +641,14 @@ class TransactionController extends Controller
         <td colspan="2"><b>Base</b></td>
         <td><b>'.format_money($base).'</b></td> 
       </tr>
+      <hr>
       <tr>
         <td colspan="2"><b>Efectivo a retirar</b></td>
         <td><b>'.$status['totalSinBase'].'</b></td> 
       </tr>
-  </table>
-  <hr>
-  <table style="width:100%">
-      <tr>
-        <td colspan="2"><b>Creditos</b></td>
-        <td><b>'.format_money($status['creditos']).'</b></td> 
-      </tr>
-    '.$status['creditos_html'].'
-     <tr>
-        <td colspan="2"><b>Total Ventas</b></td>
-        <td><b>'.$status['totalDia'].'</b></td> 
-      </tr>
-    </table>';
+      
+  </table>';
+  
 
         PDF::writeHTML($html, true, false, true, false, '');
         $js = 'print(true);';

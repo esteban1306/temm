@@ -15,10 +15,15 @@ class ProductsExport implements FromCollection
     {
         $collection = collect([["Nombre Producto", "Cantidad", "Precio Unitario", "Valor Total"]]);
         $products = Product::select(['name', 'cantidad', 'precio'])->where('parking_id',Auth::user()->parking_id)->orderBy('name','asc')->get();
+        $cantidad = 0;
+        $precio = 0;
         foreach ($products as $product){
             $product->valor = $product->cantidad =='-1'? '0':($product->cantidad * $product->precio);
             $collection->push($product);
+            $cantidad += $product->cantidad;
+            $precio += $product->valor;
         }
+        $collection->push(collect([["", $cantidad, "", $precio]]));
         return $collection;
     }
 }

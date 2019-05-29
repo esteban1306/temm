@@ -36,7 +36,7 @@
                         <input id="precioIncome" type="number" class="form-control validate[required]">
                     </div>
                     <div class="form-group col-md-12 pt-3">
-                        <button id="new_income" class="btn btn-primary full-width waves-effect waves-light" onclick="agregarIncome()"><strong>Agregar</strong></button>
+                        <button id="new_income" class="btn btn-primary full-width waves-effect waves-light" onclick="agregarIncome(1)"><strong>Agregar</strong></button>
                     </div>
                 </div>
                 <hr>

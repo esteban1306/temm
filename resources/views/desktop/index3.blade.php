@@ -463,7 +463,7 @@
                 }
             });
         }
-        function agregarIncome2() {
+        function agregarIncome2(validar) {
             var vproduct=$("#productsList_2").validationEngine('validate');
             var vCant=$("#cantIncome_2").validationEngine('validate');
             if (vproduct || vCant)

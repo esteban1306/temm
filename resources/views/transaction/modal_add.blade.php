@@ -44,7 +44,7 @@
                         <input id="cantIncome_2" type="number" class="form-control validate[required]">
                     </div>
                     <div class="form-group col-md-12 pt-3">
-                        <button id="new_income_2" class="btn btn-primary full-width waves-effect waves-light" onclick="agregarIncome2()"><strong>Agregar</strong></button>
+                        <button id="new_income_2" class="btn btn-primary full-width waves-effect waves-light" onclick="agregarIncome2(1)"><strong>Agregar</strong></button>
                     </div>
                     <div class="form-group col-md-12 pt-3">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Terminar</button>
