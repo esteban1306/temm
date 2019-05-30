@@ -679,15 +679,47 @@ class TransactionController extends Controller
         $status['instalaciones_list'] = "";
         $status['extensiones'] = ZERO;
         $status['salidas'] = ZERO;
+        $status['entradas_html'] = '';
+        $status['reparaciones_html'] = '';
+        $status['instalaciones_html'] = '';
+        $status['extensiones_html'] = '';
 
         $now = new Datetime('now');
         foreach ($tickets as $ticket){
             if($ticket->tipo == 1){
                 $status['entradas'] += $ticket->precio;
+                $status['entradas_html'] .= '<tr>
+                                                    <td colspan="2"><b>'.$ticket->description.' - '.$ticket->created_at.'</b></td>
+                                                    <td style="text-align: right">'.format_money($ticket->precio).'</td>  
+                                                  </tr>';
+                $incomes = Income::select(['id_income as Id', 'precio', 'product_id', 'cantidad','description'])->where('parking_id',Auth::user()->parking_id)->where('transaction_id', $ticket->Id)->orderBy('id_income','desc')->get();
+                foreach ($incomes as $income) {
+                    $product = Product::find($income->product_id);
+                    $status['entradas_html'] .= '<tr>
+                                                    <td>  - '.($product->name).'</td>
+                                                    <td style="text-align: right">'.$income->cantidad.'</td>  
+                                                    <td style="text-align: right">'.format_money($income->precio).'</td>  
+                                                  </tr>';
+                }
+                $status['entradas_html'] .= '<br>';
             }
             if($ticket->tipo == 2){
                 $status['reparaciones'] += $ticket->precio;
                 $status['salidas'] += $ticket->precio;
+                $status['reparaciones_html'] .= '<tr>
+                                                    <td colspan="2"><b>'.$ticket->description.' - '.$ticket->created_at.'</b></td>
+                                                    <td style="text-align: right">'.format_money($ticket->precio).'</td>  
+                                                  </tr>';
+                $incomes = Income::select(['id_income as Id', 'precio', 'product_id', 'cantidad','description'])->where('parking_id',Auth::user()->parking_id)->where('transaction_id', $ticket->Id)->orderBy('id_income','desc')->get();
+                foreach ($incomes as $income) {
+                    $product = Product::find($income->product_id);
+                    $status['reparaciones_html'] .= '<tr>
+                                                    <td>  - '.($product->name??'').'</td>
+                                                    <td style="text-align: right">'.$income->cantidad.'</td>  
+                                                    <td style="text-align: right">'.format_money($income->precio).'</td>  
+                                                  </tr>';
+                }
+                $status['reparaciones_html'] .= '<br>';
             }
             if($ticket->tipo == 3){
                 $status['instalaciones'] += $ticket->precio;
@@ -696,10 +728,38 @@ class TransactionController extends Controller
                                                     <td style="text-align: right">'.format_money($ticket->precio).'</td>  
                                                   </tr>';
                 $status['salidas'] += $ticket->precio;
+                $status['instalaciones_html'] .= '<tr>
+                                                    <td colspan="2"><b>'.$ticket->description.' - '.$ticket->created_at.'</b></td>
+                                                    <td style="text-align: right">'.format_money($ticket->precio).'</td>  
+                                                  </tr>';
+                $incomes = Income::select(['id_income as Id', 'precio', 'product_id', 'cantidad','description'])->where('parking_id',Auth::user()->parking_id)->where('transaction_id', $ticket->Id)->orderBy('id_income','desc')->get();
+                foreach ($incomes as $income) {
+                    $product = Product::find($income->product_id);
+                    $status['instalaciones_html'] .= '<tr>
+                                                    <td>  - '.($product->name??'').'</td>
+                                                    <td style="text-align: right">'.$income->cantidad.'</td>  
+                                                    <td style="text-align: right">'.format_money($income->precio).'</td>  
+                                                  </tr>';
+                }
+                $status['instalaciones_html'] .= '<br>';
             }
             if($ticket->tipo == 4){
                 $status['extensiones'] += $ticket->precio;
                 $status['salidas'] += $ticket->precio;
+                $status['extensiones_html'] .= '<tr>
+                                                    <td colspan="2"><b>'.$ticket->description.' - '.$ticket->created_at.'</b></td>
+                                                    <td style="text-align: right">'.format_money($ticket->precio).'</td>  
+                                                  </tr>';
+                $incomes = Income::select(['id_income as Id', 'precio', 'product_id', 'cantidad','description'])->where('parking_id',Auth::user()->parking_id)->where('transaction_id', $ticket->Id)->orderBy('id_income','desc')->get();
+                foreach ($incomes as $income) {
+                    $product = Product::find($income->product_id);
+                    $status['extensiones_html'] .= '<tr>
+                                                    <td>  - '.($product->name??'').'</td>
+                                                    <td style="text-align: right">'.$income->cantidad.'</td>  
+                                                    <td style="text-align: right">'.format_money($income->precio).'</td>  
+                                                  </tr>';
+                }
+                $status['extensiones_html'] .= '<br>';
             }
         }
         $status['entradas'] = format_money($status['entradas']);
@@ -742,7 +802,34 @@ class TransactionController extends Controller
         <td colspan="2">Extensiones</td>
         <td style="text-align: right">'.$status['extensiones'].'</td> 
       </tr>
-  </table></div>';
+      <hr>
+      <tr style="padding-bottom: 14px">
+        <td colspan="3" style="text-align: center"><b>ENTRADAS</b><br></td>
+      </tr>'.
+            $status['entradas_html'].'
+      <hr>
+      <tr style="padding-bottom: 14px">
+        <td colspan="3" style="text-align: center"><b>INSTALACIONES</b><br></td>
+      </tr>'.
+            $status['instalaciones_html'].'
+      <hr>
+      <tr style="padding-bottom: 14px">
+        <td colspan="3" style="text-align: center"><b>REPARACIONES</b><br></td>
+      </tr>'.
+            $status['reparaciones_html'].'
+      <hr>
+      <tr style="padding-bottom: 14px">
+        <td colspan="3" style="text-align: center"><b>EXTENSIONES</b><br></td>
+      </tr>'.
+            $status['extensiones_html'].'
+      <hr>
+      
+  </table>
+  <br>
+  <hr>
+  <br>
+  
+  </div>';
 
         PDF::writeHTML($html, true, false, true, false, '');
         $js = 'print(true);';

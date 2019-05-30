@@ -23,7 +23,7 @@ class ProductsExport implements FromCollection
             $cantidad += $product->cantidad;
             $precio += $product->valor;
         }
-        $collection->push(collect([["", $cantidad, "", $precio]]));
+        $collection->push(collect([["TOTALES", $cantidad, "", $precio]]));
         return $collection;
     }
 }
