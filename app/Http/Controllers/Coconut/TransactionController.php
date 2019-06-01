@@ -332,10 +332,8 @@ class TransactionController extends Controller
         }
         $products = Product::where('parking_id',Auth::user()->parking_id)->orderBy('name','asc')->get();
         foreach ($products as $product){
-            if($product->cantidad !='-1'){
-                $status['inventario'] += ($product->cantidad *$product->precio);
-                $status['cantidad'] += $product->cantidad;
-            }
+            $status['inventario'] += ($product->cantidad *$product->precio);
+            $status['cantidad'] += $product->cantidad;
         }
 
         $status['entradas'] = format_money($status['entradas']);
