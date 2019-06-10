@@ -1033,7 +1033,7 @@
                             }
                         },
                         columns: [
-                            { data: 'Fecha', name: 'Fecha', orderable  : true, searchable : false },
+                            { data: 'Fecha', name: 'Fecha', orderable  : false, searchable : false },
                             { data: 'id_customer', name: 'Cliente', orderable  : false, searchable : false },
                             { data: 'monto', name: 'Monto', orderable  : false, searchable : false },
                             { data: 'interes', name: 'Interes', orderable  : false, searchable : false },

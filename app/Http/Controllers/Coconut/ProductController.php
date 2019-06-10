@@ -276,7 +276,7 @@ class ProductController extends Controller
                         'data-placement' => "bottom",
                         'title' => "Eliminar !",
 
-                    ]).(Auth::user()->type == 5?
+                    ]).(Auth::user()->type == 5 || Auth::user()->type == 4?
                         \Form::button('Movimientos', [
                         'class'   => 'btn btn-primary',
                         'onclick' => "openMovimientos('$tickets->Id')",
@@ -544,7 +544,10 @@ class ProductController extends Controller
             })
             ->editColumn('tipo', function ($tickets) {
                 $transaction = Transaction::find($tickets->transaction_id);
-                return $transaction?( $transaction->tipo == 1?'Entrada': ($transaction->tipo == 2?'Reparación':( $transaction->tipo == 3?'Instalación':($transaction->tipo == 4?'Extensión': '') ) )):'';
+                if(Auth::user()->type == 4)
+                    return $transaction?( $transaction->tipo == 1?'venta': ($transaction->tipo == 2?'Surtido':( $transaction->tipo == 3?'Gasto': '' ) )):'';
+                else
+                    return $transaction?( $transaction->tipo == 1?'Entrada': ($transaction->tipo == 2?'Reparación':( $transaction->tipo == 3?'Instalación':($transaction->tipo == 4?'Extensión': '') ) )):'';
             })
             ->make(true);
     }

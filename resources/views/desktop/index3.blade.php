@@ -254,6 +254,7 @@
     @include('product.modal_product_mod')
     @include('product.modal_abono')
     @include('product.modal_list_abonos')
+    @include('product.modal_movimientos')
     @include('customer.modal_add')
     @include('customer.modal_mod')
 @endsection
@@ -267,6 +268,37 @@
     <script src="{{ asset('js/validationEngine-es.min.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/js/bootstrap-select.min.js"></script>
     <script>
+        function openMovimientos(product){
+            $('#modal_movimientos').modal('show');
+            loadMovimientos(product);
+        }
+        function loadMovimientos(product){
+            $('#movimientos-table').DataTable({
+                sDom           : 'r<Hlf><"datatable-scroll"t><Fip>',
+                order          : [],
+                processing     : true,
+                serverSide     : true,
+                deferRender    : true,
+                destroy        : true,
+                ajax: {
+                    url  : '{!! route('get_movimientos') !!}',
+                    data : {
+                        product        : product,
+                    },
+                    error : function () {
+                        //location = '/login';
+                    }
+                },
+                columns: [
+                    { data: 'description', name: 'Descripción', orderable  : false, searchable : false },
+                    { data: 'tipo', name: 'Tipo', orderable  : false, searchable : false },
+                    { data: 'cantidad', name: 'Cantidad', orderable  : false, searchable : false },
+                    { data: 'precio', name: 'Precio', orderable  : false, searchable : false },
+                    { data: 'total', name: 'Total', orderable  : false, searchable : false },
+                ],
+                lengthMenu: [[ 10, 25, 50, -1], [ 10, 25, 50, "Todos"]]
+            });
+        }
         function openModalCliente(){
             $('#modal_add').modal('show');
             $("#nombreCustomer").val("");
@@ -351,7 +383,7 @@
                     loadCustomers();
                 },
                 error : function () {
-                    location = '/login';
+                    //location = '/login';
                 }
             });
         }
@@ -391,7 +423,7 @@
                     loadCustomers();
                 },
                 error : function () {
-                    location = '/login';
+                    //location = '/login';
                 }
             });
         }
@@ -525,7 +557,7 @@
                     $('.selectpicker2').selectpicker('refresh');
                 },
                 error : function () {
-                    location = '/login';
+                    //location = '/login';
                 }
             });
         }
@@ -582,7 +614,7 @@
                         transaction        : $("#id_transaction").val(),
                     },
                     error : function () {
-                        location = '/login';
+                        //location = '/login';
                     }
                 },
                 columns: [
@@ -609,7 +641,7 @@
                         transaction        : $("#transaction_id_2").val(),
                     },
                     error : function () {
-                        location = '/login';
+                        //location = '/login';
                     }
                 },
                 columns: [
@@ -662,7 +694,7 @@
                     $('#cobrar_id').attr("onclick","form_pdf('"+ticket_id+"'); $('#modal_ticket_pay').modal('hide')");
                 },
                 error : function () {
-                    location = '/login';
+                    //location = '/login';
                 }
             });
         }
@@ -740,7 +772,7 @@
                     $('#tickets-table').dataTable()._fnAjaxUpdate();
                 },
                 error : function () {
-                    location = '/login';
+                    //location = '/login';
                 }
             });
         }
@@ -783,7 +815,7 @@
                     desktop_index_vm.load();
                 },
                 error : function () {
-                    location = '/login';
+                    //location = '/login';
                 }
             });
         }
@@ -1464,7 +1496,7 @@
                             $("#gastos").html(datos['gastos']);
                         },
                         error : function () {
-                            location = '/login';
+                            //location = '/login';
                         }
                     });
                 },
@@ -1486,7 +1518,7 @@
                             ajax: {
                                 url  : laroute.route('transaction.get_list'),
                                 error : function () {
-                                    location = '/login';
+                                    //location = '/login';
                                 }
                             },
                             columns: [
@@ -1534,7 +1566,7 @@
                             }
                         },
                         columns: [
-                            { data: 'name', name: 'Nombre', orderable  : true, searchable : false },
+                            { data: 'name', name: 'Nombre', orderable  : false, searchable : false },
                             { data: 'description', name: 'Descripción', orderable  : false, searchable : false },
                             { data: 'precio', name: 'Precio', orderable  : false, searchable : false },
                             { data: 'cantidad', name: 'Cantidad', orderable  : false, searchable : false },
@@ -1560,7 +1592,7 @@
                             }
                         },
                         columns: [
-                            { data: 'created_at', name: 'Descripción', orderable  : true, searchable : false },
+                            { data: 'created_at', name: 'Descripción', orderable  : false, searchable : false },
                             { data: 'precio', name: 'Precio', orderable  : false, searchable : false },
                             { data: 'partner_id', name: 'Atendió', orderable  : false, searchable : false },
                             { data: 'action', name: 'Acciones', orderable  : false, searchable : false },
@@ -1585,7 +1617,7 @@
                                 }
                             },
                             columns: [
-                                { data: 'created_at', name: 'Descripción', orderable  : true, searchable : false },
+                                { data: 'created_at', name: 'Descripción', orderable  : false, searchable : false },
                                 { data: 'precio', name: 'Precio', orderable  : false, searchable : false },
                                 { data: 'partner_id', name: 'Atendió', orderable  : false, searchable : false },
                                 { data: 'action', name: 'Acciones', orderable  : false, searchable : false },
@@ -1610,7 +1642,7 @@
                                 }
                             },
                             columns: [
-                                { data: 'created_at', name: 'Descripción', orderable  : true, searchable : false },
+                                { data: 'created_at', name: 'Descripción', orderable  : false, searchable : false },
                                 { data: 'precio', name: 'Precio', orderable  : false, searchable : false },
                                 { data: 'partner_id', name: 'Atendió', orderable  : false, searchable : false },
                                 { data: 'action', name: 'Acciones', orderable  : false, searchable : false },
@@ -1635,7 +1667,7 @@
                                 }
                             },
                             columns: [
-                                { data: 'created_at', name: 'Descripción', orderable  : true, searchable : false },
+                                { data: 'created_at', name: 'Descripción', orderable  : false, searchable : false },
                                 { data: 'precio', name: 'Precio', orderable  : false, searchable : false },
                                 { data: 'partner_id', name: 'Atendió', orderable  : false, searchable : false },
                                 { data: 'action', name: 'Acciones', orderable  : false, searchable : false },
@@ -1689,7 +1721,7 @@
                             }
                         },
                         columns: [
-                            { data: 'created_at', name: 'Descripción', orderable  : true, searchable : false },
+                            { data: 'created_at', name: 'Descripción', orderable  : false, searchable : false },
                             { data: 'precio', name: 'Precio', orderable  : false, searchable : false },
                             { data: 'partner_id', name: 'Atendió', orderable  : false, searchable : false },
                             { data: 'action', name: 'Acciones', orderable  : false, searchable : false },
@@ -1738,7 +1770,7 @@
                             }
                         },
                         error : function () {
-                            location = '/login';
+                            //location = '/login';
                         }
                     });
                 },
@@ -1780,7 +1812,7 @@
                             });
                         },
                         error : function () {
-                            location = '/login';
+                            //location = '/login';
                         }
                     });
                 },
@@ -1803,7 +1835,7 @@
                                 $('#clientes-table').dataTable()._fnAjaxUpdate();
                             },
                             error : function () {
-                                location = '/login';
+                                //location = '/login';
                             }
                         });
                 },
@@ -1826,7 +1858,7 @@
                                 $('#tickets-table').dataTable()._fnAjaxUpdate();
                             },
                             error : function () {
-                                location = '/login';
+                                //location = '/login';
                             }
                         });
                 },
@@ -1856,7 +1888,7 @@
                                 this.load();
                             },
                             error : function () {
-                                location = '/login';
+                                //location = '/login';
                             }
                         });
                 },
@@ -1883,7 +1915,7 @@
                                 $('#surtido-table').dataTable()._fnAjaxUpdate();
                             },
                             error : function () {
-                                location = '/login';
+                                //location = '/login';
                             }
                         });
                 },
@@ -1907,7 +1939,7 @@
                                 loadProducts();
                             },
                             error : function () {
-                                location = '/login';
+                                //location = '/login';
                             }
                         });
                 },
@@ -1934,7 +1966,7 @@
 
                             },
                             error : function () {
-                                location = '/login';
+                                //location = '/login';
                             }
                         });
                 },
@@ -1961,7 +1993,7 @@
 
                             },
                             error : function () {
-                                location = '/login';
+                                //location = '/login';
                             }
                         });
                 }

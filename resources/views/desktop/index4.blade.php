@@ -1542,7 +1542,7 @@
                             }
                         },
                         columns: [
-                            { data: 'name', name: 'Nombre', orderable  : true, searchable : false },
+                            { data: 'name', name: 'Nombre', orderable  : false, searchable : false },
                             { data: 'precio', name: 'Precio', orderable  : false, searchable : false },
                             { data: 'cantidad', name: 'Cantidad', orderable  : false, searchable : false },
                             { data: 'valor', name: 'Valor', orderable  : false, searchable : false },
@@ -1569,7 +1569,7 @@
                             }
                         },
                         columns: [
-                            { data: 'created_at', name: 'Descripción', orderable  : true, searchable : false },
+                            { data: 'created_at', name: 'Descripción', orderable  : false, searchable : false },
                             { data: 'precio', name: 'Precio', orderable  : false, searchable : false },
                             { data: 'partner_id', name: 'Atendió', orderable  : false, searchable : false },
                             { data: 'action', name: 'Acciones', orderable  : false, searchable : false },
