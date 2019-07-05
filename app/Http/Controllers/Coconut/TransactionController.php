@@ -186,14 +186,14 @@ class TransactionController extends Controller
         return Datatables::of($tickets)
             ->addColumn('action', function ($tickets) use($customers){
                 $hour =new DateTime("".$tickets->created_at);
-                    return (empty($tickets->estado) ?\Form::button('Eliminar', [
+                    return (empty($tickets->estado) && Auth::user()->type != 6 ?\Form::button('Eliminar', [
                         'class'   => 'btn btn-warning',
                         'onclick' => "eliminarTransaction('$tickets->Id')",
                         'data-toggle' => "tooltip",
                         'data-placement' => "bottom",
                         'title' => "Eliminar !",
 
-                    ]):'').($tickets->tipo == 1  && empty($tickets->estado)?
+                    ]):'').($tickets->tipo == 1  && empty($tickets->estado) && Auth::user()->type != 6?
                             \Form::button('Editar', [
                                 'class'   => 'btn btn-primary',
                                 'onclick' => "openModalVenta('$tickets->Id','".format_money($tickets->precio)."','".($tickets->customer_id ?? '')."','".$tickets->description."','".$hour->format('Y-m-d')."')",
@@ -202,7 +202,7 @@ class TransactionController extends Controller
                                 'title' => "Editar !",
 
                             ]) :'')
-                        .(!empty($tickets->customer_id)?
+                        .(!empty($tickets->customer_id) && Auth::user()->type != 6?
                         \Form::button('Editar Cliente', [
                             'class'   => 'btn btn-primary',
                             'onclick' => "openModalClienteMod($tickets->customer_id)",
@@ -211,7 +211,7 @@ class TransactionController extends Controller
                             'title' => "Editar Cliente",
 
                         ]) :'')
-                        .($tickets->tipo != 1 && empty($tickets->estado)?
+                        .($tickets->tipo != 1 && empty($tickets->estado) && Auth::user()->type != 6?
                         \Form::button('Editar Gasto', [
                             'class'   => 'btn btn-primary',
                             'onclick' => "openModalGasto($tickets->Id,'".$tickets->precio."','".$tickets->description."','".$tickets->tipo."','".$hour->format('Y-m-d')."')",
@@ -219,7 +219,7 @@ class TransactionController extends Controller
                             'data-placement' => "bottom",
                             'title' => "Editar Gasto",
 
-                        ]) :'').($tickets->tipo == 1?
+                        ]) :'').($tickets->tipo == 1  && Auth::user()->type != 6  && Auth::user()->type != 5?
                             \Form::button('Imprimir', [
                                 'class'   => 'btn btn-info',
                                 'onclick' => "form_pdf('$tickets->Id')",

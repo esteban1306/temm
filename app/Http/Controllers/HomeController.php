@@ -31,7 +31,7 @@ class HomeController extends Controller
             return view('desktop/index2');
         else if($user->type == 4)
             return view('desktop/index3');
-        else if($user->type == 5)
+        else if($user->type == 5 || $user->type == 6)
             return view('desktop/index4');
     }
 }

@@ -261,7 +261,7 @@ class ProductController extends Controller
         }
         return Datatables::of($tickets)
             ->addColumn('action', function ($tickets) {
-                $htmlAdmin= \Form::button('Editar', [
+                $htmlAdmin= (Auth::user()->type != 6?\Form::button('Editar', [
                         'class'   => 'btn btn-primary',
                         'onclick' => "openModalMod('$tickets->Id')",
                         'data-toggle' => "tooltip",
@@ -276,7 +276,7 @@ class ProductController extends Controller
                         'data-placement' => "bottom",
                         'title' => "Eliminar !",
 
-                    ]).(Auth::user()->type == 5 || Auth::user()->type == 4?
+                    ]):'').(Auth::user()->type == 5 || Auth::user()->type == 6 || Auth::user()->type == 4?
                         \Form::button('Movimientos', [
                         'class'   => 'btn btn-primary',
                         'onclick' => "openMovimientos('$tickets->Id')",
@@ -297,13 +297,13 @@ class ProductController extends Controller
                 return format_money($tickets->precio);
             })
             ->editColumn('cantidad', function ($tickets) {
-                if(Auth::user()->type == 5){
+                if(Auth::user()->type == 5 || Auth::user()->type == 6){
                     return $tickets->cantidad." ". $tickets->description;
                 }
                 return $tickets->cantidad;
             })
             ->editColumn('minimo', function ($tickets) {
-                if(Auth::user()->type == 5){
+                if(Auth::user()->type == 5 || Auth::user()->type == 6){
                     if($tickets->minimo==1)
                         return 'Alta';
                     if($tickets->minimo==2)
@@ -532,7 +532,7 @@ class ProductController extends Controller
                 return format_money($tickets->precio);
             })
             ->editColumn('cantidad', function ($tickets) {
-                if(Auth::user()->type == 5){
+                if(Auth::user()->type == 5 || Auth::user()->type == 6){
                     return $tickets->cantidad." ". $tickets->description;
                 }
                 return $tickets->cantidad;

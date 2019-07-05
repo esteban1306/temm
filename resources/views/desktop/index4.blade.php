@@ -59,12 +59,14 @@
                                 <button class="btn btn-success form-control" id="advanced_search"><i class="fa fa-search"></i> Buscar</button>
                             </div>
                         </div>
+                        @if( \Auth::user()->type != 6)
                         <div class="col-md-2 col-sm-2">
                             <div class="form-group">
                                 <label class="control-label">&nbsp;</label>
                                 <button class="btn btn-outline-info form-control" onclick="modalReport()"><i class="fa fa-search"></i> Reporte</button>
                             </div>
                         </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -143,9 +145,11 @@
                 <div class="col-md-6" style="text-align: center;">
                     <button type="button" onclick="openModalProduct()" class="btn btn-outline-info col-md-10 btn-lg">Nuevo Producto</button>
                 </div>
+                @if( \Auth::user()->type != 6)
                 <div class="col-md-6" style="text-align: center;">
                     <button type="button" onclick="reporteProductos()" class="btn btn-primary col-md-10 btn-lg">Reporte Productos</button>
                 </div>
+                @endif
             </div>
             <br>
             <hr>
