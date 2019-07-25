@@ -471,7 +471,7 @@ class TransactionController extends Controller
                 '.($parking->parking_id !=5?'<em style="font-size: 7px;margin-top: 2px;margin-bottom: 1px">Slogan <br></em>':'').'
                 <small style="font-size: x-small;margin-top: 1px;margin-bottom: 1px"><b>'.$parking->address.'</b></small>'
             .($parking->parking_id==10?'<small style="text-align:center;font-size: 6px"><br>
-    NIT:6646393-4  <br>ADOLFO REYES DURAN<br> </small><small style="text-align:center;font-size: 8px"><b>SERVICIO: lun-sab 8am-5:30pm</b><br> <b> TEL: 3102504229-7181926</b></small>':'');
+    NIT:6646393-4  <br>ADOLFO REYES DURAN<br> </small><small style="text-align:center;font-size: 8px"><b>SERVICIO: 8am-5:30pm DOM-DOM</b><br> <b> TEL: 3102504229-7181926</b></small>':'');
 
         $html .= '<small style="text-align:left;font-size: '.$size.';margin-bottom: 1px;"><b><br>
             FACTURA DE VENTA N°  '. $id . '<br> 
