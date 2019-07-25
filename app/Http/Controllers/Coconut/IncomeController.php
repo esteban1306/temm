@@ -149,9 +149,9 @@ class IncomeController extends Controller
 
         $income->save();
         if(Auth::user()->parking_id == 8)
-            $product->precio = round((($product->cantidad*($product->precio*1)) + ($income->cantidad*($income->precio*1))) /($product->cantidad+$income->cantidad),2);
+            $product->precio = round((($product->cantidad*($product->precio*1)) + ($income->cantidad*($income->precio*1))) /(( $product->cantidad+$income->cantidad !=0? (int) $product->cantidad+$income->cantidad:1)),2);
         else
-            $product->precio = intval((($product->cantidad*($product->precio*1)) + ($income->cantidad*($income->precio*1))) /($product->cantidad+$income->cantidad));
+            $product->precio = intval((($product->cantidad*($product->precio*1)) + ($income->cantidad*($income->precio*1))) /(( $product->cantidad+$income->cantidad !=0? (int) $product->cantidad+$income->cantidad:1)));
 
         $product->cantidad = ($product->cantidad*1) + ($income->cantidad*1);
         $product->save();
