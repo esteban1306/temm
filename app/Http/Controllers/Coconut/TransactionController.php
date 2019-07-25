@@ -468,10 +468,10 @@ class TransactionController extends Controller
         PDF::SetMargins($marginLeft, 0, $marginRight);
         $parking = Parking::find(Auth::user()->parking_id);
         $html = '<div style="text-align:center; margin-top: -10px !important"><big style="margin-bottom: 1px"><b style="letter-spacing: -1 px;">&nbsp;'.$parking->name.'</b></big><br>
-                '.($parking->parking_id !=5?'<em style="font-size: 7px;margin-top: 2px;margin-bottom: 1px">Cambia tu rutina <br></em>':'').'
+                '.($parking->parking_id !=5?'<em style="font-size: 7px;margin-top: 2px;margin-bottom: 1px">Slogan <br></em>':'').'
                 <small style="font-size: x-small;margin-top: 1px;margin-bottom: 1px"><b>'.$parking->address.'</b></small>'
-            .($parking->parking_id!=1?'<small style="text-align:center;font-size: 6px"><br>
-    NIT:41917760-5  <br>GLORIA LILIANA GRISALES<br> </small><small style="text-align:center;font-size: 8px"><b>SERVICIO: lun-vie 7am-5pm, sab 7am-1pm</b><br> <b> TEL: 3146246181-7328098</b></small>':'');
+            .($parking->parking_id==10?'<small style="text-align:center;font-size: 6px"><br>
+    NIT:6646393-4  <br>ADOLFO REYES DURAN<br> </small><small style="text-align:center;font-size: 8px"><b>SERVICIO: lun-vie 7am-5pm, sab 7am-1pm</b><br> <b> TEL: 3146246181-7328098</b></small>':'');
 
         $html .= '<small style="text-align:left;font-size: '.$size.';margin-bottom: 1px;"><b><br>
             FACTURA DE VENTA N°  '. $id . '<br> 
