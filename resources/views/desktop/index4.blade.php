@@ -1741,7 +1741,7 @@
                                 this.load();
                             },
                             error : function () {
-                                location = '/login';
+                                //location = '/login';
                             }
                         });
                 },
