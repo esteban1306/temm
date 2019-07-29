@@ -111,7 +111,7 @@
                     <div class="widget_box_b">
                         <div class="contt">
                             <div class="fl_layer">
-                                <h4 class="title">motos</h4>
+                                <h4 class="title">Motos {{ $typeParking == 2?' / '.(\Auth::user()->parking_id==11?'Bicicletas':'Camionetas'):'' }}</h4>
                                 <span class="line"></span>
                                 <span class="data" id="motos"> - </span>
                             </div>

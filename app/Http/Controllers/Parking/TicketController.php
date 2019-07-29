@@ -461,6 +461,7 @@ class TicketController extends Controller
         $status['total'] = ZERO;
         $status['extra'] = ZERO;
         $status['carros'] = ZERO;
+        $status['camioneta'] = ZERO;
         $status['motos'] = ZERO;
         $status['month_expire'] = 'Mensualidades por vencer:';
         $status['month_expire_num'] = ZERO;
@@ -473,6 +474,8 @@ class TicketController extends Controller
                 $status['carros'] ++;
             if($ticket->type == 2)
                 $status['motos'] ++;
+            if($ticket->type == 3)
+                $status['camioneta'] ++;
         }
         $ticketss= Ticket::select(['plate', 'type', 'extra', 'schedule', 'price', 'name', 'date_end'])->where('parking_id',Auth::user()->parking_id)->where('status','<>',"3")->orderBy('ticket_id','desc');
         $ticketss = $ticketss->where('schedule', 3);
@@ -488,6 +491,8 @@ class TicketController extends Controller
                 }
             }
         }
+        if($status['camioneta'] > 0)
+            $status['motos'] = $status['motos'] .' / '.$status['camioneta'];
         $status['total'] = format_money($status['total']);
         $status['extra'] = format_money($status['extra']);
         return $status;
