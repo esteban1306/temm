@@ -338,9 +338,11 @@
         }
 
         function actualizarCuentaParking() {
+            var min_cars_price=$('#min_cars_price').validationEngine('validate');
             var hour_cars_price=$('#hour_cars_price').validationEngine('validate');
             var day_cars_price=$('#day_cars_price').validationEngine('validate');
             var monthly_cars_price=$('#monthly_cars_price').validationEngine('validate');
+            var min_motorcycles_price=$('#min_motorcycles_price').validationEngine('validate');
             var hour_motorcycles_price=$('#hour_motorcycles_price').validationEngine('validate');
             var day_motorcycles_price=$('#day_motorcycles_price').validationEngine('validate');
             var monthly_motorcycles_price=$('#monthly_motorcycles_price').validationEngine('validate');
@@ -348,7 +350,7 @@
             var cars_num=$('#cars_num').validationEngine('validate');
             var motorcycles_num=$('#motorcycles_num').validationEngine('validate');
 
-            if (hour_cars_price || day_cars_price || monthly_cars_price || hour_motorcycles_price || day_motorcycles_price || monthly_motorcycles_price || free_time || cars_num || motorcycles_num )
+            if (hour_cars_price || day_cars_price || min_cars_price || monthly_cars_price || hour_motorcycles_price || min_motorcycles_price || day_motorcycles_price || monthly_motorcycles_price || free_time || cars_num || motorcycles_num )
                 return;
             desktop_index_vm.changePrice();
         }
@@ -829,9 +831,11 @@
                 },
                 changePrice : function() {
                     var hour_cars_price=$('#hour_cars_price').val();
+                    var min_cars_price=$('#min_cars_price').val();
                     var day_cars_price=$('#day_cars_price').val();
                     var monthly_cars_price=$('#monthly_cars_price').val();
                     var hour_motorcycles_price=$('#hour_motorcycles_price').val();
+                    var min_motorcycles_price=$('#min_motorcycles_price').val();
                     var day_motorcycles_price=$('#day_motorcycles_price').val();
                     var monthly_motorcycles_price=$('#monthly_motorcycles_price').val();
                     var free_time=$('#free_time').val();
@@ -845,9 +849,11 @@
                         url: "update_parking",
                         data: {
                             hour_cars_price: hour_cars_price,
+                            min_cars_price: min_cars_price,
                             day_cars_price : day_cars_price  ,
                             monthly_cars_price : monthly_cars_price  ,
                             hour_motorcycles_price : hour_motorcycles_price  ,
+                            min_motorcycles_price : min_motorcycles_price  ,
                             day_motorcycles_price  : day_motorcycles_price   ,
                             monthly_motorcycles_price  : monthly_motorcycles_price   ,
                             free_time: free_time,

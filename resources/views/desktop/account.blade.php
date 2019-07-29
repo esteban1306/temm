@@ -74,6 +74,10 @@
                     </div>
                 </div>
                 <div class="form-group col-sm-6">
+                    <label for="">Minuto</label>
+                    <input type="number" class="form-control validate[ onlyNumber]"  id="min_cars_price" min="0" value="{{ $parking->min_cars_price }}">
+                </div>
+                <div class="form-group col-sm-6">
                     <label for="">Hora</label>
                     <input type="number" class="form-control validate[required, onlyNumber]"  id="hour_cars_price" min="0" value="{{ $parking->hour_cars_price }}">
                 </div>
@@ -90,6 +94,10 @@
                     <div class="head">
                         <h5>Precio Moto</h5>
                     </div>
+                </div>
+                <div class="form-group col-sm-6">
+                    <label for="">Minuto</label>
+                    <input type="number" class="form-control validate[onlyNumber]" id="min_motorcycles_price" min="0" value="{{ $parking->min_motorcycles_price }}">
                 </div>
                 <div class="form-group col-sm-6">
                     <label for="">Hora</label>

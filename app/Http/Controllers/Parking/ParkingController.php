@@ -74,10 +74,12 @@ class ParkingController extends Controller
     {
         $user = Auth::user();
         $parking = Parking::find($user->parking_id);
+        $parking->min_cars_price= $request->min_cars_price;
         $parking->hour_cars_price= $request->hour_cars_price;
         $parking->day_cars_price = $request->day_cars_price  ;
         $parking->monthly_cars_price = $request->monthly_cars_price  ;
         $parking->hour_motorcycles_price = $request->hour_motorcycles_price  ;
+        $parking->min_motorcycles_price = $request->min_motorcycles_price  ;
         $parking->day_motorcycles_price  = $request->day_motorcycles_price   ;
         $parking->monthly_motorcycles_price  = $request->monthly_motorcycles_price   ;
         $parking->free_time= $request->free_time;
