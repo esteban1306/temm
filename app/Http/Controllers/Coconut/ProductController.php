@@ -98,7 +98,7 @@ class ProductController extends Controller
                 <small style="font-size: x-small;margin-top: 1px;margin-bottom: 1px"><b>'.$parking->address.'</b></small>'
             .($parking->parking_id==3?'<small style="text-align:center;font-size: 6px"><br>
     NIT: 1094965452-1 <br>OLIVEROS HERNANDEZ VALENTINA<br> </small><small style="text-align:center;font-size: 8px"><b>SERVICIO: Lun-Sab 7am - 9pm</b><br> <b> TEL: 3104276986</b></small>':'')
-            .($parking->parking_id==4?'<small style="text-align:center;font-size: 7px"><br>
+            .($parking->parking_id==11?'<small style="text-align:center;font-size: 7px"><br>
     <b>SERVICIO: Lun-Sab 7am - 9pm</b><br>CARLOS E. MIDEROS <br> NIT: 80449231-4 <br> TEL: 9207119<br> CEL: 3013830790</small>':'').
             ($parking->parking_id==5?'<small style="text-align:center;font-size: 6px"><br>
     NIT: 89000746-1 <br>HUGO ALEXANDER VARGAS SANCHEZ<br> </small><small style="text-align:center;font-size: 8px"><b>SERVICIO: Lun-Dom 6:30am - 9:30pm</b><br> <b> TEL: 3173799831</b></small>':'');
@@ -184,7 +184,7 @@ class ProductController extends Controller
         $parking = Parking::find(Auth::user()->parking_id);
         $minutos = ($minutos*1) - ($parking->free_time);
         $horas = (24*$tiempo->format("%d"))+$horas*1 + (($minutos>=0? 1: 0)*1);
-        if($parking->parking_id==4){
+        if($parking->parking_id==11){
             $minutos2 = (((24*$tiempo->format("%d"))+$horas2*1)*60)+($minutos2*1)-60;
             $priceMin = $minutos2 > 0?($tipo==1? $parking->min_cars_price*$minutos2: $parking->min_motorcycles_price*$minutos2):0;
             if($schedule==1)

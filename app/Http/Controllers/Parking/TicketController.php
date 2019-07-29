@@ -110,6 +110,8 @@ class TicketController extends Controller
     NIT: 1094965452-1 <br>OLIVEROS HERNANDEZ VALENTINA<br> </small><small style="text-align:center;font-size: '.(Auth::user()->parking_id != 5?'8px':'7px').'"><b>SERVICIO: Lun-Sab 7am - 9pm</b><br> <b> TEL: 3017601216</b></small>':'')
             .($parking->parking_id==4?'<small style="text-align:center;font-size: 7px"><br>
     <b>SERVICIO: Lun-Sab 7am - 9pm</b><br>CARLOS E. MIDEROS <br> NIT: 80449231-4 <br> TEL: 9207119<br> CEL: 3013830790</small>':'').
+            ($parking->parking_id==11?'<small style="text-align:center;font-size: 7px"><br>
+    <b>SERVICIO: Lun-Sab 6am - 9pm Dom-Fest 9am - 6pm</b><br>NESLY CATALINA GARCIA BALLEN <br> NIT: 901305901-1 <br> CEL: 3003352126</small>':'').
             ($parking->parking_id==5?'<small style="text-align:center;font-size: 6px"><br>
     NIT: 89000746-1 <br>HUGO ALEXANDER VARGAS SANCHEZ<br> </small><small style="text-align:center;font-size: 8px"><b>SERVICIO: Lun-Dom 6:30am - 9:30pm</b><br> <b> TEL: 3173799831</b></small>':'').
             ($parking->parking_id==7?'<small style="text-align:center;font-size: 6px"><br>
@@ -167,7 +169,7 @@ class TicketController extends Controller
                  <b>IMPRESO POR TEMM SOFT 3207329971</b>
                  </small>';
         PDF::writeHTML($html, true, false, true, false, '');
-        if(!isset($ticket->price)){
+        if(!isset($ticket->price) && (Auth::user()->parking_id!=11)){
         $id_bar = substr('0000000000'.$ticket->ticket_id,-10);
         PDF::write1DBarcode($id_bar, 'C128C', '', '', '', 18, 0.4, $style, 'N');
         }
@@ -197,7 +199,7 @@ class TicketController extends Controller
         $parking = Parking::find(Auth::user()->parking_id);
         $minutos = ($minutos*1) - ($parking->free_time);
         $horas = (24*$tiempo->format("%d"))+$horas*1 + (($minutos>=0? 1: 0)*1);
-        if($parking->parking_id==4){
+        if($parking->parking_id==11){
             $minutos2 = (((24*$tiempo->format("%d"))+$horas2*1)*60)+($minutos2*1)-60;
             $priceMin = $minutos2 > 0?($tipo==1? $parking->min_cars_price*$minutos2: $parking->min_motorcycles_price*$minutos2):0;
             if($schedule==1)
