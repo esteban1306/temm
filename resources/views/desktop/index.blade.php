@@ -51,7 +51,7 @@
                                     <option value="2">Moto</option>
                                     @php($typeParking = App\Parking::find(\Auth::user()->parking_id)->type)
                                     @if($typeParking == 2)
-                                    <option value="3">Camioneta</option>
+                                    <option value="3">{{ \Auth::user()->parking_id==11?'Bicicleta':'Camioneta' }}</option>
                                     @endif
                                 </select>
                             </div>

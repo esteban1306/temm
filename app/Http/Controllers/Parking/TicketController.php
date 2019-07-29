@@ -123,7 +123,7 @@ class TicketController extends Controller
                  Hora ingreso: ' . $hour->format('h:ia') . '<br>
                  ' . ($ticket->schedule==3? "   Fecha vencimiento: " . $hour2->format('d/m/Y') . "<br>" : '') .'
                  ' . ($ticket->schedule==3? "<b>".strtoupper($ticket->name) . "</b><br>" : '') .'
-                 Tipo: ' . ($ticket->type == 1 ? 'Carro' : ($ticket->type == 3 ? 'Camioneta' : 'Moto')) . '<br>
+                 Tipo: ' . ($ticket->type == 1 ? 'Carro' : ($ticket->type == 3 ? ( \Auth::user()->parking_id==11?'Bicicleta':'Camioneta' ) : 'Moto')) . '<br>
                  <small style="text-align:left;font-size:small">Placa: ' . $ticket->plate . '</small><br>
                  ' . (isset($ticket->drawer) ? "Locker: " . $ticket->drawer . "<br>" : '') . '
                  </b></small>
@@ -158,7 +158,7 @@ class TicketController extends Controller
                  ' . ($ticket->schedule!=3? "   Fecha salida: " . $pay_day->format('d/m/Y') . "<br>" : '') .'
                  ' . ($ticket->schedule!=3? "   Hora salida: " . $pay_day->format('h:ia') . "<br>" : '') .'
                  ' . ($ticket->schedule==3? "   Fecha vencimiento: " . $hour2->format('d/m/Y') . "<br>" : '') .'
-                 Tipo: ' . ($ticket->type == 1 ? 'Carro' : ($ticket->type == 3 ? 'Camioneta' : 'Moto')) . '<br>
+                 Tipo: ' . ($ticket->type == 1 ? 'Carro' : ($ticket->type == 3 ? ( \Auth::user()->parking_id==11?'Bicicleta':'Camioneta' ) : 'Moto')) . '<br>
                  Placa: ' . $ticket->plate . '<br>
                  ' . (isset($ticket->price) ? "   Precio: " . $ticket->price . "<br>" : '') .
                 (isset($ticket->extra) ? ($ticket->extra>0?"Incremento: ":"Descuento:" ). abs($ticket->extra) . "<br>Total: " . ($ticket->price+$ticket->extra) . "<br>" : '').
@@ -199,7 +199,7 @@ class TicketController extends Controller
         $parking = Parking::find(Auth::user()->parking_id);
         $minutos = ($minutos*1) - ($parking->free_time);
         $horas = (24*$tiempo->format("%d"))+$horas*1 + (($minutos>=0? 1: 0)*1);
-        if($parking->parking_id==11){
+        if($parking->parking_id==11 && $schedule==1){
             $minutos2 = (((24*$tiempo->format("%d"))+$horas2*1)*60)+($minutos2*1);
             $priceMin = $minutos2 > 0?($tipo==1? $parking->min_cars_price*$minutos2: $parking->min_motorcycles_price*$minutos2):0;
             if($schedule==1)
@@ -345,7 +345,7 @@ class TicketController extends Controller
                         ]):'');
             })
             ->addColumn('Tipo', function ($tickets) {
-                return  $tickets->type == 1? 'Carro': ($tickets->type == 3 ? 'Camioneta' : 'Moto');
+                return  $tickets->type == 1? 'Carro': ($tickets->type == 3 ? ( \Auth::user()->parking_id==11?'Bicicleta':'Camioneta' ) : 'Moto');
             })
             ->addColumn('entrada', function ($tickets) {
                 $hour =new DateTime("".$tickets->hour);

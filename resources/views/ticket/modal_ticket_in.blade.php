@@ -24,7 +24,7 @@
                             <option value="1" selected >Carro</option>
                             <option value="2">Moto</option>
                             @if($typeParking == 2)
-                                <option value="3">Camioneta</option>
+                                <option value="3">{{ \Auth::user()->parking_id==11?'Bicicleta':'Camioneta' }}</option>
                             @endif
                         </select>
                     </div>
