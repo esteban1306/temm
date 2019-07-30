@@ -193,6 +193,7 @@
             $("#rangeIn").css("display","none");
             $("#schedule").val(1);
             $("#typeIn").val(1);
+            $("#plate").val('');
         }
         function mensualidad(){
             var schedule = $("#schedule").val();
