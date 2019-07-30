@@ -113,6 +113,27 @@
                 </div>
                 <div class="form-group col-sm-12">
                     <div class="head">
+                        <h5>Precio {{ isBici()?'Bicicletas':'Camionetas' }}</h5>
+                    </div>
+                </div>
+                <div class="form-group col-sm-6">
+                    <label for="">Minuto</label>
+                    <input type="number" class="form-control validate[onlyNumber]" id="min_van_price" min="0" value="{{ $parking->min_van_price }}">
+                </div>
+                <div class="form-group col-sm-6">
+                    <label for="">Hora</label>
+                    <input type="number" class="form-control validate[required, onlyNumber]" id="hour_van_price" min="0" value="{{ $parking->hour_van_price }}">
+                </div>
+                <div class="form-group col-sm-6">
+                    <label for="">Dia</label>
+                    <input type="number" class="form-control validate[required, onlyNumber]" id="day_van_price" min="0" value="{{ $parking->day_van_price }}">
+                </div>
+                <div class="form-group col-sm-6">
+                    <label for="">Mensualidad</label>
+                    <input type="number" class="form-control validate[required, onlyNumber]" id="monthly_van_price"  min="0" value="{{ $parking->monthly_van_price }}">
+                </div>
+                <div class="form-group col-sm-12">
+                    <div class="head">
                         <h5>Otros</h5>
                     </div>
                 </div>

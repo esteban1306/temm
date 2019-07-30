@@ -82,6 +82,10 @@ class ParkingController extends Controller
         $parking->min_motorcycles_price = $request->min_motorcycles_price  ;
         $parking->day_motorcycles_price  = $request->day_motorcycles_price   ;
         $parking->monthly_motorcycles_price  = $request->monthly_motorcycles_price   ;
+        $parking->hour_van_price = $request->hour_van_price  ;
+        $parking->min_van_price = $request->min_van_price  ;
+        $parking->day_van_price  = $request->day_van_price   ;
+        $parking->monthly_van_price  = $request->monthly_van_price   ;
         $parking->free_time= $request->free_time;
         $parking->cars_num= $request->cars_num;
         $parking->motorcycles_num = $request->motorcycles_num;

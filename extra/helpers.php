@@ -261,3 +261,9 @@ if (! function_exists('format_date')) {
         return $with_hour && !empty($hour) ? $date . ' ' . $hour : $date;
     }
 }
+if(! function_exists('isBici') ) {
+    function isBici()
+    {
+        return in_array(\Auth::user()->parking_id, config('templates.bicicletas'));
+    }
+}

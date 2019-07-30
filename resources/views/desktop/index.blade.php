@@ -51,7 +51,7 @@
                                     <option value="2">Moto</option>
                                     @php($typeParking = App\Parking::find(\Auth::user()->parking_id)->type)
                                     @if($typeParking == 2)
-                                    <option value="3">{{ \Auth::user()->parking_id==11?'Bicicleta':'Camioneta' }}</option>
+                                    <option value="3">{{ isBici()?'Bicicleta':'Camioneta' }}</option>
                                     @endif
                                 </select>
                             </div>
@@ -127,7 +127,7 @@
                     <div class="widget_box_b">
                         <div class="contt">
                             <div class="fl_layer">
-                                <h4 class="title">Motos {{ $typeParking == 2?' / '.(\Auth::user()->parking_id==11?'Bicicletas':'Camionetas'):'' }}</h4>
+                                <h4 class="title">Motos {{ $typeParking == 2?' / '.(isBici()?'Bicicletas':'Camionetas'):'' }}</h4>
                                 <span class="line"></span>
                                 <span class="data" id="motos"> - </span>
                             </div>
@@ -363,11 +363,15 @@
             var hour_motorcycles_price=$('#hour_motorcycles_price').validationEngine('validate');
             var day_motorcycles_price=$('#day_motorcycles_price').validationEngine('validate');
             var monthly_motorcycles_price=$('#monthly_motorcycles_price').validationEngine('validate');
+            var min_van_price=$('#min_van_price').validationEngine('validate');
+            var hour_van_price=$('#hour_van_price').validationEngine('validate');
+            var day_van_price=$('#day_van_price').validationEngine('validate');
+            var monthly_van_price=$('#monthly_van_price').validationEngine('validate');
             var free_time=$('#free_time').validationEngine('validate');
             var cars_num=$('#cars_num').validationEngine('validate');
             var motorcycles_num=$('#motorcycles_num').validationEngine('validate');
 
-            if (hour_cars_price || day_cars_price || min_cars_price || monthly_cars_price || hour_motorcycles_price || min_motorcycles_price || day_motorcycles_price || monthly_motorcycles_price || free_time || cars_num || motorcycles_num )
+            if (hour_cars_price || day_cars_price || min_cars_price || monthly_cars_price || hour_motorcycles_price || min_motorcycles_price || day_motorcycles_price || monthly_motorcycles_price || hour_van_price || min_van_price || day_van_price || monthly_van_price || free_time || cars_num || motorcycles_num )
                 return;
             desktop_index_vm.changePrice();
         }
@@ -858,6 +862,10 @@
                     var min_motorcycles_price=$('#min_motorcycles_price').val();
                     var day_motorcycles_price=$('#day_motorcycles_price').val();
                     var monthly_motorcycles_price=$('#monthly_motorcycles_price').val();
+                    var hour_van_price=$('#hour_van_price').val();
+                    var min_van_price=$('#min_van_price').val();
+                    var day_van_price=$('#day_van_price').val();
+                    var monthly_van_price=$('#monthly_van_price').val();
                     var free_time=$('#free_time').val();
                     var cars_num=$('#cars_num').val();
                     var motorcycles_num=$('#motorcycles_num').val();
@@ -876,6 +884,10 @@
                             min_motorcycles_price : min_motorcycles_price  ,
                             day_motorcycles_price  : day_motorcycles_price   ,
                             monthly_motorcycles_price  : monthly_motorcycles_price   ,
+                            hour_van_price : hour_van_price  ,
+                            min_van_price : min_van_price  ,
+                            day_van_price  : day_van_price   ,
+                            monthly_van_price  : monthly_van_price   ,
                             free_time: free_time,
                             cars_num: cars_num,
                             motorcycles_num: motorcycles_num
