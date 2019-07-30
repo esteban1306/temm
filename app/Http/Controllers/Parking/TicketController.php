@@ -111,14 +111,14 @@ class TicketController extends Controller
             .($parking->parking_id==4?'<small style="text-align:center;font-size: 7px"><br>
     <b>SERVICIO: Lun-Sab 7am - 9pm</b><br>CARLOS E. MIDEROS <br> NIT: 80449231-4 <br> TEL: 9207119<br> CEL: 3013830790</small>':'').
             ($parking->parking_id==11?'<small style="text-align:center;font-size: 7px"><br>
-    <b>SERVICIO: Lun-Sab 6am - 9pm Dom-Fest 9am - 6pm</b><br>SOLUCIONES Y LOGÍSTICA SAS <br> NIT: 901305901-1 <br> CEL: 3003352126</small>':'').
+    <b>SERVICIO: Lun-Sab 6am - 9pm Dom-Fest 9am - 6pm</b><br>SOLUCIONES Y LOGÍSTICA SAS <br> NIT: 901305901-1 <br> autonorteparking@gmail.com</small>':'').
             ($parking->parking_id==5?'<small style="text-align:center;font-size: 6px"><br>
     NIT: 89000746-1 <br>HUGO ALEXANDER VARGAS SANCHEZ<br> </small><small style="text-align:center;font-size: 8px"><b>SERVICIO: Lun-Dom 6:30am - 9:30pm</b><br> <b> TEL: 3173799831</b></small>':'').
             ($parking->parking_id==7?'<small style="text-align:center;font-size: 6px"><br>
     NIT: 1041325245-3 <br>JHON DEIVID SANTA PULIDO<br> </small><small style="text-align:center;font-size: 8px"><b>SERVICIO: 24 HORAS</b><br> <b> TEL: 3217463250</b></small>':'');
         if(!isset($ticket->price)) {
             $html .= '<small style="text-align:left;font-size: '.$size.';margin-bottom: 1px;"><b><br>
-                 ' . ($ticket->schedule==3? "FACTURA DE VENTA N° " . $ticket->ticket_id . "<br>" : '') .'
+                 ' . ($ticket->schedule==3 || $parking->parking_id==11? "RECIBO N° " . $ticket->ticket_id . "<br>" : '') .'
                  Fecha ingreso: ' . $hour->format('d/m/Y') . '<br>
                  Hora ingreso: ' . $hour->format('h:ia') . '<br>
                  ' . ($ticket->schedule==3? "   Fecha vencimiento: " . $hour2->format('d/m/Y') . "<br>" : '') .'
@@ -203,7 +203,7 @@ class TicketController extends Controller
             $minutos2 = (((24*$tiempo->format("%d"))+$horas2*1)*60)+($minutos2*1);
             $priceMin = $minutos2 > 0?($tipo==1? $parking->min_cars_price*$minutos2: ($tipo==2?$parking->min_motorcycles_price*$minutos2:$parking->min_van_price*$minutos2)):0;
             if($schedule==1)
-                return $priceMin;
+                return intval(round($priceMin*1/100)*100);
         }
         if($tiempo->format("%I")<=5 && $horas==0 && ($schedule==1 || $schedule==2))
             return 0;
@@ -251,6 +251,7 @@ class TicketController extends Controller
             $ticket->price = $this->precio($interval,$ticket->type, $ticket->schedule);
         if($ticketss->count() > 0)
             $ticket->price =0;
+        $ticket->partner_id = Auth::user()->partner_id;
         $ticket->pay_day =$now;
         $ticket->save();
         return [$ticket->price,$interval->format("%H:%I")];
@@ -273,6 +274,7 @@ class TicketController extends Controller
         $type = $request->get('type_car');
         $range = $request->get('range');
         $status = $request->get('status');
+        $partner = $request->get('partner');
 
         $tickets= Ticket::select(['ticket_id as Id', 'plate', 'type', 'schedule', 'partner_id', 'status', 'drawer', 'price','hour'])->where('parking_id',Auth::user()->parking_id)->orderBy('ticket_id','desc');
         if ($search) {
@@ -284,6 +286,8 @@ class TicketController extends Controller
             $tickets = $tickets->where('schedule', $schedule);
         if (!empty($type))
             $tickets = $tickets->where('type', $type);
+        if (!empty($partner))
+            $tickets = $tickets->where('partner_id', $partner);
         if (!empty($range)){
             $dateRange = explode(" - ", $range);
             $tickets = $tickets->whereBetween('created_at', [$dateRange[0], $dateRange[1]]);

@@ -67,6 +67,22 @@
                                 </select>
                             </div>
                         </div>
+                        @if(\Auth::user()->type == 1)
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                @php($users = App\Models\Partner::where('parking_id',\Auth::user()->parking_id)->get())
+                                {!! Form::label('Usuario', 'Usuario', ['class' => 'control-label']) !!}
+                                <select id="partnersList" name="partnersList" class="form-control">
+                                    <option value="">Todos</option>
+                                    @foreach($users as $user)
+                                        {!! '<option data-toggle="tooltip" value="'.$user->partner_id.'">'.$user->name.'</option>' !!}
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        @else
+                            <input class="form-control" id="partnersList" style="display: none;" value=""/>
+                        @endif
                         <div class="col-md-2 col-sm-2">
                             <div class="form-group">
                                 <label class="control-label">&nbsp;</label>
@@ -676,7 +692,9 @@
                             type_car        : $("#type-car").val(),
                             type            : $("#type").val(),
                             status          : $("#status").val(),
-                            range           : $("#Tiempo").val()
+                            range           : $("#Tiempo").val(),
+                            partner         : $("#partnersList").val(),
+
                         },
                         success: function (datos) {
                             var month= datos['month_expire_num'];
@@ -766,7 +784,8 @@
                                 type_car        : $("#type-car").val(),
                                 type            : $("#type").val(),
                                 status          : $("#status").val(),
-                                range           : $("#Tiempo").val()
+                                range           : $("#Tiempo").val(),
+                                partner         : $("#partnersList").val(),
                             },
                             error : function () {
                                 location = '/login';
