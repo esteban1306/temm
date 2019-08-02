@@ -47,6 +47,11 @@ class TicketController extends Controller
     public function store(Request $request)
     {
         $now = new Datetime('now');
+        if($request->schedule!=3){
+            $count = Ticket::where('plate',strtoupper($request->plate))->where('price',null)->where('parking_id',Auth::user()->parking_id)->count();
+            if($count)
+                return ;
+        }
         $ticket= new Ticket();
         $ticket->hour =$now;
         $ticket->plate =strtoupper($request->plate);

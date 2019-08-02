@@ -490,6 +490,15 @@
                     range:date,
                 },
                 success: function (datos) {
+                    console.log(datos);
+                    if(datos==0){
+                        new PNotify({
+                            title: 'Exito',
+                            type: 'info',
+                            text: 'Ya existe un ticket con esta placa'
+                        });
+                        return;
+                    }
                     $('#modal_ticket_in').modal('hide');
                     new PNotify({
                         title: 'Exito',
