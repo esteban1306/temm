@@ -199,6 +199,7 @@
     <script src="{{ asset('js/validationEngine-es.min.js') }}"></script>
     <script>
         var typeParking = {{ $typeParking }};
+        var parkingId = {{ \Auth::user()->parking_id }};
         function openModalIn(){
             $('#modal_ticket_in').modal('show');
             getFecha();
@@ -641,12 +642,14 @@
             if(plate ==""){
                 return true;
             }
-            if(plate.length == 6 && !isNaN(plate.charAt(plate.length-1))){
-                if($("#typeIn").val()==2 )
-                    $("#typeIn").val(1);
+            if(plate.length == 6 && !isNaN(plate.charAt(plate.length-1))){    
+                $("#typeIn").val(1);
             }
             else{
-                $("#typeIn").val(2);
+                if(plate.length > 6 && parkingId==11)
+                    $("#typeIn").val(3);
+                else
+                    $("#typeIn").val(2);
             }
         }
         function createDataTableStandar(selector, opt) {
@@ -671,6 +674,16 @@
                 });
             }
             return myTable;
+        }
+        function verificar(e) {
+ 
+            // comprovamos con una expresion regular que el caracter pulsado sea
+            // una letra, numero o un espacio
+            if(e.key.match(/[a-z0-9]/i)===null) {
+     
+                // Si la tecla pulsada no es la correcta, eliminado la pulsación
+                e.preventDefault();
+            }
         }
         var desktop_index_vm = new Vue({
             el         : '#main',

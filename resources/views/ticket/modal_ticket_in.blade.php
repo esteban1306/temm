@@ -15,12 +15,12 @@
                         <label for="plate" class="control-label">PLACA</label>
 
                         <div>
-                            <input onkeyup="mayus(this);" id="plate" type="plate" class="form-control validate[required]" name="plate" value="{{ old('plate') }}" onkeypress="validar(event)" required autofocus autocomplete="off">
+                            <input onkeyup="mayus(this);" onkeypress="return verificar(event)"id="plate" type="plate" class="form-control validate[required]" name="plate" value="{{ old('plate') }}" onkeypress="validar(event)" required autofocus autocomplete="off">
                         </div>
                     </div>
                     <div class="form-group col-md-6">
                         <label for="">Tipo</label>
-                        <select name="type" class="form-control" id="typeIn">
+                        <select name="type" class="form-control" id="typeIn" {{ \Auth::user()->parking_id==11 ?'disabled':''}}>
                             <option value="1" selected >Carro</option>
                             <option value="2">Moto</option>
                             @if($typeParking == 2)
