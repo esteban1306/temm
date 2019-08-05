@@ -293,11 +293,13 @@ class TicketController extends Controller
             $tickets = $tickets->where('type', $type);
         if (!empty($partner))
             $tickets = $tickets->where('partner_id', $partner);
-        if (!empty($range)){
-            $dateRange = explode(" - ", $range);
-            $tickets = $tickets->whereBetween('created_at', [$dateRange[0], $dateRange[1]]);
-        }else{
-            $tickets = $tickets->whereBetween('created_at', [ new Datetime('today'), new Datetime('tomorrow')]);
+        if(!(Auth::user()->parking_id == 3 && !empty($search))){
+            if (!empty($range)){
+                $dateRange = explode(" - ", $range);
+                $tickets = $tickets->whereBetween('created_at', [$dateRange[0], $dateRange[1]]);
+            }else{
+                $tickets = $tickets->whereBetween('created_at', [ new Datetime('today'), new Datetime('tomorrow')]);
+            }
         }
         return Datatables::of($tickets)
             ->addColumn('action', function ($tickets) {
