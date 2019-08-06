@@ -462,7 +462,6 @@
             });
         }
         function crearTicket() {
-            type();
             var plate = $("#plate").val();
             var typeIn = $("#typeIn").val();
             var schedule = $("#schedule").val();
