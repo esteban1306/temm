@@ -462,6 +462,7 @@
             });
         }
         function crearTicket() {
+            type();
             var plate = $("#plate").val();
             var typeIn = $("#typeIn").val();
             var schedule = $("#schedule").val();
@@ -588,8 +589,8 @@
                 "locale": {
                     "format": "YYYY-MM-DD"
                 },
-                "startDate": "<?php $now = Carbon::now(); echo Carbon::yesterday()->format('Y-m-d')?>",
-                "endDate": "<?php   echo $now->addDay()->format('Y-m-d')?>",
+                "startDate": "<?php $now = Carbon::now(); echo Carbon::now()->format('Y-m-d')?>",
+                "endDate": "<?php   echo $now->format('Y-m-d')?>",
                 "opens": "center",
                 "drops": "up"
             }, function(start, end, label) {

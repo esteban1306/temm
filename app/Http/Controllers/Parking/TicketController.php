@@ -296,7 +296,7 @@ class TicketController extends Controller
         if(!(Auth::user()->parking_id == 3 && !empty($search))){
             if (!empty($range)){
                 $dateRange = explode(" - ", $range);
-                $tickets = $tickets->whereBetween('created_at', [$dateRange[0], $dateRange[1]]);
+                $tickets = $tickets->whereBetween('created_at', [$dateRange[0].' 00:00:00', $dateRange[1].' 23:59:59']);
             }else{
                 $tickets = $tickets->whereBetween('created_at', [ new Datetime('today'), new Datetime('tomorrow')]);
             }
