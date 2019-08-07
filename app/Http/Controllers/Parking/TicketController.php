@@ -13,6 +13,8 @@ use Yajra\DataTables\DataTables;
 use Illuminate\Html\HtmlServiceProvider;
 use Nexmo\Laravel\Facade\Nexmo;
 use App\Notifications\Message;
+use App\Exports\TicketsExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 use PDF; // at the top of the file
 
@@ -581,6 +583,6 @@ class TicketController extends Controller
     }
     public function export($range)
     {
-       dd($range);
+        return Excel::download(new TicketsExport($range), 'Reporte_'.$range.'.xlsx');
     }
 }

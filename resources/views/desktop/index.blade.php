@@ -91,7 +91,8 @@
                         </div>
                         <div class="col-md-2 col-sm-2">
                             <div class="form-group">
-                                <button type="button" onclick="reporte()" class="btn btn-primary form-control btn-lg">Reporte</button>
+                                <label class="control-label">&nbsp;</label>
+                                <button type="button" onclick="reporte()" class="btn btn-primary form-control">Reporte</button>
                             </div>  
                         </div>
                     </div>
