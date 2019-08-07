@@ -89,6 +89,11 @@
                                 <button class="btn btn-success form-control" id="advanced_search"><i class="fa fa-search"></i> Buscar</button>
                             </div>
                         </div>
+                        <div class="col-md-2 col-sm-2">
+                            <div class="form-group">
+                                <button type="button" onclick="reporte()" class="btn btn-primary form-control btn-lg">Reporte</button>
+                            </div>  
+                        </div>
                     </div>
                 </div>
             </div>
@@ -674,6 +679,9 @@
                 });
             }
             return myTable;
+        }
+        function reporte(){
+            window.open("/export_tickets/"+ $("#Tiempo").val(), "_blank");
         }
         function verificar(e) {
  

@@ -170,7 +170,8 @@ class TicketController extends Controller
                 '</small>
 </div>';
         }
-        $html .= '<small style="text-align:left;font-size: 6px"><br>
+        $html .= ($parking->parking_id==11?'<small style="text-align:center;font-size: 7px">
+    <b>POLIZA No. 21-02-101009484</b><br>SEGUROS DEL ESTADO</small>':'').'<small style="text-align:left;font-size: 6px"><br>
                  <b>IMPRESO POR TEMM SOFT 3207329971</b>
                  </small>';
         PDF::writeHTML($html, true, false, true, false, '');
@@ -464,7 +465,7 @@ class TicketController extends Controller
             $tickets = $tickets->where('type', $type);
         if (!empty($range)){
             $dateRange = explode(" - ", $range);
-            $tickets = $tickets->whereBetween('created_at', [$dateRange[0], $dateRange[1]]);
+            $tickets = $tickets->whereBetween('created_at', [$dateRange[0].' 00:00:00', $dateRange[1].' 23:59:59']);
         }else{
             $tickets = $tickets->whereBetween('created_at', [ new Datetime('today'), new Datetime('tomorrow')]);
         }
@@ -577,5 +578,9 @@ class TicketController extends Controller
         $ticket->save();
 
         return ;
+    }
+    public function export($range)
+    {
+       dd($range);
     }
 }
