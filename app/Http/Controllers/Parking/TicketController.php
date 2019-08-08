@@ -541,6 +541,8 @@ class TicketController extends Controller
     public function deleteTicket(Request $request)
     {
         $ticket = Ticket::find($request->ticket_id);
+        $ticket->partner_id = Auth::user()->partner_id;
+        $ticket->save();
         $ticket->delete();
         return ;
     }

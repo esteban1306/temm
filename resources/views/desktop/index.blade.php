@@ -89,12 +89,14 @@
                                 <button class="btn btn-success form-control" id="advanced_search"><i class="fa fa-search"></i> Buscar</button>
                             </div>
                         </div>
+                        @if(isReport())
                         <div class="col-md-2 col-sm-2">
                             <div class="form-group">
                                 <label class="control-label">&nbsp;</label>
                                 <button type="button" onclick="reporte()" class="btn btn-primary form-control">Reporte</button>
                             </div>  
                         </div>
+                        @endif
                     </div>
                 </div>
             </div>

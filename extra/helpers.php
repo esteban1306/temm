@@ -267,3 +267,10 @@ if(! function_exists('isBici') ) {
         return in_array(\Auth::user()->parking_id, config('templates.bicicletas'));
     }
 }
+
+if(! function_exists('isReport') ) {
+    function isReport()
+    {
+        return in_array(\Auth::user()->parking_id, config('templates.report'));
+    }
+}

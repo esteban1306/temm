@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Partner;
 use Carbon\Carbon;
 use DateTime;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class TicketsExport implements FromCollection
 {
@@ -61,6 +62,26 @@ class TicketsExport implements FromCollection
         $auxCollection->push(collect([[$carros,$motos,$bicicletas,format_money($precio),$extra]]));
         $auxCollection->push(collect([[""]]));
         $auxCollection->push( $collection);
+        $collection = collect([[""]]);
+
+		$tickets= Ticket::onlyTrashed()->select(['created_at', 'hour', 'pay_day', 'plate', 'type', 'price', 'extra', 'partner_id', 'status', 'deleted_at'])->where('parking_id',Auth::user()->parking_id)->orderBy('ticket_id','desc')->whereBetween('created_at', [$dateRange[0].' 00:00:00', $dateRange[1].' 23:59:59'])->get();
+        foreach ($tickets as $ticket){
+        	$precio += $ticket->price;
+        	$extra += $ticket->extra;
+            $ticket->price = format_money($ticket->price);
+            $ticket->extra = format_money($ticket->extra);
+            $partner = Partner::find($ticket->partner_id);
+            $ticket->partner_id =  $partner ?$partner->name:'';
+            $ticket->status = 'Eliminado';
+            $hour =new DateTime("".$ticket->hour);
+            $ticket->hour = $hour->format('h:ia');
+            $hour =new DateTime("".$ticket->pay_day);
+            $ticket->pay_day = $hour->format('h:ia');
+            $ticket->type = $ticket->type == 1? 'Carro': ($ticket->type == 3 ? ( isBici()?'Bicicleta':'Camioneta' ) : 'Moto');
+            $collection->push($ticket);
+        }
+		$auxCollection->push( $collection);
+
         return $auxCollection;
     }
 }
