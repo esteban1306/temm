@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Ticket;
+use App\Convenio;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Partner;
@@ -24,9 +25,9 @@ class TicketsExport implements FromCollection
     */
     public function collection()
     {
-        $collection = collect([["Fecha", "Hora Entrada", "Hora Salida", "Placa", "Tipo Vehiculo", "Valor cancelado","Extra", "Usuario", "Estado"]]);
+        $collection = collect([["Fecha", "Hora Entrada", "Hora Salida", "Placa", "Tipo Vehiculo", "Valor cancelado","Extra","Convenio", "Usuario", "Estado"]]);
 
-		$tickets= Ticket::select(['created_at', 'hour', 'pay_day', 'plate', 'type', 'price', 'extra', 'partner_id', 'status'])->where('parking_id',Auth::user()->parking_id)->orderBy('ticket_id','desc');
+		$tickets= Ticket::select(['created_at', 'hour', 'pay_day', 'plate', 'type', 'price', 'extra', 'convenio_id', 'partner_id', 'status'])->where('parking_id',Auth::user()->parking_id)->orderBy('ticket_id','desc');
 		$dateRange = explode(" - ", $this->range);
         $tickets = $tickets->whereBetween('created_at', [$dateRange[0].' 00:00:00', $dateRange[1].' 23:59:59'])->get();
 
@@ -54,6 +55,10 @@ class TicketsExport implements FromCollection
             if($ticket->type == 3)
             	$bicicletas++;
             $ticket->type = $ticket->type == 1? 'Carro': ($ticket->type == 3 ? ( isBici()?'Bicicleta':'Camioneta' ) : 'Moto');
+            if(!empty($ticket->convenio_id)){
+                $convenio = Convenio::find($ticket->convenio_id);
+                $ticket->convenio_id = $convenio ?$convenio->name:'';
+            }
             $collection->push($ticket);
         }
         $auxCollection = collect([["TOTALES","RANGO DE FECHAS",$this->range]]);

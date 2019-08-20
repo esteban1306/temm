@@ -274,3 +274,10 @@ if(! function_exists('isReport') ) {
         return in_array(\Auth::user()->parking_id, config('templates.report'));
     }
 }
+
+if(! function_exists('isconvenio') ) {
+    function isconvenio()
+    {
+        return in_array(\Auth::user()->parking_id, config('templates.convenio'));
+    }
+}

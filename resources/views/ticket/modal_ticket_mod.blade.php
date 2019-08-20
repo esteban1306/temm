@@ -41,6 +41,18 @@
                         <label for="drawer" class="control-label">Casilla</label>
                         <input id="drawer_mod" type="text" class="form-control">
                     </div>
+                    @if(isconvenio())
+                        <div class="form-group col-md-6">
+                            @php($convenios = App\Convenio::where('parking_id',Illuminate\Support\Facades\Auth::user()->parking_id)->get())
+                            <label for="">Convenio</label>
+                            <select name="convenio" class="form-control" id="id_convenio_mod">
+                                <option value="">Seleccionar</option>
+                                @foreach($convenios as $convenio)
+                                    {!! '<option data-toggle="tooltip" value="'.$convenio->convenio_id.'">'.$convenio->name.'</option>' !!}
+                                @endforeach
+                            </select>
+                        </div>
+                    @endif
                     <div class="form-group col-md-12{{ $errors->has('name') ? ' has-error' : '' }}">
                         <label for="extra" class="control-label">Extra</label>
                         <input id="extra" type="number" class="form-control">

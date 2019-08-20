@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Partner;
 use App\Parking;
 use App\Ticket;
+use App\Convenio;
 use Carbon\Carbon;
 use DateTime;
 use Illuminate\Http\Request;
@@ -72,6 +73,7 @@ class TicketController extends Controller
         $ticket->parking_id = Auth::user()->parking_id;
         $ticket->partner_id = Auth::user()->partner_id;
         $ticket->drawer = $request->drawer;
+        $ticket->convenio_id = $request->convenio;
         $ticket->save();
 
         /*Nexmo::message()->send([
@@ -198,7 +200,7 @@ class TicketController extends Controller
         //
     }
 
-    public function precio($tiempo, $tipo, $schedule)
+    public function precio($tiempo, $tipo, $schedule, $convenio = null)
     {
         $horas = $tiempo->format("%H");
         $horas2 = $tiempo->format("%H");
@@ -207,6 +209,26 @@ class TicketController extends Controller
         $parking = Parking::find(Auth::user()->parking_id);
         $minutos = ($minutos*1) - ($parking->free_time);
         $horas = (24*$tiempo->format("%d"))+$horas*1 + (($minutos>=0? 1: 0)*1);
+        if(!empty($convenio)){
+            $convenio = Convenio::find($convenio);
+            if(!empty($convenio)){
+                if($tipo==1){
+                    $parking->min_cars_price = $convenio->min_cars_price ?? $parking->min_cars_price;
+                    $parking->hour_cars_price = $convenio->hour_cars_price ?? $parking->hour_cars_price;
+                    $parking->day_cars_price = $convenio->day_cars_price ?? $parking->day_cars_price;
+                }
+                if($tipo==2){
+                    $parking->min_motorcycle_price = $convenio->min_motorcycle_price ?? $parking->min_motorcycle_price;
+                    $parking->hour_motorcycle_price = $convenio->hour_motorcycle_price ?? $parking->hour_motorcycle_price;
+                    $parking->day_motorcycle_price = $convenio->day_motorcycle_price ?? $parking->day_motorcycle_price;
+                }
+                if($tipo==3){
+                    $parking->min_van_price = $convenio->min_van_price ?? $parking->min_van_price;
+                    $parking->hour_van_price = $convenio->hour_van_price ?? $parking->hour_van_price;
+                    $parking->day_van_price = $convenio->day_van_price ?? $parking->day_van_price;
+                }
+            }
+        }
         if($parking->parking_id==11 && $schedule==1){
             $minutos2 = (((24*$tiempo->format("%d"))+$horas2*1)*60)+($minutos2*1);
             $priceMin = $minutos2 > 0?($tipo==1? $parking->min_cars_price*$minutos2: ($tipo==2?$parking->min_motorcycles_price*$minutos2:$parking->min_van_price*$minutos2)):0;
@@ -256,7 +278,7 @@ class TicketController extends Controller
         $ticketss= Ticket::select(['plate'])->where('parking_id',Auth::user()->parking_id)->where('status','<>',"3")->where('plate',$ticket->plate)->where('date_end','>=',$now2)->orderBy('ticket_id','desc')->get();
 
         if($ticket->schedule != 3 || empty($ticket->price))
-            $ticket->price = $this->precio($interval,$ticket->type, $ticket->schedule);
+            $ticket->price = $this->precio($interval,$ticket->type, $ticket->schedule, $ticket->convenio_id);
         if($ticketss->count() > 0)
             $ticket->price =0;
         $ticket->partner_id = Auth::user()->partner_id;
@@ -284,7 +306,7 @@ class TicketController extends Controller
         $status = $request->get('status');
         $partner = $request->get('partner');
 
-        $tickets= Ticket::select(['ticket_id as Id', 'plate', 'type', 'schedule', 'partner_id', 'status', 'drawer', 'price','hour'])->where('parking_id',Auth::user()->parking_id)->orderBy('ticket_id','desc');
+        $tickets= Ticket::select(['ticket_id as Id', 'plate', 'type', 'schedule', 'partner_id', 'status', 'drawer', 'price','hour','convenio_id'])->where('parking_id',Auth::user()->parking_id)->orderBy('ticket_id','desc');
         if ($search) {
                 $tickets = $tickets->where('plate', 'LIKE', "%$search%");
         }
@@ -375,7 +397,7 @@ class TicketController extends Controller
             ->editColumn('price', function ($tickets) {
                 $now = new Datetime('now');
                 $interval = date_diff(new DateTime("".$tickets->hour),$now);
-                return isset( $tickets->price)?  $tickets->price:( "*".$this->precio($interval,$tickets->type, $tickets->schedule));
+                return isset( $tickets->price)?  $tickets->price:( "*".$this->precio($interval,$tickets->type, $tickets->schedule, $tickets->convenio_id));
             })
             ->make(true);
     }
@@ -532,6 +554,7 @@ class TicketController extends Controller
             $ticket->phone = $request->movil;
             $ticket->price = $request->price;
         }
+        $ticket->convenio_id = $request->convenio;
         $ticket->partner_id = Auth::user()->partner_id;
         $ticket->extra = $request->extra;
         $ticket->drawer = $request->drawer;

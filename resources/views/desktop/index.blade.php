@@ -313,6 +313,7 @@
             var emailIn = $("#emailIn_mod").val();
             var celularIn = $("#celularIn_mod").val();
             var range= $('#date_range_mod').val();
+            var convenio= $('#id_convenio_mod').val();
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -330,7 +331,8 @@
                     email:emailIn,
                     movil:celularIn,
                     extra:extra,
-                    range:range
+                    range:range,
+                    convenio:convenio,
                 },
                 success: function (datos) {
                     new PNotify({
@@ -480,6 +482,7 @@
             var emailIn = $("#emailIn").val();
             var celularIn = $("#celularIn").val();
             var date = $("#date-range").val();
+            var convenio = $('#id_convenio').val();
 
             $.ajax({
                 headers: {
@@ -497,6 +500,7 @@
                     email:emailIn,
                     movil:celularIn,
                     range:date,
+                    convenio:convenio,
                 },
                 success: function (datos) {
                     console.log(datos);
@@ -543,6 +547,7 @@
                     $('#emailIn_mod').val(datos['email']);
                     $('#celularIn_mod').val(datos['phone']);
                     $('#extra').val(datos['extra']);
+                    $('#id_convenio_mod').val(datos['convenio_id']);
                     $('#date_range_mod').val(datos['hour']+' - '+datos['date_end']);
                     mensualidad2();
                     $('#date_range_mod').daterangepicker({
