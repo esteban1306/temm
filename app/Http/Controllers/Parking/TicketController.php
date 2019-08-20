@@ -13,6 +13,8 @@ use Yajra\DataTables\DataTables;
 use Illuminate\Html\HtmlServiceProvider;
 use Nexmo\Laravel\Facade\Nexmo;
 use App\Notifications\Message;
+use App\Exports\TicketsExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 use PDF; // at the top of the file
 
@@ -170,7 +172,8 @@ class TicketController extends Controller
                 '</small>
 </div>';
         }
-        $html .= '<small style="text-align:left;font-size: 6px"><br>
+        $html .= ($parking->parking_id==11?'<small style="text-align:center;font-size: 7px">
+    <b>POLIZA No. 21-02-101009484</b><br>SEGUROS DEL ESTADO</small>':'').'<small style="text-align:left;font-size: 6px"><br>
                  <b>IMPRESO POR TEMM SOFT 3207329971</b>
                  </small>';
         PDF::writeHTML($html, true, false, true, false, '');
@@ -538,6 +541,8 @@ class TicketController extends Controller
     public function deleteTicket(Request $request)
     {
         $ticket = Ticket::find($request->ticket_id);
+        $ticket->partner_id = Auth::user()->partner_id;
+        $ticket->save();
         $ticket->delete();
         return ;
     }
@@ -577,5 +582,9 @@ class TicketController extends Controller
         $ticket->save();
 
         return ;
+    }
+    public function export($range)
+    {
+        return Excel::download(new TicketsExport($range), 'Reporte_'.$range.'.xlsx');
     }
 }

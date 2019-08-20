@@ -67,4 +67,5 @@ Route::post('/get_products', 'ProductController@getSelect')->name('get_products'
 Route::get('/get_abonos', 'AbonoController@getAbonos')->name('get_abonos')->middleware('auth');
 Route::get('/get_months', 'TicketController@getMonths')->name('get_months')->middleware('auth');
 Route::get('/export_products', 'ProductController@exportProducts')->name('export_products')->middleware('auth');
+Route::get('/export_tickets/{range}', 'TicketController@export')->name('export_tickets')->middleware('auth');
 Route::resource('tickets', 'TicketController')->middleware('auth');
