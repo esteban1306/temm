@@ -655,8 +655,9 @@
             if(plate ==""){
                 return true;
             }
-            if(plate.length == 6 && !isNaN(plate.charAt(plate.length-1))){    
-                $("#typeIn").val(1);
+            if(plate.length == 6 && !isNaN(plate.charAt(plate.length-1))){
+                if($("#typeIn").val() == 2 && parkingId!=11)
+                    $("#typeIn").val(1);
             }
             else{
                 if(plate.length > 6 && parkingId==11)
