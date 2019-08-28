@@ -66,6 +66,11 @@ Route::get('/get_movimientos', 'ProductController@getMovimientos')->name('get_mo
 Route::post('/get_products', 'ProductController@getSelect')->name('get_products')->middleware('auth');
 Route::get('/get_abonos', 'AbonoController@getAbonos')->name('get_abonos')->middleware('auth');
 Route::get('/get_months', 'TicketController@getMonths')->name('get_months')->middleware('auth');
+Route::get('/get_convenios', 'ConvenioController@getConvenios')->name('get_convenios')->middleware('auth');
+Route::post('/convenios', 'ConvenioController@store')->name('convenios')->middleware('auth');
+Route::post('/get_convenio', 'ConvenioController@getConvenio')->name('get_convenio')->middleware('auth');
+Route::post('/actualizar_convenio', 'ConvenioController@update')->name('actualizar_convenio')->middleware('auth');
+Route::post('/eliminar_convenio', 'ConvenioController@deleteConvenio')->name('eliminar_convenio')->middleware('auth');
 Route::get('/export_products', 'ProductController@exportProducts')->name('export_products')->middleware('auth');
 Route::get('/export_tickets/{range}', 'TicketController@export')->name('export_tickets')->middleware('auth');
 Route::resource('tickets', 'TicketController')->middleware('auth');

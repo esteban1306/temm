@@ -4,7 +4,7 @@
     <div class="container-fluid">
         <div class="panelPartner auto_margin">
             <!---->
-            <div class="row">
+            <div class="row" v-show="nav != 'convenios'">
                 <div class="col-md-6" style="text-align: center;">
                     <button type="button" onclick="openModalIn()" class="btn btn-primary col-md-10 btn-lg">Ingresar</button>
                 </div>
@@ -13,6 +13,7 @@
                 </div>
             </div>
             <p class="height_10"></p>
+            <hr v-show="nav != 'convenios'">
             <!---->
             <p class="height_10" v-show="all"></p>
 
@@ -189,6 +190,9 @@
                 <button id="pdfsubmit" type="submit" form="form_pdf">Submit</button>
             </form>
             @include('desktop.account')
+            @if(isconvenio())
+                @include('desktop.convenios')
+            @endif
         </div>
     </div>
 
@@ -196,6 +200,8 @@
     @include('ticket.modal_ticket_out')
     @include('ticket.modal_ticket_mod')
     @include('ticket.modal_ticket_pay')
+    @include('convenio.modal_convenio_in')
+    @include('convenio.modal_convenio_mod')
 @endsection
 @section('scripts')
     <script src="{{ asset('js/app.js') }}"></script>
@@ -219,6 +225,24 @@
             $("#schedule").val(1);
             $("#typeIn").val(1);
             $("#plate").val('');
+        }
+        function openModalInConvenio(){
+            $('#modal_convenio_in').modal('show');
+            $('#namec').val('');
+            $('#min_cars_pricec').val('');
+            $('#hour_cars_pricec').val('');
+            $('#day_cars_pricec').val('');
+            $('#min_motorcycles_pricec').val('');
+            $('#hour_motorcycles_pricec').val('');
+            $('#day_motorcycles_pricec').val('');
+            $('#min_van_pricec').val('');
+            $('#hour_van_pricec').val('');
+            $('#day_van_pricec').val('');
+        }
+        function openModalModConvenio(ticket_id){
+            $('#modal_convenio_mod').modal('show');
+            loadConvenio(ticket_id);
+            $('#convenio_id_mod').val(ticket_id);
         }
         function mensualidad(){
             var schedule = $("#schedule").val();
@@ -415,6 +439,34 @@
                ;
             });
         }
+        function eliminarConvenio(id) {
+            (new PNotify({
+                title: 'Necesita confirmación',
+                text: 'Esta seguro de querer eliminar el registro?',
+                icon: 'glyphicon glyphicon-question-sign',
+                hide: false,
+                confirm: {
+                    confirm: true
+                },
+                buttons: {
+                    closer: false,
+                    sticker: false
+                },
+                history: {
+                    history: false
+                },
+                addclass: 'stack-modal',
+                stack: {
+                    'dir1': 'down',
+                    'dir2': 'right',
+                    'modal': true
+                }
+            })).get().on('pnotify.confirm', function() {
+                desktop_index_vm.deleteConvenio(id);
+            }).on('pnotify.cancel', function() {
+                ;
+            });
+        }
         function recuperarTicket(id) {
             (new PNotify({
                 title: 'Necesita confirmación',
@@ -563,6 +615,33 @@
                 }
             });
         }
+        function loadConvenio(id) {
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: "POST",
+                url: "get_convenio",
+                data: {
+                    convenio:id
+                },
+                success: function (datos) {
+                    $('#namecm').val(datos['name']);
+                    $('#min_cars_pricecm').val(datos['min_cars_price']);
+                    $('#hour_cars_pricecm').val(datos['hour_cars_price']);
+                    $('#day_cars_pricecm').val(datos['day_cars_price']);
+                    $('#min_motorcycles_pricecm').val(datos['min_motorcycles_price']);
+                    $('#hour_motorcycles_pricecm').val(datos['hour_motorcycles_price']);
+                    $('#day_motorcycles_pricecm').val(datos['day_motorcycles_price']);
+                    $('#min_van_pricecm').val(datos['min_van_price']);
+                    $('#hour_van_pricecm').val(datos['hour_van_price']);
+                    $('#day_van_pricecm').val(datos['day_van_price']);
+                },
+                error : function () {
+                    location = '/login';
+                }
+            });
+        }
         function mayus(e) {
             if (screen.width>=500 )
                 e.value = e.value.toUpperCase();
@@ -702,6 +781,122 @@
                 e.preventDefault();
             }
         }
+        function crearConvenio() {
+            var name=$('#namec').validationEngine('validate');
+            var min_cars_price=$('#min_cars_pricec').validationEngine('validate');
+            var hour_cars_price=$('#hour_cars_pricec').validationEngine('validate');
+            var day_cars_price=$('#day_cars_pricec').validationEngine('validate');
+            var min_motorcycles_price=$('#min_motorcycles_pricec').validationEngine('validate');
+            var hour_motorcycles_price=$('#hour_motorcycles_pricec').validationEngine('validate');
+            var day_motorcycles_price=$('#day_motorcycles_pricec').validationEngine('validate');
+            var min_van_price=$('#min_van_pricec').validationEngine('validate');
+            var hour_van_price=$('#hour_van_pricec').validationEngine('validate');
+            var day_van_price=$('#day_van_pricec').validationEngine('validate');
+
+            if (name || hour_cars_price || day_cars_price || min_cars_price  || hour_motorcycles_price || min_motorcycles_price || day_motorcycles_price || hour_van_price || min_van_price || day_van_price )
+                return;
+
+            name=$('#namec').val();
+            min_cars_price=$('#min_cars_pricec').val();
+            hour_cars_price=$('#hour_cars_pricec').val();
+            day_cars_price=$('#day_cars_pricec').val();
+            min_motorcycles_price=$('#min_motorcycles_pricec').val();
+            hour_motorcycles_price=$('#hour_motorcycles_pricec').val();
+            day_motorcycles_price=$('#day_motorcycles_pricec').val();
+            min_van_price=$('#min_van_pricec').val();
+            hour_van_price=$('#hour_van_pricec').val();
+            day_van_price=$('#day_van_pricec').val();
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: "POST",
+                url: "convenios",
+                data: {
+                    name:name,
+                    min_cars_price:min_cars_price,
+                    hour_cars_price:hour_cars_price,
+                    day_cars_price:day_cars_price,
+                    min_motorcycles_price:min_motorcycles_price,
+                    hour_motorcycles_price:hour_motorcycles_price,
+                    day_motorcycles_price:day_motorcycles_price,
+                    min_van_price:min_van_price,
+                    hour_van_price:hour_van_price,
+                    day_van_price:day_van_price,
+                },
+                success: function (datos) {
+                    console.log(datos);
+                    $('#modal_convenio_in').modal('hide');
+                    new PNotify({
+                        title: 'Exito',
+                        type: 'success',
+                        text: 'Se agregó el convenio con éxito'
+                    });
+                    $('#convenios-table').dataTable()._fnAjaxUpdate();
+                },
+                error : function () {
+                    //location = '/login';
+                }
+            });
+        }
+        function modificarConvenio() {
+            var convenio= $('#convenio_id_mod').val();
+            var name=$('#namecm').validationEngine('validate');
+            var min_cars_price=$('#min_cars_pricecm').validationEngine('validate');
+            var hour_cars_price=$('#hour_cars_pricecm').validationEngine('validate');
+            var day_cars_price=$('#day_cars_pricecm').validationEngine('validate');
+            var min_motorcycles_price=$('#min_motorcycles_pricecm').validationEngine('validate');
+            var hour_motorcycles_price=$('#hour_motorcycles_pricecm').validationEngine('validate');
+            var day_motorcycles_price=$('#day_motorcycles_pricecm').validationEngine('validate');
+            var min_van_price=$('#min_van_pricecm').validationEngine('validate');
+            var hour_van_price=$('#hour_van_pricecm').validationEngine('validate');
+            var day_van_price=$('#day_van_pricecm').validationEngine('validate');
+
+            if (name || hour_cars_price || day_cars_price || min_cars_price  || hour_motorcycles_price || min_motorcycles_price || day_motorcycles_price || hour_van_price || min_van_price || day_van_price )
+                return;
+            name=$('#namecm').val();
+            min_cars_price=$('#min_cars_pricecm').val();
+            hour_cars_price=$('#hour_cars_pricecm').val();
+            day_cars_price=$('#day_cars_pricecm').val();
+            min_motorcycles_price=$('#min_motorcycles_pricecm').val();
+            hour_motorcycles_price=$('#hour_motorcycles_pricecm').val();
+            day_motorcycles_price=$('#day_motorcycles_pricecm').val();
+            min_van_price=$('#min_van_pricecm').val();
+            hour_van_price=$('#hour_van_pricecm').val();
+            day_van_price=$('#day_van_pricecm').val();
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: "POST",
+                url: "actualizar_convenio",
+                data: {
+                    convenio:convenio,
+                    name:name,
+                    min_cars_price:min_cars_price,
+                    hour_cars_price:hour_cars_price,
+                    day_cars_price:day_cars_price,
+                    min_motorcycles_price:min_motorcycles_price,
+                    hour_motorcycles_price:hour_motorcycles_price,
+                    day_motorcycles_price:day_motorcycles_price,
+                    min_van_price:min_van_price,
+                    hour_van_price:hour_van_price,
+                    day_van_price:day_van_price,
+                },
+                success: function (datos) {
+                    new PNotify({
+                        title: 'Exito',
+                        type: 'success',
+                        text: 'Se modificó el convenio con exito'
+                    });
+                    $('#modal_convenio_mod').modal('hide');
+                    $('#convenios-table').dataTable()._fnAjaxUpdate();
+                },
+                error : function () {
+                    //location = '/login';
+                }
+            });
+        }
         var desktop_index_vm = new Vue({
             el         : '#main',
             data       : {
@@ -809,6 +1004,24 @@
                                 { data: 'name', name: 'Nombre', orderable  : false, searchable : false },
                                 { data: 'Atendio', name: 'Atendió', orderable  : false, searchable : false },
                                 { data: 'action', name: 'acciones', orderable  : false, searchable : false },
+                            ],
+                            lengthMenu: [[ 10, 25, 50, -1], [ 10, 25, 50, "Todos"]]
+                        });
+                    }else if(status == 'convenios'){
+                        $('#convenios-table').DataTable({
+                            sDom           : 'r<Hlf><"datatable-scroll"t><Fip>',
+                            order          : [],
+                            processing     : true,
+                            serverSide     : true,
+                            deferRender    : true,
+                            destroy        : true,
+                                ajax: '{!! route('get_convenios') !!}',
+                            columns: [
+                                { data: 'name', orderable  : false, searchable : false },
+                                { data: 'carro', orderable  : false, searchable : false },
+                                { data: 'moto', orderable  : false, searchable : false },
+                                { data: 'camioneta', orderable  : false, searchable : false },
+                                { data: 'action', orderable  : false, searchable : false },
                             ],
                             lengthMenu: [[ 10, 25, 50, -1], [ 10, 25, 50, "Todos"]]
                         });
@@ -967,6 +1180,30 @@
                                     $('#tickets-table').dataTable()._fnAjaxUpdate();
                                 else
                                     $('#month-table').dataTable()._fnAjaxUpdate();
+
+                            },
+                            error : function () {
+                                location = '/login';
+                            }
+                        });
+                },
+                deleteConvenio : function(ticket_id) {
+                        $.ajax({
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            type: "POST",
+                            url: "eliminar_convenio",
+                            data: {
+                                convenio:ticket_id
+                            },
+                            success: function (datos) {
+                                new PNotify({
+                                    title: 'Exito',
+                                    type: 'success',
+                                    text: 'Se Eliminó el convenio con exito'
+                                });
+                                $('#convenios-table').dataTable()._fnAjaxUpdate();
 
                             },
                             error : function () {
