@@ -205,6 +205,7 @@ class TicketController extends Controller
         $horas = $tiempo->format("%H");
         $horas2 = $tiempo->format("%H");
         $minutos = $tiempo->format("%I");
+        $dias = $tiempo->format("%d");
         $minutos2 = $minutos;
         $parking = Parking::find(Auth::user()->parking_id);
         $minutos = ($minutos*1) - ($parking->free_time);
@@ -229,19 +230,27 @@ class TicketController extends Controller
                 }
             }
         }
+        $dayPrice = ($tipo==1? $parking->day_cars_price : ($tipo==2?$parking->day_motorcycles_price:$parking->day_van_price));
         if($parking->parking_id==11 && $schedule==1){
             $minutos2 = (((24*$tiempo->format("%d"))+$horas2*1)*60)+($minutos2*1);
             $priceMin = $minutos2 > 0?($tipo==1? $parking->min_cars_price*$minutos2: ($tipo==2?$parking->min_motorcycles_price*$minutos2:$parking->min_van_price*$minutos2)):0;
-            if($schedule==1)
+            if($schedule==1 && ($priceMin < $dayPrice || $dayPrice == 0))
                 return intval(round($priceMin*1/100)*100);
+            else
+                $schedule=2;
         }
         if($tiempo->format("%I")<=5 && $horas==0 && ($schedule==1 || $schedule==2))
             return 0;
         $horas = $horas==0? 1: $horas;
-        if($schedule==1)
-            return ($tipo==1? $parking->hour_cars_price * $horas: ($tipo==2? $parking->hour_motorcycles_price * $horas: $parking->hour_van_price * $horas ));
+        if($schedule==1){
+            $price= ($tipo==1? $parking->hour_cars_price * $horas: ($tipo==2? $parking->hour_motorcycles_price * $horas: $parking->hour_van_price * $horas ));
+            if($price < $dayPrice || $dayPrice == 0)
+                return $price;
+            else
+                $schedule=2;
+        }
         if($schedule==2)
-            return ($tipo==1? $parking->day_cars_price: ($tipo==2? $parking->day_motorcycles_price: $parking->day_van_price ));
+            return ($tipo==1? $parking->day_cars_price: ($tipo==2? $parking->day_motorcycles_price: $parking->day_van_price ))* ($dias+1);
         if($schedule==3)
             return ($tipo==1? $parking->monthly_cars_price: ($tipo==2? $parking->monthly_motorcycles_price: $parking->monthly_van_price ));
     }
