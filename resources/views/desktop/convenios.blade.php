@@ -4,12 +4,14 @@
             <div class="head">
                 <h3>Convenios</h3>
             </div>
+            @if(\Auth::user()->type == 1)
             <div class="body">
                 <hr>
                 <div class="col-md-12" style="text-align: center;">
                     <button type="button" onclick="openModalInConvenio()" class="btn btn-primary col-md-10 btn-lg">Agregar</button>
                 </div>
             </div>
+            @endif
         </div>
     </div>
     <div class="col-sm-8">

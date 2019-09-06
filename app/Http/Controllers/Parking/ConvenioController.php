@@ -154,7 +154,7 @@ class ConvenioController extends Controller
                         'title' => "Eliminar !",
 
                     ]);
-                return $htmlAdmin;
+                return Auth::user()->type == 1?$htmlAdmin:'';
             })
             ->addColumn('moto', function ($tickets) {
                 $text = (!empty($tickets->min_motorcycles_price)?format_money($tickets->min_motorcycles_price):'');
