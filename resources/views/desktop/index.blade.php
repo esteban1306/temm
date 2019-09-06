@@ -225,6 +225,7 @@
             $("#schedule").val(1);
             $("#typeIn").val(1);
             $("#plate").val('');
+            $("#id_convenio").val('');
         }
         function openModalInConvenio(){
             $('#modal_convenio_in').modal('show');

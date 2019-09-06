@@ -337,14 +337,15 @@ class TicketController extends Controller
         }
         return Datatables::of($tickets)
             ->addColumn('action', function ($tickets) {
-                $htmlAdmin= \Form::button('Editar', [
-                        'class'   => 'btn btn-primary',
-                        'onclick' => "openModalMod('$tickets->Id')",
-                        'data-toggle' => "tooltip",
-                        'data-placement' => "bottom",
-                        'title' => "Editar !",
+                $edit = \Form::button('Editar', [
+                    'class'   => 'btn btn-primary',
+                    'onclick' => "openModalMod('$tickets->Id')",
+                    'data-toggle' => "tooltip",
+                    'data-placement' => "bottom",
+                    'title' => "Editar !",
 
-                    ]).
+                ]);
+                $htmlAdmin= $edit.
                     \Form::button('Eliminar', [
                         'class'   => 'btn btn-warning',
                         'onclick' => "eliminarTicket('$tickets->Id')",
@@ -361,7 +362,7 @@ class TicketController extends Controller
                         'data-placement' => "bottom",
                         'title' => "Pagar !",
 
-                    ]).(Auth::user()->type == 1?$htmlAdmin:'').
+                    ]).(Auth::user()->type == 1?$htmlAdmin:(Auth::user()->type == 2 && isconvenio()?$edit:'')).
                     \Form::button('Imprimir', [
                         'class'   => 'btn btn-info',
                         'onclick' => "form_pdf('$tickets->Id')",
