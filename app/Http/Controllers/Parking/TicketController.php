@@ -188,7 +188,7 @@ class TicketController extends Controller
         $id_bar = substr('0000000000'.$ticket->ticket_id,-10);
         PDF::write1DBarcode($id_bar, 'C128C', '', '', '', 18, 0.4, $style, 'N');
         }
-        $js = 'print(true);print()';
+        $js = 'this.print(true);';
         PDF::IncludeJS($js);
         PDF::Output('ticket.pdf');
 
