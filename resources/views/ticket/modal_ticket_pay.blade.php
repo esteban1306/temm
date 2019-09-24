@@ -34,6 +34,9 @@
                 <div class="col-sm-12">
                     <span class="height_10"></span>
                     <button type="button" id="cobrar_id" onclick="form_pdf()" class="btn btn-success waves-effect waves-light"><i class="mdi mdi-content-save-all"></i>Imprimir recibo</button>
+                    @if(isIva())
+                        <button type="button" id="cobrar_id_iva" onclick="form_pdf()" class="btn btn-success waves-effect waves-light"><i class="mdi mdi-content-save-all"></i>Imprimir recibo (IVA)</button>
+                    @endif
                 </div>
             </div>
         </div><!-- /.modal-content -->

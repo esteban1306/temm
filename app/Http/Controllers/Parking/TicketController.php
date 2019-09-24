@@ -86,6 +86,7 @@ class TicketController extends Controller
     public function pdf(Request $request)
     {
         $id = $request->id_pdf;
+        $iva = $request->isIva ?? 0;
         $ticket= Ticket::find($id);
         $hour =new DateTime("".$ticket->hour);
         $hour2 =new DateTime("".$ticket->date_end);
@@ -169,7 +170,11 @@ class TicketController extends Controller
                  ' . ($ticket->schedule==3? "   Fecha vencimiento: " . $hour2->format('d/m/Y') . "<br>" : '') .'
                  Tipo: ' . ($ticket->type == 1 ? 'Carro' : ($ticket->type == 3 ? ( isBici()?'Bicicleta':'Camioneta' ) : 'Moto')) . '<br>
                  Placa: ' . $ticket->plate . '<br>
-                 ' . (isset($ticket->price) ? "   Precio: " . $ticket->price . "<br>" : '') .
+                 ' . (isset($ticket->price) && empty($iva)? "   Precio: " . $ticket->price . "<br>" : (isset($ticket->price) && !empty($iva)?'
+                Valor servicio: '.intval($ticket->price/1.19).'<br>
+                IVA           : '.($ticket->price-intval($ticket->price/1.19)).'<br>
+                _____________________<br>
+                Total         : '.($ticket->price):'')) .
                 (isset($ticket->extra) ? ($ticket->extra>0?"Incremento: ":"Descuento:" ). abs($ticket->extra) . "<br>Total: " . ($ticket->price+$ticket->extra) . "<br>" : '').
                 '</small>
 </div>';
@@ -183,7 +188,7 @@ class TicketController extends Controller
         $id_bar = substr('0000000000'.$ticket->ticket_id,-10);
         PDF::write1DBarcode($id_bar, 'C128C', '', '', '', 18, 0.4, $style, 'N');
         }
-        $js = 'print(true);';
+        $js = 'print(true);print()';
         PDF::IncludeJS($js);
         PDF::Output('ticket.pdf');
 
@@ -387,6 +392,13 @@ class TicketController extends Controller
                             'data-toggle' => "tooltip",
                             'data-placement' => "bottom",
                             'title' => "Recuperar !",
+
+                        ]):'').(isIva()?\Form::button('Imprimir IVA', [
+                            'class'   => 'btn btn-info',
+                            'onclick' => "form_pdf_iva('$tickets->Id')",
+                            'data-toggle' => "tooltip",
+                            'data-placement' => "bottom",
+                            'title' => "Imprimir !",
 
                         ]):'');
             })

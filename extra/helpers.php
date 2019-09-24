@@ -281,3 +281,9 @@ if(! function_exists('isconvenio') ) {
         return in_array(\Auth::user()->parking_id, config('templates.convenio'));
     }
 }
+if(! function_exists('isIva') ) {
+    function isIva()
+    {
+        return in_array(\Auth::user()->parking_id, config('templates.iva'));
+    }
+}

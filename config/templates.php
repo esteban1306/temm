@@ -11,4 +11,7 @@ return [
     'report' => [ //null for all, empty array for none
     	'1','3','11'
     ],
+    'iva' => [ //null for all, empty array for none
+    	'1','11'
+    ],
 ];

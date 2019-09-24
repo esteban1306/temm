@@ -187,6 +187,7 @@
             <form id="form_pdf" class="row" method="POST" action="{{ route('pdf') }}" TARGET="_blank" hidden>
             {{ csrf_field() }}
                 <input id="id_pdf" type="text" class="form-control" name="id_pdf">
+                <input id="isIva" type="text" class="form-control" name="isIva">
                 <button id="pdfsubmit" type="submit" form="form_pdf">Submit</button>
             </form>
             @include('desktop.account')
@@ -316,11 +317,21 @@
                     if(!$('#nav_inicio').hasClass('active'))
                         $('#month-table').dataTable()._fnAjaxUpdate();
                     $('#cobrar_id').attr("onclick","form_pdf('"+ticket_id+"'); $('#modal_ticket_pay').modal('hide')");
+                    @if(isIva())
+                        $('#cobrar_id_iva').attr("onclick","form_pdf_iva('"+ticket_id+"'); $('#modal_ticket_pay').modal('hide')");
+                    @endif
                 },
                 error : function () {
                     location = '/login';
                 }
             });
+        }
+        function form_pdf_iva(id) {
+            $('#isIva').val('1');
+            form_pdf(id);
+            setTimeout(function (){
+                $('#isIva').val('');
+            },1500);
         }
         function form_pdf(id) {
             $('#id_pdf').val(id);
