@@ -287,3 +287,9 @@ if(! function_exists('isIva') ) {
         return in_array(\Auth::user()->parking_id, config('templates.iva'));
     }
 }
+if(! function_exists('onlyIva') ) {
+    function onlyIva()
+    {
+        return in_array(\Auth::user()->parking_id, config('templates.onlyIva'));
+    }
+}

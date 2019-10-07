@@ -87,6 +87,8 @@ class TicketController extends Controller
     {
         $id = $request->id_pdf;
         $iva = $request->isIva ?? 0;
+        if(onlyIva())
+            $iva=19;
         $ticket= Ticket::find($id);
         $hour =new DateTime("".$ticket->hour);
         $hour2 =new DateTime("".$ticket->date_end);
@@ -122,6 +124,8 @@ class TicketController extends Controller
     <b>SERVICIO: Lun-Sab 7am - 9pm</b><br>CARLOS E. MIDEROS <br> NIT: 80449231-4 <br> TEL: 9207119<br> CEL: 3013830790</small>':'').
             ($parking->parking_id==11?'<small style="text-align:center;font-size: 7px"><br>
     <b>SERVICIO: Lun-Sab 6am - 9pm Dom-Fest 9am - 6pm</b><br>SOLUCIONES Y LOGÍSTICA SAS <br> NIT: 901305901-1 <br> autonorteparking@gmail.com</small>':'').
+            ($parking->parking_id==9?'<small style="text-align:center;font-size: 7px"><br>
+    <b>SERVICIO: 24 horas</b><br>SANDRA CAROLINA LIZARAZO <br> NIT: 901.008.443-4 <br> CEL. 3007216502</small>':'').
             ($parking->parking_id==5?'<small style="text-align:center;font-size: 6px"><br>
     NIT: 89000746-1 <br>HUGO ALEXANDER VARGAS SANCHEZ<br> </small><small style="text-align:center;font-size: 8px"><b>SERVICIO: Lun-Dom 6:30am - 9:30pm</b><br> <b> TEL: 3173799831</b></small>':'').
             ($parking->parking_id==7?'<small style="text-align:center;font-size: 6px"><br>
@@ -236,7 +240,7 @@ class TicketController extends Controller
             }
         }
         $dayPrice = ($tipo==1? $parking->day_cars_price : ($tipo==2?$parking->day_motorcycles_price:$parking->day_van_price));
-        if($parking->parking_id==11 && $schedule==1){
+        if(($parking->parking_id==11 || $parking->parking_id==9) && $schedule==1){
             $minutos2 = (((24*$tiempo->format("%d"))+$horas2*1)*60)+($minutos2*1);
             $priceMin = $minutos2 > 0?($tipo==1? $parking->min_cars_price*$minutos2: ($tipo==2?$parking->min_motorcycles_price*$minutos2:$parking->min_van_price*$minutos2)):0;
             if($schedule==1 && ($priceMin < $dayPrice || $dayPrice == 0))
