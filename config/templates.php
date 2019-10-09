@@ -17,4 +17,7 @@ return [
     'onlyIva' => [ //null for all, empty array for none
     	'9'
     ],
+    'jornada' => [ //null for all, empty array for none
+    	'9'
+    ],
 ];

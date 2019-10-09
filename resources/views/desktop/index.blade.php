@@ -63,6 +63,9 @@
                                 <select id="type" name="type" class="form-control">
                                     <option value="">Todos</option>
                                     <option value="1">Horas</option>
+                                    @if(isJornada())
+                                    <option value="4">Jornada</option>
+                                    @endif
                                     <option value="2">Dias</option>
                                     <option value="3">Mensualidad</option>
                                 </select>
@@ -742,20 +745,22 @@
             }
         }
         function type() {
-            var plate = $("#plate").val();
-            if(plate ==""){
-                return true;
-            }
-            if(plate.length == 6 && !isNaN(plate.charAt(plate.length-1))){
-                if($("#typeIn").val() == 2 && parkingId!=11)
-                    $("#typeIn").val(1);
-            }
-            else{
-                if(plate.length > 6 && parkingId==11)
-                    $("#typeIn").val(3);
-                else
-                    $("#typeIn").val(2);
-            }
+            @if(\Auth::user()->parking_id != 9)
+                var plate = $("#plate").val();
+                if(plate ==""){
+                    return true;
+                }
+                if(plate.length == 6 && !isNaN(plate.charAt(plate.length-1))){
+                    if($("#typeIn").val() == 2 && parkingId!=11)
+                        $("#typeIn").val(1);
+                }
+                else{
+                    if(plate.length > 6 && parkingId==11)
+                        $("#typeIn").val(3);
+                    else
+                        $("#typeIn").val(2);
+                }
+            @endif
         }
         function createDataTableStandar(selector, opt) {
             if (typeof opt.scroll === 'undefined')

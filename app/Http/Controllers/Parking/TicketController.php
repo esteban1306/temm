@@ -125,7 +125,7 @@ class TicketController extends Controller
             ($parking->parking_id==11?'<small style="text-align:center;font-size: 7px"><br>
     <b>SERVICIO: Lun-Sab 6am - 9pm Dom-Fest 9am - 6pm</b><br>SOLUCIONES Y LOGÍSTICA SAS <br> NIT: 901305901-1 <br> autonorteparking@gmail.com</small>':'').
             ($parking->parking_id==9?'<small style="text-align:center;font-size: 7px"><br>
-    <b>SERVICIO: 24 horas</b><br>SANDRA CAROLINA LIZARAZO <br> NIT: 901.008.443-4 <br> CEL. 3007216502</small>':'').
+    <b>SERVICIO: 24 horas</b><br>INVERSIONES Y CONTRUCCIONES BARI SAS <br> NIT: 901.008.443-4 <br> CEL. 3007216502</small>':'').
             ($parking->parking_id==5?'<small style="text-align:center;font-size: 6px"><br>
     NIT: 89000746-1 <br>HUGO ALEXANDER VARGAS SANCHEZ<br> </small><small style="text-align:center;font-size: 8px"><b>SERVICIO: Lun-Dom 6:30am - 9:30pm</b><br> <b> TEL: 3173799831</b></small>':'').
             ($parking->parking_id==7?'<small style="text-align:center;font-size: 6px"><br>
@@ -167,19 +167,21 @@ class TicketController extends Controller
                     FACTURA DE VENTA N° ' . $ticket->ticket_id . '<br>
                  ' . ($ticket->schedule==3?"<b>".strtoupper($ticket->name) . "</b><br>" : '') .'
                  ' . ($ticket->schedule==1? "   Fracciones: " . $horas . "<br>" : '') .'
-                   Fecha ingreso: ' . $hour->format('d/m/Y') . '<br>
+                 Fecha ingreso: ' . $hour->format('d/m/Y') . '<br>
                  Hora ingreso: ' . $hour->format('h:ia') . '<br>
                  ' . ($ticket->schedule!=3? "   Fecha salida: " . $pay_day->format('d/m/Y') . "<br>" : '') .'
                  ' . ($ticket->schedule!=3? "   Hora salida: " . $pay_day->format('h:ia') . "<br>" : '') .'
+                 ' . ($ticket->schedule!=3? "   Duración: " . $interval->format('%d D %h:%i') . "<br>" : '') .'
                  ' . ($ticket->schedule==3? "   Fecha vencimiento: " . $hour2->format('d/m/Y') . "<br>" : '') .'
                  Tipo: ' . ($ticket->type == 1 ? 'Carro' : ($ticket->type == 3 ? ( isBici()?'Bicicleta':'Camioneta' ) : 'Moto')) . '<br>
                  Placa: ' . $ticket->plate . '<br>
                  ' . (isset($ticket->price) && empty($iva)? "   Precio: " . $ticket->price . "<br>" : (isset($ticket->price) && !empty($iva)?'
-                Valor servicio: '.intval($ticket->price/1.19).'<br>
-                IVA           : '.($ticket->price-intval($ticket->price/1.19)).'<br>
+                Valor servicio: '.intval($ticket->price/1.19).'<br>'.
+                    (isset($ticket->extra) ? ($ticket->extra>0?"Incremento: ":"Descuento:" ). abs($ticket->extra).'<br>':'').'
+                IVA           : '.(($ticket->price+$ticket->extra)-intval(($ticket->price+$ticket->extra)/1.19)).'<br>
                 _____________________<br>
-                Total         : '.($ticket->price):'')) .
-                (isset($ticket->extra) ? ($ticket->extra>0?"Incremento: ":"Descuento:" ). abs($ticket->extra) . "<br>Total: " . ($ticket->price+$ticket->extra) . "<br>" : '').
+                Total         : '.(($ticket->price+$ticket->extra)):'')) .
+                (isset($ticket->extra) && empty($iva)? ($ticket->extra>0?"<br>Incremento: ":"<br>Descuento:" ). abs($ticket->extra) . "<br>Total: " . ($ticket->price+$ticket->extra) . "<br>" : '').
                 '</small>
 </div>';
         }
@@ -248,20 +250,32 @@ class TicketController extends Controller
             else
                 $schedule=2;
         }
-        if($tiempo->format("%I")<=5 && $horas==0 && ($schedule==1 || $schedule==2))
+        if($tiempo->format("%I")<=5 && $horas==0 && ($schedule==1 || $schedule==2 || $schedule==4))
             return 0;
         $horas = $horas==0? 1: $horas;
+        if(Auth::user()->parking_id == 9 && empty($convenio)){
+            $minutos = $minutos2*1 <= 15 && $tipo==1? 0.25 :($minutos2*1 <= 30 ? 0.5 :($minutos2*1 <= 45 && $tipo==1? 0.75 :1));
+            $horas = $horas2 + $minutos;
+        }
         if($schedule==1){
             $price= ($tipo==1? $parking->hour_cars_price * $horas: ($tipo==2? $parking->hour_motorcycles_price * $horas: $parking->hour_van_price * $horas ));
             if($price < $dayPrice || $dayPrice == 0 || Auth::user()->parking_id == 3 )
-                return $price;
-            else
-                $schedule=2;
+                return intval($price);
+            else{
+                if(isJornada())
+                    $schedule=4;
+                else
+                    $schedule=2;
+            }
         }
         if($schedule==2)
             return ($tipo==1? $parking->day_cars_price: ($tipo==2? $parking->day_motorcycles_price: $parking->day_van_price ))* ($dias+1);
         if($schedule==3)
             return ($tipo==1? $parking->monthly_cars_price: ($tipo==2? $parking->monthly_motorcycles_price: $parking->monthly_van_price ));
+        if($schedule==4){
+            $dias = (intval($horas/12)+1+($dias*2))/2;
+            return ($tipo==1? $parking->day_cars_price: ($tipo==2? $parking->day_motorcycles_price: $parking->day_van_price ))* ($dias);
+        }
     }
 
     /**
@@ -482,7 +496,7 @@ class TicketController extends Controller
                             'data-placement' => "bottom",
                             'title' => "Renovar !",
 
-                        ]).(!empty($tickets->phone)?'<a class="btn btn-success" href="https://api.whatsapp.com/send?phone=57'.$tickets->phone.'&text=Hola%20'.$tickets->name.',parqueadero%20'.$parking->name.'%20le%20saluda%20coordialmente%20y%20le%20informa%20que%20el%20vehiculo%20con%20placa%20'.$tickets->plate.'%20tiene%20pago%20el%20parqueo%20con%20nosotros%20hasta%20la%20fecha:%20'.$tickets->date_end.'" target="_blank">Whatsapp</a>':'');
+                        ]).(!empty($tickets->phone)?'<a class="btn btn-success" href="https://web.whatsapp.com/send?phone=57'.$tickets->phone.'&text=Hola%20'.$tickets->name.',parqueadero%20'.$parking->name.'%20le%20saluda%20coordialmente%20y%20le%20informa%20que%20el%20vehiculo%20con%20placa%20'.$tickets->plate.'%20tiene%20pago%20el%20parqueo%20con%20nosotros%20hasta%20la%20fecha:%20'.$tickets->date_end.'" target="_blank">Whatsapp</a>':'');
                 else
                     return '';
             })
@@ -632,8 +646,88 @@ class TicketController extends Controller
 
         return ;
     }
-    public function export($range)
+
+    public function export($range){
+
+        if(Auth::user()->type == 1)
+            return Excel::download(new TicketsExport($range), 'Reporte_'.$range.'.xlsx');
+        else
+            $this->reportUser($range);
+    }
+
+    public function reportUser($range)
     {
-        return Excel::download(new TicketsExport($range), 'Reporte_'.$range.'.xlsx');
+        $tickets= Ticket::select(['plate', 'type', 'extra', 'schedule', 'price', 'name', 'status', 'date_end'])->where('parking_id',Auth::user()->parking_id)->where('status','<>',"3")->orderBy('ticket_id','desc');
+        $tickets = $tickets->where('status', 2);
+        $tickets = $tickets->where('partner_id', Auth::user()->partner_id);
+        $dateRange = explode(" - ", $range);
+        $tickets = $tickets->whereBetween('created_at', [$dateRange[0].' 00:00:00', $dateRange[1].' 23:59:59']);
+
+        $status = [];
+        $status['total'] = ZERO;
+        $status['extra'] = ZERO;
+        $status['carros'] = ZERO;
+        $status['camioneta'] = ZERO;
+        $status['motos'] = ZERO;
+
+        $tickets=$tickets->get();
+        foreach ($tickets as $ticket){
+            $status['total'] += $ticket->price;
+            $status['extra'] += $ticket->extra;
+            if($ticket->type == 1)
+                $status['carros'] ++;
+            if($ticket->type == 2)
+                $status['motos'] ++;
+            if($ticket->type == 3)
+                $status['camioneta'] ++;
+        }
+        PDF::SetTitle('Reporte PDF');
+        PDF::AddPage('P', 'A6');
+        $marginRight = Auth::user()->parking_id == 5?57:45;
+        $marginLeft = Auth::user()->parking_id == 5?2:6;
+        PDF::SetMargins($marginLeft, 0, $marginRight);
+
+        $html = '<table style="width:100%">
+        <tr>
+        <th>'.$dateRange[0].'</th>
+        <th>'.$dateRange[1].'</th> 
+        <th>&nbsp;</th>
+      </tr>
+      <tr>
+        <td colspan="1"><b>Usuario</b></td>
+        <td><b>'.Auth::user()->name.'</b></td> 
+      </tr>
+      <tr>
+        <td colspan="1"><b>Carros</b></td>
+        <td><b>'.$status['carros'].'</b></td> 
+      </tr>
+      <tr>
+        <td colspan="1"><b>Motos</b></td>
+        <td><b>'.$status['motos'].'</b></td> 
+      </tr>
+      <tr>
+        <td colspan="1"><b>'.(isBici()?'Bicicletas':'Camionetas').'</b></td>
+        <td><b>'.$status['camioneta'].'</b></td> 
+      </tr>
+     
+    <tr>
+        <td colspan="1"><b>Ventas</b></td>
+        <td><b>'.$status['total'].'</b></td> 
+      </tr>
+      <tr>
+        <td colspan="1"><b>Extras</b></td>
+        <td><b>'.$status['extra'].'</b></td> 
+      </tr>
+      <hr>
+      <tr>
+        <td colspan="1"><b>Saldo</b></td>
+        <td><b>'.($status['total']+$status['extra']).'</b></td> 
+      </tr>
+      <hr>
+  </table>';
+        PDF::writeHTML($html, true, false, true, false, '');
+        $js = 'print(true);';
+        PDF::IncludeJS($js);
+        PDF::Output('ticket.pdf');
     }
 }

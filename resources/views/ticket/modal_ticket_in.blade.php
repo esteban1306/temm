@@ -32,6 +32,9 @@
                         <label for="">Horario</label>
                         <select name="schedule" class="form-control" id="schedule" onchange="mensualidad()">
                             <option value="1" selected >Hora</option>
+                            @if(isJornada())
+                                <option value="4">Jornada</option>
+                            @endif
                             <option value="2">Dia</option>
                             <option value="3">Mes</option>
                         </select>

@@ -293,3 +293,9 @@ if(! function_exists('onlyIva') ) {
         return in_array(\Auth::user()->parking_id, config('templates.onlyIva'));
     }
 }
+if(! function_exists('isJornada') ) {
+    function isJornada()
+    {
+        return in_array(\Auth::user()->parking_id, config('templates.jornada'));
+    }
+}
