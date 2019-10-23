@@ -218,6 +218,7 @@
     <script>
         var typeParking = {{ $typeParking }};
         var parkingId = {{ \Auth::user()->parking_id }};
+        var showMensaje = 1;
         function openModalIn(){
             $('#modal_ticket_in').modal('show');
             getFecha();
@@ -968,12 +969,13 @@
                             $("#motos").html(datos['motos']);
                             $("#carros").html(datos['carros']);
                             $("#month_expired").html(datos['month_expire_num']);
-                            if( datos['month_expire_num']>0){
+                            if( datos['month_expire_num']>0 && showMensaje ==1){
                                 new PNotify({
                                     title: 'Mensualidades pendientes',
                                     text: datos['month_expire'],
                                     type: 'info'
                                 });
+                                showMensaje ++;
                             }
                             this.retired = 1;
                         },
