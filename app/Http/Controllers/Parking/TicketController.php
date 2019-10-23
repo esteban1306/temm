@@ -54,6 +54,10 @@ class TicketController extends Controller
             $count = Ticket::where('plate',strtoupper($request->plate))->where('price',null)->where('parking_id',Auth::user()->parking_id)->count();
             if($count)
                 return ;
+        }else{
+            $count = Ticket::where('plate',strtoupper($request->plate))->where('parking_id',Auth::user()->parking_id)->where('status','<>',"3")->where('date_end','<',$now)->count();
+            if($count)
+                return 'a';
         }
         $ticket= new Ticket();
         $ticket->hour =$now;

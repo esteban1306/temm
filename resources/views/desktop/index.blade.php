@@ -579,6 +579,14 @@
                         });
                         return;
                     }
+                    if(datos=='a'){
+                        new PNotify({
+                            title: 'Exito',
+                            type: 'info',
+                            text: 'Tiene mensualidad vigente'
+                        });
+                        return;
+                    }
                     $('#modal_ticket_in').modal('hide');
                     new PNotify({
                         title: 'Exito',
