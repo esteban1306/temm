@@ -262,7 +262,7 @@ class TicketController extends Controller
         }
         if($schedule==1){
             $price= ($tipo==1? $parking->hour_cars_price * $horas: ($tipo==2? $parking->hour_motorcycles_price * $horas: $parking->hour_van_price * $horas ));
-            if($price < $dayPrice || $dayPrice == 0 || Auth::user()->parking_id == 3 )
+            if($price < $dayPrice || $dayPrice == 0 || Auth::user()->parking_id == 3 || Auth::user()->parking_id == 5 )
                 return intval($price);
             else{
                 if(isJornada())
