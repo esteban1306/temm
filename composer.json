@@ -7,7 +7,6 @@
     "require": {
         "php": ">=7.0.0",
         "barryvdh/laravel-debugbar": "^2.2",
-        "barryvdh/laravel-dompdf": "^0.8.2",
         "elibyy/tcpdf-laravel": "5.5.*",
         "fideloper/proxy": "~3.3",
         "laravel/framework": "5.5.*",
