@@ -114,12 +114,12 @@ class TicketController extends Controller
         );
         PDF::SetTitle('Ticket');
         PDF::AddPage('P', 'A6');
-        $marginRight = Auth::user()->parking_id == 5?57:45;
-        $marginLeft = Auth::user()->parking_id == 5?2:6;
+        $marginRight = Auth::user()->parking_id == 5?60:45;
+        $marginLeft = Auth::user()->parking_id == 5?4:6;
         $size = Auth::user()->parking_id == 5?'8px':'small';
         PDF::SetMargins($marginLeft, 0, $marginRight);
         $parking = Parking::find(Auth::user()->parking_id);
-        $html = '<div style="text-align:center; margin-top: -10px !important"><big style="margin-bottom: 1px"><b style="letter-spacing: -1 px;">&nbsp; PARQUEADERO '.$parking->name.'</b></big><br>
+        $html = '<div style="text-align:center; margin-top: -10px !important"><big style="margin-bottom: 1px"><b style="letter-spacing: -1 px;font-size: 11px">&nbsp; PARQUEADERO '.$parking->name.'</b></big><br>
                 '.($parking->parking_id !=5 && $parking->parking_id !=11 && $parking->parking_id !=9?'<em style="font-size: 7px;margin-top: 2px;margin-bottom: 1px">"Todo lo puedo en Cristo que<br> me fortalece": Fil 4:13 <br></em>':'').'
                 <small style="font-size: x-small;margin-top: 1px;margin-bottom: 1px"><b>'.$parking->address.'</b></small>'
             .($parking->parking_id==3?'<small style="text-align:center;font-size: 6px"><br>
@@ -131,7 +131,7 @@ class TicketController extends Controller
             ($parking->parking_id==9?'<small style="text-align:center;font-size: 7px"><br>
     <b>SERVICIO: 24 horas</b><br>INVERSIONES Y CONTRUCCIONES BARI SAS <br> NIT: 901.008.443-4 <br> CEL. 3007216502</small>':'').
             ($parking->parking_id==5?'<small style="text-align:center;font-size: 6px"><br>
-    NIT: 89000746-1 <br>HUGO ALEXANDER VARGAS SANCHEZ<br> </small><small style="text-align:center;font-size: 8px"><b>SERVICIO: Lun-Dom 6:30am - 9:30pm</b><br> <b> TEL: 3173799831</b></small>':'').
+    NIT: 89000746-1 <br>&nbsp; HUGO ALEXANDER VARGAS SANCHEZ<br> </small><small style="text-align:center;font-size: 6px"><b>SERVICIO: Lun-Dom 6:30am - 9:30pm</b><br> <b> TEL: 3173799831</b></small>':'').
             ($parking->parking_id==7?'<small style="text-align:center;font-size: 6px"><br>
     NIT: 1041325245-3 <br>JHON DEIVID SANTA PULIDO<br> </small><small style="text-align:center;font-size: 8px"><b>SERVICIO: 24 HORAS</b><br> <b> TEL: 3217463250</b></small>':'');
         if(!isset($ticket->price)) {
