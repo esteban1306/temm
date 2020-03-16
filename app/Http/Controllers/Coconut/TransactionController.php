@@ -416,6 +416,7 @@ class TransactionController extends Controller
     }
     public function pdf(Request $request)
     {
+        error_reporting(0);
         $id = $request->id_pdf;
         $ticket= Transaction::find($id);
         $hour =new DateTime("".$ticket->created_at);
@@ -656,6 +657,7 @@ class TransactionController extends Controller
 
     public function pdfAcueducto(Request $request)
     {
+        error_reporting(0);
         $fecha = $request->fechaReporte;
         $dateRange = explode("-", $fecha);
         $mes = $dateRange[1];

@@ -661,6 +661,7 @@ class TicketController extends Controller
 
     public function reportUser($range)
     {
+        error_reporting(0);
         $tickets= Ticket::select(['plate', 'type', 'extra', 'schedule', 'price', 'name', 'status', 'date_end'])->where('parking_id',Auth::user()->parking_id)->where('status','<>',"3")->orderBy('ticket_id','desc');
         $tickets = $tickets->where('status', 2);
         $tickets = $tickets->where('partner_id', Auth::user()->partner_id);

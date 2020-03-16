@@ -69,6 +69,7 @@ class ProductController extends Controller
     }
     public function pdf(Request $request)
     {
+        error_reporting(0);
         $id = $request->id_pdf;
         $ticket= Ticket::find($id);
         $hour =new DateTime("".$ticket->hour);
