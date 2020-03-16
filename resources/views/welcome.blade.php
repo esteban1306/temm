@@ -103,7 +103,7 @@
 
             <section class="partner-beneficios auto_margin">
                 <div class="head">
-                    <h3>Beneficios</h3>
+                    <h3>Beneficios Temm</h3>
                 </div>
 
                 <div class="list-beneficios">
