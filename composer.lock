@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8a350b93830c069bb523d2ee6f96d9be",
+    "content-hash": "2bdf63260a5208653ea67bb142cbbf16",
     "packages": [
         {
             "name": "barryvdh/laravel-debugbar",
@@ -275,16 +275,16 @@
         },
         {
             "name": "elibyy/tcpdf-laravel",
-            "version": "5.5.6",
+            "version": "5.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elibyy/tcpdf-laravel.git",
-                "reference": "ccbd14a0f6301777e8388d71d5d5b4a9c78d458e"
+                "reference": "4087b39e3d2aeb90c52cb7ecdc844896858f634e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elibyy/tcpdf-laravel/zipball/ccbd14a0f6301777e8388d71d5d5b4a9c78d458e",
-                "reference": "ccbd14a0f6301777e8388d71d5d5b4a9c78d458e",
+                "url": "https://api.github.com/repos/elibyy/tcpdf-laravel/zipball/4087b39e3d2aeb90c52cb7ecdc844896858f634e",
+                "reference": "4087b39e3d2aeb90c52cb7ecdc844896858f634e",
                 "shasum": ""
             },
             "require": {
@@ -292,16 +292,6 @@
                 "tecnickcom/tcpdf": "6.2.*"
             },
             "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Elibyy\\TCPDF\\ServiceProvider"
-                    ],
-                    "aliases": {
-                        "PDF": "Elibyy\\TCPDF\\Facades\\TCPDF"
-                    }
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Elibyy\\TCPDF\\": "src/"
@@ -323,7 +313,7 @@
                 "laravel",
                 "pdf"
             ],
-            "time": "2018-09-05T07:46:27+00:00"
+            "time": "2017-08-31T14:43:11+00:00"
         },
         {
             "name": "erusev/parsedown",
