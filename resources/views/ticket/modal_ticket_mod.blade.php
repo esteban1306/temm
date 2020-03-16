@@ -13,7 +13,7 @@
                         <input id="fecha_mod" type="text" class="form-control" disabled>
                     </div>
                     <div class="form-group col-md-12">
-                        <label for="plate_mod" class="control-label">PLACA</label>
+                        <label for="plate_mod" class="control-label">PLACA </label>
 
                         <div>
                             <input id="plate_mod" type="plate" class="form-control validate[required]" value="{{ old('plate') }}" onkeypress="validar(event)" required autofocus {!! \Auth::user()->type == 2 ?'disabled':'' !!}>
