@@ -88,6 +88,7 @@ class TicketController extends Controller
     }
     public function pdf(Request $request)
     {
+        error_reporting(0);
         $id = $request->id_pdf;
         $iva = $request->isIva ?? 0;
         if(onlyIva())
