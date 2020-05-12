@@ -527,10 +527,10 @@ class ProductController extends Controller
             ->orderBy('id_income','asc');
         return Datatables::of($tickets)
             ->addColumn('total', function ($tickets) {
-                return  format_money($tickets->precio);
+                return  format_money($tickets->cantidad*1*$tickets->precio);
             })
             ->editColumn('precio', function ($tickets) {
-                return format_money($tickets->precio*1/$tickets->cantidad);
+                return format_money($tickets->precio);
             })
             ->editColumn('cantidad', function ($tickets) {
                 if(Auth::user()->type == 5 || Auth::user()->type == 6){
