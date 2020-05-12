@@ -299,3 +299,9 @@ if(! function_exists('isJornada') ) {
         return in_array(\Auth::user()->parking_id, config('templates.jornada'));
     }
 }
+if(! function_exists('isLavadero') ) {
+    function isLavadero()
+    {
+        return in_array(\Auth::user()->parking_id, config('templates.lavadero'));
+    }
+}

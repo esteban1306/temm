@@ -343,6 +343,7 @@
                     $('#celularCustomerMod').val(datos['telefono']);
                     $('#cedulaCustomerMod').val(datos['cedula']);
                     $('#observacionCustomerMod').val(datos['observacion']);
+                    $('#emailCustomerMod').val(datos['email']);
                 },
                 error : function () {
                     //location = '/login';
@@ -360,6 +361,7 @@
             var telefono = $("#celularCustomer").val();
             var cedula = $("#cedulaCustomer").val();
             var observacion = $("#observacionCustomer").val();
+            var email = $("#emailCustomer").val();
 
             $.ajax({
                 headers: {
@@ -372,6 +374,7 @@
                     movil:telefono,
                     cedula:cedula,
                     observacion:observacion,
+                    email:email,
                 },
                 success: function (datos) {
                     $('#modal_add').modal('hide');
@@ -399,6 +402,7 @@
             var telefono = $("#celularCustomerMod").val();
             var cedula = $("#cedulaCustomerMod").val();
             var observacion = $("#observacionCustomerMod").val();
+            var email = $("#emailCustomerMod").val();
 
             $.ajax({
                 headers: {
@@ -412,6 +416,7 @@
                     movil:telefono,
                     cedula:cedula,
                     observacion:observacion,
+                    email:email,
                 },
                 success: function (datos) {
                     $('#modal_mod').modal('hide');

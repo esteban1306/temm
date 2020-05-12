@@ -20,7 +20,11 @@
                         <input id="celularCustomer" type="number" class="form-control validate[required]">
                     </div>
                     <div class="form-group col-md-12">
-                        <label for="fechas" class="control-label">Observación</label>
+                        <label for="nombre" class="control-label">Email</label>
+                        <input id="emailCustomer" type="text" class="form-control validate[required]">
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label for="fechas" class="control-label">{{ isLavadero()?'Placa':'Observación' }}</label>
                         <input id="observacionCustomer" type="text" class="form-control">
                     </div>
                     <div class="form-group col-md-12 pt-3">

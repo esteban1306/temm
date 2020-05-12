@@ -20,4 +20,7 @@ return [
     'jornada' => [ //null for all, empty array for none
     	'9'
     ],
+    'lavadero' => [ //null for all, empty array for none
+    	'6'
+    ],
 ];

@@ -131,6 +131,8 @@ class TicketController extends Controller
     <b>SERVICIO: Lun-Sab 6am - 9pm Dom-Fest 9am - 6pm</b><br>SOLUCIONES Y LOGÍSTICA SAS <br> NIT: 901305901-1 <br> autonorteparking@gmail.com</small>':'').
             ($parking->parking_id==9?'<small style="text-align:center;font-size: 7px"><br>
     <b>SERVICIO: 24 horas</b><br>INVERSIONES Y CONTRUCCIONES BARI SAS <br> NIT: 901.008.443-4 <br> CEL. 3007216502</small>':'').
+            ($parking->parking_id==12?'<small style="text-align:center;font-size: 7px"><br>
+    <b>SERVICIO: 24 horas</b><br>GERMAN ROJAS QUIÑONES <br> NIT: 13870919 <br> TEL: 6717705</small>':'').
             ($parking->parking_id==5?'<small style="text-align:center;font-size: 6px"><br>
     NIT: 89000746-1 <br>&nbsp; HUGO ALEXANDER VARGAS SANCHEZ<br> </small><small style="text-align:center;font-size: 6px"><b>&nbsp;&nbsp;SERVICIO: Lun-Dom 6:30am - 9:30pm</b><br> <b> TEL: 3173799831</b></small>':'').
             ($parking->parking_id==7?'<small style="text-align:center;font-size: 6px"><br>

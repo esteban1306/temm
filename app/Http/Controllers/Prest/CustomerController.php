@@ -53,6 +53,7 @@ class CustomerController extends Controller
         $ticket->telefono =$request->movil;
         $ticket->cedula =$request->cedula;
         $ticket->observacion =$request->observacion;
+        $ticket->email =$request->email??'';
         $ticket->id_partner =Auth::user()->partner_id;
         $ticket->id_parking =Auth::user()->parking_id;
         $ticket->save();
@@ -126,6 +127,7 @@ class CustomerController extends Controller
         $ticket->telefono =$request->movil;
         $ticket->cedula =$request->cedula;
         $ticket->observacion =$request->observacion;
+        $ticket->email =$request->email??'';
         $ticket->save();
         return [$ticket->cedula,$ticket->nombre];
     }
