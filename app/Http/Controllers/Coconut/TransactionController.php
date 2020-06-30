@@ -196,7 +196,7 @@ class TransactionController extends Controller
                     ]):'').($tickets->tipo == 1  && empty($tickets->estado) && Auth::user()->type != 6?
                             \Form::button('Editar', [
                                 'class'   => 'btn btn-primary',
-                                'onclick' => "openModalVenta('$tickets->Id','".format_money($tickets->precio)."','".($tickets->customer_id ?? '')."','".$tickets->description."','".$hour->format('Y-m-d')."')",
+                                'onclick' => "openModalVenta('$tickets->Id','".format_money($tickets->precio)."','".($tickets->customer_id ?? '')."','".$tickets->description."','".$hour->format('Y-m-d')."','".($tickets->estado ?? '')."','".($tickets->partner_id ?? '')."','".($tickets->servicio ?? '')."')",
                                 'data-toggle' => "tooltip",
                                 'data-placement' => "bottom",
                                 'title' => "Editar !",
@@ -525,7 +525,7 @@ class TransactionController extends Controller
         $range = $request->date_pdf;
         $base = $request->base?? 500000;
         //dd($range);
-        $tickets= Transaction::select(['id_transaction as Id', 'precio', 'partner_id','created_at','tipo','description','customer_id'])->where('parking_id',Auth::user()->parking_id)->orderBy('id_transaction','desc');
+        $tickets= Transaction::select(['id_transaction as Id', 'precio', 'partner_id','created_at','tipo','description','customer_id','estado'])->where('parking_id',Auth::user()->parking_id)->orderBy('id_transaction','desc');
         if (!empty($range)) {
             $dateRange = explode(" - ", $range);
             $tickets = $tickets->whereBetween('created_at', [$dateRange[0].' 00:00:00', $dateRange[1].' 23:59:59']);
@@ -543,7 +543,7 @@ class TransactionController extends Controller
         $status['recaudado'] = ZERO;
         foreach ($tickets as $ticket){
             if($ticket->tipo == 1){
-                if(!empty($ticket->customer_id)){
+                if(!empty($ticket->customer_id) && empty($ticket->estado)){
                     $customer = Customer::find($ticket->customer_id);
                     $status['creditos_html'].='<tr>
                                             <td colspan="2"><small>'.$customer->nombre.'</small></td> 

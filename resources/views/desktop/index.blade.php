@@ -540,6 +540,13 @@
             });
         }
         function crearTicket() {
+            @if(\Auth::user()->parking_id == 5)
+            new PNotify({
+                title: 'El sistema va a dejar de funcionar',
+                type: 'error',
+                text: 'Apartir del 3 de Julio, contacte al 3207329971'
+            });
+            @endif
             type();
             var plate = $("#plate").val();
             var typeIn = $("#typeIn").val();
@@ -985,6 +992,13 @@
                     });
                 },
                 loadTable : function(status,idTransaction) {
+                    @if(\Auth::user()->parking_id == 5)
+                    new PNotify({
+                        title: 'El sistema va a dejar de funcionar',
+                        type: 'error',
+                        text: 'Apartir del 3 de Julio, contacte al 3207329971'
+                    });
+                    @endif
                     $.extend(true, $.fn .dataTable.defaults, {
                         "stateSave": true,
                         "language": {

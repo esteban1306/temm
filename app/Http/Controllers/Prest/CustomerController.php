@@ -142,102 +142,25 @@ class CustomerController extends Controller
     {
         //
     }
-    public function getTickets(Request $request)
+    public function getCustomers(Request $request)
     {
         $search = $request->get('search')['value'];
-        $schedule = $request->get('type');
-        $type = $request->get('type_car');
-        $range = $request->get('range');
-        $status = $request->get('status');
 
-        $tickets= Ticket::select(['ticket_id as Id', 'plate', 'type', 'schedule', 'partner_id', 'status', 'drawer', 'price','hour'])->where('parking_id',Auth::user()->parking_id)->orderBy('ticket_id','desc');
+        $tickets= Customer::select(['id_customer as Id', 'nombre', 'cedula', 'telefono', 'observacion', 'email'])->where('id_parking',Auth::user()->parking_id)->orderBy('nombre','desc');
         if ($search) {
-                $tickets = $tickets->where('plate', 'LIKE', "%$search%");
-        }
-        if (!empty($status))
-            $tickets = $tickets->where('status', $status);
-        if (!empty($schedule))
-            $tickets = $tickets->where('schedule', $schedule);
-        if (!empty($type))
-            $tickets = $tickets->where('type', $type);
-        if (!empty($range)){
-            $dateRange = explode(" - ", $range);
-            $tickets = $tickets->whereBetween('created_at', [$dateRange[0], $dateRange[1]]);
-        }else{
-            $tickets = $tickets->whereBetween('created_at', [ new Datetime('today'), new Datetime('tomorrow')]);
+                $tickets = $tickets->where('observacion', 'LIKE', "%$search%");
         }
         return Datatables::of($tickets)
             ->addColumn('action', function ($tickets) {
                 $htmlAdmin= \Form::button('Editar', [
                         'class'   => 'btn btn-primary',
-                        'onclick' => "openModalMod('$tickets->Id')",
+                        'onclick' => "openModalClienteMod('$tickets->Id')",
                         'data-toggle' => "tooltip",
                         'data-placement' => "bottom",
                         'title' => "Editar !",
 
-                    ]).
-                    \Form::button('Eliminar', [
-                        'class'   => 'btn btn-warning',
-                        'onclick' => "eliminarTicket('$tickets->Id')",
-                        'data-toggle' => "tooltip",
-                        'data-placement' => "bottom",
-                        'title' => "Eliminar !",
-
                     ]);
-                if ($tickets->status == 1)
-                return \Form::button('Pagar', [
-                        'class'   => 'btn btn-info',
-                        'onclick' => "$('#modal_ticket_out').modal('show');$('#ticket_id').val('$tickets->Id')",
-                        'data-toggle' => "tooltip",
-                        'data-placement' => "bottom",
-                        'title' => "Pagar !",
-
-                    ]).(Auth::user()->type == 1?$htmlAdmin:'').
-                    \Form::button('Imprimir', [
-                        'class'   => 'btn btn-info',
-                        'onclick' => "form_pdf('$tickets->Id')",
-                        'data-toggle' => "tooltip",
-                        'data-placement' => "bottom",
-                        'title' => "Imprimir !",
-
-                    ]);
-                else
-                    return (Auth::user()->type == 1?$htmlAdmin:'').
-                        \Form::button('Imprimir', [
-                            'class'   => 'btn btn-info',
-                            'onclick' => "form_pdf('$tickets->Id')",
-                            'data-toggle' => "tooltip",
-                            'data-placement' => "bottom",
-                            'title' => "Imprimir !",
-
-                        ]).($tickets->schedule != 3?
-                        \Form::button('Recuperar', [
-                            'class'   => 'btn btn-info',
-                            'onclick' => "recuperarTicket('$tickets->Id')",
-                            'data-toggle' => "tooltip",
-                            'data-placement' => "bottom",
-                            'title' => "Recuperar !",
-
-                        ]):'');
-            })
-            ->addColumn('Tipo', function ($tickets) {
-                return  $tickets->type == 1? 'Carro': 'Moto';
-            })
-            ->addColumn('entrada', function ($tickets) {
-                $hour =new DateTime("".$tickets->hour);
-                return  $hour->format('h:ia');
-            })
-            ->addColumn('Estado', function ($tickets) {
-                return  $tickets->status == 1? 'Pendiente Pago': 'Pagó';
-            })
-            ->addColumn('Atendio', function ($tickets) {
-                $partner = Partner::find($tickets->partner_id);
-                return  $partner->name;
-            })
-            ->editColumn('price', function ($tickets) {
-                $now = new Datetime('now');
-                $interval = date_diff(new DateTime("".$tickets->hour),$now);
-                return isset( $tickets->price)?  $tickets->price:( "*".$this->precio($interval,$tickets->type, $tickets->schedule));
+                return $htmlAdmin;
             })
             ->make(true);
     }
@@ -442,7 +365,7 @@ class CustomerController extends Controller
         $customers = Customer::where('id_parking' ,Auth::user()->parking_id)->get();
         $select="<option value=''>Seleccionar</option>";
         foreach ($customers as $customer){
-            $select .='<option data-toggle="tooltip" title="'.$customer->observacion.'"value="'.$customer->id_customer.'">'.$customer->nombre.'</option>';
+            $select .='<option data-toggle="tooltip" title="'.$customer->observacion.'"value="'.$customer->id_customer.'">'.$customer->nombre.'('.$customer->observacion.')</option>';
         }
         return $select;
     }

@@ -199,6 +199,19 @@
                         </thead>
                     </table>
                 </div>
+                <div class="col-12"  style="overflow:  auto;">
+                    <table class="table responsive" id="clientes-list-table">
+                        <thead>
+                        <tr>
+                            <th class="all">Nombre</th>
+                            <th class="min-tablet">{{ isLavadero()?'Placa':'Observación' }}</th>
+                            <th class="min-tablet">Email</th>
+                            <th class="min-tablet">Telefono</th>
+                            <th class="all">acciones</th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
             </div>
             <hr>
             <br>
@@ -432,11 +445,14 @@
                 }
             });
         }
-        function openModalVenta(transaction,precio, customer,descripcion,fecha){
+        function openModalVenta(transaction,precio, customer,descripcion,fecha, estado,partner,servicio){
             $('#modal_venta').modal('show');
             $('#id_transaction').val(transaction);
             $('#precioVenta').html(precio);
             $('#customerList_id').val(customer);
+            $('#usersList_id').val(partner);
+            $('#estadoGt').val(estado);
+            $('#servicioGt').val(servicio);
             $('.selectpicker2').selectpicker('refresh');
             loadIncomes();
         }
@@ -473,7 +489,10 @@
                     product : product,
                     cantidad : cantidad,
                     transaction : transaction,
-                    customer    : $('#customerList_id').val()
+                    customer    : $('#customerList_id').val(),
+                    user        : $('#usersList_id').val(),
+                    estado      :  $("#estadoGt").val(),
+                    servicio    :  $("#servicioGt").val()
                 },
                 success: function (datos) {
                     new PNotify({
@@ -1326,6 +1345,18 @@
                 if($("#id_transaction").val() !='')
                     agregarIncome(2);
             });
+            $("#estadoGt").change(function(){
+                if($("#id_transaction").val() !='')
+                    agregarIncome(2);
+            });
+            $("#servicioGt").change(function(){
+                if($("#id_transaction").val() !='')
+                    agregarIncome(2);
+            });
+            $("#usersList_id").change(function(){
+                if($("#id_transaction").val() !='')
+                    agregarIncome(2);
+            });
             $("#ticket_id").keypress(function(e) {
                 if(e.which == 13) {
                     // Acciones a realizar, por ej: enviar formulario.
@@ -1427,6 +1458,9 @@
                 $("#typeIn").val(2);
             }
         }
+        function customerList() {
+            desktop_index_vm.loadClientesList();
+        }
         function createDataTableStandar(selector, opt) {
             if (typeof opt.scroll === 'undefined')
                 opt.scroll = true;
@@ -1476,6 +1510,7 @@
                     $('#surtido-table').dataTable()._fnAjaxUpdate();
                     }, 60000);
                 $('.selectpicker2').selectpicker();
+                this.loadClientesList();
                 setTimeout(function (){
                     desktop_index_vm.loadTable();
                     desktop_index_vm.load();
@@ -1729,6 +1764,34 @@
                             { data: 'created_at', name: 'Descripción', orderable  : false, searchable : false },
                             { data: 'precio', name: 'Precio', orderable  : false, searchable : false },
                             { data: 'partner_id', name: 'Atendió', orderable  : false, searchable : false },
+                            { data: 'action', name: 'Acciones', orderable  : false, searchable : false },
+                        ],
+                        lengthMenu: [[ 10, 25, 50, -1], [ 10, 25, 50, "Todos"]]
+                    });
+                },
+                loadClientesList:function(){
+                    $('#clientes-list-table').DataTable({
+                        sDom           : 'r<Hlf><"datatable-scroll"t><Fip>',
+                        order          : [],
+                        processing     : true,
+                        serverSide     : true,
+                        deferRender    : true,
+                        destroy        : true,
+                        ajax: {
+                            url  : '{!! route('get_customers_list') !!}',
+                            data : {
+                                customer        :$('#customerList').val(),
+                                customers       :1,
+                            },
+                            error : function () {
+                                ;
+                            }
+                        },
+                        columns: [
+                            { data: 'nombre', name: 'Descripción', orderable  : false, searchable : false },
+                            { data: 'observacion', name: 'Placa', orderable  : false, searchable : false },
+                            { data: 'email', name: 'Email', orderable  : false, searchable : false },
+                            { data: 'telefono', name: 'Telefono', orderable  : false, searchable : false },
                             { data: 'action', name: 'Acciones', orderable  : false, searchable : false },
                         ],
                         lengthMenu: [[ 10, 25, 50, -1], [ 10, 25, 50, "Todos"]]

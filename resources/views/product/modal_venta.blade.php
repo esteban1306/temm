@@ -8,6 +8,25 @@
             <div class="modal-body" style="min-height: 130px;" >
                 <div id="formAddCustomer" class="row">
                     <input id="id_transaction" type="number" class="form-control" style="display: none">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            {!! Form::label('tipoT', 'Cliente', ['class' => 'control-label']) !!}
+                            <select class="form-control selectpicker2"  data-live-search="true" id="customerList_id">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            {!! Form::label('tipoT', 'Trabajador', ['class' => 'control-label']) !!}
+                            @php($users = App\Models\Partner::where('parking_id',Illuminate\Support\Facades\Auth::user()->parking_id)->get())
+                            <select class="validate[required] selectpicker2" id="usersList_id"  data-live-search="true" data-size="10">
+                                <option value="">Seleccionar</option>
+                                @foreach($users as $partner)
+                                    {!! '<option data-toggle="tooltip" value="'.$partner->partner_id.'">'.$partner->name.' '.$partner->last_name.'</option>' !!}
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
                     <div class="form-group col-md-6">
                         <label for="nombre" class="control-label">Productos</label>
                         @php($products = App\Product::where('parking_id',Illuminate\Support\Facades\Auth::user()->parking_id)->get())
@@ -25,13 +44,22 @@
                     <div class="form-group col-md-12 pt-3">
                         <button id="new_income" class="btn btn-primary full-width waves-effect waves-light" onclick="agregarIncome(1)"><strong>Agregar</strong></button>
                     </div>
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            {!! Form::label('tipoT', 'Cliente', ['class' => 'control-label']) !!}
-                            <select class="form-control selectpicker2" id="customerList_id">
-                            </select>
-                        </div>
+                    <div class="form-group col-md-6">
+                        <label for="nombre" class="control-label">Estado</label>
+                        <select id="estadoGt" name="type" class="form-control">
+                            <option value="1">Pagó</option>
+                            <option value="">Credito</option>
+                        </select>
                     </div>
+                    @if(isLavadero())
+                    <div class="form-group col-md-6">
+                        <label for="nombre" class="control-label">Servicio</label>
+                        <select id="servicioGt" name="type" class="form-control">
+                            <option value="particular">Particular</option>
+                            <option value="publico">Publica</option>
+                        </select>
+                    </div>
+                    @endif
                 </div>
                 <div class="col-12"  style="overflow:  auto;">
                     <table class="table responsive" id="income-table">

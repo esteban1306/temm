@@ -62,6 +62,7 @@ Route::get('/get_prestamos', 'PrestamoController@getPrestamos')->name('get_prest
 Route::get('/get_productos', 'ProductController@getProducts')->name('get_productos')->middleware('auth');
 Route::get('/get_transactions', 'TransactionController@getTransactions')->name('get_transactions')->middleware('auth');
 Route::get('/get_incomes', 'IncomeController@getIncomes')->name('get_incomes')->middleware('auth');
+Route::get('/get_customers_list', 'CustomerController@getCustomers')->name('get_customers_list')->middleware('auth');
 Route::get('/get_movimientos', 'ProductController@getMovimientos')->name('get_movimientos')->middleware('auth');
 Route::post('/get_products', 'ProductController@getSelect')->name('get_products')->middleware('auth');
 Route::get('/get_abonos', 'AbonoController@getAbonos')->name('get_abonos')->middleware('auth');
