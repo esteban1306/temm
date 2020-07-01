@@ -540,7 +540,7 @@
             });
         }
         function crearTicket() {
-            @if(\Auth::user()->parking_id == 5)
+            @if(\Auth::user()->parking_id == 100)
             new PNotify({
                 title: 'El sistema va a dejar de funcionar',
                 type: 'error',
@@ -992,7 +992,7 @@
                     });
                 },
                 loadTable : function(status,idTransaction) {
-                    @if(\Auth::user()->parking_id == 5)
+                    @if(\Auth::user()->parking_id == 100)
                     new PNotify({
                         title: 'El sistema va a dejar de funcionar',
                         type: 'error',
