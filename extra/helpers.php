@@ -267,6 +267,12 @@ if(! function_exists('isBici') ) {
         return in_array(\Auth::user()->parking_id, config('templates.bicicletas'));
     }
 }
+if(! function_exists('is58') ) {
+    function is58()
+    {
+        return in_array(\Auth::user()->parking_id, config('templates.impresora_58'));
+    }
+}
 
 if(! function_exists('isReport') ) {
     function isReport()

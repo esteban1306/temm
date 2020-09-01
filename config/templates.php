@@ -23,4 +23,7 @@ return [
     'lavadero' => [ //null for all, empty array for none
     	'6'
     ],
+    'impresora_58' => [ //null for all, empty array for none
+    	'5','14','1',
+    ],
 ];
