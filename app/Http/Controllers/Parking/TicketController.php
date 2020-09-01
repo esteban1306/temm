@@ -121,7 +121,7 @@ class TicketController extends Controller
         PDF::SetMargins($marginLeft, 0, $marginRight);
         $parking = Parking::find(Auth::user()->parking_id);
         $html = '<div style="text-align:center; margin-top: -10px !important"><big style="margin-bottom: 1px"><b style="letter-spacing: -1 px;font-size: '.$titulo.'">&nbsp;&nbsp; PARQUEADERO '.$parking->name.'</b></big><br>
-                '.($parking->parking_id !=5 && $parking->parking_id !=11 && $parking->parking_id !=9?'<em style="font-size: 7px;margin-top: 2px;margin-bottom: 1px">"Todo lo puedo en Cristo que<br> me fortalece": Fil 4:13 <br></em>':'').'
+                '.($parking->parking_id !=5 && $parking->parking_id !=11 && $parking->parking_id !=13 && $parking->parking_id !=9?'<em style="font-size: 7px;margin-top: 2px;margin-bottom: 1px">"Todo lo puedo en Cristo que<br> me fortalece": Fil 4:13 <br></em>':'').'
                 <small style="font-size: x-small;margin-top: 1px;margin-bottom: 1px"><b>'.$parking->address.'</b></small>'
             .($parking->parking_id==3?'<small style="text-align:center;font-size: 6px"><br>
     NIT: 1094965452-1 <br>OLIVEROS HERNANDEZ VALENTINA<br> </small><small style="text-align:center;font-size: '.(Auth::user()->parking_id != 5?'8px':'7px').'"><b>SERVICIO: Lun-Sab 7am - 9pm</b><br> <b> TEL: 3017601216</b></small>':'')
@@ -133,6 +133,10 @@ class TicketController extends Controller
     <b>SERVICIO: 24 horas</b><br>INVERSIONES Y CONTRUCCIONES BARI SAS <br> NIT: 901.008.443-4 <br> CEL. 3007216502</small>':'').
             ($parking->parking_id==12?'<small style="text-align:center;font-size: 7px"><br>
     <b>SERVICIO: 24 horas</b><br>GERMAN ROJAS QUIÑONES <br> NIT: 13870919 <br> TEL: 6717705</small>':'').
+            ($parking->parking_id==13?'<small style="text-align:center;font-size: 7px"><br>
+    <b>SERVICIO: LUN-SAB 7AM A 8PM</b><br>sociedad  intermediaria de  negocios s.a.s<br> NIT: 900799396-5 <br></small>':'').
+            ($parking->parking_id==14?'<small style="text-align:center;font-size: 7px"><br>
+    <b>SERVICIO: LUN-SAB 7AM A 7PM</b><br>ARMANDO RINCÓN<br> NIT: 13805107-8 <br> CEL. 314 6319341</small>':'').
             ($parking->parking_id==5?'<small style="text-align:center;font-size: 6px"><br>
     NIT: 89000746-1 <br>&nbsp; HUGO ALEXANDER VARGAS SANCHEZ<br> </small><small style="text-align:center;font-size: 6px"><b>&nbsp;&nbsp;SERVICIO: Lun-Dom 6:30am - 9:30pm</b><br> <b> TEL: 3173799831</b></small>':'').
             ($parking->parking_id==7?'<small style="text-align:center;font-size: 6px"><br>

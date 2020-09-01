@@ -771,7 +771,7 @@
                         $("#typeIn").val(1);
                 }
                 else{
-                    if(plate.length > 6 && parkingId==11)
+                    if(plate.length > 6 && isBici() )
                         $("#typeIn").val(3);
                     else
                         $("#typeIn").val(2);
