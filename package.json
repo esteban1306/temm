@@ -19,6 +19,6 @@
         "vue": "^2.5.7"
     },
     "devDependencies": {
-        "node-sass": "^4.13.0"
+        "node-sass": "4.13.0"
     }
 }
