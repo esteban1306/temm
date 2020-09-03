@@ -136,7 +136,7 @@ class TicketController extends Controller
             ($parking->parking_id==13?'<small style="text-align:center;font-size: 7px"><br>
     <b>SERVICIO: LUN-SAB 7AM A 8PM</b><br>sociedad  intermediaria de  negocios s.a.s<br> NIT: 900799396-5 <br></small>':'').
             ($parking->parking_id==14?'<small style="text-align:center;font-size: 7px"><br>
-    <b>SERVICIO: LUN-SAB 7AM A 7PM</b><br>ARMANDO RINCÓN<br> NIT: 13805107-8 <br> CEL. 314 6319341</small>':'').
+    <b>SERVICIO: LUN-SAB 7AM A 7PM</b><br>ARMANDO RINCÓN<br> NIT: 13805107-2 <br> CEL. 314 6319341</small>':'').
             ($parking->parking_id==5?'<small style="text-align:center;font-size: 6px"><br>
     NIT: 89000746-1 <br>&nbsp; HUGO ALEXANDER VARGAS SANCHEZ<br> </small><small style="text-align:center;font-size: 6px"><b>&nbsp;&nbsp;SERVICIO: Lun-Dom 6:30am - 9:30pm</b><br> <b> TEL: 3173799831</b></small>':'').
             ($parking->parking_id==7?'<small style="text-align:center;font-size: 6px"><br>
