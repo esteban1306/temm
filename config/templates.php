@@ -3,13 +3,13 @@
 return [
     'companies' => null,
     'bicicletas' => [ //null for all, empty array for none
-        '1','11','9','13','14'
+        '1','11','9','13','14','15'
     ],
     'convenio' => [ //null for all, empty array for none
     	'1','11','9','13'
     ],
     'report' => [ //null for all, empty array for none
-    	'1','3','11','9','13','14'
+    	'1','3','11','9','13','14','15'
     ],
     'iva' => [ //null for all, empty array for none
     	'1','11'
@@ -24,6 +24,6 @@ return [
     	'6'
     ],
     'impresora_58' => [ //null for all, empty array for none
-    	'5','14','1',
+    	'5','14','15','1',
     ],
 ];
