@@ -286,6 +286,7 @@ class TicketController extends Controller
         if($schedule==3)
             return ($tipo==1? $parking->monthly_cars_price: ($tipo==2? $parking->monthly_motorcycles_price: $parking->monthly_van_price ));
         if($schedule==4){
+            $horas = $minutos>5? $horas+1:$horas;
             $dias = (intval($horas/12)+1+($dias*2));
             return ($tipo==1? $parking->day_cars_price: ($tipo==2? $parking->day_motorcycles_price: $parking->day_van_price ))* ($dias);
         }
