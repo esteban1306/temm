@@ -317,3 +317,9 @@ if(! function_exists('isMula') ) {
         return in_array(\Auth::user()->parking_id, config('templates.mulas'));
     }
 }
+if(! function_exists('isBar') ) {
+    function isBar()
+    {
+        return in_array(\Auth::user()->parking_id, config('templates.barcode'));
+    }
+}
