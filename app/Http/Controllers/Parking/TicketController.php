@@ -258,6 +258,9 @@ class TicketController extends Controller
                 }
             }
         }
+        if(Auth::user()->parking_id == 15){
+            $schedule=4;
+        }
         $dayPrice = ($tipo==1? $parking->day_cars_price : ($tipo==2?$parking->day_motorcycles_price:$parking->day_van_price));
         if(($parking->parking_id==11) && $schedule==1){
             $minutos2 = (((24*$tiempo->format("%d"))+$horas2*1)*60)+($minutos2*1);
