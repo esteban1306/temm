@@ -25,7 +25,7 @@
                             <option value="1" selected >Carro</option>
                             <option value="2">Moto</option>
                             @if($typeParking == 2)
-                                <option value="3">{{ isBici()?'Bicicleta':'Camioneta' }}</option>
+                                <option value="3">{{ isBici()?'Bicicleta':(isMula()?'Mulas':'Camionetas') }}</option>
                             @endif
                         </select>
                     </div>

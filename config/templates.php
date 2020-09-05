@@ -3,7 +3,7 @@
 return [
     'companies' => null,
     'bicicletas' => [ //null for all, empty array for none
-        '1','11','9','13','14','15'
+        '1','11','9','13','14'
     ],
     'convenio' => [ //null for all, empty array for none
     	'1','11','9','13'
@@ -25,5 +25,8 @@ return [
     ],
     'impresora_58' => [ //null for all, empty array for none
     	'5','14','15','1',
+    ],
+    'mulas' => [ //null for all, empty array for none
+        '15'
     ],
 ];

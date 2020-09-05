@@ -150,7 +150,7 @@ class TicketController extends Controller
                  Hora ingreso: ' . $hour->format('h:ia') . '<br>
                  ' . ($ticket->schedule==3? "   Fecha vencimiento: " . $hour2->format('d/m/Y') . "<br>" : '') .'
                  ' . ($ticket->schedule==3? "<b>".strtoupper($ticket->name) . "</b><br>" : '') .'
-                 Tipo: ' . ($ticket->type == 1 ? 'Carro' : ($ticket->type == 3 ? ( isBici()?'Bicicleta':'Camioneta' ) : 'Moto')) . '<br>
+                 Tipo: ' . ($ticket->type == 1 ? 'Carro' : ($ticket->type == 3 ? ( isBici()?'Bicicleta':(isMula()?'Mula':'Camioneta') ) : 'Moto')) . '<br>
                  <small style="text-align:left;font-size:small">Placa: ' . $ticket->plate . '</small><br>
                  ' . (isset($ticket->drawer) ? "Locker: " . $ticket->drawer . "<br>" : '') . '
                  </b></small>
@@ -186,7 +186,7 @@ class TicketController extends Controller
                  ' . ($ticket->schedule!=3? "   Hora salida: " . $pay_day->format('h:ia') . "<br>" : '') .'
                  ' . ($ticket->schedule!=3? "   Duración: " . $interval->format('%d D %h:%i') . "<br>" : '') .'
                  ' . ($ticket->schedule==3? "   Fecha vencimiento: " . $hour2->format('d/m/Y') . "<br>" : '') .'
-                 Tipo: ' . ($ticket->type == 1 ? 'Carro' : ($ticket->type == 3 ? ( isBici()?'Bicicleta':'Camioneta' ) : 'Moto')) . '<br>
+                 Tipo: ' . ($ticket->type == 1 ? 'Carro' : ($ticket->type == 3 ? ( isBici()?'Bicicleta':(isMula()?'Mula':'Camioneta') ) : 'Moto')) . '<br>
                  Placa: ' . $ticket->plate . '<br>
                  ' . (isset($ticket->price) && empty($iva)? "   Precio: " . $ticket->price . "<br>" : (isset($ticket->price) && !empty($iva)?'
                 Valor servicio: '.intval($ticket->price/1.19).'<br>'.
@@ -434,7 +434,7 @@ class TicketController extends Controller
                         ]):'');
             })
             ->addColumn('Tipo', function ($tickets) {
-                return  $tickets->type == 1? 'Carro': ($tickets->type == 3 ? ( isBici()?'Bicicleta':'Camioneta' ) : 'Moto');
+                return  $tickets->type == 1? 'Carro': ($tickets->type == 3 ? ( isBici()?'Bicicleta':(isMula()?'Mula':'Camioneta') ) : 'Moto');
             })
             ->addColumn('entrada', function ($tickets) {
                 $hour =new DateTime("".$tickets->hour);
@@ -720,7 +720,7 @@ class TicketController extends Controller
         <td><b>'.$status['motos'].'</b></td> 
       </tr>
       <tr>
-        <td colspan="1"><b>'.(isBici()?'Bicicletas':'Camionetas').'</b></td>
+        <td colspan="1"><b>'.(isBici()?'Bicicletas':(isMula()?'Mulas':'Camionetas')).'</b></td>
         <td><b>'.$status['camioneta'].'</b></td> 
       </tr>
      

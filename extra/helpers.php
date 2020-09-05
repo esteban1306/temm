@@ -311,3 +311,9 @@ if(! function_exists('isLavadero') ) {
         return in_array(\Auth::user()->parking_id, config('templates.lavadero'));
     }
 }
+if(! function_exists('isMula') ) {
+    function isMula()
+    {
+        return in_array(\Auth::user()->parking_id, config('templates.mulas'));
+    }
+}

@@ -54,7 +54,7 @@ class TicketsExport implements FromCollection
             	$motos++;
             if($ticket->type == 3)
             	$bicicletas++;
-            $ticket->type = $ticket->type == 1? 'Carro': ($ticket->type == 3 ? ( isBici()?'Bicicleta':'Camioneta' ) : 'Moto');
+            $ticket->type = $ticket->type == 1? 'Carro': ($ticket->type == 3 ? ( isBici()?'Bicicleta':(isMula()?'Mulas':'Camionetas') ) : 'Moto');
             if(!empty($ticket->convenio_id)){
                 $convenio = Convenio::find($ticket->convenio_id);
                 $ticket->convenio_id = $convenio ?$convenio->name:'';
@@ -63,7 +63,7 @@ class TicketsExport implements FromCollection
         }
         $auxCollection = collect([["TOTALES","RANGO DE FECHAS",$this->range]]);
         
-        $auxCollection->push(collect([["CARROS","MOTOS",( isBici()?'BICICLETAS':'CAMIONETAS' ),"TOTAL","EXTRA"]]));
+        $auxCollection->push(collect([["CARROS","MOTOS",( isBici()?'BICICLETAS':(isMula()?'MULAS':'CAMIONETAS') ),"TOTAL","EXTRA"]]));
         $auxCollection->push(collect([[$carros,$motos,$bicicletas,format_money($precio),$extra]]));
         $auxCollection->push(collect([[""]]));
         $auxCollection->push( $collection);
@@ -82,7 +82,7 @@ class TicketsExport implements FromCollection
             $ticket->hour = $hour->format('h:ia');
             $hour =new DateTime("".$ticket->pay_day);
             $ticket->pay_day = $hour->format('h:ia');
-            $ticket->type = $ticket->type == 1? 'Carro': ($ticket->type == 3 ? ( isBici()?'Bicicleta':'Camioneta' ) : 'Moto');
+            $ticket->type = $ticket->type == 1? 'Carro': ($ticket->type == 3 ? ( isBici()?'Bicicleta':(isMula()?'Mula':'Camioneta') ) : 'Moto');
             $collection->push($ticket);
         }
 		$auxCollection->push( $collection);

@@ -110,7 +110,7 @@ class ProductController extends Controller
                  Hora ingreso: ' . $hour->format('h:ia') . '<br>
                  ' . ($ticket->schedule==3? "   Fecha vencimiento: " . $hour2->format('d/m/Y') . "<br>" : '') .'
                  ' . ($ticket->schedule==3? "<b>".strtoupper($ticket->name) . "</b><br>" : '') .'
-                 Tipo: ' . ($ticket->type == 1 ? 'Carro' : ($ticket->type == 3 ? ( isBici()?'Bicicleta':'Camioneta' ) : 'Moto')) . '<br>
+                 Tipo: ' . ($ticket->type == 1 ? 'Carro' : ($ticket->type == 3 ? ( isBici()?'Bicicleta':(isMula()?'Mula':'Camioneta') ) : 'Moto')) . '<br>
                  Placa: ' . $ticket->plate . '<br>
                  ' . (isset($ticket->drawer) ? "Locker: " . $ticket->drawer . "<br>" : '') . '
                  </b></small>
@@ -144,7 +144,7 @@ class ProductController extends Controller
                  ' . ($ticket->schedule!=3? "   Fecha salida: " . $pay_day->format('d/m/Y') . "<br>" : '') .'
                  ' . ($ticket->schedule!=3? "   Hora salida: " . $pay_day->format('h:ia') . "<br>" : '') .'
                  ' . ($ticket->schedule==3? "   Fecha vencimiento: " . $hour2->format('d/m/Y') . "<br>" : '') .'
-                 Tipo: ' . ($ticket->type == 1 ? 'Carro' : ($ticket->type == 3 ? ( isBici()?'Bicicleta':'Camioneta' ) : 'Moto')) . '<br>
+                 Tipo: ' . ($ticket->type == 1 ? 'Carro' : ($ticket->type == 3 ? ( isBici()?'Bicicleta':(isMula()?'Mula':'Camioneta') ) : 'Moto')) . '<br>
                  Placa: ' . $ticket->plate . '<br>
                  ' . (isset($ticket->price) ? "   Precio: " . $ticket->price . "<br>" : '') .
                 (isset($ticket->extra) ? ($ticket->extra>0?"Incremento: ":"Descuento:" ). abs($ticket->extra) . "<br>Total: " . ($ticket->price+$ticket->extra) . "<br>" : '').

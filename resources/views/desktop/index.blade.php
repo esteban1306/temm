@@ -52,7 +52,7 @@
                                     <option value="2">Moto</option>
                                     @php($typeParking = App\Parking::find(\Auth::user()->parking_id)->type)
                                     @if($typeParking == 2)
-                                    <option value="3">{{ isBici()?'Bicicleta':'Camioneta' }}</option>
+                                    <option value="3">{{ isBici()?'Bicicleta':(isMula()?'Mula':'Camioneta') }}</option>
                                     @endif
                                 </select>
                             </div>
@@ -139,7 +139,7 @@
                     <div class="widget_box_b">
                         <div class="contt">
                             <div class="fl_layer">
-                                <h4 class="title">Motos {{ $typeParking == 2?' / '.(isBici()?'Bicicletas':'Camionetas'):'' }}</h4>
+                                <h4 class="title">Motos {{ $typeParking == 2?' / '.(isBici()?'Bicicletas':(isMula()?'Mulas':'Camionetas')):'' }}</h4>
                                 <span class="line"></span>
                                 <span class="data" id="motos"> - </span>
                             </div>
