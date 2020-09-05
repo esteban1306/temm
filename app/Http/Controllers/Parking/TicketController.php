@@ -258,7 +258,7 @@ class TicketController extends Controller
                 }
             }
         }
-        if(Auth::user()->parking_id == 15){
+        if(Auth::user()->parking_id == 1){
             $schedule=4;
         }
         $dayPrice = ($tipo==1? $parking->day_cars_price : ($tipo==2?$parking->day_motorcycles_price:$parking->day_van_price));
@@ -294,7 +294,7 @@ class TicketController extends Controller
             return ($tipo==1? $parking->monthly_cars_price: ($tipo==2? $parking->monthly_motorcycles_price: $parking->monthly_van_price ));
         if($schedule==4){
             $dias = (intval($horas/12)+1+($dias*2));
-            return (($tipo==1? $parking->day_cars_price: ($tipo==2? $parking->day_motorcycles_price: $parking->day_van_price ))* ($dias))+4;
+            return (($tipo==1? $parking->day_cars_price: ($tipo==2? $parking->day_motorcycles_price: $parking->day_van_price ))* ($dias));
         }
     }
 
