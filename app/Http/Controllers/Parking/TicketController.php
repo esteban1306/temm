@@ -263,7 +263,7 @@ class TicketController extends Controller
             else
                 $schedule=2;
         }
-        if($tiempo->format("%I")<=5 && $horas==0 && ($schedule==1 || $schedule==2 || $schedule==4))
+        if($tiempo->format("%I")<=5 && $horas==0 && ($schedule==1 || $schedule==2 || $schedule==4) && $parking->parking_id!=14)
             return 0;
         $horas = $horas==0? 1: $horas;
         if(Auth::user()->parking_id == 9 && empty($convenio)){
