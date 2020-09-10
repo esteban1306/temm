@@ -32,7 +32,7 @@
 
                     <div class="form-group col-sm-12">
                         <div class="head">
-                            <h5>Precio Moto</h5>
+                            <h5>Precio {{ (isGrua()?'Grua':'Moto') }}</h5>
                         </div>
                     </div>
                     <div class="form-group col-sm-6">

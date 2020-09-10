@@ -63,7 +63,7 @@ class TicketsExport implements FromCollection
         }
         $auxCollection = collect([["TOTALES","RANGO DE FECHAS",$this->range]]);
         
-        $auxCollection->push(collect([["CARROS","MOTOS",( isBici()?'BICICLETAS':(isMula()?'MULAS':'CAMIONETAS') ),"TOTAL","EXTRA"]]));
+        $auxCollection->push(collect([["CARROS",( isGrua()?'GRUAS':'MOTOS'),( isBici()?'BICICLETAS':(isMula()?'MULAS':'CAMIONETAS') ),"TOTAL","EXTRA"]]));
         $auxCollection->push(collect([[$carros,$motos,$bicicletas,format_money($precio),$extra]]));
         $auxCollection->push(collect([[""]]));
         $auxCollection->push( $collection);

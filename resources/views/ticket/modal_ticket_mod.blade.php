@@ -23,7 +23,7 @@
                         <label for="">Tipo</label>
                         <select class="form-control" id="typeIn_mod" {!! \Auth::user()->type == 2 ?'disabled':'' !!}>
                             <option value="1" selected >Carro</option>
-                            <option value="2">Moto</option>
+                            <option value="2">{{ (isGrua()?'Grua':'Moto') }}</option>
                             @if($typeParking == 2)
                                 <option value="3">{{ isBici()?'Bicicleta':(isMula()?'Mulas':'Camionetas') }}</option>
                             @endif

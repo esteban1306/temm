@@ -29,6 +29,9 @@ return [
     'mulas' => [ //null for all, empty array for none
         '15'
     ],
+    'gruas' => [ //null for all, empty array for none
+        '15'
+    ],
     'barcode' => [ //null for all, empty array for none
        '3','11','9','13'
     ],

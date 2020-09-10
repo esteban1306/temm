@@ -317,6 +317,12 @@ if(! function_exists('isMula') ) {
         return in_array(\Auth::user()->parking_id, config('templates.mulas'));
     }
 }
+if(! function_exists('isGrua') ) {
+    function isGrua()
+    {
+        return in_array(\Auth::user()->parking_id, config('templates.gruas'));
+    }
+}
 if(! function_exists('isBar') ) {
     function isBar()
     {
