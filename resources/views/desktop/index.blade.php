@@ -761,7 +761,7 @@
             }
         }
         function type() {
-            @if(\Auth::user()->parking_id != 9 && \Auth::user()->parking_id != 16)
+            @if(\Auth::user()->parking_id != 9 && \Auth::user()->parking_id != 15)
                 var plate = $("#plate").val();
                 if(plate ==""){
                     return true;
