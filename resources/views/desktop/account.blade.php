@@ -92,7 +92,7 @@
 
                 <div class="form-group col-sm-12">
                     <div class="head">
-                        <h5>Precio {{ (isGrua()?'Grua':'Moto') }}</h5>
+                        <h5>Precio {{ labelMoto() }}</h5>
                     </div>
                 </div>
                 <div class="form-group col-sm-6">
@@ -113,7 +113,7 @@
                 </div>
                 <div class="form-group col-sm-12">
                     <div class="head">
-                        <h5>Precio {{ isBici()?'Bicicletas':(isMula()?'Mulas':'Camionetas') }}</h5>
+                        <h5>Precio {{ labelTres(false) }}</h5>
                     </div>
                 </div>
                 <div class="form-group col-sm-6">
@@ -146,7 +146,7 @@
                     <input type="number" class="form-control validate[required, onlyNumber]" min="0" id="cars_num" value="{{ $parking->cars_num }}">
                 </div>
                 <div class="form-group col-sm-6">
-                    <label for="">Numero de {{ (isGrua()?'Gruas':'Motos') }}</label>
+                    <label for="">Numero de {{ labelMoto(false) }}</label>
                     <input type="number" class="form-control validate[required, onlyNumber]" min="0" id="motorcycles_num" value="{{ $parking->motorcycles_num }}">
                 </div>
 

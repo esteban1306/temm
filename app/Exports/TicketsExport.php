@@ -25,9 +25,9 @@ class TicketsExport implements FromCollection
     */
     public function collection()
     {
-        $collection = collect([["Fecha", "Hora Entrada", "Hora Salida", "Placa", "Tipo Vehiculo", "Valor cancelado","Extra","Convenio", "Usuario", "Estado"]]);
+        $collection = collect([["Fecha", "Hora Entrada", "Hora Salida", "Fecha Fin", "Placa", "Tipo Vehiculo", "Valor cancelado","Extra","Convenio", "Usuario", "Estado"]]);
 
-		$tickets= Ticket::select(['created_at', 'hour', 'pay_day', 'plate', 'type', 'price', 'extra', 'convenio_id', 'partner_id', 'status'])->where('parking_id',Auth::user()->parking_id)->orderBy('ticket_id','desc');
+		$tickets= Ticket::select(['created_at', 'hour', 'pay_day', 'date_end', 'plate', 'type', 'price', 'extra', 'convenio_id', 'partner_id', 'status'])->where('parking_id',Auth::user()->parking_id)->orderBy('ticket_id','desc');
 		$dateRange = explode(" - ", $this->range);
         $tickets = $tickets->whereBetween('created_at', [$dateRange[0].' 00:00:00', $dateRange[1].' 23:59:59'])->get();
 
@@ -54,7 +54,7 @@ class TicketsExport implements FromCollection
             	$motos++;
             if($ticket->type == 3)
             	$bicicletas++;
-            $ticket->type = $ticket->type == 1? 'Carro': ($ticket->type == 3 ? ( isBici()?'Bicicleta':(isMula()?'Mulas':'Camionetas') ) : 'Moto');
+            $ticket->type = $ticket->type == 1? 'Carro': ($ticket->type == 3 ? ( labelTres(false) ) : 'Moto');
             if(!empty($ticket->convenio_id)){
                 $convenio = Convenio::find($ticket->convenio_id);
                 $ticket->convenio_id = $convenio ?$convenio->name:'';
@@ -63,13 +63,13 @@ class TicketsExport implements FromCollection
         }
         $auxCollection = collect([["TOTALES","RANGO DE FECHAS",$this->range]]);
         
-        $auxCollection->push(collect([["CARROS",( isGrua()?'GRUAS':'MOTOS'),( isBici()?'BICICLETAS':(isMula()?'MULAS':'CAMIONETAS') ),"TOTAL","EXTRA"]]));
+        $auxCollection->push(collect([["CARROS",( isGrua()?'GRUAS':'MOTOS'),( labelTres(false) ),"TOTAL","EXTRA"]]));
         $auxCollection->push(collect([[$carros,$motos,$bicicletas,format_money($precio),$extra]]));
         $auxCollection->push(collect([[""]]));
         $auxCollection->push( $collection);
         $collection = collect([[""]]);
 
-		$tickets= Ticket::onlyTrashed()->select(['created_at', 'hour', 'pay_day', 'plate', 'type', 'price', 'extra', 'partner_id', 'status', 'deleted_at'])->where('parking_id',Auth::user()->parking_id)->orderBy('ticket_id','desc')->whereBetween('created_at', [$dateRange[0].' 00:00:00', $dateRange[1].' 23:59:59'])->get();
+		$tickets= Ticket::onlyTrashed()->select(['created_at', 'hour', 'pay_day', 'date_end', 'plate', 'type', 'price', 'extra', 'partner_id', 'status', 'deleted_at'])->where('parking_id',Auth::user()->parking_id)->orderBy('ticket_id','desc')->whereBetween('created_at', [$dateRange[0].' 00:00:00', $dateRange[1].' 23:59:59'])->get();
         foreach ($tickets as $ticket){
         	$precio += $ticket->price;
         	$extra += $ticket->extra;
@@ -82,7 +82,7 @@ class TicketsExport implements FromCollection
             $ticket->hour = $hour->format('h:ia');
             $hour =new DateTime("".$ticket->pay_day);
             $ticket->pay_day = $hour->format('h:ia');
-            $ticket->type = $ticket->type == 1? 'Carro': ($ticket->type == 3 ? ( isBici()?'Bicicleta':(isMula()?'Mula':'Camioneta') ) : 'Moto');
+            $ticket->type = $ticket->type == 1? 'Carro': ($ticket->type == 3 ? ( labelTres() ) : labelMoto());
             $collection->push($ticket);
         }
 		$auxCollection->push( $collection);

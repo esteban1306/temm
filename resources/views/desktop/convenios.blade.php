@@ -25,8 +25,8 @@
                         <tr>
                             <th class="all">Nombre</th>
                             <th class="all">Carro</th>
-                            <th class="min-tablet">{{ (isGrua()?'Grua':'Moto') }}</th>
-                            <th class="min-tablet">{{ isBici()?'Bicicleta':(isMula()?'Mula':'Camioneta') }}</th>
+                            <th class="min-tablet">{{ labelMoto() }}</th>
+                            <th class="min-tablet">{{ labelTres() }}</th>
                             <th class="all">acciones</th>
                         </tr>
                         </thead>

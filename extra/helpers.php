@@ -329,3 +329,21 @@ if(! function_exists('isBar') ) {
         return in_array(\Auth::user()->parking_id, config('templates.barcode'));
     }
 }
+if(! function_exists('labelMoto') ) {
+    function labelMoto($singular=true)
+    {
+        if($singular)
+            return (isGrua()?'Grua':'Mototas');
+        else
+            return (isGrua()?'Gruas':'Motos');
+    }
+}
+if(! function_exists('labelTres') ) {
+    function labelTres($singular=true)
+    {
+        if($singular)
+            return isBici()?'Bicicleto':(isMula()?'Mula':(\Auth::user()->parking_id==17?'Carreta':'Camioneta'));
+        else
+            return isBici()?'Bicicletas':(isMula()?'Mulas':(\Auth::user()->parking_id==17?'Carretas':'Camionetas'));
+    }
+}

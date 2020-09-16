@@ -6,7 +6,7 @@ return [
         '1','11','9','13','14'
     ],
     'convenio' => [ //null for all, empty array for none
-    	'1','11','9','13'
+    	'1','11','9','13','17'
     ],
     'report' => [ //null for all, empty array for none
     	'1','3','11','9','13','14','15','16','17'

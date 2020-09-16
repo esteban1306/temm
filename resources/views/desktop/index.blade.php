@@ -49,10 +49,10 @@
                                 <select id="type-car" name="type" class="form-control">
                                     <option value="">Todos</option>
                                     <option value="1">Carro</option>
-                                    <option value="2">{{ (isGrua()?'Grua':'Moto') }}</option>
+                                    <option value="2">{{ labelMoto() }}</option>
                                     @php($typeParking = App\Parking::find(\Auth::user()->parking_id)->type)
                                     @if($typeParking == 2)
-                                    <option value="3">{{ isBici()?'Bicicleta':(isMula()?'Mula':'Camioneta') }}</option>
+                                    <option value="3">{{ labelTres() }}</option>
                                     @endif
                                 </select>
                             </div>
@@ -139,7 +139,7 @@
                     <div class="widget_box_b">
                         <div class="contt">
                             <div class="fl_layer">
-                                <h4 class="title">{{ (isGrua()?'Gruas':'Motos') }} {{ $typeParking == 2?' / '.(isBici()?'Bicicletas':(isMula()?'Mulas':'Camionetas')):'' }}</h4>
+                                <h4 class="title">{{ labelMoto(false) }} {{ $typeParking == 2?' / '.(labelTres(false)):'' }}</h4>
                                 <span class="line"></span>
                                 <span class="data" id="motos"> - </span>
                             </div>

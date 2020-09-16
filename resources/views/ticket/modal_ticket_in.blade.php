@@ -22,9 +22,9 @@
                         <label for="">Tipo</label>
                         <select name="type" class="form-control" id="typeIn" {{ \Auth::user()->parking_id==11 ?'disabled':''}}>
                             <option value="1" {!! \Auth::user()->parking_id != 15?'selected':'' !!} >Carro</option>
-                            <option value="2">{{ isGrua()?'Grua':'Moto' }}</option>
+                            <option value="2">{{ labelMoto() }}</option>
                             @if($typeParking == 2)
-                                <option value="3" {!! \Auth::user()->parking_id==15?'selected':'' !!}>{{ isBici()?'Bicicleta':(isMula()?'Mula':'Camioneta') }}</option>
+                                <option value="3" {!! \Auth::user()->parking_id==15?'selected':'' !!}>{{ labelTres() }}</option>
                             @endif
                         </select>
                     </div>

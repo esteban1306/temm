@@ -32,7 +32,7 @@
 
                     <div class="form-group col-sm-12">
                         <div class="head">
-                            <h5>Precio {{ (isGrua()?'Grua':'Moto') }}</h5>
+                            <h5>Precio {{ labelMoto() }}</h5>
                         </div>
                     </div>
                     <div class="form-group col-sm-6">
@@ -49,7 +49,7 @@
                     </div>
                     <div class="form-group col-sm-12">
                         <div class="head">
-                            <h5>Precio {{ isBici()?'Bicicletas':(isMula()?'Mulas':'Camionetas') }}</h5>
+                            <h5>Precio {{ labelTres(false) }}</h5>
                         </div>
                     </div>
                     <div class="form-group col-sm-6">
