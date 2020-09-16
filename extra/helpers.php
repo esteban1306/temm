@@ -342,7 +342,7 @@ if(! function_exists('labelTres') ) {
     function labelTres($singular=true)
     {
         if($singular)
-            return isBici()?'Bicicleto':(isMula()?'Mula':(\Auth::user()->parking_id==17?'Carreta':'Camioneta'));
+            return isBici()?'Bicicleta':(isMula()?'Mula':(\Auth::user()->parking_id==17?'Carreta':'Camioneta'));
         else
             return isBici()?'Bicicletas':(isMula()?'Mulas':(\Auth::user()->parking_id==17?'Carretas':'Camionetas'));
     }
