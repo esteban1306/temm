@@ -9,7 +9,7 @@ return [
     	'1','11','9','13'
     ],
     'report' => [ //null for all, empty array for none
-    	'1','3','11','9','13','14','15','16'
+    	'1','3','11','9','13','14','15','16','17'
     ],
     'iva' => [ //null for all, empty array for none
     	'1','11'
