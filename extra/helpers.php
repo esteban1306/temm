@@ -333,7 +333,7 @@ if(! function_exists('labelMoto') ) {
     function labelMoto($singular=true)
     {
         if($singular)
-            return (isGrua()?'Grua':'Mototas');
+            return (isGrua()?'Grua':'Moto');
         else
             return (isGrua()?'Gruas':'Motos');
     }
