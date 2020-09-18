@@ -3136,12 +3136,13 @@ select.form-control-lg:not([size]):not([multiple]),
   letter-spacing: 0.5px;
   -webkit-box-shadow: 0 2px 2px rgba(0, 0, 0, 0.15);
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.15);
-  border: 1px solid transparent;
-  padding: 0.641rem 1rem;
+  border: 0px solid transparent;
+  padding: 0.441rem 0.6rem;
   font-size: 0.875rem;
   border-radius: 0.125rem;
   -webkit-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
+  margin: 2px !important;
 }
 
 .btn:focus,
@@ -12493,7 +12494,7 @@ strong {
 
 .auto_margin {
   margin: auto;
-  max-width: 1152px;
+  max-width: 1252px;
 }
 
 .full-width {

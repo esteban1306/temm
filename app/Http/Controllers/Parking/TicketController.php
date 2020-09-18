@@ -362,7 +362,7 @@ class TicketController extends Controller
         $status = $request->get('status');
         $partner = $request->get('partner');
 
-        $tickets= Ticket::select(['ticket_id as Id', 'plate', 'type', 'schedule', 'partner_id', 'status', 'drawer', 'price','hour','convenio_id'])->where('parking_id',Auth::user()->parking_id)->orderBy('ticket_id','desc');
+        $tickets= Ticket::select(['ticket_id as Id', 'plate', 'type', 'schedule', 'partner_id', 'status', 'drawer', 'price','hour','extra','convenio_id'])->where('parking_id',Auth::user()->parking_id)->orderBy('ticket_id','desc');
         if ($search) {
                 $tickets = $tickets->where('plate', 'LIKE', "%$search%");
         }
@@ -461,7 +461,7 @@ class TicketController extends Controller
             ->editColumn('price', function ($tickets) {
                 $now = new Datetime('now');
                 $interval = date_diff(new DateTime("".$tickets->hour),$now);
-                return isset( $tickets->price)?  $tickets->price:( "*".$this->precio($interval,$tickets->type, $tickets->schedule, $tickets->convenio_id));
+                return (isset( $tickets->price)?  format_money($tickets->price):( "*".format_money($this->precio($interval,$tickets->type, $tickets->schedule, $tickets->convenio_id)))).($tickets->extra?' ('.format_money($tickets->extra).')':'');
             })
             ->escapeColumns([])
             ->make(true);
@@ -473,7 +473,7 @@ class TicketController extends Controller
         $search = $request->get('search')['value'];
         $schedule = 3;
 
-        $tickets= Ticket::select(['ticket_id as Id', 'plate', 'type', 'name', 'date_end', 'partner_id', 'status', 'price','email','phone'])->where('parking_id',Auth::user()->parking_id)->where('status','<>',"3")->orderBy('ticket_id','desc');
+        $tickets= Ticket::select(['ticket_id as Id', 'plate', 'type', 'name', 'date_end', 'partner_id', 'status', 'price','email','phone','extra'])->where('parking_id',Auth::user()->parking_id)->where('status','<>',"3")->orderBy('ticket_id','desc');
         if ($search) {
             $tickets = $tickets->where('plate', 'LIKE', "%$search%");
         }
@@ -530,7 +530,10 @@ class TicketController extends Controller
             })
             ->addColumn('Estado', function ($tickets) {
                 $now = date("Y-m-d H:i:s");
-                return  ($tickets->date_end >= $now? 'Activo': 'Vencido'). '<br><b style="color: '.($tickets->status == 1?'red':'green').';">'.($tickets->status == 1?'Sin Pagar':'Pago').'</b>';
+                return  '<b style="color: '.($tickets->date_end >= $now?'green':'red').';">'.($tickets->date_end >= $now? 'Activo': 'Vencido').'</b><br><b style="color: '.($tickets->status == 1?'red':'green').';">'.($tickets->status == 1?'Sin Pagar':'Pago').'</b>';
+            })
+            ->editColumn('price', function($tickets){
+                return format_money($tickets->price).($tickets->extra?' ('.format_money($tickets->extra).')':'');
             })
             ->addColumn('Atendio', function ($tickets) {
                 $partner = Partner::find($tickets->partner_id);
