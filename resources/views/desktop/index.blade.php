@@ -324,9 +324,6 @@
                     @if(isIva())
                         $('#cobrar_id_iva').attr("onclick","form_pdf_iva('"+ticket_id+"'); $('#modal_ticket_pay').modal('hide')");
                     @endif
-                },
-                error : function () {
-                    location = '/login';
                 }
             });
         }

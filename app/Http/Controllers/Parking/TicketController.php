@@ -335,7 +335,7 @@ class TicketController extends Controller
 
         if($ticket->schedule != 3 || empty($ticket->price))
             $ticket->price = $this->precio($interval,$ticket->type, $ticket->schedule, $ticket->convenio_id);
-        if($ticketss->count() > 0)
+        if($ticketss->count() > 0 && $ticket->schedule != 3)
             $ticket->price =0;
         $ticket->partner_id = Auth::user()->partner_id;
         $ticket->pay_day =$now;
@@ -463,6 +463,7 @@ class TicketController extends Controller
                 $interval = date_diff(new DateTime("".$tickets->hour),$now);
                 return isset( $tickets->price)?  $tickets->price:( "*".$this->precio($interval,$tickets->type, $tickets->schedule, $tickets->convenio_id));
             })
+            ->escapeColumns([])
             ->make(true);
     }
 
@@ -529,12 +530,13 @@ class TicketController extends Controller
             })
             ->addColumn('Estado', function ($tickets) {
                 $now = date("Y-m-d H:i:s");
-                return  $tickets->date_end >= $now? 'Activo': 'Vencido';
+                return  ($tickets->date_end >= $now? 'Activo': 'Vencido'). '<br><b style="color: '.($tickets->status == 1?'red':'green').';">'.($tickets->status == 1?'Sin Pagar':'Pago').'</b>';
             })
             ->addColumn('Atendio', function ($tickets) {
                 $partner = Partner::find($tickets->partner_id);
                 return  $partner->name;
             })
+            ->escapeColumns([])
             ->make(true);
     }
     public function getStatus(Request $request)
