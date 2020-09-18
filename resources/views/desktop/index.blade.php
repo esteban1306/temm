@@ -768,7 +768,7 @@
                         $("#typeIn").val(1);
                 }
                 else{
-                    if(plate.length > 6 && isBici() )
+                    if(plate.length > 6 && ({!! isBici() ?'1':'0' !!}  || {!! isVenezuela() ?'plate.length > 7':'1' !!}) && {!! $typeParking==2?'1':'0' !!})
                         $("#typeIn").val(3);
                     else
                         $("#typeIn").val(2);

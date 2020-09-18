@@ -35,4 +35,7 @@ return [
     'barcode' => [ //null for all, empty array for none
        '3','11','9','13'
     ],
+    'venezuela' => [ //null for all, empty array for none
+       '17'
+    ],
 ];
