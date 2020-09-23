@@ -33,7 +33,7 @@ return [
         '15'
     ],
     'barcode' => [ //null for all, empty array for none
-       '3','11','9','13'
+       '3','11','9','13','7'
     ],
     'venezuela' => [ //null for all, empty array for none
        '17'
