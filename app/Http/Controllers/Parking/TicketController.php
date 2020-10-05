@@ -134,7 +134,7 @@ class TicketController extends Controller
             ($parking->parking_id==12?'<small style="text-align:center;font-size: 7px"><br>
     <b>SERVICIO: 24 horas</b><br>GERMAN ROJAS QUIÑONES <br> NIT: 13870919 <br> TEL: 6717705</small>':'').
             ($parking->parking_id==13?'<small style="text-align:center;font-size: 7px"><br>
-    <b>SERVICIO: LUN-SAB 7AM A 8PM</b><br>sociedad  intermediaria de  negocios s.a.s<br> NIT: 900799396-5 <br></small>':'').
+    <b>SERVICIO: LUN-DOM 7AM A 12AM</b><br>sociedad  intermediaria de  negocios s.a.s<br> NIT: 900799396-5 <br></small>':'').
             ($parking->parking_id==14?'<small style="text-align:center;font-size: 7px"><br>
     <b>SERVICIO: LUN-SAB 7AM A 7PM</b><br>ARMANDO RINCÓN<br> NIT: 13805107-2 <br> CEL. 314 6319341</small>':'').
             ($parking->parking_id==15?'<small style="text-align:center;font-size: 7px"><br>
@@ -144,7 +144,7 @@ class TicketController extends Controller
             ($parking->parking_id==17?'<small style="text-align:center;font-size: 7px"><br>
     <b>SERVICIO: 7AM - 7PM</b><br>KEVIN ARENGAS<br> NIT: 1003202539 <br> CEL. 3114271524 </small>':'').
             ($parking->parking_id==5?'<small style="text-align:center;font-size: 6px"><br>
-    NIT: 89000746-1 <br>&nbsp; HUGO ALEXANDER VARGAS SANCHEZ<br> </small><small style="text-align:center;font-size: 6px"><b>&nbsp;&nbsp;SERVICIO: Lun-Dom 6:30am - 9:30pm</b><br> <b> TEL: 3173799831</b></small>':'').
+    NIT: 89000746-1 <br>&nbsp; HUGO ALEXANDER VARGAS SANCHEZ<br> </small><small style="text-align:center;font-size: 6px"><b>&nbsp;&nbsp;SERVICIO: Lun-Sab 6:30am - 8:30pm</b><br> <b> TEL: 3173799831</b></small>':'').
             ($parking->parking_id==7?'<small style="text-align:center;font-size: 6px"><br>
     NIT: 1041325245-3 <br>JHON DEIVID SANTA PULIDO<br> </small><small style="text-align:center;font-size: 8px"><b>SERVICIO: 24 HORAS</b><br> <b> TEL: 3217463250</b></small>':'');
         if(!isset($ticket->price)) {
