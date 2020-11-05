@@ -124,7 +124,7 @@ class TicketController extends Controller
                 '.($parking->parking_id !=5 && $parking->parking_id !=11 && $parking->parking_id !=13 && $parking->parking_id !=9?'<em style="font-size: 7px;margin-top: 2px;margin-bottom: 1px">"Todo lo puedo en Cristo que<br> me fortalece": Fil 4:13 <br></em>':'').'
                 <small style="font-size: x-small;margin-top: 1px;margin-bottom: 1px"><b>'.$parking->address.'</b></small>'
             .($parking->parking_id==3?'<small style="text-align:center;font-size: 6px"><br>
-    NIT: 1094965452-1 <br>OLIVEROS HERNANDEZ VALENTINA<br> </small><small style="text-align:center;font-size: '.(Auth::user()->parking_id != 5?'8px':'7px').'"><b>SERVICIO: Lun-Sab 7am - 9pm</b><br> <b> TEL: 3017601216</b></small>':'')
+    NIT: 1094965452-1 <br>OLIVEROS HERNANDEZ VALENTINA<br> </small><small style="text-align:center;font-size: '.(Auth::user()->parking_id != 5?'8px':'7px').'"><b>SERVICIO: Lun-Sab 7am - 9pm</b><br> <b> TEL: 310 5385826</b></small>':'')
             .($parking->parking_id==4?'<small style="text-align:center;font-size: 7px"><br>
     <b>SERVICIO: Lun-Sab 7am - 9pm</b><br>CARLOS E. MIDEROS <br> NIT: 80449231-4 <br> TEL: 9207119<br> CEL: 3013830790</small>':'').
             ($parking->parking_id==11?'<small style="text-align:center;font-size: 7px"><br>
