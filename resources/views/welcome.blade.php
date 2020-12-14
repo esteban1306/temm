@@ -8,6 +8,9 @@
                         <div class="text-center">
                             <!--<figure><img src="images/wasi-partner.svg" class="img-fluid" alt=""></figure>-->
                             <h2>SOFTWARE PARA GESTIÓN DE <strong>PARQUEADEROS, CAFÉS Y MUCHO MAS</strong></h2>
+                            <h3>Contacto: <strong>3207329971</strong></h3>
+                            <p><a href="tel:+573207329971">Click para llamar</a></p>
+                            <p><a href="https://wa.link/89a3ot" target="_blank">Click para WHATSAPP</a></p>
                             <img src="images/box-shadow.png" width="220" alt="">
                             <!--<p>Integer fringilla enim eget accumsan tempus. Vivamus nec odio eget sapien convallis condimentum Etiam ac eros quis purus egestas ornare
                                 ut eu augue.</p>-->
@@ -103,7 +106,7 @@
 
             <section class="partner-beneficios auto_margin">
                 <div class="head">
-                    <h3>Beneficios Temm</h3>
+                    <h3>Beneficios TEMM</h3>
                 </div>
 
                 <div class="list-beneficios">
