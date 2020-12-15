@@ -121,7 +121,7 @@ class TicketController extends Controller
         PDF::SetMargins($marginLeft, 0, $marginRight);
         $parking = Parking::find(Auth::user()->parking_id);
         $html = '<div style="text-align:center; margin-top: -10px !important"><big style="margin-bottom: 1px"><b style="letter-spacing: -1 px;font-size: '.$titulo.'">&nbsp;&nbsp; PARQUEADERO '.$parking->name.'</b></big><br>
-                '.($parking->parking_id !=3 && $parking->parking_id !=5 && $parking->parking_id !=11 && $parking->parking_id !=13 && $parking->parking_id !=9 && $parking->parking_id !=16?'<em style="font-size: 7px;margin-top: 2px;margin-bottom: 1px">"Todo lo puedo en Cristo que<br> me fortalece": Fil 4:13 <br></em>':'').($parking->parking_id==16?'<small style="text-align:center;font-size: 7px">
+                '.($parking->parking_id !=3 && $parking->parking_id !=5 && $parking->parking_id !=11 && $parking->parking_id !=13 && $parking->parking_id !=9 && $parking->parking_id !=16 && $parking->parking_id !=18?'<em style="font-size: 7px;margin-top: 2px;margin-bottom: 1px">"Todo lo puedo en Cristo que<br> me fortalece": Fil 4:13 <br></em>':'').($parking->parking_id==16?'<small style="text-align:center;font-size: 7px">
     <b>POLIZA No. 100835</b><br>PREVISORA SEGUROS</small><br>':'').'
                 <small style="font-size: x-small;margin-top: 1px;margin-bottom: 1px"><b>'.$parking->address.($parking->parking_id==3?'<br>Armenia, Q':'').'</b></small>'
             .($parking->parking_id==3?'<small style="text-align:center;font-size: 8px"><br>
@@ -147,7 +147,9 @@ class TicketController extends Controller
             ($parking->parking_id==5?'<small style="text-align:center;font-size: 6px"><br>
     NIT: 89000746-1 <br>&nbsp; HUGO ALEXANDER VARGAS SANCHEZ<br> </small><small style="text-align:center;font-size: 6px"><b>&nbsp;&nbsp;SERVICIO: Lun-Sab 6:30am - 8:30pm</b><br> <b> TEL: 3173799831</b></small>':'').
             ($parking->parking_id==7?'<small style="text-align:center;font-size: 6px"><br>
-    NIT: 1041325245-3 <br>JHON DEIVID SANTA PULIDO<br> </small><small style="text-align:center;font-size: 8px"><b>SERVICIO: 24 HORAS</b><br> <b> TEL: 3217463250</b></small>':'');
+    NIT: 1041325245-3 <br>JHON DEIVID SANTA PULIDO<br> </small><small style="text-align:center;font-size: 8px"><b>SERVICIO: 24 HORAS</b><br> <b> TEL: 3217463250</b></small>':'').
+            ($parking->parking_id==18?'<small style="text-align:center;font-size: 7px"><br>
+    <b>SERVICIO: LUN-SAB 7AM A 7PM</b><br> CEL. 3168279297</small>':'');
         if(!isset($ticket->price)) {
             $html .= '<small style="text-align:left;font-size: '.$size.';margin-bottom: 1px;"><b><br>
                  ' . ($ticket->schedule==3 || $parking->parking_id==11? "RECIBO N° " . $ticket->ticket_id . "<br>" : '') .'
