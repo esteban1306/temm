@@ -269,7 +269,7 @@ class TicketController extends Controller
             $schedule=4;
         }
         $dayPrice = ($tipo==1? $parking->day_cars_price : ($tipo==2?$parking->day_motorcycles_price:$parking->day_van_price));
-        if(($parking->parking_id==11) && $schedule==1){
+        if(($parking->parking_id==11 || $parking->parking_id==18) && $schedule==1){
             $minutos2 = (((24*$tiempo->format("%d"))+$horas2*1)*60)+($minutos2*1);
             $priceMin = $minutos2 > 0?($tipo==1? $parking->min_cars_price*$minutos2: ($tipo==2?$parking->min_motorcycles_price*$minutos2:$parking->min_van_price*$minutos2)):0;
             if($schedule==1 && ($priceMin < $dayPrice || $dayPrice == 0))
