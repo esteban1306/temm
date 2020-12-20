@@ -18,7 +18,7 @@ return [
     	'9'
     ],
     'jornada' => [ //null for all, empty array for none
-    	'9','15'
+    	'9','15','18'
     ],
     'lavadero' => [ //null for all, empty array for none
     	'6'
