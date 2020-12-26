@@ -275,7 +275,10 @@ class TicketController extends Controller
             if($schedule==1 && ($priceMin < $dayPrice || $dayPrice == 0))
                 return intval(round($priceMin*1/100)*100);
             else
-                $schedule=2;
+                if(isJornada())
+                    $schedule=4;
+                else
+                    $schedule=2;
         }
         if($tiempo->format("%I")<=5 && $horas==0 && ($schedule==1 || $schedule==2 || $schedule==4) && $parking->parking_id!=14)
             return 0;
