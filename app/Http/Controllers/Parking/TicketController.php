@@ -161,7 +161,7 @@ class TicketController extends Controller
                  <small style="text-align:left;font-size:small">Placa: ' . $ticket->plate . '</small><br>
                  ' . (isset($ticket->drawer) ? "Locker: " . $ticket->drawer . "<br>" : '') . '
                  </b></small>
-                 '.($parking->parking_id==3?'':'
+                 '.($parking->parking_id==3 || $parking->parking_id==17?'':'
                  <small style="text-align:left;font-size: 6px;margin-top: 1px"><br>
                  1.El vehiculo se entregara al portador de este recibo<br>
                  2.No aceptamos ordenes escritas o por telefono<br>
