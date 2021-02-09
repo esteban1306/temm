@@ -125,7 +125,7 @@ class TicketController extends Controller
     <b>POLIZA No. 100835</b><br>PREVISORA SEGUROS</small><br>':'').'
                 <small style="font-size: x-small;margin-top: 1px;margin-bottom: 1px"><b>'.$parking->address.($parking->parking_id==3?'<br>Armenia, Q':'').'</b></small>'
             .($parking->parking_id==3?'<small style="text-align:center;font-size: 8px"><br>
-    NIT: 1094965452-1 <br>OLIVEROS HERNANDEZ VALENTINA<br> </small><small style="text-align:center;font-size: '.(Auth::user()->parking_id != 5?'8px':'7px').'"><b>SERVICIO: Lun-Sab 7am - 9pm</b><br> <b> TEL: 310 5385826</b></small>':'')
+    NIT: 1094965452-1 <br>OLIVEROS HERNANDEZ VALENTINA<br> </small><small style="text-align:center;font-size: '.(Auth::user()->parking_id != 5?'8px':'7px').'"><b>SERVICIO: Lun-Sab 7am - 8pm</b><br> <b> TEL: 310 5385826</b></small>':'')
             .($parking->parking_id==4?'<small style="text-align:center;font-size: 7px"><br>
     <b>SERVICIO: Lun-Sab 7am - 9pm</b><br>CARLOS E. MIDEROS <br> NIT: 80449231-4 <br> TEL: 9207119<br> CEL: 3013830790</small>':'').
             ($parking->parking_id==11?'<small style="text-align:center;font-size: 7px"><br>
@@ -149,7 +149,7 @@ class TicketController extends Controller
             ($parking->parking_id==7?'<small style="text-align:center;font-size: 6px"><br>
     NIT: 1041325245-3 <br>JHON DEIVID SANTA PULIDO<br> </small><small style="text-align:center;font-size: 8px"><b>SERVICIO: 24 HORAS</b><br> <b> TEL: 3217463250</b></small>':'').
             ($parking->parking_id==18?'<small style="text-align:center;font-size: 7px"><br>
-    <b>SERVICIO: LUN-SAB 7AM A 7PM</b><br> CEL. 3168279297</small>':'');
+    <b>SERVICIO: LUN-SAB 6AM A 7PM</b><br> TEL. 7716249</small>':'');
         if(!isset($ticket->price)) {
             $html .= '<small style="text-align:left;font-size: '.$size.';margin-bottom: 1px;"><b><br>
                  ' . ($ticket->schedule==3 || $parking->parking_id==11? "RECIBO N° " . $ticket->ticket_id . "<br>" : '') .'

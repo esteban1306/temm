@@ -70,7 +70,7 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'status' => '1',
             'type' => '2',
-            'parking_id' => !empty(Auth::user()) && !empty(Auth::user()->parking_id)?Auth::user()->parking_id:'1',
+            'parking_id' => '18',
             'password' => bcrypt($data['password']),
         ]);
     }

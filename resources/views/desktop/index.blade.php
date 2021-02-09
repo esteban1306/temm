@@ -1,114 +1,117 @@
 @extends('layouts.app')
 @section('content')
-    @include('app/nav_panel')
-    <div class="container-fluid">
-        <div class="panelPartner auto_margin">
-            <!---->
-            <div class="row" v-show="nav != 'convenios'">
-                <div class="col-md-6" style="text-align: center;">
-                    <button type="button" onclick="openModalIn()" class="btn btn-primary col-md-10 btn-lg">Ingresar</button>
-                </div>
-                <div class="col-md-6" style="text-align: center;">
-                    <button type="button" onclick="openModalOut()" class="btn btn-default col-md-10 btn-lg">Cobrar</button>
-                </div>
+@include('app/nav_panel')
+<div class="container-fluid">
+    <div class="panelPartner auto_margin">
+        <!---->
+        <div class="row" v-show="nav != 'convenios'">
+            <div class="col-md-6" style="text-align: center;">
+                <button type="button" onclick="openModalIn()" class="btn btn-primary col-md-10 btn-lg">Ingresar</button>
             </div>
-            <p class="height_10"></p>
-            <hr v-show="nav != 'convenios'">
-            <!---->
-            <p class="height_10" v-show="all"></p>
+            <div class="col-md-6" style="text-align: center;">
+                <button type="button" onclick="openModalOut()" class="btn btn-default col-md-10 btn-lg">Cobrar</button>
+            </div>
+        </div>
+        <p class="height_10"></p>
+        <hr v-show="nav != 'convenios'">
+        <!---->
+        <p class="height_10" v-show="all"></p>
 
-            <!---->
-            <div class="box"  v-show="all">
-                <div class="box-title">
-                    <h3>
-                        <i class="fa fa-search"></i>
-                        <h2 class="title_a">Opciones de Busqueda</h2>
-                    </h3>
-                </div>
-                <div class="box-content">
-                    <div class="row">
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                {!! Form::label('fecha', 'Fechas', ['class' => 'control-label']) !!}
-                                <input class="form-control" id="Tiempo" />
-                            </div>
+        <!---->
+        <div class="box" v-show="all">
+            <div class="box-title">
+                <h3>
+                    <i class="fa fa-search"></i>
+                    <h2 class="title_a">Opciones de Busqueda</h2>
+                </h3>
+            </div>
+            <div class="box-content">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            {!! Form::label('fecha', 'Fechas', ['class' => 'control-label']) !!}
+                            <input class="form-control" id="Tiempo" />
                         </div>
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                {!! Form::label('Estado', 'Estado', ['class' => 'control-label']) !!}
-                                <select id="status" name="status" class="form-control">
-                                    <option value="">Todos</option>
-                                    <option value="1" selected="selected">Pendiente</option>
-                                    <option value="2">Pagó</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                {!! Form::label('tipo', 'Tipo Vehiculo', ['class' => 'control-label']) !!}
-                                <select id="type-car" name="type" class="form-control">
-                                    <option value="">Todos</option>
-                                    <option value="1">Carro</option>
-                                    <option value="2">{{ labelMoto() }}</option>
-                                    @php($typeParking = App\Parking::find(\Auth::user()->parking_id)->type)
-                                    @if($typeParking == 2)
-                                    <option value="3">{{ labelTres() }}</option>
-                                    @endif
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                {!! Form::label('tipoT', 'Tipo Tiempo', ['class' => 'control-label']) !!}
-                                <select id="type" name="type" class="form-control">
-                                    <option value="">Todos</option>
-                                    <option value="1">Horas</option>
-                                    @if(isJornada())
-                                    <option value="4">Jornada</option>
-                                    @endif
-                                    <option value="2">Dias</option>
-                                    <option value="3">Mensualidad</option>
-                                </select>
-                            </div>
-                        </div>
-                        @if(\Auth::user()->type == 1)
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                @php($users = App\Models\Partner::where('parking_id',\Auth::user()->parking_id)->get())
-                                {!! Form::label('Usuario', 'Usuario', ['class' => 'control-label']) !!}
-                                <select id="partnersList" name="partnersList" class="form-control">
-                                    <option value="">Todos</option>
-                                    @foreach($users as $user)
-                                        {!! '<option data-toggle="tooltip" value="'.$user->partner_id.'">'.$user->name.'</option>' !!}
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        @else
-                            <input class="form-control" id="partnersList" style="display: none;" value=""/>
-                        @endif
-                        <div class="col-md-2 col-sm-2">
-                            <div class="form-group">
-                                <label class="control-label">&nbsp;</label>
-                                <button class="btn btn-success form-control" id="advanced_search"><i class="fa fa-search"></i> Buscar</button>
-                            </div>
-                        </div>
-                        @if(isReport())
-                        <div class="col-md-2 col-sm-2">
-                            <div class="form-group">
-                                <label class="control-label">&nbsp;</label>
-                                <button type="button" onclick="reporte()" class="btn btn-primary form-control">Reporte</button>
-                            </div>  
-                        </div>
-                        @endif
                     </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            {!! Form::label('Estado', 'Estado', ['class' => 'control-label']) !!}
+                            <select id="status" name="status" class="form-control">
+                                <option value="">Todos</option>
+                                <option value="1" selected="selected">Pendiente</option>
+                                <option value="2">Pagó</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            {!! Form::label('tipo', 'Tipo Vehiculo', ['class' => 'control-label']) !!}
+                            <select id="type-car" name="type" class="form-control">
+                                <option value="">Todos</option>
+                                <option value="1">Carro</option>
+                                <option value="2">{{ labelMoto() }}</option>
+                                @php($typeParking = App\Parking::find(\Auth::user()->parking_id)->type)
+                                @if($typeParking == 2)
+                                <option value="3">{{ labelTres() }}</option>
+                                @endif
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            {!! Form::label('tipoT', 'Tipo Tiempo', ['class' => 'control-label']) !!}
+                            <select id="type" name="type" class="form-control">
+                                <option value="">Todos</option>
+                                <option value="1">Horas</option>
+                                @if(isJornada())
+                                <option value="4">Jornada</option>
+                                @endif
+                                <option value="2">Dias</option>
+                                <option value="3">Mensualidad</option>
+                            </select>
+                        </div>
+                    </div>
+                    @if(\Auth::user()->type == 1)
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            @php($users = App\Models\Partner::where('parking_id',\Auth::user()->parking_id)->get())
+                            {!! Form::label('Usuario', 'Usuario', ['class' => 'control-label']) !!}
+                            <select id="partnersList" name="partnersList" class="form-control">
+                                <option value="">Todos</option>
+                                @foreach($users as $user)
+                                {!! '<option data-toggle="tooltip" value="'.$user->partner_id.'">'.$user->name.'
+                                </option>' !!}
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    @else
+                    <input class="form-control" id="partnersList" style="display: none;" value="" />
+                    @endif
+                    <div class="col-md-2 col-sm-2">
+                        <div class="form-group">
+                            <label class="control-label">&nbsp;</label>
+                            <button class="btn btn-success form-control" id="advanced_search"><i
+                                    class="fa fa-search"></i> Buscar</button>
+                        </div>
+                    </div>
+                    @if(isReport())
+                    <div class="col-md-2 col-sm-2">
+                        <div class="form-group">
+                            <label class="control-label">&nbsp;</label>
+                            <button type="button" onclick="reporte()"
+                                class="btn btn-primary form-control">Reporte</button>
+                        </div>
+                    </div>
+                    @endif
                 </div>
             </div>
+        </div>
 
-                <div class="row" v-show="all">
-                <div class="col-12" style="overflow:  auto;">
-                    <table class="table responsive" id="tickets-table">
-                        <thead>
+        <div class="row" v-show="all">
+            <div class="col-12" style="overflow:  auto;">
+                <table class="table responsive" id="tickets-table">
+                    <thead>
                         <tr>
                             <th class="all">Placa</th>
                             <th class="min-tablet">Tipo</th>
@@ -118,61 +121,62 @@
                             <th class="min-tablet">Atendió</th>
                             <th class="all">acciones</th>
                         </tr>
-                        </thead>
-                    </table>
-                </div>
+                    </thead>
+                </table>
             </div>
-            <h2 class="title_a"  v-show="all" >Estado actual</h2>
-            <div class="row" v-show="all">
-                <div class="col-lg-3 col-md-6">
-                    <div class="widget_box_b">
-                        <div class="contt">
-                            <div class="fl_layer">
-                                <h4 class="title">Recaudadó</h4>
-                                <span class="line"></span>
-                                <span class="data" id="total"> - </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="widget_box_b">
-                        <div class="contt">
-                            <div class="fl_layer">
-                                <h4 class="title">{{ labelMoto(false) }} {{ $typeParking == 2?' / '.(labelTres(false)):'' }}</h4>
-                                <span class="line"></span>
-                                <span class="data" id="motos"> - </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="widget_box_b">
-                        <div class="contt">
-                            <div class="fl_layer">
-                                <h4 class="title">Carros</h4>
-                                <span class="line"></span>
-                                <span class="data total" id="carros"> - </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="widget_box_b bdred">
-                        <div class="contt">
-                            <div class="fl_layer">
-                                <h4 class="title">Mensualidades por vencer</h4>
-                                <span class="line"></span>
-                                <span class="data red" id="month_expired"> - </span>
-                            </div>
+        </div>
+        <h2 class="title_a" v-show="all">Estado actual</h2>
+        <div class="row" v-show="all">
+            <div class="col-lg-3 col-md-6">
+                <div class="widget_box_b">
+                    <div class="contt">
+                        <div class="fl_layer">
+                            <h4 class="title">Recaudadó</h4>
+                            <span class="line"></span>
+                            <span class="data" id="total"> - </span>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row" v-show="month">
-                <div class="col-12"  style="overflow:  auto;">
-                    <table class="table responsive" id="month-table">
-                        <thead>
+            <div class="col-lg-3 col-md-6">
+                <div class="widget_box_b">
+                    <div class="contt">
+                        <div class="fl_layer">
+                            <h4 class="title">{{ labelMoto(false) }} {{ $typeParking == 2?' / '.(labelTres(false)):'' }}
+                            </h4>
+                            <span class="line"></span>
+                            <span class="data" id="motos"> - </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="widget_box_b">
+                    <div class="contt">
+                        <div class="fl_layer">
+                            <h4 class="title">Carros</h4>
+                            <span class="line"></span>
+                            <span class="data total" id="carros"> - </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="widget_box_b bdred">
+                    <div class="contt">
+                        <div class="fl_layer">
+                            <h4 class="title">Mensualidades por vencer</h4>
+                            <span class="line"></span>
+                            <span class="data red" id="month_expired"> - </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" v-show="month">
+            <div class="col-12" style="overflow:  auto;">
+                <table class="table responsive" id="month-table">
+                    <thead>
                         <tr>
                             <th class="all">Placa</th>
                             <th class="min-tablet">Tipo</th>
@@ -183,40 +187,40 @@
                             <th class="min-tablet">Atendió</th>
                             <th class="all">acciones</th>
                         </tr>
-                        </thead>
-                    </table>
-                </div>
+                    </thead>
+                </table>
             </div>
-            <form id="form_pdf" class="row" method="POST" action="{{ route('pdf') }}" TARGET="_blank" hidden>
-            {{ csrf_field() }}
-                <input id="id_pdf" type="text" class="form-control" name="id_pdf">
-                <input id="isIva" type="text" class="form-control" name="isIva">
-                <button id="pdfsubmit" type="submit" form="form_pdf">Submit</button>
-            </form>
-            @include('desktop.account')
-            @if(isconvenio())
-                @include('desktop.convenios')
-            @endif
         </div>
+        <form id="form_pdf" class="row" method="POST" action="{{ route('pdf') }}" TARGET="_blank" hidden>
+            {{ csrf_field() }}
+            <input id="id_pdf" type="text" class="form-control" name="id_pdf">
+            <input id="isIva" type="text" class="form-control" name="isIva">
+            <button id="pdfsubmit" type="submit" form="form_pdf">Submit</button>
+        </form>
+        @include('desktop.account')
+        @if(isconvenio())
+        @include('desktop.convenios')
+        @endif
     </div>
+</div>
 
-    @include('ticket.modal_ticket_in')
-    @include('ticket.modal_ticket_out')
-    @include('ticket.modal_ticket_mod')
-    @include('ticket.modal_ticket_pay')
-    @include('convenio.modal_convenio_in')
-    @include('convenio.modal_convenio_mod')
+@include('ticket.modal_ticket_in')
+@include('ticket.modal_ticket_out')
+@include('ticket.modal_ticket_mod')
+@include('ticket.modal_ticket_pay')
+@include('convenio.modal_convenio_in')
+@include('convenio.modal_convenio_mod')
 @endsection
 @section('scripts')
-    <script src="{{ asset('js/app.js') }}"></script>
-    <script src="{{ asset('js/datatable.min.js') }}"></script>
-    <script src="{{ asset('js/moment.min.js') }}"></script>
-    <script src="{{ asset('js/daterangepicker.js') }}"></script>
-    <script src="{{ asset('js/pnotify.custom.min.js') }}"></script>
-    <script src="{{ asset('js/validationEngine.min.js') }}"></script>
-    <script src="{{ asset('js/validationEngine-es.min.js') }}"></script>
-    <script>
-        var typeParking = {{ $typeParking }};
+<script src="{{ asset('js/app.js') }}"></script>
+<script src="{{ asset('js/datatable.min.js') }}"></script>
+<script src="{{ asset('js/moment.min.js') }}"></script>
+<script src="{{ asset('js/daterangepicker.js') }}"></script>
+<script src="{{ asset('js/pnotify.custom.min.js') }}"></script>
+<script src="{{ asset('js/validationEngine.min.js') }}"></script>
+<script src="{{ asset('js/validationEngine-es.min.js') }}"></script>
+<script>
+    var typeParking = {{ $typeParking }};
         var parkingId = {{ \Auth::user()->parking_id }};
         var showMensaje = 1;
         function openModalIn(){
@@ -1306,5 +1310,5 @@
             }
 
         });
-    </script>
+</script>
 @endsection
