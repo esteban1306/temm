@@ -163,7 +163,7 @@ class TicketController extends Controller
     NIT: 89000746-1 <br>&nbsp; HUGO ALEXANDER VARGAS SANCHEZ<br> </small><small style="text-align:center;font-size: 6px"><b>&nbsp;&nbsp;SERVICIO: Lun-Sab 6:30am - 8:30pm</b><br> <b> TEL: 3173799831</b></small>':'').
             ($parking->parking_id==7?'<small style="text-align:center;font-size: 6px"><br>
     NIT: 1041325245-3 <br>JHON DEIVID SANTA PULIDO<br> </small><small style="text-align:center;font-size: 8px"><b>SERVICIO: 24 HORAS</b><br> <b> TEL: 3217463250</b></small>':'').
-    ($parking->parking_id==19?'<small style="text-align:center;font-size: 6px"><br>
+    ($parking->parking_id==19?'<small style="text-align:center;font-size: 8px"><br>
     NIT: 1002901429-0 <br></small><small style="text-align:center;font-size: 8px"><b>SERVICIO: Lun-Sab 6am a 9pm</b><br> <b> TEL: 301 306 8968</b></small>':'').
             ($parking->parking_id==18?'<small style="text-align:center;font-size: 7px"><br>
     <b>SERVICIO: LUN-SAB 6AM A 7PM</b><br> TEL. 7716249</small>':'');
