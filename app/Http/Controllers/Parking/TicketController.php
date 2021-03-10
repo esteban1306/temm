@@ -164,7 +164,7 @@ class TicketController extends Controller
             ($parking->parking_id==7?'<small style="text-align:center;font-size: 6px"><br>
     NIT: 1041325245-3 <br>JHON DEIVID SANTA PULIDO<br> </small><small style="text-align:center;font-size: 8px"><b>SERVICIO: 24 HORAS</b><br> <b> TEL: 3217463250</b></small>':'').
     ($parking->parking_id==19?'<small style="text-align:center;font-size: 6px"><br>
-    NIT: 1002901429-0 <br></small><small style="text-align:center;font-size: 8px"><b>SERVICIO: Lunes a sábados 6 am a 9 pm/b><br> <b> TEL: 301 306 8968</b></small>':'').
+    NIT: 1002901429-0 <br></small><small style="text-align:center;font-size: 8px"><b>SERVICIO: Lun-Sab 6am a 9pm</b><br> <b> TEL: 301 306 8968</b></small>':'').
             ($parking->parking_id==18?'<small style="text-align:center;font-size: 7px"><br>
     <b>SERVICIO: LUN-SAB 6AM A 7PM</b><br> TEL. 7716249</small>':'');
         if(!isset($ticket->price)) {
