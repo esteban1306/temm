@@ -120,8 +120,23 @@ class TicketController extends Controller
         $size = is58()?'8px':'small';
         PDF::SetMargins($marginLeft, 0, $marginRight);
         $parking = Parking::find(Auth::user()->parking_id);
+        if($parking->parking_id ==19 && false){
+            switch ($ticket->partner_id) {
+                case 67:
+                    $parking->name = $parking->name.' #1';
+                    break;
+                case 68:
+                    $parking->name = $parking->name.' #1';
+                    break;
+                case 69:
+                $parking->name = $parking->name.' #1';
+                    break;
+            }
+        }
         $html = '<div style="text-align:center; margin-top: -10px !important"><big style="margin-bottom: 1px"><b style="letter-spacing: -1 px;font-size: '.$titulo.'">&nbsp;&nbsp; PARQUEADERO '.$parking->name.'</b></big><br>
-                '.($parking->parking_id !=3 && $parking->parking_id !=5 && $parking->parking_id !=11 && $parking->parking_id !=13 && $parking->parking_id !=9 && $parking->parking_id !=16 && $parking->parking_id !=18?'<em style="font-size: 7px;margin-top: 2px;margin-bottom: 1px">"Todo lo puedo en Cristo que<br> me fortalece": Fil 4:13 <br></em>':'').($parking->parking_id==16?'<small style="text-align:center;font-size: 7px">
+                '.($parking->parking_id !=3 && $parking->parking_id !=5 && $parking->parking_id !=11 && $parking->parking_id !=13 && $parking->parking_id !=9 && $parking->parking_id !=16 && $parking->parking_id !=18 && $parking->parking_id !=19?'<em style="font-size: 7px;margin-top: 2px;margin-bottom: 1px">"Todo lo puedo en Cristo que<br> me fortalece": Fil 4:13 <br></em>':'')
+                //.($parking->parking_id ==19?'<em style="font-size: 7px;margin-top: 2px;margin-bottom: 1px">La magia está, en no perder la ternura del alma<br></em>':'')
+                .($parking->parking_id==16?'<small style="text-align:center;font-size: 7px">
     <b>POLIZA No. 100835</b><br>PREVISORA SEGUROS</small><br>':'').'
                 <small style="font-size: x-small;margin-top: 1px;margin-bottom: 1px"><b>'.$parking->address.($parking->parking_id==3?'<br>Armenia, Q':'').'</b></small>'
             .($parking->parking_id==3?'<small style="text-align:center;font-size: 8px"><br>
@@ -148,6 +163,8 @@ class TicketController extends Controller
     NIT: 89000746-1 <br>&nbsp; HUGO ALEXANDER VARGAS SANCHEZ<br> </small><small style="text-align:center;font-size: 6px"><b>&nbsp;&nbsp;SERVICIO: Lun-Sab 6:30am - 8:30pm</b><br> <b> TEL: 3173799831</b></small>':'').
             ($parking->parking_id==7?'<small style="text-align:center;font-size: 6px"><br>
     NIT: 1041325245-3 <br>JHON DEIVID SANTA PULIDO<br> </small><small style="text-align:center;font-size: 8px"><b>SERVICIO: 24 HORAS</b><br> <b> TEL: 3217463250</b></small>':'').
+    ($parking->parking_id==19?'<small style="text-align:center;font-size: 6px"><br>
+    NIT: 1002901429-0 <br></small><small style="text-align:center;font-size: 8px"><b>SERVICIO: Lunes a sábados 6 am a 9 pm/b><br> <b> TEL: 301 306 8968</b></small>':'').
             ($parking->parking_id==18?'<small style="text-align:center;font-size: 7px"><br>
     <b>SERVICIO: LUN-SAB 6AM A 7PM</b><br> TEL. 7716249</small>':'');
         if(!isset($ticket->price)) {
@@ -389,6 +406,9 @@ class TicketController extends Controller
                 $tickets = $tickets->whereBetween('created_at', [ new Datetime('today'), new Datetime('tomorrow')]);
             }
         }
+        if (Auth::user()->type != 1) {
+                $tickets = $tickets->where('partner_id', Auth::user()->partner_id);
+            }
         return Datatables::of($tickets)
             ->addColumn('action', function ($tickets) {
                 $edit = \Form::button('Editar', [
