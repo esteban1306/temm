@@ -133,7 +133,7 @@ class TicketController extends Controller
                     break;
             }
         }
-        $html = '<div style="text-align:center; margin-top: -10px !important"><big style="margin-bottom: 1px"><b style="letter-spacing: -1 px;font-size: '.$titulo.'">&nbsp;&nbsp; PARQUEADERO '.$parking->name.'</b></big><br>
+        $html = '<div style="text-align:center; margin-top: -10px !important"><big style="margin-bottom: 1px"><b style="letter-spacing: -1 px;font-size: '.$titulo.'">&nbsp;&nbsp; '.($parking->type ==3 || $parking->type ==20 ?'':'PARQUEADERO').' '.$parking->name.'</b></big><br>
                 '.($parking->parking_id !=3 && $parking->parking_id !=5 && $parking->parking_id !=11 && $parking->parking_id !=13 && $parking->parking_id !=9 && $parking->parking_id !=16 && $parking->parking_id !=18 && $parking->parking_id !=19?'<em style="font-size: 7px;margin-top: 2px;margin-bottom: 1px">"Todo lo puedo en Cristo que<br> me fortalece": Fil 4:13 <br></em>':'')
                 //.($parking->parking_id ==19?'<em style="font-size: 7px;margin-top: 2px;margin-bottom: 1px">La magia está, en no perder la ternura del alma<br></em>':'')
                 .($parking->parking_id==16?'<small style="text-align:center;font-size: 7px">
@@ -165,6 +165,8 @@ class TicketController extends Controller
     NIT: 1041325245-3 <br>JHON DEIVID SANTA PULIDO<br> </small><small style="text-align:center;font-size: 8px"><b>SERVICIO: 24 HORAS</b><br> <b> TEL: 3217463250</b></small>':'').
     ($parking->parking_id==19?'<small style="text-align:center;font-size: 8px"><br>
     NIT: 1002901429-0 <br></small><small style="text-align:center;font-size: 8px"><b>SERVICIO: Lun-Sab 6am a 9pm</b><br> <b> TEL: 301 306 8968</b></small>':'').
+    ($parking->parking_id==20?'<small style="text-align:center;font-size: 6px"><br>
+    NIT: 901451294-1 <br>CARLOS FERNANDEZ<br> </small><small style="text-align:center;font-size: 8px"><b>SERVICIO: 7AM - 6PM</b><br> <b> TEL: 8168997</b></small>':'').
             ($parking->parking_id==18?'<small style="text-align:center;font-size: 7px"><br>
     <b>SERVICIO: LUN-SAB 6AM A 7PM</b><br> TEL. 7716249</small>':'');
         if(!isset($ticket->price)) {
@@ -174,11 +176,11 @@ class TicketController extends Controller
                  Hora ingreso: ' . $hour->format('h:ia') . '<br>
                  ' . ($ticket->schedule==3? "   Fecha vencimiento: " . $hour2->format('d/m/Y') . "<br>" : '') .'
                  ' . ($ticket->schedule==3? "<b>".strtoupper($ticket->name) . "</b><br>" : '') .'
-                 Tipo: ' . ($ticket->type == 1 ? 'Carro' : ($ticket->type == 3 ? ( labelTres() ) : labelMoto())) . '<br>
-                 <small style="text-align:left;font-size:small">Placa: ' . $ticket->plate . '</small><br>
+                 '.($parking->type ==3?'':'Tipo: ' . ($ticket->type == 1 ? 'Carro' : ($ticket->type == 3 ? ( labelTres() ) : labelMoto())) . '<br>').'
+                 <small style="text-align:left;font-size:small">'.($parking->type ==3?'Casillero':'Placa').': ' . $ticket->plate . '</small><br>
                  ' . (isset($ticket->drawer) ? "Locker: " . $ticket->drawer . "<br>" : '') . '
                  </b></small>
-                 '.($parking->parking_id==3 || $parking->parking_id==17?'':'
+                 '.($parking->parking_id==3 || $parking->parking_id==17 || $parking->type ==3?'':'
                  <small style="text-align:left;font-size: 6px;margin-top: 1px"><br>
                  1.El vehiculo se entregara al portador de este recibo<br>
                  2.No aceptamos ordenes escritas o por telefono<br>
@@ -210,8 +212,8 @@ class TicketController extends Controller
                  ' . ($ticket->schedule!=3? "   Hora salida: " . $pay_day->format('h:ia') . "<br>" : '') .'
                  ' . ($ticket->schedule!=3? "   Duración: " . $interval->format('%d D %h:%i') . "<br>" : '') .'
                  ' . ($ticket->schedule==3? "   Fecha vencimiento: " . $hour2->format('d/m/Y') . "<br>" : '') .'
-                 Tipo: ' . ($ticket->type == 1 ? 'Carro' : ($ticket->type == 3 ? ( labelTres() ) : labelMoto())) . '<br>
-                 Placa: ' . $ticket->plate . '<br>
+                 '.($parking->type ==3?'':'Tipo: ' . ($ticket->type == 1 ? 'Carro' : ($ticket->type == 3 ? ( labelTres() ) : labelMoto())) . '<br>').'
+                 '.($parking->type ==3?'Casillero':'Placa').': ' . $ticket->plate . '<br>
                  ' . (isset($ticket->price) && empty($iva)? "   Precio: " . $ticket->price . "<br>" : (isset($ticket->price) && !empty($iva)?'
                 Valor servicio: '.intval($ticket->price/1.19).'<br>'.
                     (isset($ticket->extra) ? ($ticket->extra>0?"Incremento: ":"Descuento:" ). abs($ticket->extra).'<br>':'').'
@@ -286,7 +288,7 @@ class TicketController extends Controller
             $schedule=4;
         }
         $dayPrice = ($tipo==1? $parking->day_cars_price : ($tipo==2?$parking->day_motorcycles_price:$parking->day_van_price));
-        if(($parking->parking_id==11 || $parking->parking_id==18) && $schedule==1){
+        if(($parking->type==4) && $schedule==1){
             $minutos2 = (((24*$tiempo->format("%d"))+$horas2*1)*60)+($minutos2*1);
             $priceMin = $minutos2 > 0?($tipo==1? $parking->min_cars_price*$minutos2: ($tipo==2?$parking->min_motorcycles_price*$minutos2:$parking->min_van_price*$minutos2)):0;
             if($schedule==1 && ($priceMin < $dayPrice || $dayPrice == 0))
