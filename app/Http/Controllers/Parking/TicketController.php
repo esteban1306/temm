@@ -408,7 +408,7 @@ class TicketController extends Controller
                 $tickets = $tickets->whereBetween('created_at', [ new Datetime('today'), new Datetime('tomorrow')]);
             }
         }
-        if (Auth::user()->type != 1) {
+        if (Auth::user()->type != 1 && false) {
                 $tickets = $tickets->where('partner_id', Auth::user()->partner_id);
             }
         return Datatables::of($tickets)
