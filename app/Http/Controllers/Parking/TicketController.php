@@ -113,8 +113,8 @@ class TicketController extends Controller
             'stretchtext' => 4
         );
         PDF::SetTitle('Ticket');
-        PDF::AddPage('P', 'A6');
-        $marginRight = is58()?60:45;
+        PDF::AddPage('P', (isContinue()?'A5':'A6'));
+        $marginRight = is58()?(isContinue()?103:60):45;
         $marginLeft = is58()?4:6;
         $titulo = is58()?10:11;
         $size = is58()?'8px':'small';

@@ -329,6 +329,12 @@ if(! function_exists('isBar') ) {
         return in_array(\Auth::user()->parking_id, config('templates.barcode'));
     }
 }
+if(! function_exists('isContinue') ) {
+    function isContinue()
+    {
+        return in_array(\Auth::user()->parking_id, config('templates.continue'));
+    }
+}
 if(! function_exists('isVenezuela') ) {
     function isVenezuela()
     {
