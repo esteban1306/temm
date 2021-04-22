@@ -24,7 +24,7 @@
                         <select class="form-control" id="typeIn_mod" {!! \Auth::user()->type == 2 ?'disabled':'' !!}>
                             <option value="1" selected >Carro</option>
                             <option value="2">{{ labelMoto() }}</option>
-                            @if($typeParking == 2)
+                            @if($typeParking == 2 || $typeParking == 4)
                                 <option value="3">{{ labelTres(false) }}</option>
                             @endif
                         </select>

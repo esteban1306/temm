@@ -51,7 +51,7 @@
                                 <option value="1">Carro</option>
                                 <option value="2">{{ labelMoto() }}</option>
                                 @php($typeParking = App\Parking::find(\Auth::user()->parking_id)->type)
-                                @if($typeParking == 2)
+                                @if($typeParking == 2 || $typeParking == 4)
                                 <option value="3">{{ labelTres() }}</option>
                                 @endif
                             </select>
@@ -142,7 +142,7 @@
                 <div class="widget_box_b">
                     <div class="contt">
                         <div class="fl_layer">
-                            <h4 class="title">{{ labelMoto(false) }} {{ $typeParking == 2?' / '.(labelTres(false)):'' }}
+                            <h4 class="title">{{ labelMoto(false) }} {{ $typeParking == 2 || $typeParking == 4?' / '.(labelTres(false)):'' }}
                             </h4>
                             <span class="line"></span>
                             <span class="data" id="motos"> - </span>
