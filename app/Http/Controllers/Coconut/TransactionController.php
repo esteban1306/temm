@@ -186,6 +186,7 @@ class TransactionController extends Controller
         return Datatables::of($tickets)
             ->addColumn('action', function ($tickets) use($customers){
                 $hour =new DateTime("".$tickets->created_at);
+                $user = Auth::user();
                     return (empty($tickets->estado) && Auth::user()->type != 6 ?\Form::button('Eliminar', [
                         'class'   => 'btn btn-warning',
                         'onclick' => "eliminarTransaction('$tickets->Id')",
@@ -227,7 +228,7 @@ class TransactionController extends Controller
                                 'data-placement' => "bottom",
                                 'title' => "Imprimir !",
 
-                            ]) :'').($customers == 1 && empty($tickets->estado)?
+                            ]) :'').(($customers == 1 || ($user->type == 7 || $user->type == 8)) && empty($tickets->estado)?
                             \Form::button('Pagar', [
                                 'class'   => 'btn btn-info',
                                 'onclick' => "pagarV('$tickets->Id')",
@@ -247,6 +248,14 @@ class TransactionController extends Controller
             ->editColumn('created_at', function ($tickets) {
                 $hour =new DateTime("".$tickets->created_at);
                 return  $hour->format('d/m/Y  h:ia').' '.$tickets->description ;
+            })
+            ->addColumn('plate', function ($tickets) {
+                $customer = Customer::find($tickets->customer_id);
+                return  !empty($customer)?$customer->plate:'' ;
+            })
+            ->addColumn('nombre', function ($tickets) {
+                $customer = Customer::find($tickets->customer_id);
+                return  !empty($customer)?$customer->nombre:'' ;
             })
             ->make(true);
     }

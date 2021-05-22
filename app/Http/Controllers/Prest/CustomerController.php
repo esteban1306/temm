@@ -152,8 +152,13 @@ class CustomerController extends Controller
     {
         $search = $request->get('search')['value'];
 
-        $tickets= Customer::select(['id_customer as Id', 'nombre', 'cedula', 'telefono', 'observacion', 'email', 'plate', 'date_soat','date_tm'])->where('id_parking',Auth::user()->parking_id)->orderBy('nombre','desc');
+        $tickets= Customer::select(['id_customer as Id', 'nombre', 'cedula', 'telefono', 'observacion', 'email', 'plate', 'date_soat','date_tm'])
+        ->where('id_parking',Auth::user()->parking_id)->orderBy('nombre','desc');
         if ($search) {
+            $user = Auth::user();
+            if($user->type == 7 || $user->type == 8){
+                $tickets = $tickets->where('plate', 'LIKE', "%$search%");
+            }else
                 $tickets = $tickets->where('observacion', 'LIKE', "%$search%");
         }
         return Datatables::of($tickets)

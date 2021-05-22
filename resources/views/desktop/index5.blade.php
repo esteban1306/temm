@@ -77,6 +77,8 @@
                     <table class="table responsive" id="transaction-table">
                         <thead>
                         <tr>
+                            <th class="all">Placa</th>
+                            <th class="all">Nombre</th>
                             <th class="all">Descripción</th>
                             <th class="min-tablet">Precio</th>
                             <th class="min-tablet">Atendió</th>
@@ -191,6 +193,8 @@
                     <table class="table responsive" id="clientes-table">
                         <thead>
                         <tr>
+                            <th class="all">Placa</th>
+                            <th class="all">Nombre</th>
                             <th class="all">Descripción</th>
                             <th class="min-tablet">Precio</th>
                             <th class="min-tablet">Atendió</th>
@@ -307,6 +311,8 @@
                     }
                 },
                 columns: [
+                    { data: 'plate', name: 'Placa', orderable  : false, searchable : false },
+                    { data: 'nombre', name: 'Nombre', orderable  : false, searchable : false },
                     { data: 'description', name: 'Descripción', orderable  : false, searchable : false },
                     { data: 'tipo', name: 'Tipo', orderable  : false, searchable : false },
                     { data: 'cantidad', name: 'Cantidad', orderable  : false, searchable : false },
@@ -1679,6 +1685,8 @@
                             }
                         },
                         columns: [
+                            { data: 'plate', name: 'Placa', orderable  : false, searchable : false },
+                            { data: 'nombre', name: 'Nombre', orderable  : false, searchable : false },
                             { data: 'created_at', name: 'Descripción', orderable  : false, searchable : false },
                             { data: 'precio', name: 'Precio', orderable  : false, searchable : false },
                             { data: 'partner_id', name: 'Atendió', orderable  : false, searchable : false },
@@ -1808,6 +1816,8 @@
                             }
                         },
                         columns: [
+                            { data: 'plate', name: 'Placa', orderable  : false, searchable : false },
+                            { data: 'nombre', name: 'Nombre', orderable  : false, searchable : false },
                             { data: 'created_at', name: 'Descripción', orderable  : false, searchable : false },
                             { data: 'precio', name: 'Precio', orderable  : false, searchable : false },
                             { data: 'partner_id', name: 'Atendió', orderable  : false, searchable : false },
@@ -1950,6 +1960,7 @@
                                     text: 'Se Pagó con exito'
                                 });
                                 $('#clientes-table').dataTable()._fnAjaxUpdate();
+                                $('#transaction-table').dataTable()._fnAjaxUpdate();
                             },
                             error : function () {
                                 //location = '/login';
