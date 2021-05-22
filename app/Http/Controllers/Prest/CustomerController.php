@@ -54,6 +54,9 @@ class CustomerController extends Controller
         $ticket->cedula =$request->cedula;
         $ticket->observacion =$request->observacion;
         $ticket->email =$request->email??'';
+        $ticket->date_tm =$request->tm??null;
+        $ticket->date_soat =$request->soat??null;
+        $ticket->plate =$request->placa??'';
         $ticket->id_partner =Auth::user()->partner_id;
         $ticket->id_parking =Auth::user()->parking_id;
         $ticket->save();
@@ -128,6 +131,9 @@ class CustomerController extends Controller
         $ticket->cedula =$request->cedula;
         $ticket->observacion =$request->observacion;
         $ticket->email =$request->email??'';
+        $ticket->date_tm =$request->tm??null;
+        $ticket->date_soat =$request->soat??null;
+        $ticket->plate =$request->placa??'';
         $ticket->save();
         return [$ticket->cedula,$ticket->nombre];
     }
@@ -146,7 +152,7 @@ class CustomerController extends Controller
     {
         $search = $request->get('search')['value'];
 
-        $tickets= Customer::select(['id_customer as Id', 'nombre', 'cedula', 'telefono', 'observacion', 'email'])->where('id_parking',Auth::user()->parking_id)->orderBy('nombre','desc');
+        $tickets= Customer::select(['id_customer as Id', 'nombre', 'cedula', 'telefono', 'observacion', 'email', 'plate', 'date_soat','date_tm'])->where('id_parking',Auth::user()->parking_id)->orderBy('nombre','desc');
         if ($search) {
                 $tickets = $tickets->where('observacion', 'LIKE', "%$search%");
         }
@@ -161,6 +167,14 @@ class CustomerController extends Controller
 
                     ]);
                 return $htmlAdmin;
+            })
+            ->editColumn('date_soat', function($tickets){
+                $hour2 =new DateTime("".$tickets->date_soat);
+                return $hour2->format('d/m/Y');
+            })
+            ->editColumn('date_tm', function($tickets){
+                $hour2 =new DateTime("".$tickets->date_tm);
+                return $hour2->format('d/m/Y');
             })
             ->make(true);
     }
@@ -238,62 +252,49 @@ class CustomerController extends Controller
     }
     public function getStatus(Request $request)
     {
-        $schedule = $request->get('type');
-        $type = $request->get('type_car');
-        $range = $request->get('range');
-        $status = $request->get('status');
-
-        $tickets= Ticket::select(['plate', 'type', 'extra', 'schedule', 'price', 'name', 'status', 'date_end'])->where('parking_id',Auth::user()->parking_id)->where('status','<>',"3")->orderBy('ticket_id','desc');
-        if (!empty($schedule))
-        $tickets = $tickets->where('schedule', $schedule);
-        if (!empty($status))
-        $tickets = $tickets->where('status', $status);
-        if (!empty($type))
-            $tickets = $tickets->where('type', $type);
-        if (!empty($range)){
-            $dateRange = explode(" - ", $range);
-            $tickets = $tickets->whereBetween('created_at', [$dateRange[0], $dateRange[1]]);
-        }else{
-            $tickets = $tickets->whereBetween('created_at', [ new Datetime('today'), new Datetime('tomorrow')]);
-        }
-        $status = [];
-        $status['total'] = ZERO;
-        $status['extra'] = ZERO;
-        $status['carros'] = ZERO;
-        $status['motos'] = ZERO;
-        $status['month_expire'] = 'Mensualidades por vencer:';
-        $status['month_expire_num'] = ZERO;
-        $tickets=$tickets->get();
+        $status['soat_expire'] = 'SOAT por vencer:';
+        $status['soat_expire_num'] = ZERO;
+        $status['tm_expire'] = 'Tecnomecanica por vencer:';
+        $status['tm_expire_num'] = ZERO;
         $now = new Datetime('now');
-        foreach ($tickets as $ticket){
-            $status['total'] += $ticket->price;
-            $status['extra'] += $ticket->extra;
-            if($ticket->type == 1)
-                $status['carros'] ++;
-            if($ticket->type == 2)
-                $status['motos'] ++;
-        }
-        $ticketss= Ticket::select(['plate', 'type', 'extra', 'schedule', 'price', 'name', 'date_end'])->where('parking_id',Auth::user()->parking_id)->where('status','<>',"3")->orderBy('ticket_id','desc');
-        $ticketss = $ticketss->where('schedule', 3);
+        $ticketss= Customer::select(['id_customer as Id', 'nombre', 'cedula', 'telefono', 'observacion', 'email', 'plate', 'date_soat','date_tm'])->where('id_parking',Auth::user()->parking_id)->orderBy('id_customer','desc');
         $ticketss=$ticketss->get();
+        $parking = Parking::find(Auth::user()->parking_id);
         foreach ($ticketss as $ticket){
-            if($ticket->schedule == 3 and !empty($ticket->date_end)){
-                $hour2 =new DateTime("".$ticket->date_end);
-                $diff=date_diff(new DateTime("".$ticket->date_end), $now);
+            if(!empty($ticket->date_soat)){
+                $hour2 =new DateTime("".$ticket->date_soat);
+                $diff=date_diff(new DateTime("".$ticket->date_soat), $now);
                 $diff=$diff->format("%a");
-                if($diff<=2){
-                    $status['month_expire'] .= $ticket->name.' ('.$ticket->plate.') Vence '.$hour2->format('d/m/Y');
-                    $status['month_expire_num'] ++;
+                if($diff<=5){
+                    $status['soat_expire'] .= $ticket->nombre.' ('.$ticket->plate.') Vence '.$hour2->format('d/m/Y').' telefono: <a href="tel:'.$ticket->telefono.'">'.$ticket->telefono.'</a><br> '.
+                    (!empty($ticket->telefono)?'<a class="hidden-sm-down btn btn-success" href="https://web.whatsapp.com/send?phone=57'.$ticket->telefono.'&text=Hola%20'.$ticket->name.',lavadero%20'.$parking->name.'%20le%20saluda%20coordialmente%20y%20le%20informa%20que%20el%20vehiculo%20con%20placa%20'.$ticket->plate.'%20tiene%20SOAT%20hasta%20la%20fecha:%20'.$hour2->format('d/m/Y').'" target="_blank">Whatsapp</a>':'').'<br><br>';
+                    $status['soat_expire_num'] ++;
+                }
+            }
+            if(!empty($ticket->date_tm)){
+                $hour2 =new DateTime("".$ticket->date_tm);
+                $diff=date_diff(new DateTime("".$ticket->date_tm), $now);
+                $diff=$diff->format("%a");
+                if($diff<=5){
+                    $status['tm_expire'] .= $ticket->nombre.' ('.$ticket->plate.') Vence '.$hour2->format('d/m/Y').' telefono: <a href="tel:'.$ticket->telefono.'">'.$ticket->telefono.'</a><br> '.
+                    (!empty($ticket->telefono)?'<a class="hidden-sm-down btn btn-success" href="https://web.whatsapp.com/send?phone=57'.$ticket->telefono.'&text=Hola%20'.$ticket->name.',lavadero%20'.$parking->name.'%20le%20saluda%20coordialmente%20y%20le%20informa%20que%20el%20vehiculo%20con%20placa%20'.$ticket->plate.'%20tiene%20tecnomecanica%20hasta%20la%20fecha:%20'.$hour2->format('d/m/Y').'" target="_blank">Whatsapp</a>':'').'<br><br>';
+                    $status['tm_expire_num'] ++;
                 }
             }
         }
-        $status['total'] = format_money($status['total']);
-        $status['extra'] = format_money($status['extra']);
         return $status;
     }
     public function getCustomer(Request $request)
     {
         $ticket = Customer::find($request->cliente_id);
+        if(!empty($ticket) && !empty($ticket->date_tm)){
+            $hour2 =new DateTime("".$ticket->date_tm);
+            $ticket->date_tm = $hour2->format('Y-m-d');
+        }
+        if(!empty($ticket) && !empty($ticket->date_soat)){
+            $hour2 =new DateTime("".$ticket->date_soat);
+            $ticket->date_soat = $hour2->format('Y-m-d');
+        }
         return $ticket;
     }
     public function updateTicket(Request $request)
@@ -365,7 +366,7 @@ class CustomerController extends Controller
         $customers = Customer::where('id_parking' ,Auth::user()->parking_id)->get();
         $select="<option value=''>Seleccionar</option>";
         foreach ($customers as $customer){
-            $select .='<option data-toggle="tooltip" title="'.$customer->observacion.'"value="'.$customer->id_customer.'">'.$customer->nombre.'('.$customer->observacion.')</option>';
+            $select .='<option data-toggle="tooltip" title="'.$customer->observacion.'"value="'.$customer->id_customer.'">'.(!empty($customer->plate)?$customer->plate . ' - ':'').$customer->nombre.'('.$customer->observacion.')</option>';
         }
         return $select;
     }
