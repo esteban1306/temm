@@ -531,6 +531,7 @@ class TransactionController extends Controller
     }
     public function pdfReport(Request $request)
     {
+        error_reporting(0);
         $range = $request->date_pdf;
         $base = $request->base?? 500000;
         //dd($range);
@@ -652,23 +653,25 @@ class TransactionController extends Controller
       <hr>
       <tr>
         <td colspan="2"><b>Efectivo a retirar</b></td>
-        <td><b>'.$status['totalSinBase'].'</b></td> 
+        <td><b>'.$status['totalSinBase'].'</b><br></td> 
       </tr>
       
   </table>';
         $users = Collect($tickets)->groupBy('partner_id');
         $userA = Auth::user();
         if($userA->type == 7 || $userA->type == 8){
-            $users_html = '<hr><br><br><br><table style="width:100%">
+            $users_html = '<hr><table style="width:100%">
                     <tr>
-                        <td colspan="2"><b> Trabajadores </b></td>
+                        <td><b> Trabajador </b></td>
+                        <td><b> Ventas </b></td>
                         <td><b>Comisión</b></td> 
                     </tr><hr>';
             foreach($users as $key => $user){
                 $partner = Partner::find($key);
                 $users_html .='<tr>
-                    <td colspan="2"><b>'.$partner->name.'</b></td>
+                    <td><b>'.$partner->name.'</b></td>
                     <td><b>'.format_money($user->sum('precio')).'</b></td> 
+                    <td><b>'.format_money($user->sum('precio')/2).'</b></td> 
                 </tr>'; 
             }
             $users_html .='</table>'; 
