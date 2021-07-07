@@ -36,7 +36,7 @@ return [
        '3','11','9','13','7','19','20'
     ],
     'continue' => [ //null for all, empty array for none
-       '20'
+       '0'
     ],
     'venezuela' => [ //null for all, empty array for none
        '17'
