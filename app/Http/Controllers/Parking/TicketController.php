@@ -180,7 +180,7 @@ class TicketController extends Controller
                  <small style="text-align:left;font-size:small">'.($parking->type ==3?'Casillero':'Placa').': ' . $ticket->plate . '</small><br>
                  ' . (isset($ticket->drawer) ? "Locker: " . $ticket->drawer . "<br>" : '') . '
                  </b></small>
-                 '.($parking->parking_id==3 || $parking->parking_id==17 || $parking->type ==3?'':'
+                 '.($parking->parking_id==3 || $parking->parking_id==17 || $parking->type ==3 || $parking->parking_id ==20?'':'
                  <small style="text-align:left;font-size: 6px;margin-top: 1px"><br>
                  1.El vehiculo se entregara al portador de este recibo<br>
                  2.No aceptamos ordenes escritas o por telefono<br>
@@ -188,7 +188,12 @@ class TicketController extends Controller
                  4.No respondemos por objetos dejados en el carro mientras sus puertas esten aseguradas<br>
                  5.No somos responsables por daños o perdidas causadas en el parqueadero mientras el vehiculo no sea entregado personalmente<br>'.
                  ($parking->parking_id!=16?'6.No respondemos por la perdida, deterioro o daños ocurridos por causa de incendio, terremoto o causas similares, motin,conmosion civil, revolucion <br>y otros eventos que impliquen fuerza mayor.':'6.Observaciones: <br><br><br>').
-                 '</small>').'</div>';
+                 '</small>').($parking->parking_id == 20?'<small style="text-align:left;font-size: 6px;margin-top: 1px"><b>POLIZA SEGUROS DEL ESTADO # 33-02-101007580 del 22 -04- 2021 al 21- 04- 2022 </b><br>
+                 La empresa no responde por vehículos cuya entrada al sitio de estacionamiento, el usuario no tenga la debida constancia por perdidas, 
+                 daños o deterioros ocurridos en los vehículos como consecuencia de incendio, motín, asonada, terremoto, revolución armada, caso fortuito o 
+                 fuerza mayor o causa sin culpa de la empresa legalmente, por daños que no dejen constancia al retirar el vehículo, por daños ocasionados a otros vehículos, 
+                 si el daño es causado por su propietario o persona ajena al rol del empleado. Por objetos, joyas, maletines, etc. Que no sean entregados en la administración.<br>
+                 Procedimiento para reclamaciones: Poner en conocimiento del empleado de turno para que se comunique con el supervisor, Radicar carta en máximo 3 días hábiles con 2 cotizaciones en la Calle 18 #28 A-32 de lunes a viernes de 7am a 5pm</small>':'').'</div>';
         }else{
             $pay_day = new DateTime("".$ticket->pay_day);
             $interval = date_diff($hour,$pay_day);
