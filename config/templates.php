@@ -24,7 +24,7 @@ return [
     	'6'
     ],
     'impresora_58' => [ //null for all, empty array for none
-    	'5','14','15','1','16','13',
+    	'5','14','15','1','16','13','20'
     ],
     'mulas' => [ //null for all, empty array for none
         '15'
