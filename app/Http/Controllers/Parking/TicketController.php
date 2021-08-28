@@ -168,7 +168,9 @@ class TicketController extends Controller
     ($parking->parking_id==20?'<small style="text-align:center;font-size: 6px"><br>
     NIT: 901451294-1 <br> </small><small style="text-align:center;font-size: 8px"><b>SERVICIO: 7AM - 6PM</b><br> <b> TEL: 8168997</b></small>':'').
             ($parking->parking_id==18?'<small style="text-align:center;font-size: 7px"><br>
-    <b>SERVICIO: LUN-SAB 6AM A 7PM</b><br> TEL. 7716249</small>':'');
+    <b>SERVICIO: LUN-SAB 6AM A 7PM</b><br> TEL. 7716249</small>':'').
+            ($parking->parking_id==22?'<small style="text-align:center;font-size: 7px"><br>
+    <b>SERVICIO: 24 HORAS</b><br>DIANA A MUÑOZ L<br> NIT: 52.232.943-5 <br> CEL. 3134098294</small>':'');
         if(!isset($ticket->price)) {
             $html .= '<small style="text-align:left;font-size: '.$size.';margin-bottom: 1px;"><b><br>
                  ' . ($ticket->schedule==3 || $parking->parking_id==11? "RECIBO N° " . $ticket->ticket_id . "<br>" : '') .'
@@ -269,8 +271,10 @@ class TicketController extends Controller
         $parking = Parking::find(Auth::user()->parking_id);
         $minutos = ($minutos*1) - ($parking->free_time);
         $horas = (24*$tiempo->format("%d"))+$horas*1 + (($minutos>=0? 1: 0)*1);
+        $is_convenio = false;
         if(!empty($convenio)){
             $convenio = Convenio::find($convenio);
+            $is_convenio = true;
             if(!empty($convenio)){
                 if($tipo==1){
                     $parking->min_cars_price = $convenio->min_cars_price ?? $parking->min_cars_price;
@@ -295,6 +299,12 @@ class TicketController extends Controller
         $dayPrice = ($tipo==1? $parking->day_cars_price : ($tipo==2?$parking->day_motorcycles_price:$parking->day_van_price));
         if(($parking->type==4) && $schedule==1){
             $minutos2 = (((24*$tiempo->format("%d"))+$horas2*1)*60)+($minutos2*1);
+            if($is_convenio){
+                if(($parking->hour_cars_price<10 && $tipo==1 ) || ($parking->hour_motorcycles_price <10 && $tipo==2) || ($parking->hour_van_price <10 && $tipo==3)){
+                    $regalo = ($tipo==1? $parking->hour_cars_price: ($tipo==2? $parking->hour_motorcycles_price: $parking->hour_van_price ));
+                    $minutos2 = $minutos2-($regalo*60) < 0? 0 : $minutos2-($regalo*60);
+                }
+            }
             $priceMin = $minutos2 > 0?($tipo==1? $parking->min_cars_price*$minutos2: ($tipo==2?$parking->min_motorcycles_price*$minutos2:$parking->min_van_price*$minutos2)):0;
             if($schedule==1 && ($priceMin < $dayPrice || $dayPrice == 0))
                 return intval(round($priceMin*1/100)*100);
@@ -312,6 +322,14 @@ class TicketController extends Controller
             $horas = $horas2 + $minutos;
         }
         if($schedule==1){
+            if($is_convenio){
+                if(($parking->hour_cars_price<10 && $tipo==1 ) || ($parking->hour_motorcycles_price <10 && $tipo==2) || ($parking->hour_van_price <10 && $tipo==3)){
+                    $regalo = ($tipo==1? $parking->hour_cars_price: ($tipo==2? $parking->hour_motorcycles_price: $parking->hour_van_price ));
+                    $horas = $horas-$regalo < 0? 0 : $horas-$regalo;
+                    $parking = Parking::find(Auth::user()->parking_id);
+                    $dayPrice = ($tipo==1? $parking->day_cars_price : ($tipo==2?$parking->day_motorcycles_price:$parking->day_van_price));
+                }
+            }
             $price= ($tipo==1? $parking->hour_cars_price * $horas: ($tipo==2? $parking->hour_motorcycles_price * $horas: $parking->hour_van_price * $horas ));
             if($price < $dayPrice || $dayPrice == 0 || Auth::user()->parking_id == 3 || Auth::user()->parking_id == 5 || Auth::user()->parking_id == 14 )
                 return intval($price);
