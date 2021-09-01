@@ -98,7 +98,7 @@ class TicketController extends Controller
         $hour2 =new DateTime("".$ticket->date_end);
         $style = array(
             'position' => 'L',
-            'align' => 'C',
+            'align' => 'L',
             'stretch' => false,
             'fitwidth' => true,
             'cellfitalign' => '',

@@ -354,8 +354,8 @@ if(! function_exists('labelTres') ) {
     function labelTres($singular=true)
     {
         if($singular)
-            return isBici()?'Bicicleta':(isMula()?'Mula':(\Auth::user()->parking_id==17?'Carreta':'Camioneta'));
+            return isBici()?'Bicicleta':(isMula()?'Mula':(\Auth::user()->parking_id==17?'Carreta':(\Auth::user()->parking_id==22?'Vehiculo producido':'Camioneta')));
         else
-            return isBici()?'Bicicletas':(isMula()?'Mulas':(\Auth::user()->parking_id==17?'Carretas':'Camionetas'));
+            return isBici()?'Bicicletas':(isMula()?'Mulas':(\Auth::user()->parking_id==17?'Carretas':(\Auth::user()->parking_id==22?'Vehiculos producido':'Camionetas')));
     }
 }
