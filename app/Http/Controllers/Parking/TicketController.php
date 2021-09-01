@@ -101,7 +101,7 @@ class TicketController extends Controller
             'align' => 'L',
             'stretch' => false,
             'fitwidth' => true,
-            'cellfitalign' => '',
+            'cellfitalign' => 'L',
             'border' => false,
             'hpadding' => 'auto',
             'vpadding' => 'auto',
@@ -134,7 +134,7 @@ class TicketController extends Controller
             }
         }
         $html = '<div style="text-align:center; margin-top: -10px !important"><big style="margin-bottom: 1px"><b style="letter-spacing: -1 px;font-size: '.$titulo.'">&nbsp;&nbsp; '.($parking->type ==3 || $parking->type ==20 ?'':'PARQUEADERO').' '.$parking->name.'</b></big><br>
-                '.($parking->parking_id !=3 && $parking->parking_id !=5 && $parking->parking_id !=11 && $parking->parking_id !=13 && $parking->parking_id !=9 && $parking->parking_id !=16 && $parking->parking_id !=18 && $parking->parking_id !=19?'<em style="font-size: 7px;margin-top: 2px;margin-bottom: 1px">"Todo lo puedo en Cristo que<br> me fortalece": Fil 4:13 <br></em>':'')
+                '.($parking->parking_id !=3 && $parking->parking_id !=5 && $parking->parking_id !=11 && $parking->parking_id !=13 && $parking->parking_id !=9 && $parking->parking_id !=16 && $parking->parking_id !=18 && $parking->parking_id !=19 && $parking->parking_id !=22?'<em style="font-size: 7px;margin-top: 2px;margin-bottom: 1px">"Todo lo puedo en Cristo que<br> me fortalece": Fil 4:13 <br></em>':'')
                 //.($parking->parking_id ==19?'<em style="font-size: 7px;margin-top: 2px;margin-bottom: 1px">La magia está, en no perder la ternura del alma<br></em>':'')
                 .($parking->parking_id==16?'<small style="text-align:center;font-size: 7px">
     <b>POLIZA No. 100835</b><br>PREVISORA SEGUROS</small><br>':'').'
@@ -229,7 +229,7 @@ class TicketController extends Controller
                 Total         : '.(($ticket->price+$ticket->extra)):'')) .
                 (isset($ticket->extra) && empty($iva)? ($ticket->extra>0?"<br>Incremento: ":"<br>Descuento:" ). abs($ticket->extra) . "<br>Total: " . ($ticket->price+$ticket->extra) . "<br>" : '').
                 '</small>
-</div></br>';
+</div>';
         }
         if(!isset($ticket->price) && (Auth::user()->parking_id!=11) && !isBar()){
             $html .='<small style="text-align:center;font-size: 7px">'.
@@ -238,7 +238,7 @@ class TicketController extends Controller
         $html .= ($parking->parking_id==11?'<small style="text-align:center;font-size: 7px">
     <b>POLIZA No. 21-02-101009484</b><br>SEGUROS DEL ESTADO</small>':'').'<small style="text-align:left;font-size: 6px"><br>
                  <b>IMPRESO POR TEMM SOFT 3207329971</b>
-                 </small></br>';
+                 </small>';
         PDF::writeHTML($html.'</br>', true, false, true, false, '');
         if(!isset($ticket->price) && (Auth::user()->parking_id!=11) && isBar()){
             $id_bar = substr('0000000000'.$ticket->ticket_id,-10);
