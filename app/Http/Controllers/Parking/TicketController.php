@@ -229,7 +229,7 @@ class TicketController extends Controller
                 Total         : '.(($ticket->price+$ticket->extra)):'')) .
                 (isset($ticket->extra) && empty($iva)? ($ticket->extra>0?"<br>Incremento: ":"<br>Descuento:" ). abs($ticket->extra) . "<br>Total: " . ($ticket->price+$ticket->extra) . "<br>" : '').
                 '</small>
-</div>';
+</div></br>';
         }
         if(!isset($ticket->price) && (Auth::user()->parking_id!=11) && !isBar()){
             $html .='<small style="text-align:center;font-size: 7px">'.
@@ -238,8 +238,8 @@ class TicketController extends Controller
         $html .= ($parking->parking_id==11?'<small style="text-align:center;font-size: 7px">
     <b>POLIZA No. 21-02-101009484</b><br>SEGUROS DEL ESTADO</small>':'').'<small style="text-align:left;font-size: 6px"><br>
                  <b>IMPRESO POR TEMM SOFT 3207329971</b>
-                 </small>';
-        PDF::writeHTML($html, true, false, true, false, '');
+                 </small></br>';
+        PDF::writeHTML($html.'</br>', true, false, true, false, '');
         if(!isset($ticket->price) && (Auth::user()->parking_id!=11) && isBar()){
             $id_bar = substr('0000000000'.$ticket->ticket_id,-10);
             PDF::write1DBarcode($id_bar, 'C128C', '', '', '', 18, 0.4, $style, 'N');
