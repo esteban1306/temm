@@ -606,7 +606,7 @@
                     form_pdf(datos);
                 },
                 error : function () {
-                    location = '/login';
+                    //location = '/login';
                 }
             });
         }
