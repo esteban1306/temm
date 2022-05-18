@@ -170,7 +170,9 @@ class TicketController extends Controller
             ($parking->parking_id==18?'<small style="text-align:center;font-size: 7px"><br>
     <b>SERVICIO: LUN-SAB 6AM A 7PM</b><br> TEL. 7716249</small>':'').
             ($parking->parking_id==22?'<small style="text-align:center;font-size: 7px"><br>
-    <b>SERVICIO: 24 HORAS</b><br>DIANA A MUÑOZ L<br> NIT: 52.232.943-5 <br> CEL. 3134098294</small>':'');
+    <b>SERVICIO: 24 HORAS</b><br>DIANA A MUÑOZ L<br> NIT: 52.232.943-5 <br> CEL. 3134098294</small>':'').
+            ($parking->parking_id==24?'<small style="text-align:center;font-size: 7px"><br>
+    <b>SERVICIO: 24 HORAS</b><br>EDWIN A SANCHEZ L<br> NIT: 890911846-2 <br> CEL. 3113077583</small>':'');
         if(!isset($ticket->price)) {
             $html .= '<small style="text-align:left;font-size: '.$size.';margin-bottom: 1px;"><b><br>
                  ' . ($ticket->schedule==3 || $parking->parking_id==11? "RECIBO N° " . $ticket->ticket_id . "<br>" : '') .'
