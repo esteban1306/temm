@@ -643,7 +643,7 @@
                     });
                 },
                 error : function () {
-                    //location = '/login';
+                    location = '/login';
                 }
             });
         }
@@ -670,7 +670,7 @@
                     $('#day_van_pricecm').val(datos['day_van_price']);
                 },
                 error : function () {
-                    //location = '/login';
+                    location = '/login';
                 }
             });
         }
@@ -988,7 +988,7 @@
                             this.retired = 1;
                         },
                         error : function () {
-                            //location = '/login';
+                            location = '/login';
                         }
                     });
                 },
@@ -1086,7 +1086,7 @@
                                 partner         : $("#partnersList").val(),
                             },
                             error : function () {
-                                //location = '/login';
+                                location = '/login';
                             }
                         },
                         columns: [
