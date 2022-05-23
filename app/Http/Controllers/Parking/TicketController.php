@@ -284,9 +284,9 @@ class TicketController extends Controller
                     $parking->day_cars_price = $convenio->day_cars_price ?? $parking->day_cars_price;
                 }
                 if($tipo==2){
-                    $parking->min_motorcycle_price = $convenio->min_motorcycle_price ?? $parking->min_motorcycle_price;
-                    $parking->hour_motorcycle_price = $convenio->hour_motorcycle_price ?? $parking->hour_motorcycle_price;
-                    $parking->day_motorcycle_price = $convenio->day_motorcycle_price ?? $parking->day_motorcycle_price;
+                    $parking->min_motorcycle_price = $convenio->min_motorcycles_price ?? $parking->min_motorcycle_price;
+                    $parking->hour_motorcycle_price = $convenio->hour_motorcycles_price ?? $parking->hour_motorcycle_price;
+                    $parking->day_motorcycle_price = $convenio->day_motorcycles_price ?? $parking->day_motorcycle_price;
                 }
                 if($tipo==3){
                     $parking->min_van_price = $convenio->min_van_price ?? $parking->min_van_price;
