@@ -133,7 +133,7 @@ class TicketController extends Controller
                     break;
             }
         }
-        $html = '<div style="text-align:center; margin-top: -10px !important"><big style="margin-bottom: 1px"><b style="letter-spacing: -1 px;font-size: '.$titulo.'">&nbsp;&nbsp; '.($parking->type ==3 || $parking->type ==20 ?'':'PARQUEADERO').' '.$parking->name.'</b></big><br>
+        $html = '<div style="text-align:center; margin-top: -10px !important"><big style="margin-bottom: 1px"><b style="letter-spacing: -1 px;font-size: '.$titulo.'">&nbsp;&nbsp; '.($parking->type ==3 || $parking->type ==20 || $parking->type ==24 ?'':'PARQUEADERO').' '.$parking->name.'</b></big><br>
                 '.($parking->parking_id !=3 && $parking->parking_id !=5 && $parking->parking_id !=11 && $parking->parking_id !=13 && $parking->parking_id !=9 && $parking->parking_id !=16 && $parking->parking_id !=18 && $parking->parking_id !=19 && $parking->parking_id !=22?'<em style="font-size: 7px;margin-top: 2px;margin-bottom: 1px">"Todo lo puedo en Cristo que<br> me fortalece": Fil 4:13 <br></em>':'')
                 //.($parking->parking_id ==19?'<em style="font-size: 7px;margin-top: 2px;margin-bottom: 1px">La magia está, en no perder la ternura del alma<br></em>':'')
                 .($parking->parking_id==16?'<small style="text-align:center;font-size: 7px">
@@ -172,7 +172,7 @@ class TicketController extends Controller
             ($parking->parking_id==22?'<small style="text-align:center;font-size: 7px"><br>
     <b>SERVICIO: 24 HORAS</b><br>DIANA A MUÑOZ L<br> NIT: 52.232.943-5 <br> CEL. 3134098294</small>':'').
             ($parking->parking_id==24?'<small style="text-align:center;font-size: 7px"><br>
-    <b>SERVICIO: 24 HORAS</b><br>EDWIN A SANCHEZ L<br> NIT: 890911846-2 <br> CEL. 3113077583</small>':'');
+    <b>SERVICIO: 24 HORAS</b><br>EDWIN A SANCHEZ L<br> NIT: 890924840-5 <br> CEL. 3113077583</small>':'');
         if(!isset($ticket->price)) {
             $html .= '<small style="text-align:left;font-size: '.$size.';margin-bottom: 1px;"><b><br>
                  ' . ($ticket->schedule==3 || $parking->parking_id==11? "RECIBO N° " . $ticket->ticket_id . "<br>" : '') .'
@@ -211,8 +211,8 @@ class TicketController extends Controller
                 $horas = (24*$interval->format("%d"))+$horas*1 + (($minutos>=0? 1: 0)*1);
                 $horas = $horas==0? 1: $horas;
             }
-            $html .= '<small style="text-align:left;font-size: small"><br>
-                    FACTURA DE VENTA N° ' . $ticket->ticket_id . '<br>
+            $html .= '<small style="text-align:left;font-size: small"><br>'.
+                    (isIva()?'REGIMEN COMÚN <br>':'').'FACTURA DE VENTA N° ' . $ticket->ticket_id . '<br>
                  ' . ($ticket->schedule==3?"<b>".strtoupper($ticket->name) . "</b><br>" : '') .'
                  ' . ($ticket->schedule==1? "   Fracciones: " . $horas . "<br>" : '') .'
                  Fecha ingreso: ' . $hour->format('d/m/Y') . '<br>
@@ -224,11 +224,11 @@ class TicketController extends Controller
                  '.($parking->type ==3?'':'Tipo: ' . ($ticket->type == 1 ? 'Carro' : ($ticket->type == 3 ? ( labelTres() ) : labelMoto())) . '<br>').'
                  '.($parking->type ==3?'Casillero':'Placa').': ' . $ticket->plate . '<br>
                  ' . (isset($ticket->price) && empty($iva)? "   Precio: " . $ticket->price . "<br>" : (isset($ticket->price) && !empty($iva)?'
-                Valor servicio: '.intval($ticket->price/1.19).'<br>'.
+                VALOR SIN IVA: '.intval($ticket->price/1.19).'<br>'.
                     (isset($ticket->extra) ? ($ticket->extra>0?"Incremento: ":"Descuento:" ). abs($ticket->extra).'<br>':'').'
-                IVA           : '.(($ticket->price+$ticket->extra)-intval(($ticket->price+$ticket->extra)/1.19)).'<br>
-                _____________________<br>
-                Total         : '.(($ticket->price+$ticket->extra)):'')) .
+                VALOR IVA           : '.(($ticket->price+$ticket->extra)-intval(($ticket->price+$ticket->extra)/1.19)).'<br>
+                VALOR TOTAL         : '.(($ticket->price+$ticket->extra)):'')) .
+                ($parking->parking_id==24 || true?"<small style='text-align:left;font-size: 13px'><br>Si desea factura electronica favor comunicarse al número 3233213075 durante las proximas 24 horas</small>":"").
                 (isset($ticket->extra) && empty($iva)? ($ticket->extra>0?"<br>Incremento: ":"<br>Descuento:" ). abs($ticket->extra) . "<br>Total: " . ($ticket->price+$ticket->extra) . "<br>" : '').
                 '</small>
 </div>';

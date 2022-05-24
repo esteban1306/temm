@@ -12,7 +12,7 @@ return [
     	'1','3','11','9','13','14','15','16','17','18','19','20','22','23','24'
     ],
     'iva' => [ //null for all, empty array for none
-    	'1','11'
+    	'1','11','24'
     ],
     'onlyIva' => [ //null for all, empty array for none
     	'9'
