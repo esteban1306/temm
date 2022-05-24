@@ -133,7 +133,7 @@ class TicketController extends Controller
                     break;
             }
         }
-        $html = '<div style="text-align:center; margin-top: -10px !important"><big style="margin-bottom: 1px"><b style="letter-spacing: -1 px;font-size: '.$titulo.'">&nbsp;&nbsp; '.($parking->type ==3 || $parking->type ==20 || $parking->type ==24 ?'':'PARQUEADERO').' '.$parking->name.'</b></big><br>
+        $html = '<div style="text-align:center; margin-top: -10px !important"><big style="margin-bottom: 1px"><b style="letter-spacing: -1 px;font-size: '.$titulo.'">&nbsp;&nbsp; '.($parking->type ==3 || $parking->parking_id ==20 || $parking->parking_id ==24 ?'':'PARQUEADERO').' '.$parking->name.'</b></big><br>
                 '.($parking->parking_id !=3 && $parking->parking_id !=5 && $parking->parking_id !=11 && $parking->parking_id !=13 && $parking->parking_id !=9 && $parking->parking_id !=16 && $parking->parking_id !=18 && $parking->parking_id !=19 && $parking->parking_id !=22?'<em style="font-size: 7px;margin-top: 2px;margin-bottom: 1px">"Todo lo puedo en Cristo que<br> me fortalece": Fil 4:13 <br></em>':'')
                 //.($parking->parking_id ==19?'<em style="font-size: 7px;margin-top: 2px;margin-bottom: 1px">La magia está, en no perder la ternura del alma<br></em>':'')
                 .($parking->parking_id==16?'<small style="text-align:center;font-size: 7px">
