@@ -228,7 +228,7 @@ class TicketController extends Controller
                     (isset($ticket->extra) ? ($ticket->extra>0?"Incremento: ":"Descuento:" ). abs($ticket->extra).'<br>':'').'
                 VALOR IVA           : '.(($ticket->price+$ticket->extra)-intval(($ticket->price+$ticket->extra)/1.19)).'<br>
                 VALOR TOTAL         : '.(($ticket->price+$ticket->extra)):'')) .
-                ($parking->parking_id==24 || true?"<small style='text-align:left;font-size: 13px'><br>Si desea factura electronica favor comunicarse al número 3233213075 durante las proximas 24 horas</small>":"").
+                ($parking->parking_id==24?"<small style='text-align:left;font-size: 13px'><br>Si desea factura electronica favor comunicarse al número 3233213075 durante las proximas 24 horas</small>":"").
                 (isset($ticket->extra) && empty($iva)? ($ticket->extra>0?"<br>Incremento: ":"<br>Descuento:" ). abs($ticket->extra) . "<br>Total: " . ($ticket->price+$ticket->extra) . "<br>" : '').
                 '</small>
 </div>';
