@@ -120,6 +120,9 @@ class TicketController extends Controller
         $size = is58()?'8px':'small';
         PDF::SetMargins($marginLeft, 0, $marginRight);
         $parking = Parking::find(Auth::user()->parking_id);
+        if($parking->parking_id == 20){
+            $size = '8px';
+        }
         if($parking->parking_id ==19 && false){
             switch ($ticket->partner_id) {
                 case 67:
@@ -134,7 +137,7 @@ class TicketController extends Controller
             }
         }
         $html = '<div style="text-align:center; margin-top: -10px !important"><big style="margin-bottom: 1px"><b style="letter-spacing: -1 px;font-size: '.$titulo.'">&nbsp;&nbsp; '.($parking->type ==3 || $parking->parking_id ==20 || $parking->parking_id ==24 ?'':'PARQUEADERO').' '.$parking->name.'</b></big><br>
-                '.($parking->parking_id !=3 && $parking->parking_id !=5 && $parking->parking_id !=11 && $parking->parking_id !=13 && $parking->parking_id !=9 && $parking->parking_id !=16 && $parking->parking_id !=18 && $parking->parking_id !=19 && $parking->parking_id !=22?'<em style="font-size: 7px;margin-top: 2px;margin-bottom: 1px">"Todo lo puedo en Cristo que<br> me fortalece": Fil 4:13 <br></em>':'')
+                '.($parking->parking_id !=3 && $parking->parking_id !=5 && $parking->parking_id !=11 && $parking->parking_id !=13 && $parking->parking_id !=9 && $parking->parking_id !=16 && $parking->parking_id !=18 && $parking->parking_id !=19 && $parking->parking_id !=20 && $parking->parking_id !=22?'<em style="font-size: 7px;margin-top: 2px;margin-bottom: 1px">"Todo lo puedo en Cristo que<br> me fortalece": Fil 4:13 <br></em>':'')
                 //.($parking->parking_id ==19?'<em style="font-size: 7px;margin-top: 2px;margin-bottom: 1px">La magia está, en no perder la ternura del alma<br></em>':'')
                 .($parking->parking_id==16?'<small style="text-align:center;font-size: 7px">
     <b>POLIZA No. 100835</b><br>PREVISORA SEGUROS</small><br>':'').'
@@ -192,7 +195,7 @@ class TicketController extends Controller
                  4.No respondemos por objetos dejados en el carro mientras sus puertas esten aseguradas<br>
                  5.No somos responsables por daños o perdidas causadas en el parqueadero mientras el vehiculo no sea entregado personalmente<br>'.
                  ($parking->parking_id!=16?'6.No respondemos por la perdida, deterioro o daños ocurridos por causa de incendio, terremoto o causas similares, motin,conmosion civil, revolucion <br>y otros eventos que impliquen fuerza mayor.':'6.Observaciones: <br><br><br>').
-                 '</small>').($parking->parking_id == 20?'<small style="text-align:left;font-size: 6px;margin-top: 1px"><b>POLIZA SEGUROS DEL ESTADO # 33-02-101007580 del 22 -04- 2021 al 21- 04- 2022 </b><br>
+                 '</small>').($parking->parking_id == 20?'<small style="text-align:left;font-size: 5px;margin-top: 1px"><b>POLIZA SEGUROS DEL ESTADO # 33-02-101007580 del 22 -04- 2021 al 21- 04- 2022 </b><br>
                  La empresa no responde por vehículos cuya entrada al sitio de estacionamiento, el usuario no tenga la debida constancia por perdidas, 
                  daños o deterioros ocurridos en los vehículos como consecuencia de incendio, motín, asonada, terremoto, revolución armada, caso fortuito o 
                  fuerza mayor o causa sin culpa de la empresa legalmente, por daños que no dejen constancia al retirar el vehículo, por daños ocasionados a otros vehículos, 
