@@ -190,7 +190,7 @@ class TicketController extends Controller
                  <small style="text-align:left;font-size:small">'.($parking->type ==3?'Casillero':'Placa').': ' . $ticket->plate . '</small><br>
                  ' . (isset($ticket->drawer) ? "Locker: " . $ticket->drawer . "<br>" : '') . '
                  </b></small>
-                 '.($parking->parking_id==3 || $parking->parking_id==17 || $parking->type ==3 || $parking->parking_id ==20?'':'
+                 '.($parking->parking_id==3 || $parking->parking_id==25 || $parking->type ==3 || $parking->parking_id ==20?'':'
                  <small style="text-align:left;font-size: 6px;margin-top: 1px"><br>
                  Debe conservar el tiquete para la entrega de su vehículo, en caso de perdida deberá presentar la tarjeta de propiedad del vehículo y la cédula de quien lo retira.<br>
                  1.El vehiculo se entregara al portador de este recibo<br>
