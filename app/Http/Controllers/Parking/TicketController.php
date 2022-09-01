@@ -123,7 +123,7 @@ class TicketController extends Controller
         $size = is58()?'8px':'small';
         PDF::SetMargins($marginLeft, 0, $marginRight);
         $parking = Parking::find(Auth::user()->parking_id);
-        if($parking->parking_id == 20){
+        if($parking->parking_id == 20 || $parking->parking_id == 7){
             $size = '8px';
         }
         if($parking->parking_id ==19 && false){
@@ -139,7 +139,7 @@ class TicketController extends Controller
                     break;
             }
         }
-        $html = '<div style="text-align:center; margin-top: -10px !important"><big style="margin-bottom: 1px"><b style="letter-spacing: -1 px;font-size: '.$titulo.'">&nbsp;&nbsp; '.($parking->type ==3 || $parking->parking_id ==20 || $parking->parking_id ==24 || $parking->parking_id ==17 ?'':'PARQUEADERO').' '.$parking->name.'</b></big><br>
+        $html = '<div style="text-align:center; margin-top: -10px !important"><big style="margin-bottom: -7px"><b style="letter-spacing: -1 px;font-size: '.$titulo.'">&nbsp;&nbsp; '.($parking->type ==3 || $parking->parking_id ==20 || $parking->parking_id ==24 || $parking->parking_id ==17 ?'':'PARQUEADERO').' '.$parking->name.'</b></big><br>
                 '.($parking->parking_id !=3 && $parking->parking_id !=5 && $parking->parking_id !=11 && $parking->parking_id !=13 && $parking->parking_id !=9 && $parking->parking_id !=16 && $parking->parking_id !=18 && $parking->parking_id !=19 && $parking->parking_id !=20 && $parking->parking_id !=22?'<em style="font-size: 7px;margin-top: 2px;margin-bottom: 1px">"Todo lo puedo en Cristo que<br> me fortalece": Fil 4:13 <br></em>':'')
                 //.($parking->parking_id ==19?'<em style="font-size: 7px;margin-top: 2px;margin-bottom: 1px">La magia está, en no perder la ternura del alma<br></em>':'')
                 .($parking->parking_id==16?'<small style="text-align:center;font-size: 7px">
@@ -187,11 +187,11 @@ class TicketController extends Controller
                  ' . ($ticket->schedule==3? "   Fecha vencimiento: " . $hour2->format('d/m/Y') . "<br>" : '') .'
                  ' . ($ticket->schedule==3? "<b>".strtoupper($ticket->name) . "</b><br>" : '') .'
                  '.($parking->type ==3?'':'Tipo: ' . ($ticket->type == 1 ? 'Carro' : ($ticket->type == 3 ? ( labelTres() ) : labelMoto())) . '<br>').'
-                 <small style="text-align:left;font-size:small">'.($parking->type ==3?'Casillero':'Placa').': ' . $ticket->plate . '</small><br>
+                 <small style="text-align:left;font-size:small;letter-spacing: 0.5 px;">'.($parking->type ==3?'Casillero':'Placa').': ' . $ticket->plate . '</small><br>
                  ' . (isset($ticket->drawer) ? "Locker: " . $ticket->drawer . "<br>" : '') . '
                  </b></small>
                  '.($parking->parking_id==3 || $parking->parking_id==25 || $parking->type ==3 || $parking->parking_id ==20?'':'
-                 <small style="text-align:left;font-size: 6px;margin-top: 1px"><br>
+                 <small style="text-align:left;font-size: 6px;margin-top: 1px">
                  Debe conservar el tiquete para la entrega de su vehículo, en caso de perdida deberá presentar la tarjeta de propiedad del vehículo y la cédula de quien lo retira.<br>
                  1.El vehiculo se entregara al portador de este recibo<br>
                  2.No aceptamos ordenes escritas o por telefono<br>
@@ -245,7 +245,7 @@ class TicketController extends Controller
                 '<b>TICKET No. </b>'.$ticket->ticket_id.'</small>';
         }
         $html .= ($parking->parking_id==11?'<small style="text-align:center;font-size: 7px">
-    <b>POLIZA No. 21-02-101009484</b><br>SEGUROS DEL ESTADO</small>':'').'<small style="text-align:left;font-size: 6px"><br>
+    <b>POLIZA No. 21-02-101009484</b><br>SEGUROS DEL ESTADO</small><br>':'').'<small style="text-align:left;font-size: 6px;letter-spacing:0.5px">
                  <b>IMPRESO POR TEMM SOFT 3207329971</b>
                  </small>';
         PDF::writeHTML($html.'</br>', true, false, true, false, '');
