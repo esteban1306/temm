@@ -385,6 +385,7 @@ class TicketController extends Controller
     {
         $now = new Datetime('now');
         $ticket = Ticket::find($request->ticket_id);
+        $ticket->convenio_id = $request->convenio_id??null;
         if($ticket->status == 2 && !empty($ticket->pay_day)){
             $interval = date_diff(new DateTime("".$ticket->hour),new DateTime("".$ticket->pay_day));
             return [$ticket->price,$interval->format("%H:%I")];
@@ -469,7 +470,7 @@ class TicketController extends Controller
                 if ($tickets->status == 1)
                 return \Form::button('Pagar', [
                         'class'   => 'btn btn-info',
-                        'onclick' => "$('#modal_ticket_out').modal('show');$('#ticket_id').val('$tickets->Id')",
+                        'onclick' => "$('#modal_ticket_out').modal('show');$('#id_convenio_pay').val('');$('#ticket_id').val('$tickets->Id')",
                         'data-toggle' => "tooltip",
                         'data-placement' => "bottom",
                         'title' => "Pagar !",
@@ -551,7 +552,7 @@ class TicketController extends Controller
                 if (Auth::user()->type == 1)
                     return ($tickets->status == 1? \Form::button('Pagar', [
                             'class'   => 'btn btn-info',
-                            'onclick' => "$('#modal_ticket_out').modal('show');$('#ticket_id').val('$tickets->Id')",
+                            'onclick' => "$('#modal_ticket_out').modal('show');$('#id_convenio_pay').val('');$('#ticket_id').val('$tickets->Id')",
                             'data-toggle' => "tooltip",
                             'data-placement' => "bottom",
                             'title' => "Pagar !",

@@ -290,6 +290,7 @@
             $('#modal_ticket_out').modal('show');
             getFecha();
             $('#ticket_id').val('');
+            $('#id_convenio_pay').val('');
         }
         function openModalMod(ticket_id){
             $('#modal_ticket_mod').modal('show');
@@ -304,6 +305,7 @@
         };
         function pagar() {
             var ticket_id= $('#ticket_id').val();
+            var convenio_id= $('#id_convenio_pay').val();
             ticket_id = ticket_id.replace(/[^0-9]/g,'');
             $('#ticket_id').val(ticket_id*1);
             $.ajax({
@@ -313,7 +315,8 @@
                 type: "POST",
                 url: "cobrar",
                 data: {
-                    ticket_id:ticket_id
+                    ticket_id:ticket_id,
+                    convenio_id:convenio_id,
                 },
                 success: function (datos) {
                     $('.alert').alert();
