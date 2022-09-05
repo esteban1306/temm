@@ -196,9 +196,9 @@ class TicketController extends Controller
                  1.El vehiculo se entregara al portador de este recibo<br>
                  2.No aceptamos ordenes escritas o por telefono<br>
                  3.Despues de retirado el vehiculo no respondemos por daños, faltas o averias. Revise el vehiculo a la salida.<br>
-                 4.No respondemos por objetos dejados en el carro mientras sus puertas esten aseguradas<br>
-                 5.No somos responsables por daños o perdidas causadas en el parqueadero mientras el vehiculo no sea entregado personalmente<br>'.
-                 ($parking->parking_id!=16?'6.No respondemos por la perdida, deterioro o daños ocurridos por causa de incendio, terremoto o causas similares, motin,conmosion civil, revolucion <br>y otros eventos que impliquen fuerza mayor.':'6.Observaciones: <br><br><br>').
+                 4.No respondemos por objetos dejados en el carro mientras sus puertas esten aseguradas.'.($parking->parking_id!=17?'<br>
+                 5.No somos responsables por daños o perdidas causadas en el parqueadero mientras el vehiculo no sea entregado personalmente<br>':'').
+                 ($parking->parking_id!=16 && $parking->parking_id!=17?'6.No respondemos por la perdida, deterioro o daños ocurridos por causa de incendio, terremoto o causas similares, motin,conmosion civil, revolucion <br>y otros eventos que impliquen fuerza mayor.':($parking->parking_id!=17?'6.Observaciones: <br><br><br>':'')).
                  '</small>').($parking->parking_id == 20?'<small style="text-align:left;font-size: 5px;margin-top: 1px"><b>POLIZA SEGUROS DEL ESTADO # 33-02-101007580 del 22 -04- 2021 al 21- 04- 2022 </b><br>
                  La empresa no responde por vehículos cuya entrada al sitio de estacionamiento, el usuario no tenga la debida constancia por perdidas, 
                  daños o deterioros ocurridos en los vehículos como consecuencia de incendio, motín, asonada, terremoto, revolución armada, caso fortuito o 
