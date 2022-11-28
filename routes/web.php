@@ -12,6 +12,7 @@
 */
 
 Route::get('/', function () {
+    redirect_index_temporaly();
     return view('welcome');
 });
 

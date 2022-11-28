@@ -24,6 +24,7 @@ class HomeController extends Controller
      */
     public function index()
     {
+        redirect_index_temporaly();
         $user = Auth::user();
         
         if($user->type == 1 || $user->type == 2)
